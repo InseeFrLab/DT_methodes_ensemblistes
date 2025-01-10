@@ -290,7 +290,7 @@ window.Quarto = {
 </ul>
 <p><span class="math display">\[ F\left(\mathbf{x}\right) = \sum_{m=1}^M \beta_m f\left(\mathbf{x}, \mathbf{\theta}_m\right) \]</span></p>
 <ul>
-<li>ils reposent sur une <strong>modélisation additive par étapes</strong>, qui décompose l’entraînement de ce modèle complexe en une <strong>séquence d’entraînements de petits modèles</strong>. Chaque étape de l’entraînement cherche le modèle simple <span class="math inline">\(f\)</span> qui améliore la puissance prédictive du modèle complet, sans modifier les modèles précédents, puis l’ajoute de façon incrémentale à ces derniers:</li>
+<li>Ils reposent sur une <strong>modélisation additive par étapes</strong> (<em>forward stagewise additive modeling</em>), qui décompose l’entraînement de ce modèle complexe en une <strong>séquence d’entraînements de petits modèles</strong>. Chaque étape de l’entraînement cherche le modèle simple <span class="math inline">\(f\)</span> qui améliore la puissance prédictive du modèle complet, sans modifier les modèles précédents, puis l’ajoute de façon incrémentale à ces derniers:</li>
 </ul>
 <p><span class="math display">\[ F_m(\mathbf{x}) = F_{m-1}(\mathbf{x}) + \hat{\beta}_m f(\mathbf{x}_i, \mathbf{\hat{\theta}_m}) \]</span></p>
 <!-- Imaginons qu'on veuille entraîner le modèle suivant:
@@ -380,7 +380,7 @@ Commentaire: On pourrait peut-être donner la version formelle de la GBM, mais c
 </section>
 <section id="faire-apparaître-le-gradient-de-la-fonction-de-perte" class="level4">
 <h4 class="anchored" data-anchor-id="faire-apparaître-le-gradient-de-la-fonction-de-perte">Faire apparaître le gradient de la fonction de perte</h4>
-<p>Une fois isolé le <span class="math inline">\(t\)</span>-ième arbre, on fait un développement limité d’ordre 2 de <span class="math inline">\(l(y_i, \hat{y}_{i}^{(t-1)} + f_{t}(\mathbf{x}_i))\)</span> au voisinage de <span class="math inline">\(\hat{y}_{i}^{(t-1)}\)</span>, en considérant que la prédiction du <span class="math inline">\(t\)</span>-ième arbre <span class="math inline">\(f_{t}(\mathbf{x}_i)\)</span> est</p>
+<p>Une fois isolé le <span class="math inline">\(t\)</span>-ième arbre, on fait un développement limité d’ordre 2 de <span class="math inline">\(l(y_i, \hat{y}_{i}^{(t-1)} + f_{t}(\mathbf{x}_i))\)</span> au voisinage de <span class="math inline">\(\hat{y}_{i}^{(t-1)}\)</span>, en considérant que la prédiction du <span class="math inline">\(t\)</span>-ième arbre <span class="math inline">\(f_{t}(\mathbf{x}_i)\)</span> est un incrément de petite taille:</p>
 <p><span class="math display">\[ \mathcal{L}^{(t)} \approx \sum_{i=1}^{n} [\underbrace{l(y_i, \hat{y}_{i}^{(t-1)})}_{\text{(A)}} + g_i f_t(\mathbf{x}_i)+ \frac{1}{2} h_i f^2_t(\mathbf{x}_i)] + \underbrace{\sum_{j=1}^{t-1}\Omega(f_j)}_{\text{(B)}} + \Omega(f_t) \]</span></p>
 <p>avec</p>
 <p><span class="math display">\[ g_i = \frac{\partial l(y_i, \hat{y}_i^{(t-1)})}{\partial\hat{y}_i^{(t-1)}} \text{et} h_i = \frac{\partial^2 l(y_i, \hat{y}_i^{(t-1)})}{{\partial \hat{y}_i^{(t-1)}}^2} \]</span></p>
