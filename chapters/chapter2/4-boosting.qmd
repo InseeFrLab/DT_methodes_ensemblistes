@@ -195,7 +195,7 @@ L'équation @eq-fct-eval-split est au coeur de la mécanique du *gradient boosti
 | `n_estimators`                                                      | Le nombre d'arbres                                                          | 100               |
 | `lambda` ou `reg_lambda`                                            | La pénalisation L2                                                          | 1                 |
 | `alpha` ou `reg_alpha`                                              | La pénalisation L1                                                          | 0                 |
-| `gamma`                                                             | Le gain minimal nécessaire pour ajouter un noeud supplémentaire             | 0                 |
+| `gamma`                                                             | Le gain minimal nécessaire pour diviser un noeud                            | 0                 |
 | `tree_method`                                                       | La méthode utilisée pour rechercher les splits                              | `'hist'`          |
 | `max_bin`                                                           | Le nombre utilisés pour discrétiser les variables continues                 | 0                 |
 | `subsample`                                                         | Le taux d'échantillonnage des données d'entraîenment                        | 1                 |
