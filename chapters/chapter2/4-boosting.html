@@ -342,7 +342,7 @@ Commentaire: On pourrait peut-être donner la version formelle de la GBM, mais c
 </section>
 <section id="la-mécanique-du-gradient-boosting" class="level3">
 <h3 class="anchored" data-anchor-id="la-mécanique-du-gradient-boosting">La mécanique du <em>gradient boosting</em></h3>
-<p>Depuis la publication de <span class="citation" data-cites="friedman2001greedy">Friedman (<a href="#ref-friedman2001greedy" role="doc-biblioref">2001</a>)</span>, la méthode de <em>gradient boosting</em> a connu de multiples développements et raffinements, parmi lesquels XGBoost (<span class="citation" data-cites="chen2016xgboost">Chen and Guestrin (<a href="#ref-chen2016xgboost" role="doc-biblioref">2016</a>)</span>), LightGBM (<span class="citation" data-cites="ke2017lightgbm">Ke et al. (<a href="#ref-ke2017lightgbm" role="doc-biblioref">2017</a>)</span>) et CatBoost (<span class="citation" data-cites="prokhorenkova2018catboost">Prokhorenkova et al. (<a href="#ref-prokhorenkova2018catboost" role="doc-biblioref">2018</a>)</span>). S’il existe quelques différences entre ces implémentations, elles partagent néanmoins la même mécanique d’ensemble, que la section qui suit va présenter en détail en s’appuyant sur l’implémentation proposée par XBGoost.<span class="citation" data-cites="chen2016xgboost">(^Cette partie reprend la structure et les notations de la partie 2 de <a href="#ref-chen2016xgboost" role="doc-biblioref">Chen and Guestrin 2016</a>.)</span></p>
+<p>La méthode de <em>gradient boosting</em> proposée <span class="citation" data-cites="friedman2001greedy">Friedman (<a href="#ref-friedman2001greedy" role="doc-biblioref">2001</a>)</span> a fait l’objet de multiples implémentations intégrant de nombreuses optimisations et raffinements, parmi lesquelles XGBoost (<span class="citation" data-cites="chen2016xgboost">Chen and Guestrin (<a href="#ref-chen2016xgboost" role="doc-biblioref">2016</a>)</span>), LightGBM (<span class="citation" data-cites="ke2017lightgbm">Ke et al. (<a href="#ref-ke2017lightgbm" role="doc-biblioref">2017</a>)</span>) et CatBoost (<span class="citation" data-cites="prokhorenkova2018catboost">Prokhorenkova et al. (<a href="#ref-prokhorenkova2018catboost" role="doc-biblioref">2018</a>)</span>). S’il existe quelques différences entre ces implémentations, elles partagent néanmoins la même mécanique d’ensemble, que la section qui suit va présenter en détail en s’appuyant sur l’implémentation proposée par XBGoost.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <p>Choses importantes à mettre en avant:</p>
 <ul>
 <li>Le boosting est fondamentalement différent des forêts aléatoires. See ESL, chapitre 10.</li>
@@ -361,7 +361,7 @@ Commentaire: On pourrait peut-être donner la version formelle de la GBM, mais c
 <li>son nombre de feuilles terminales <span class="math inline">\(T\)</span>;</li>
 <li>les valeurs figurant sur ses feuilles terminales <span class="math inline">\(\mathbf{w}\in \mathbb{R}^T\)</span> (appelées poids ou <em>weights</em>).</li>
 </ul>
-<p>Le modèle est entraîné avec une <strong>fonction-objectif</strong> constituée d’une <strong>fonction de perte</strong> <span class="math inline">\(l\)</span> et d’une <strong>fonction de régularisation</strong> <span class="math inline">\(\Omega\)</span>. La fonction de perte mesure la distance entre la prédiction <span class="math inline">\(hat(y)\)</span> et la vraie valeur <span class="math inline">\(y\)</span> et présente généralement les propriétés suivantes: elle est convexe et dérivable deux fois, et atteint son minimum lorsque <span class="math inline">\(hat(y) = y\)</span>. La fonction de régularisation pénalise la complexité du modèle. Dans le cas présent, elle pénalise les arbres avec un grand nombre de feuilles (<span class="math inline">\(T\)</span> élevé) et les arbres avec des poids élevés (<span class="math inline">\(w_t\)</span> élevés en valeur absolue).</p>
+<p>Le modèle est entraîné avec une <strong>fonction-objectif</strong> constituée d’une <strong>fonction de perte</strong> <span class="math inline">\(l\)</span> et d’une <strong>fonction de régularisation</strong> <span class="math inline">\(\Omega\)</span>. La fonction de perte mesure la distance entre la prédiction <span class="math inline">\(hat(y)\)</span> et la vraie valeur <span class="math inline">\(y\)</span> et présente généralement les propriétés suivantes: elle est convexe et dérivable deux fois, et atteint son minimum lorsque <span class="math inline">\(\hat{y} = y\)</span>. La fonction de régularisation pénalise la complexité du modèle. Dans le cas présent, elle pénalise les arbres avec un grand nombre de feuilles (<span class="math inline">\(T\)</span> élevé) et les arbres avec des poids élevés (<span class="math inline">\(w_t\)</span> élevés en valeur absolue).</p>
 <p><span id="eq-fct-obj-initial"><span class="math display">\[ \mathcal{L}(\phi) = \underbrace{\sum_i l(\hat{y}_{i}, y_{i})}_{\substack{\text{Perte sur les} \\ \text{observations}}} + \underbrace{\sum_k \Omega(f_{k})}_{\substack{\text{Fonction de} \\ \text{régularisation}}}\text{avec}\Omega(f) = \gamma T + \frac{1}{2} \lambda \sum_{t=1}^T w_j^2  \tag{1}\]</span></span></p>
 </section>
 <section id="isoler-le-k-ième-arbre" class="level4">
@@ -584,6 +584,7 @@ Commentaire: On pourrait peut-être donner la version formelle de la GBM, mais c
 </section>
 </section>
 
+
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-breiman1998rejoinder" class="csl-entry" role="listitem">
 Breiman, Leo. 1998. <span>“Rejoinder: Arcing Classifiers.”</span> <em>The Annals of Statistics</em> 26 (3): 841–49.
@@ -612,7 +613,12 @@ Prokhorenkova, Liudmila, Gleb Gusev, Aleksandr Vorobev, Anna Veronika Dorogush, 
 <div id="ref-shapire1990strength" class="csl-entry" role="listitem">
 Shapire, R. 1990. <span>“The Strength of Weak Learning.”</span> <em>Machine Learning</em> 5 (2).
 </div>
-</div></section></div></main> <!-- /main -->
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Cette partie reprend la structure et les notations de la partie 2 de <span class="citation" data-cites="chen2016xgboost">Chen and Guestrin (<a href="#ref-chen2016xgboost" role="doc-biblioref">2016</a>)</span>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
