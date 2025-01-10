@@ -149,8 +149,8 @@ $$
 
 Dans la dernière expression, la fonction de perte simplifiée se reformule comme une combinaison quadratique des poids $w_j$, dans laquelle les dérivées première et seconde de la fonction de perte interviennent sous forme de pondérations. Tout l'enjeu de l'entraînement devient donc de trouver les poids optimaux $w_j$ qui minimiseront cette fonction de perte, compte tenu de ces pondérations. Il se trouve que le calcul de ces poids optimaux est très simple: pour une structure d'arbre donnée ($q: \mathbb{R}^m \rightarrow \{1, \dots, T\}$), le poids optimal $w_j^{\ast}$ de la feuille $j$ est donné par l'équation:
 
-$$ w_j^{\ast} = -frac(sum_(i in I_j) g_i, sum_(i in I_j) h_i + lambda) $$ {#eq-w_j_optimal}
-z
+$$ w_j^{\ast} = -\frac{\sum_{i \in I_j} g_i}{\sum_{i \in I_j} h_i + \lambda} $$ {#eq-w_j_optimal}
+
 Par conséquent, la valeur optimale de la fonction objectif pour l'arbre $q$ est égale à
 
 $$\mathcal{\tilde{L}}^{(t)}(q) = -\frac{1}{2} \sum_{j=1}^T \frac{\left(\sum_{i\in I_j} g_i\right)^2}{\sum_{i\in I_j} h_i+\lambda} + \gamma T$$ {#eq-fct-obj-optimal}
