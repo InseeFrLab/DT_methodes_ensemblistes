@@ -55,11 +55,12 @@ L'algorithme Adaboost a été au coeur de la littérature sur le *boosting* à l
 
 La *Gradient Boosting Machine* (GBM) propose une approche assez différente: elle introduit le *gradient boosting* en reformulant le *boosting* sous la forme d'un problème de descente de gradient. Voici une esquisse du fonctionnement de la *Gradient Boosting Machine*:
 
--   Un premier modèle simple est entraîné sur un jeu d'entraînement, de façon à minimiser une fonction de perte qui mesure l'écart entre la variable à prédire et la prédiction du modèle.
+-   Un premier modèle simple est entraîné sur les données d'entraînement, de façon à minimiser une fonction de perte qui mesure l'écart entre la variable à prédire et la prédiction du modèle.
 -   A l'issue de cette première itération, on calcule la dérivée partielle (*gradient*) de la fonction de perte par rapport à la prédiction en chaque point de l'ensemble d'entraînement. Ce gradient indique dans quelle direction et dans quelle ampleur la prédiction devrait être modifiée afin de réduire la perte.
 -   A la deuxième itération, on ajoute un deuxième modèle qui va tâcher d'améliorer le modèle complet en prédisant le mieux possible l'opposé de ce gradient.
 -   Ce deuxième modèle est ajouté au premier, puis on recalcule la dérivée partielle de la fonction de perte par rapport à la prédiction de ce nouveau modèle.
 -   Cette procédure est répétée en ajoutant de nouveaux modèles et en recalculant le gradient à chaque étape.
+-   La qualité du modèle final est évaluée sur un ensemble de test.
 
 <!-- 
 Commentaire: On pourrait peut-être donner la version formelle de la GBM, mais c'est peut-être inutile. 
@@ -82,9 +83,10 @@ Choses importantes à mettre en avant:
 
 -   Le boosting est fondamentalement différent des forêts aléatoires. See ESL, chapitre 10.
 -   Toute la mécanique est indépendante de la fonction de perte choisie. En particulier, elle est applicable indifféremment à des problèmes de classification et de régression.
--   Les poids sont calculés par une formule explicite, ce qui rend les calculs extrêmement rapides.
+-   Les poids sont calculés par une formule explicite, ce qui rend les calculs très rapides.
+-   Les termes de régularisation sont directement intégrées à la mécanique du _gradient boosting_.
+-   Le boosting est fait pour overfitter; contrairement aux RF, il n'y a pas de limite à l'overfitting. Donc lutter contre le surapprentissage est un élément particulièrement important de l'usage des algorithmes de _gradient boosting_.
 -   Comment on interprète le gradient et la hessienne: cas avec une fonction de perte quadratique.
--   Le boosting est fait pour overfitter; contrairement aux RF, il n'y a pas de limite à l'overfitting. Donc lutter contre le surapprentissage est un élément particulièrement important de l'usage des algorithmes de boosting.
 
 #### Le modèle à entraîner
 
