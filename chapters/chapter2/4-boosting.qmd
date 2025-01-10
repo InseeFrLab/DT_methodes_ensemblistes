@@ -149,17 +149,15 @@ $$
 
 Dans la dernière expression, la fonction de perte simplifiée se reformule comme une combinaison quadratique des poids $w_j$, dans laquelle les dérivées première et seconde de la fonction de perte interviennent sous forme de pondérations. Tout l'enjeu de l'entraînement devient donc de trouver les poids optimaux $w_j$ qui minimiseront cette fonction de perte, compte tenu de ces pondérations. Il se trouve que le calcul de ces poids optimaux est très simple: pour une structure d'arbre donnée ($q: \mathbb{R}^m \rightarrow \{1, \dots, T\}$), le poids optimal $w_j^{\ast}$ de la feuille $j$ est donné par l'équation:
 
-$$ w_j^{\ast} = -\frac{\sum_{i \in I_j} g_i}{\sum_{i \in I_j} h_i + \lambda} $$ {#eq-w_j_optimal}
-
-Par conséquent, la valeur optimale de la fonction objectif pour l'arbre $q$ est égale à
-
-$$\mathcal{\tilde{L}}^{(t)}(q) = -\frac{1}{2} \sum_{j=1}^T \frac{\left(\sum_{i\in I_j} g_i\right)^2}{\sum_{i\in I_j} h_i+\lambda} + \gamma T$$ {#eq-fct-obj-optimal}
-
-Cette équation est utile car elle permet de comparer simplement la qualité de deux arbres, et de déterminer lequel est le meilleur.
+$$ w_j^{\ast} = -\frac{\sum_{i \in I_j} g_i}{\sum_{i \in I_j} h_i + \lambda} $$ {#eq-w-j-optimal}
 
 #### Construire le $t$-ième arbre
 
-Dans la mesure où elle permet de comparer des arbres, on pourrait penser que l'équation @eq-fct-obj-optimal est suffisante pour choisir directement le $t$-ième arbre: il suffirait d'énumérer les arbres possibles, de calculer la qualité de chacun d'entre eux, et de retenir le meilleur. Bien que cette approche soit possible en théorie, elle est inemployable en pratique car le nombre d'arbres possibles est extrêmement élevé. Par conséquent, le $t$-ième arbre n'est pas défini en une fois, mais construit de façon gloutonne (_greedy_). 
+En combinant les équations @eq-fct-obj-final et @eq-w-j-optimal, on déduit que la valeur optimale de la fonction objectif pour l'arbre $q$ est égale à 
+
+$$ \mathcal{\tilde{L}}^{(t)}(q) = -\frac{1}{2} \sum_{j=1}^T \frac{\left(\sum_{i\in I_j} g_i\right)^2}{\sum_{i\in I_j} h_i+\lambda} + \gamma T$$ {#eq-fct-obj-optimal}
+
+Cette équation est utile car elle permet de comparer la qualité de deux arbres, et de déterminer lequel est le meilleur. On pourrait penser que l'équation @eq-fct-obj-optimal est à elle seule suffisante pour choisir le $t$-ième arbre: il suffirait d'énumérer les arbres possibles, de calculer la qualité de chacun d'entre eux, et de retenir le meilleur. Bien que cette approche soit possible en théorie, elle est inemployable en pratique car le nombre d'arbres possibles est extrêmement élevé. Par conséquent, le $t$-ième arbre n'est pas défini en une fois, mais construit de façon gloutonne (_greedy_), en utilisant l'équation @eq-fct-obj-optimal à chaque étape.
 
 La méthode de construction des arbres dans les algorithmes de _gradient boosting_ est donc identique à celle décrite dans la partie **REFERENCE A LA PARTIE CART/RF**, à une différence près: ces algorithmes utilisent l'équation @eq-fct-obj-optimal pour choisir la condition de partition (_split_) à chaque étape de la construction de l'arbre. Imaginons qu'on envisage de décomposer la feuille $I$ en deux nouvelles feuilles $I_L$ et $I_R$ (avec $I = I_L \cup I_R$), selon une condition logique reposant sur une variable et une valeur de cette variable (exemple: $x_6 > 11$). Par application de l'équation @eq-fct-obj-optimal, le gain potentiel induit par ce critère de partition est égal à:
 
