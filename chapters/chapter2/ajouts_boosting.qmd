@@ -1,0 +1,29 @@
+### Sujets avancés
+
+#### Remarques diverses
+
+Choses importantes à mettre en avant:
+
+-   Le _boosting_ est fondamentalement différent des forêts aléatoires. See ESL, chapitre 10.
+-   La mécanique du _gradient boosting_ est entièrement indépendante de la nature du problème considéré (régression, classification, classement...) et de la fonction de perte choisie[^lossfunction]. L'approche de _gradient boosting_ est donc particulièrement flexible et peut être adaptée à des problèmes variés.
+
+[^lossfunction]: la fonction de perte doit uniquement vérifier quelques conditions mathématiques peu contraignantes en pratique.
+
+-   A la différence des forêts aléatoires, l'approche de _gradient boosting_ ne contient en elle-même aucune limite au surapprentissage, bien au contraire: le _gradient boosting_ est un algorithme conçu pour approximer le plus précisément possible la relation entre $X$ et $y$ telle qu'elle apparaît dans les données d'entraînement, qu'il s'agisse d'un signal pertinent ou d'un bruit statistique, ce qui le rend particulièrement vulnérable au surapprentissage. Par conséquent, la lutte contre l'_overfitting_ est un élément essentiel de l'usage des algorithmes de _gradient boosting_.
+
+-   Les termes de régularisation sont directement intégrées à la mécanique du _gradient boosting_.
+-   Comment on interprète le gradient et la hessienne: cas avec une fonction de perte quadratique.
+
+
+#### _Histogram-based algorithms_
+
+L'algorithme de détermination des critères de partition (_split-finding algorithm_) est un enjeu de performance essentiel dans les méthodes ensemblistes. En effet, utiliser l'algorithme le plus simple (énumérer tous les critères de partition possibles, en balayant toutes les valeurs de toutes les variables) s'avère très coûteux dès lors que les données contiennent soit un grand nombre de variables, soit des variables continues prenant un grand nombre de valeurs. C'est pourquoi cet algorithme a fait l'objet de multiples améliorations et optimisations visant à réduire leur coût computationnel sans dégrader la qualité des critères de partition.
+
+L'utilisation d'histogrammes (_histogram-based algorithms_) est une approche efficace mobilisée par les trois implémentations de référence (XGBoost, LightGBM et CatBoost) qui permet de réduire de manière significative le coût computationnel lié à la recherche des _splits_ optimaux en discrétisant les variables continues. Cette approche comprend Deux caractéristiques:
+
+- __Discrétisation__: avant le début de l'entraînement, chaque variable continue est discrétisée en un nombre limité d'intervalles (_bins_), construits le plus souvent à partir de ses quantiles. Ce processus est appelé *binning*. Par exemple, une variable continue uniformément distribuée de 0 à 100 peut être divisée en dix intervalles ($[0, 10), [10, 20), \dots, [90, 100)$). Le nombre maximal de _bins_ est un hyperparamètre qui peut parfois jouer un rôle important.
+<!-- - __Construction de l'histogramme__: après la discrétisation, un histogramme est construit pour chaque variable continue; il résume combien d'observations appartiennent à chaque _bin_, ainsi que la somme des gradients et la somme des hessiennes de ces observations (il s'agit des quantités $\sum_{i \in \text{bin}} g_i$ et $\sum_{i \in \text{bin}} h_i$ mentionnées dans l'équation @eq-w-j-optimal. -->
+- __Énumération restreinte__: l'algorithme de détermination des critères de partition ne considère que les bornes des intervalles précédemment définies (10, 20, 30, etc. dans l'exemple précédent) et non l'ensemble des valeurs prises par les variables continues. Cette modification se traduit par une nette accélération de l'entraînement, dans la mesure où le nombre de _bins_ est en général beaucoup plus faible que le nombre de valeurs uniques des variables continues.
+<!-- - __Mise à jour de l'histogramme__: G et H sont mis à jour après chaque arbre. -->
+
+
