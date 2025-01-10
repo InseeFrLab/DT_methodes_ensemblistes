@@ -279,9 +279,9 @@ window.Quarto = {
 <p>S’il existe plusieurs variantes, tous les algorithmes de <em>boosting</em> suivent la même logique :</p>
 <ul>
 <li>Un premier modèle simple et peu performant est entraîné sur les données.</li>
-<li>Un deuxième modèle est entraîné de façon à corriger les erreurs du premier modèle (par exemple en pondérant davantage les observations mal prédites);</li>
+<li>Un deuxième modèle est entraîné de façon à corriger les erreurs du premier modèle (par exemple en pondérant davantage les observations mal prédites), puis combiné avec le premier modèle;</li>
 <li>Ce processus est répété en ajoutant des modèles simples, chaque modèle corrigeant les erreurs commises par l’ensemble des modèles précédents;</li>
-<li>Tous ces modèles sont finalement combinés (souvent par une somme pondérée) pour obtenir un modèle complexe et performant.</li>
+<li>Le modèle final est la combinaison de l’ensemble des modèles simples.</li>
 </ul>
 <p>En termes plus techniques, les algorithmes de <em>boosting</em> partagent trois caractéristiques communes:</p>
 <ul>
