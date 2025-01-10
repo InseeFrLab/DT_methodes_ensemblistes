@@ -276,14 +276,13 @@ window.Quarto = {
 <section id="introduction" class="level3">
 <h3 class="anchored" data-anchor-id="introduction">Introduction</h3>
 <p>Le fondement théorique du <em>boosting</em> est un article de de 1990 (<span class="citation" data-cites="shapire1990strength">Shapire (<a href="#ref-shapire1990strength" role="doc-biblioref">1990</a>)</span>) qui a démontré théoriquement que, sous certaines conditions, il est possible de transformer un modèle prédictif peu performant en un modèle prédictif très performant. Plus précisément, cet article prouve que s’il est possible de construire un modèle simple dont les prédictions ne sont que légèrement meilleures que le hasard (appelé <em>weak learner</em>), alors il est possible de construire un modèle ayant un pouvoir prédictif arbitrairement élevé (appelé <em>strong learner</em>) en améliorant progressivement ce modèle simple. Le <em>boosting</em> est donc une méthode qui combine une approche ensembliste reposant sur un grand nombre de modèles simples avec un entraînement séquentiel: chaque modèle simple (souvent des arbres de décision peu profonds) tâche d’améliorer la prédiction globale en corrigeant les erreurs des prédictions précédentes à chaque étape. Bien qu’une approche de <em>boosting</em> puisse en théorie mobiliser différentes classes de <em>weak learners</em>, en pratique les <em>weak learners</em> utilisés par les algorithmes de <em>boosting</em> sont presque toujours des arbres de décision.</p>
-<p>S’il existe plusieurs variantes, tous les algorithmes de <em>boosting</em> suivent la même logique :</p>
-<ul>
-<li>Un premier modèle simple et peu performant est entraîné sur les données.</li>
-<li>Un deuxième modèle est entraîné de façon à corriger les erreurs du premier modèle (par exemple en pondérant davantage les observations mal prédites), puis combiné avec le premier modèle;</li>
-<li>Ce processus est répété en ajoutant des modèles simples, chaque modèle corrigeant les erreurs commises par l’ensemble des modèles précédents;</li>
-<li>Le modèle final est la combinaison de l’ensemble des modèles simples.</li>
-</ul>
-<p>En termes plus techniques, les algorithmes de <em>boosting</em> partagent trois caractéristiques communes:</p>
+<!-- S'il existe plusieurs variantes, tous les algorithmes de *boosting* suivent la même logique :
+
+-   Un premier modèle simple et peu performant est entraîné sur les données.
+-   Un deuxième modèle est entraîné de façon à corriger les erreurs du premier modèle (par exemple en pondérant davantage les observations mal prédites), puis combiné avec le premier modèle;
+-   Ce processus est répété en ajoutant des modèles simples, chaque modèle corrigeant les erreurs commises par l'ensemble des modèles précédents;
+-   Le modèle final est la combinaison de l'ensemble des modèles simples. -->
+<p>En termes plus techniques, les différentes variantes du <em>boosting</em> partagent toutes trois caractéristiques communes:</p>
 <ul>
 <li>Ils visent à <strong>trouver une approximation</strong> <span class="math inline">\(\hat{F}\)</span> d’une fonction inconnue <span class="math inline">\(F^{\ast}: \mathbf{x} \mapsto y\)</span> à partir d’un ensemble d’entraînement <span class="math inline">\((y_i, \mathbf{x_i})_{i= 1,\dots,n}\)</span>;</li>
 <li>Ils supposent que la fonction <span class="math inline">\(F^{\ast}\)</span> peut être approchée par une <strong>somme pondérée de modèles simples</strong> <span class="math inline">\(f\)</span> de paramètres <span class="math inline">\(\theta\)</span>:</li>
@@ -313,18 +312,18 @@ C'est un problème très compliqué dès que $M$ est élevé! -->
 <p>Le principe d’Adaboost consiste à pondérer les erreurs commises à chaque itération en donnant plus d’importance aux observations mal prédites, de façon à obliger les modèles simples à se concentrer sur les observations les plus difficiles à prédire. Voici une esquisse du fonctionnement d’AdaBoost:</p>
 <ul>
 <li>Un premier modèle simple est entraîné sur un jeu d’entraînement dans lequel toutes les observations ont le même poids.</li>
-<li>A l’issue de cette première itération, les observations mal prédites reçoivent une pondération plus élevé que les observations bien prédites, et un deuxième modèle est entraîné sur ce jeu d’entraînement pondéré.</li>
+<li>A l’issue de cette première itération, les observations mal prédites reçoivent une pondération plus élevée que les observations bien prédites, et un deuxième modèle est entraîné sur ce jeu d’entraînement pondéré.</li>
 <li>Ce deuxième modèle est ajouté au premier, puis on repondère à nouveau les observations en fonction de la qualité de prédiction de ce nouveau modèle.</li>
 <li>Cette procédure est répétée en ajoutant de nouveaux modèles et en ajustant les pondérations.</li>
 </ul>
-<p>L’algorithme Adaboost a été au coeur de la littérature sur le <em>boosting</em> à la fin des années 1990 et dans les années 2000, en raison de ses performances sur les problèmes de classification binaire. Il a toutefois été progressivement remplacé par les algorithmes de <em>gradient boosting</em> inventé quelques années plus tard.</p>
+<p>L’algorithme Adaboost a été au coeur de la littérature sur le <em>boosting</em> à la fin des années 1990 et dans les années 2000, en raison de ses performances sur les problèmes de classification binaire. Il a toutefois été progressivement remplacé par les algorithmes de <em>gradient boosting</em> mis au point quelques années plus tard.</p>
 </section>
 <section id="linvention-du-boosting-boosting-la-gradient-boosting-machine" class="level4">
 <h4 class="anchored" data-anchor-id="linvention-du-boosting-boosting-la-gradient-boosting-machine">L’invention du <em>boosting boosting</em> : la <em>Gradient Boosting Machine</em></h4>
 <p>La <em>Gradient Boosting Machine</em> (GBM) propose une approche assez différente: elle introduit le <em>gradient boosting</em> en reformulant le <em>boosting</em> sous la forme d’un problème de descente de gradient. Voici une esquisse du fonctionnement de la <em>Gradient Boosting Machine</em>:</p>
 <ul>
 <li>Un premier modèle simple est entraîné sur les données d’entraînement, de façon à minimiser une fonction de perte qui mesure l’écart entre la variable à prédire et la prédiction du modèle.</li>
-<li>A l’issue de cette première itération, on calcule la dérivée partielle (<em>gradient</em>) de la fonction de perte par rapport à la prédiction en chaque point de l’ensemble d’entraînement. Ce gradient indique dans quelle direction et dans quelle ampleur la prédiction devrait être modifiée afin de réduire la perte.</li>
+<li>A l’issue de cette première itération, on calcule la dérivée partielle (<em>gradient</em>) de la fonction de perte par rapport à la prédiction en chaque point de l’ensemble d’entraînement. Ce gradient indique à la fois dans quelle direction et dans quelle ampleur la prédiction devrait être modifiée afin de réduire la perte.</li>
 <li>A la deuxième itération, on ajoute un deuxième modèle qui va tâcher d’améliorer le modèle complet en prédisant le mieux possible l’opposé de ce gradient.</li>
 <li>Ce deuxième modèle est ajouté au premier, puis on recalcule la dérivée partielle de la fonction de perte par rapport à la prédiction de ce nouveau modèle.</li>
 <li>Cette procédure est répétée en ajoutant de nouveaux modèles et en recalculant le gradient à chaque étape.</li>
