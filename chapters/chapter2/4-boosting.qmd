@@ -133,7 +133,7 @@ Les termes $g_i$ et $h_i$ désignent respectivement la dérivée première (le g
 $$ \mathcal{\tilde{L}}^{(t)} = \sum_{i=1}^{n} [g_i f_t(\mathbf{x}_i)+ \frac{1}{2} h_i f^2_t(\mathbf{x}_i)] + \gamma T + \frac{1}{2} \lambda \sum_{j=1}^T w_i^2 
 $$ {#eq-fct-obj-final}
 
-Cette expression est importante car elle montre qu'on est passé d'un problème complexe où il fallait entraîner un grand nombre d'arbres simultanément (équation @eq-fct-obj-initial) à un problème beaucoup plus simple dans lequel il n'y a qu'un seul arbre à entraîner (équation @eq-fct-obj-final).
+<!-- Cette expression montre que le problème initial où il fallait entraîner un grand nombre d'arbres simultanément (équation @eq-fct-obj-initial) à un problème beaucoup plus simple dans lequel il n'y a plus qu'un seul arbre à entraîner (équation @eq-fct-obj-final). -->
 
 #### Calculer les poids optimaux
 
@@ -170,11 +170,7 @@ $$ Gain = \frac{1}{2} \left[\frac{G_L^2}{H_L+\lambda}+\frac{G_R^2}{H_R+\lambda}-
 L'équation @eq-fct-eval-split est au coeur de la mécanique du *gradient boosting* car elle permet de comparer les critères de partition possibles. Plus précisément, l'algorithme de détermination des critère de partition (*split finding algorithm*) consiste en une double boucle sur les variables et les valeurs prises par ces variables, qui énumère un grand nombre de critères de partition et mesure le gain associé à chacun d'entre eux avec l'équation @eq-fct-eval-split. Le critère de partition retenu est simplement celui dont le gain est le plus élevé.
 
 
-::: {.callout-note title="Comment trouver rapidement le meilleur _split_?"}
-L'algorithme qui détermine les critères de partition est un enjeu de performance essentiel dans le *gradient boosting*. En effet, utiliser l'algorithme le plus simple (énumérer tous les critères de partition possibles, en balayant toutes les valeurs de toutes les variables) s'avère très coûteux dès lors que les données contiennent soit un grand nombre de variables, soit des variables continues prenant un grand nombre de valeurs. C'est pourquoi les algorithmes de détermination des critère de partition ont fait l'objet de multiples améliorations et optimisations visant à réduire leur coût computationnel sans dégrader la qualité des critères de partition.
 
-A COMPLETER SUR LES HISTOGRAMMES
-:::
 
 
 
