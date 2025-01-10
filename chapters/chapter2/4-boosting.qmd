@@ -88,7 +88,7 @@ Choses importantes à mettre en avant:
 
 #### Le modèle à entraîner
 
-On veut entraîner un modèle comprenant $K$ arbres de régression ou de classification:
+On veut entraîner un modèle comprenant $t$ arbres de régression ou de classification:
 
 $$\hat{y}_{i} = \phi\left(\mathbf{x}_i\right) = \sum_{k=1}^{K} f_k\left(\mathbf{x}_i\right) $$
 
@@ -104,7 +104,7 @@ $$ \mathcal{L}(\phi) = \underbrace{\sum_i l(\hat{y}_{i}, y_{i})}_{\substack{\tex
 
 #### Isoler le $t$-ième arbre
 
-La fonction-objectif introduite précédemment est très complexe et ne peut être utilisée directement pour entraîner le modèle, car il faudrait entraîner tous les arbres en même temps. On reformule donc cette fonction objectif de façon à isoler le $k$-ième arbre, qui pourra ensuite être entraîné seul, une fois que les $k-1$ arbres précédents auront été entraînés. Pour cela, on note $\hat{y}_i^{(k)}$ la prédiction à l'issue de l'étape $k$: $\hat{y}_i^{(t)} = \sum_{j=1}^t f_j(\mathbf{x}_i)$, et on note $\mathcal{L}^{(t)}$ la fonction-objectif au moment de l'entraînement du $t$-ième arbre:
+La fonction-objectif introduite précédemment est très complexe et ne peut être utilisée directement pour entraîner le modèle, car il faudrait entraîner tous les arbres en même temps. On reformule donc cette fonction objectif de façon à isoler le $t$-ième arbre, qui pourra ensuite être entraîné seul, une fois que les $t-1$ arbres précédents auront été entraînés. Pour cela, on note $\hat{y}_i^{(t)}$ la prédiction à l'issue de l'étape $t$: $\hat{y}_i^{(t)} = \sum_{j=1}^t f_j(\mathbf{x}_i)$, et on note $\mathcal{L}^{(t)}$ la fonction-objectif au moment de l'entraînement du $t$-ième arbre:
 
 $$
 \begin{aligned}
@@ -115,9 +115,9 @@ $$
 $$
 
 
-#### Faire apparaître le gradient
+#### Faire apparaître le gradient de la fonction de perte
 
-Une fois isolé le $k$-ième arbre, on fait un développement limité d'ordre 2 de $l(y_i, \hat{y}_{i}^{(k-1)} + f_{k}(\mathbf{x}_i))$ au voisinage de $\hat{y}_{i}^{(k-1)}$, en considérant que la prédiction du $k$-ième arbre $f_{k}(\mathbf{x}_i)$ est
+Une fois isolé le $t$-ième arbre, on fait un développement limité d'ordre 2 de $l(y_i, \hat{y}_{i}^{(t-1)} + f_{k}(\mathbf{x}_i))$ au voisinage de $\hat{y}_{i}^{(t-1)}$, en considérant que la prédiction du $t$-ième arbre $f_{k}(\mathbf{x}_i)$ est
 
 $$ \mathcal{L}^{(t)} \approx \sum_{i=1}^{n} [l(y_i, \hat{y}_{i}^{(t-1)}) + g_i f_t(\mathbf{x}_i)+ \frac{1}{2} h_i f^2_t(\mathbf{x}_i)] + \Omega(f_t) $$ 
 
@@ -127,7 +127,7 @@ avec
 $$ g_i = \frac{\partial l(y_i, \hat{y}_i^{(t-1)})}{\partial\hat{y}_i^{(t-1)}} \text{et} h_i = \frac{\partial^2 l(y_i, \hat{y}_i^{(t-1)})}{{\partial \hat{y}_i^{(t-1)}}^2} $$
 
 
-Les termes $g_i$ et $h_i$ désignent respectivement la dérivée première (le gradient) et la dérivée seconde (la hessienne) de la fonction de perte par rapport à la variable prédite. Il est important de noter que les termes (A) et (B) sont constants car les $k-1$ arbres précédents ont déjà été entraînés et ne sont pas modifiés par l'entraînement du $k$-ième arbre. <!-- Autrement dit, la seule façon d'améliorer le modèle sera de trouver un $k$-ième arbre $f_t$ qui minimise la fonction-objectif \mathcal{L}^{(k)} ainsi ré$1e.  --> On peut donc retirer ces termes pour obtenir la fonction-objectif simplifiée qui sera utilisée pour l'entraînement du $k$-ième arbre.
+Les termes $g_i$ et $h_i$ désignent respectivement la dérivée première (le gradient) et la dérivée seconde (la hessienne) de la fonction de perte par rapport à la variable prédite. Il est important de noter que les termes (A) et (B) sont constants car les $t-1$ arbres précédents ont déjà été entraînés et ne sont pas modifiés par l'entraînement du $t$-ième arbre. <!-- Autrement dit, la seule façon d'améliorer le modèle sera de trouver un $t$-ième arbre $f_t$ qui minimise la fonction-objectif \mathcal{L}^{(k)} ainsi ré$1e.  --> On peut donc retirer ces termes pour obtenir la fonction-objectif simplifiée qui sera utilisée pour l'entraînement du $t$-ième arbre.
 
 $$ \mathcal{\tilde{L}}^{(t)} = \sum_{i=1}^{n} [g_i f_t(\mathbf{x}_i)+ \frac{1}{2} h_i f^2_t(\mathbf{x}_i)] + \gamma T + \frac{1}{2} \lambda \sum_{j=1}^T w_i^2 $$
 
@@ -135,7 +135,7 @@ Cette expression est importante car elle montre qu'on est passé d'un problème 
 
 #### Calculer les poids optimaux
 
-A partir de l'expression précédente, il est possible de faire apparaître les poids $w_j$ du $k$-ième arbre. Pour une structure d'arbre donnée ($q: \mathbb{R}^m \rightarrow \{1, \dots, T\}$), on définit $I_j = \{ i | q(\mathbf{x}_i) = j \}$ l'ensemble des observations situées sur la feuille $j$ puis on réorganise $\mathcal{\tilde{L}}^{(k)}$:
+A partir de l'expression précédente, il est possible de faire apparaître les poids $w_j$ du $t$-ième arbre. Pour une structure d'arbre donnée ($q: \mathbb{R}^m \rightarrow \{1, \dots, T\}$), on définit $I_j = \{ i | q(\mathbf{x}_i) = j \}$ l'ensemble des observations situées sur la feuille $j$ puis on réorganise $\mathcal{\tilde{L}}^{(k)}$:
 
 $$
 \begin{align*}
@@ -159,9 +159,9 @@ $$\mathcal{\tilde{L}}^{(t)}(q) = -\frac{1}{2} \sum_{j=1}^T \frac{\left(\sum_{i\i
 
 Cette équation est utile car elle permet de comparer simplement la qualité de deux arbres, et de déterminer lequel est le meilleur.
 
-#### Construire le $k$-ième arbre
+#### Construire le $t$-ième arbre
 
-Dans la mesure où elle permet de comparer des arbres, on pourrait penser que l'équation @eq-fct-obj-optimal est suffisante pour choisir directement le $k$-ième arbre: il suffirait d'énumérer les arbres possibles, de calculer la qualité de chacun d'entre eux, et de retenir le meilleur. Bien que cette approche soit possible théoriquement, elle est inemployable en pratique car le nombre d'arbres possibles est extrêmement élevé. Par conséquent, le $k$-ième arbre n'est pas défini en une fois, mais construit de façon gloutonne:
+Dans la mesure où elle permet de comparer des arbres, on pourrait penser que l'équation @eq-fct-obj-optimal est suffisante pour choisir directement le $t$-ième arbre: il suffirait d'énumérer les arbres possibles, de calculer la qualité de chacun d'entre eux, et de retenir le meilleur. Bien que cette approche soit possible théoriquement, elle est inemployable en pratique car le nombre d'arbres possibles est extrêmement élevé. Par conséquent, le $t$-ième arbre n'est pas défini en une fois, mais construit de façon gloutonne:
 
 **REFERENCE A LA PARTIE CART/RF?**
 
