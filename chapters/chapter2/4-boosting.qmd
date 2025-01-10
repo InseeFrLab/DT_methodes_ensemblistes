@@ -7,9 +7,9 @@ Le fondement théorique du *boosting* est un article de de 1990 (@shapire1990str
 S'il existe plusieurs variantes, tous les algorithmes de *boosting* suivent la même logique :
 
 -   Un premier modèle simple et peu performant est entraîné sur les données.
--   Un deuxième modèle est entraîné de façon à corriger les erreurs du premier modèle (par exemple en pondérant davantage les observations mal prédites);
+-   Un deuxième modèle est entraîné de façon à corriger les erreurs du premier modèle (par exemple en pondérant davantage les observations mal prédites), puis combiné avec le premier modèle;
 -   Ce processus est répété en ajoutant des modèles simples, chaque modèle corrigeant les erreurs commises par l'ensemble des modèles précédents;
--   Tous ces modèles sont finalement combinés (souvent par une somme pondérée) pour obtenir un modèle complexe et performant.
+-   Le modèle final est la combinaison de l'ensemble des modèles simples.
 
 En termes plus techniques, les algorithmes de *boosting* partagent trois caractéristiques communes:
 
