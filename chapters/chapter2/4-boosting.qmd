@@ -13,7 +13,7 @@ S'il existe plusieurs variantes, tous les algorithmes de *boosting* suivent la m
 
 En termes plus techniques, les algorithmes de *boosting* partagent trois caractéristiques communes:
 
--   Ils visent à **trouver une approximation** $\hat{F}$")`{=typst} d'une fonction inconnue $F*: \mathbf{x} \mapsto y$ à partir d'un ensemble d'entraînement $(y_i, \mathbf{x_i})_{i= 1,\dots,n}$;
+-   Ils visent à **trouver une approximation** $\hat{F}$ d'une fonction inconnue $F*: \mathbf{x} \mapsto y$ à partir d'un ensemble d'entraînement $(y_i, \mathbf{x_i})_{i= 1,\dots,n}$;
 -   Ils supposent que la fonction $F*$ peut être approchée par une **somme pondérée de modèles simples** $f$ de paramètres $\theta$:
 
 $$ F\left(\mathbf{x}\right) = \sum_{m=1}^M \beta_m f\left(\mathbf{x}, \mathbf{\theta}_m\right) $$
@@ -137,7 +137,7 @@ Cette expression est importante car elle montre qu'on est passé d'un problème 
 
 #### Calculer les poids optimaux
 
-A partir de l'équation @eq-fct-obj-final, il est possible de faire apparaître les poids $w_j$ du $t$-ième arbre. Pour un arbre donné comprenant $T$ feuilles ($q: \mathbb{R}^m \rightarrow \{1, \dots, T\}$), on définit $I_j = \{ i | q(\mathbf{x}_i) = j \}$ l'ensemble des observations situées sur la feuille $j$, et $w_j$ la valeur prédite pour la feuille $j$. Avec cette notation, on réorganise $\mathcal{\tilde{L}}^{(t)}$:
+A partir de l'équation @eq-fct-obj-final, il est possible de faire apparaître les poids $w_j$ du $t$-ième arbre. Pour un arbre donné comprenant $T$ feuilles ($q: \mathbb{R}^m \rightarrow \{1, \dots, T\}$), on définit $I_j = \{ i | q(\mathbf{x}_i) = j \}$ l'ensemble des observations situées sur la feuille $j$, et $w_j$ la valeur prédite par l'arbre pour la feuille $j$. Avec cette notation, on réorganise $\mathcal{\tilde{L}}^{(t)}$:
 
 $$
 \begin{align*}
@@ -147,7 +147,7 @@ $$
 \end{align*}
 $$
 
-Dans la dernière expression, la fonction de perte simplifiée se reformule comme une combinaison quadratique des poids $w_j$, dans laquelle les dérivées première et seconde de la fonction de perte interviennent sous forme de pondérations. Tout l'enjeu de l'entraînement devient donc de trouver les poids optimaux $w_j$ qui minimiseront cette fonction de perte, compte tenu de ces pondérations. Il se trouve que le calcul de ces poids optimaux est très simple: pour une structure d'arbre donnée ($q: \mathbb{R}^m \rightarrow \{1, \dots, T\}$), le poids optimal $w_j^{\ast}$ de la feuille $j$ est donné par l'équation:
+Dans la dernière expression, la fonction de perte simplifiée se reformule comme une combinaison quadratique des poids $w_j$, dans laquelle les dérivées première et seconde de la fonction de perte interviennent sous forme de pondérations ($\sum_{i \in I_j} g_i$ et $\sum_{i \in I_j} h_i$). Pour un arbre donné, les poids optimaux $w_j$ sont ceux minimisent cette fonction de perte, compte tenu de ces pondérations. Il se trouve que le calcul de ces poids optimaux est très simple: le poids optimal $w_j^{\ast}$ de la feuille $j$ est donné par l'équation:
 
 $$ w_j^{\ast} = -\frac{\sum_{i \in I_j} g_i}{\sum_{i \in I_j} h_i + \lambda} $$ {#eq-w-j-optimal}
 
