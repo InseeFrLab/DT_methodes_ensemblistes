@@ -1,10 +1,57 @@
-# Liste des _notebooks_ envisagés
+---
+title: "Introduction aux méthodes ensemblistes"
+subtitle: "Liste des _notebooks_ envisagés"
+preview:
+  port: 4200
+  browser: true
+format:
+  ctk-article-typst:
+    include-in-header: customisation_plan.typ
+    keep-typ: true
+author:
+  - name: Mélina Hillion
+    affiliations:
+      - name: Insee
+        department: Unité SSP-Lab
+    email: melina.hillion@insee.fr
+  - name: Olivier Meslin
+    affiliations:
+      - name: Insee
+        department: Unité SSP-Lab
+    email: olivier.meslin@insee.fr
+fig-cap-location: top
+date: today
+abstract: |
+  A compléter
+keywords:
+  - machine learning
+  - méthodes ensemblistes
+  - formation
+# thanks: "Nous remercions Daffy Duck et Mickey Mouse pour leur contribution."
+papersize: a4
+margins: 1.25in
+mainfont: New Computer Modern
+codefont: New Computer Modern Math
+title-page: false
+toc: false
+toc-depth: 3
+toc-title: "Sommaire"
+blind: false
+linkcolor: "#000000"
+bibliography: /references.bib
+bibliographystyle: ieee
+functions:
+  - "titled-raw-block"
+  - "text"
+---
 
-## Objectifs généraux des _notebooks_
+# Objectifs généraux des _notebooks_
 
 Les _notebooks_ devront être conçus pour être indépendants, reproductibles et pédagogiques, en offrant une transition progressive des bases aux approches plus avancées.
 
 - **Illustration des méthodes**: Illustrer concrètement les méthodes ensemblistes présentées dans le document méthodologique, en mettant en lumière les étapes clés, de la préparation des données à l'entraînement des modèles, en passant par l'optimisation des performance et l’interprétation des résultats. Ces notebooks mettront en oeuvre la procédure d'entraînement proposée dans le document méthodologique.
+
+- **Liens avec le document méthodologique**: les _notebooks_ contiendront de nombreux renvois vers les différentes parties du document méthodologique pour faciliter les allers-retours entre la présentation des algorithmes et leur usage pratique.
 
 - **Reproductibilité et accessibilité**: les _notebooks_ seront déployés sur le SSPCloud et utiliseront des données publiques pour une reproductibilité optimale.
 
@@ -13,9 +60,9 @@ Les _notebooks_ devront être conçus pour être indépendants, reproductibles e
 - **Applications concrètes**: Illustrer l'application des méthodes sur des cas d'usage simples basés sur des données ouvertes.
 
 
-## Liste des _notebooks_
+# Liste des _notebooks_
 
-### _Notebooks_ de base
+## _Notebooks_ de base
 
 Deux applications très simples sont envisagées: un problème de **régression** (prédire des prix immobiliers) et un problème de **classification binaire** (prédire le fait d'être diplômé du baccalauréat à partir des données individuelles du recensement de la population).
 
@@ -25,7 +72,7 @@ Deux applications très simples sont envisagées: un problème de **régression*
     - régression et classification par **forêt aléatoire** avec la librairie `scikit-learn`;
     - régression et classification par **_gradient boosting_** avec la librairie `lightgbm`.
 
-### _Notebooks_ avancés
+## _Notebooks_ avancés
 
 Selon le temps disponible, des _notebooks_ plus avancés pourront être proposés:
 

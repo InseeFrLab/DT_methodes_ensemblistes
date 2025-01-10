@@ -1,0 +1,3 @@
+# Le _bagging_ {#sec-bagging-detail}
+
+A rédiger

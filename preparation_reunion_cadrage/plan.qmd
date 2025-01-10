@@ -1,0 +1,168 @@
+---
+title: "Introduction aux méthodes ensemblistes"
+subtitle: "Plan détaillé"
+preview:
+  port: 4200
+  browser: true
+format:
+  ctk-article-typst:
+    include-in-header: ../customisation_template.typ
+    keep-typ: true
+author:
+  - name: Mélina Hillion
+    affiliations:
+      - name: Insee
+        department: Unité SSP-Lab
+    email: melina.hillion@insee.fr
+  - name: Olivier Meslin
+    affiliations:
+      - name: Insee
+        department: Unité SSP-Lab
+    email: olivier.meslin@insee.fr
+fig-cap-location: top
+date: today
+abstract: |
+  A compléter
+keywords:
+  - machine learning
+  - méthodes ensemblistes
+  - formation
+# thanks: "Nous remercions Daffy Duck et Mickey Mouse pour leur contribution."
+papersize: a4
+margins: 1.25in
+mainfont: New Computer Modern
+codefont: New Computer Modern Math
+title-page: false
+toc: true
+toc-depth: 3
+toc-title: "Sommaire"
+blind: false
+linkcolor: "#000000"
+bibliography: /references.bib
+bibliographystyle: ieee
+functions:
+  - "titled-raw-block"
+  - "text"
+bibliography: references.bib
+---
+
+
+# Introduction
+
+Enjeux pour la statistique publique:
+
+  - Qualité des données produites et diffusées (biais et précision des indicateurs/estimateurs)
+  
+  
+Contexte: des méthodes traditionnelles qui peuvent être mise en concurrence avec des méthodes plus performantes 
+
+  - Une approche puissante pour traiter les relations complexes (relations non linéaires, interactions entre variables etc.)
+  - Une infrastructure plus adaptée à l'utilisation de ces méthodes
+  
+
+Objectif de ce document méthodologique:
+
+  - diminuer le coup d'appropriation et d'expérimentation de ces méthodes
+
+
+Brève présentation des méthodes ensemblistes
+
+Brève présentation des applications dans la statistique publique (imputation, détection des valeurs aberrantes etc.)
+
+
+
+
+# Aperçu des méthodes ensemblistes
+
+__Principe__: cette partie propose une présentation intuitive des méthodes ensemblistes, sans aucune formalisation mathématique. Elle détaille les avantages et les inconvénients des méthodes ensemblistes par rapport aux méthodes traditionnelles, et propose une comparaison détaillée des forêts aléatoires et des algorithmes de boosting.
+
+__Principaux messages__:
+
+- Les méthodes ensemblistes sont des approches de _machine learning_ très performantes sur données tabulaires et relativement simples à prendre en main.
+- Elles sont particulièrement bien adaptées à de nombreux cas d'usage de la statistique publique car elles sont conçues pour s'appliquer à des données tabulaires.
+
+## Que sont les méthodes ensemblistes?
+
+- Plutôt que de chercher à construire d'emblée un unique modèle très complexe, les approches ensemblistes vise à obtenir un modèle très performant en combinant un grand nombre de modèles simples. 
+- Le document de travail se concentre sur les méthodes ensemblistes à base d'arbre de décision et de classification (on exclut le _stacking_.)
+- Les méthodes ensemblistes peuvent être divisées en deux grandes familles selon qu'elles s'appuient sur des modèles entrainés en parallèle ou de manière imbriquée ou séquentielle.
+
+## Pourquoi utiliser des méthodes ensemblistes?
+
+Les méthodes ensemblistes sont particulièrement bien adaptées à de nombreux cas d'usage de la statistique publique car elles sont conçues pour s'appliquer à des données tabulaires. 
+
+Trois avantages par rapport aux méthodes économétriques traditionnelles (régression linéaire et régression logistique): puissance prédictive supérieure, moins de préparation des données, moindres sensibibilités aux valeurs extrêmes et à l'hétéroscédasticité.
+
+Inconvénients par rapport aux méthodes économétriques traditionnelles: interprétabilité moindre, hyperparamètres plus nombreux et devant faire l'objet d'une optimisation, temps d'entraînement plus long.
+
+Par rapport au _deep learning_: la supériorité du _deep learning_ n'est pas établie pour les applications reposant sur des données tabulaires (@grinsztajn2022tree, @shwartz2022tabular, @mcelfresh2024neural). Avantages pratiques des méthodes ensemblistes par rapport au _deep learning_: plus faciles à prendre en main, plus rapides à entraîner, moins gourmandes en ressources informatiques, optimisation des hyperparamètres moins complexe.
+:::
+
+
+## Comment fonctionnent les méthodes ensemblistes?
+
+### Le point de départ: les arbres de décision et de régression
+
+Présentation intuitive  des arbres CART (@breiman1984cart). Un arbre est un algorithme prédictif assez simple avec trois caractéristiques essentielles:
+
+- Un arbre est un partitionnement de l'espace des variables en régions homogènes au sens d'une certaine mesure de l'hétérogénéité;
+- Ce partitionnement est réalisé à l'aide de régles de décision binaires très simples, mobilisant à chaque fois une variable et un seuil (exemple: $age > 40?$);
+- Une fois entraîné, l'arbre est une fonction constante par morceaux: à chaque région est associé une valeur qui constitue la prédiction du modèle pour les observations situées dans cette région.
+
+Illustration, et représentation graphique (sous forme d'arbre et de graphique).
+
+Avantages: simplicité, interprétabilité, représentation graphique simple.
+Inconvénients: instabilité, faible pouvoir prédictif.
+
+La performance d'un modèle augmente généralement avec sa complexité, jusqu'à atteindre un maximum, puis diminue. L'objectif est d'obtenir un modèle qui minimise à la fois le sous-apprentissage (biais) et le sur-apprentissage (variance). C'est ce qu'on appelle le compromis biais/variance. Cette section présente très brièvement les critères utilisés pour évaluer et comparer les performances des modèles.
+
+Toutes les méthodes ensemblistes ont en commun de construire des modèles performants en combinant un grand nombre d'arbres de décision. Le présent document présente les trois principales méthodes : le _bagging_, les _random forests_ et le _boosting_.
+
+### Le _bagging_ (Bootstrap Aggregating)
+
+Le _bagging_, ou _Bootstrap Aggregating_ (@breiman1996bagging), est une méthode ensembliste qui comporte trois étapes principales:
+
+- Création de sous-échantillons par échantillonnage aléatoire avec remise (_bootstrapping_). Cette technique permet de diversifier les données d'entraînement en créant des échantillons variés, ce qui aide à réduire la variance et à améliorer la robustesse du modèle.
+- Entraînement parallèle: Un arbre est entraîné sur chaque sous-échantillon de manière indépendante.
+- Agrégation des prédictions: Les prédictions des modèles sont combinées pour produire le résultat final (vote majoritaire en classification, moyenne en régression).
+
+En combinant les prédictions de plusieurs modèles, le _bagging_ renforce la stabilité et la performance globale de l'algorithme, notamment en réduisant la variance des prédictions.
+
+Avantages: pouvoir prédictif, entraînement hautement parallélisable.
+Inconvénients: malgré l'échantillonnage des données, les arbres ont souvent une structure similaire car les variables hautement prédictives restent approximativement les mêmes dans les différents sous-échantillons. Ce phénomène de corrélation entre arbres est le principal frein à la puissance prédictive du _bagging_ et explique pourquoi il est très peu utilisé en pratique aujourd'hui. 
+
+![Représentation schématique d'un algorithme de _bagging_](/figures/bagging.svg){#fig-bagging}
+    
+### Les forêts aléatoires
+
+Les forêts aléatoires (_random forests_) sont une amélioration du _bagging_ qui tâche de surmonter (ou au moins de minimiser) le problème de corrélation entre arbres, ce qui permet d'augmenter la précision de l'ensemble du modèle. Les forêts aléatoires sont un algorithme qui est très largement employé.
+
+![Représentation schématique d'un algorithme de forêt aléatoire](/figures/rf.svg){#fig-rf}
+
+
+
+<!-- https://neptune.ai/blog/ensemble-learning-guide -->
+<!-- https://www.analyticsvidhya.com/blog/2021/06/understanding-random-forest/ -->
+
+- Présentation avec la figure en SVG;
+- Difficile d'illustrer avec un exemple (car on ne peut pas vraiment représenter le _feature sampling_);
+Avantages des random forests: 1/ faible nombre d'hyperparamètres; 2/ faible sensibilité aux hyperparamètres; 3/ limite intrinsèque à l'overfitting.
+
+### Le _boosting_
+
+
+![Représentation schématique d'un algorithme de _boosting_](/figures/gb.svg){#fig-gb}
+
+
+Reprendre des éléments du chapitre 12 de https://bradleyboehmke.github.io/HOML/ et des éléments de la formation boosting.
+
+Le *boosting* combine l'[**approche ensembliste**]{.orange} avec une [**modélisation additive par étapes**]{.orange} (*forward stagewise additive modeling*).
+
+- Présentation;
+- Avantage du boosting: performances particulièrement élevées.
+- Inconvénients: 1/ nombre élevé d'hyperparamètres; 2/ sensibilité des performances aux hyperparamètres; 3/ risque élevé d'overfitting.
+
+- Préciser qu'il est possible d'utiliser du subsampling par lignes et colonnes pour un algoithme de boosting. Ce point est abordé plus en détail dans la partie sur les hyperparamètres.
+
+
+

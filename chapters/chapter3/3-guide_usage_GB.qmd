@@ -1,0 +1,4 @@
+
+# Guide d'usage du _gradient boosting_ {#sec-guide-gb}
+
+A rédiger

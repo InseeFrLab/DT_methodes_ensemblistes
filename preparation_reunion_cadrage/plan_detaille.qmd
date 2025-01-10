@@ -52,7 +52,7 @@ Cette introduction aux méthodes ensemblistes s'adresse aux agents de la statist
 
 
 # Introduction
-Cette section comporterait environ 1 page.
+Cette section comporterait environ 1 page et détaillerait les objectifs du document et les différents niveaux de lecture (aperçu, détail formalisé, guide d'usage, cas d'usage).
 
 #  Aperçu des méthodes ensemblistes
 

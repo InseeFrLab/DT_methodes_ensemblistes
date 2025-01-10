@@ -45,12 +45,18 @@ functions:
   - "text"
 ---
 
-{{< include ../index.qmd >}}
+{{< include ../chapters/chapter0/1-intro_generale.qmd >}}
 
 {{< include ../chapters/chapter1/1-survol.qmd >}}
 {{< include ../chapters/chapter1/2-comparaison_GB_RF.qmd >}}
 
+{{< include ../chapters/chapter2/1-CART_min.qmd >}}
+{{< include ../chapters/chapter2/2-bagging_min.qmd >}}
 {{< include ../chapters/chapter2/3-random_forest.qmd >}}
+{{< include ../chapters/chapter2/4-boosting_min.qmd >}}
 
-{{< include ../chapters/chapter3/1-preparation_donnees.qmd >}}
+{{< include ../chapters/chapter3/1-preparation_donnees_min.qmd >}}
 {{< include ../chapters/chapter3/2-guide_usage_RF.qmd >}}
+{{< include ../chapters/chapter3/3-guide_usage_GB.qmd >}}
+
+{{< include ../chapters/chapter4/1-cas_usage_SSP.qmd >}}
