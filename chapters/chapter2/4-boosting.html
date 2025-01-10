@@ -398,7 +398,8 @@ Commentaire: On pourrait peut-être donner la version formelle de la GBM, mais c
 \end{align*}
 \]</span></p>
 <p>Dans la dernière expression, la fonction de perte simplifiée se reformule comme une combinaison quadratique des poids <span class="math inline">\(w_j\)</span>, dans laquelle les dérivées première et seconde de la fonction de perte interviennent sous forme de pondérations. Tout l’enjeu de l’entraînement devient donc de trouver les poids optimaux <span class="math inline">\(w_j\)</span> qui minimiseront cette fonction de perte, compte tenu de ces pondérations. Il se trouve que le calcul de ces poids optimaux est très simple: pour une structure d’arbre donnée (<span class="math inline">\(q: \mathbb{R}^m \rightarrow \{1, \dots, T\}\)</span>), le poids optimal <span class="math inline">\(w_j^{\ast}\)</span> de la feuille <span class="math inline">\(j\)</span> est donné par l’équation:</p>
-<p><span id="eq-w_j_optimal"><span class="math display">\[ w_j^{\ast} = -frac(sum_(i in I_j) g_i, sum_(i in I_j) h_i + lambda)  \tag{3}\]</span></span> z Par conséquent, la valeur optimale de la fonction objectif pour l’arbre <span class="math inline">\(q\)</span> est égale à</p>
+<p><span id="eq-w_j_optimal"><span class="math display">\[ w_j^{\ast} = -\frac{\sum_{i \in I_j} g_i}{\sum_{i \in I_j} h_i + \lambda}  \tag{3}\]</span></span></p>
+<p>Par conséquent, la valeur optimale de la fonction objectif pour l’arbre <span class="math inline">\(q\)</span> est égale à</p>
 <p><span id="eq-fct-obj-optimal"><span class="math display">\[\mathcal{\tilde{L}}^{(t)}(q) = -\frac{1}{2} \sum_{j=1}^T \frac{\left(\sum_{i\in I_j} g_i\right)^2}{\sum_{i\in I_j} h_i+\lambda} + \gamma T \tag{4}\]</span></span></p>
 <p>Cette équation est utile car elle permet de comparer simplement la qualité de deux arbres, et de déterminer lequel est le meilleur.</p>
 </section>
