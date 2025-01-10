@@ -13,8 +13,8 @@ S'il existe plusieurs variantes, tous les algorithmes de *boosting* suivent la m
 
 En termes plus techniques, les algorithmes de *boosting* partagent trois caractéristiques communes:
 
--   Ils visent à **trouver une approximation** $\hat{F}$ d'une fonction inconnue $F*: \mathbf{x} \mapsto y$ à partir d'un ensemble d'entraînement $(y_i, \mathbf{x_i})_{i= 1,\dots,n}$;
--   Ils supposent que la fonction $F*$ peut être approchée par une **somme pondérée de modèles simples** $f$ de paramètres $\theta$:
+-   Ils visent à **trouver une approximation** $\hat{F}$ d'une fonction inconnue $F^{\ast}: \mathbf{x} \mapsto y$ à partir d'un ensemble d'entraînement $(y_i, \mathbf{x_i})_{i= 1,\dots,n}$;
+-   Ils supposent que la fonction $F^{\ast}$ peut être approchée par une **somme pondérée de modèles simples** $f$ de paramètres $\theta$:
 
 $$ F\left(\mathbf{x}\right) = \sum_{m=1}^M \beta_m f\left(\mathbf{x}, \mathbf{\theta}_m\right) $$
 
