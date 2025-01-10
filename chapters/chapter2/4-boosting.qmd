@@ -74,7 +74,9 @@ L'approche de *gradient boosting* proposée par @friedman2001greedy présente de
 
 ### La mécanique du *gradient boosting*
 
-Depuis la publication de @friedman2001greedy, la méthode de *gradient boosting* a connu de multiples développements et raffinements, parmi lesquels XGBoost (@chen2016xgboost), LightGBM (@ke2017lightgbm) et CatBoost (@prokhorenkova2018catboost). S'il existe quelques différences entre ces implémentations, elles partagent néanmoins la même mécanique d'ensemble, que la section qui suit va présenter en détail en s'appuyant sur l'implémentation proposée par XBGoost.[\^Cette partie reprend la structure et les notations de la partie 2 de @chen2016xgboost.]
+La méthode de *gradient boosting* proposée @friedman2001greedy a fait l'objet de multiples implémentations intégrant de nombreuses optimisations et raffinements, parmi lesquelles XGBoost (@chen2016xgboost), LightGBM (@ke2017lightgbm) et CatBoost (@prokhorenkova2018catboost). S'il existe quelques différences entre ces implémentations, elles partagent néanmoins la même mécanique d'ensemble, que la section qui suit va présenter en détail en s'appuyant sur l'implémentation proposée par XBGoost.[^1]
+
+[^1]: Cette partie reprend la structure et les notations de la partie 2 de @chen2016xgboost.
 
 Choses importantes à mettre en avant:
 
