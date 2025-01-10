@@ -12,6 +12,9 @@ Choses importantes à mettre en avant:
 -   A la différence des forêts aléatoires, l'approche de _gradient boosting_ ne contient en elle-même aucune limite au surapprentissage, bien au contraire: le _gradient boosting_ est un algorithme conçu pour approximer le plus précisément possible la relation entre $X$ et $y$ telle qu'elle apparaît dans les données d'entraînement, qu'il s'agisse d'un signal pertinent ou d'un bruit statistique, ce qui le rend particulièrement vulnérable au surapprentissage. Par conséquent, la lutte contre l'_overfitting_ est un élément essentiel de l'usage des algorithmes de _gradient boosting_.
 
 -   Les termes de régularisation sont directement intégrées à la mécanique du _gradient boosting_.
+
+Interprétation intuitive: $\gamma$ est le gain minimal nécessaire pour diviser un noeud.
+
 -   Comment on interprète le gradient et la hessienne: cas avec une fonction de perte quadratique.
 
 
@@ -27,3 +30,25 @@ L'utilisation d'histogrammes (_histogram-based algorithms_) est une approche eff
 <!-- - __Mise à jour de l'histogramme__: G et H sont mis à jour après chaque arbre. -->
 
 
+# Le Shrinkage en Apprentissage Automatique
+
+Le **shrinkage** (ou **réduction** en français) est une technique utilisée dans l'apprentissage automatique, en particulier dans des algorithmes comme le gradient boosting, pour réduire la complexité du modèle et améliorer sa généralisation. En termes simples, le shrinkage consiste à appliquer un facteur de réduction aux mises à jour des paramètres à chaque itération.
+
+## Explication du Shrinkage dans le Contexte du Gradient Boosting
+
+### 1. But
+Dans les méthodes de boosting, à chaque itération, un nouveau modèle (souvent un arbre de décision) est ajouté pour corriger les erreurs du modèle précédent. Le shrinkage permet de réduire l'impact de chaque nouvel arbre ajouté, ce qui peut aider à éviter le sur-apprentissage (overfitting) en ralentissant l'ajustement du modèle aux données d'entraînement.
+
+### 2. Comment ça fonctionne
+- Après chaque itération, au lieu d'ajouter directement le nouvel arbre au modèle existant, on applique un facteur de réduction \( \eta \) (souvent appelé taux d'apprentissage ou **learning rate**) qui détermine l'ampleur de l'ajustement du modèle.
+- Par exemple, si l'arbre nouvellement appris améliore la prédiction de \( \Delta f(x) \), au lieu de l'ajouter directement à la prédiction, on ajoute \( \eta \times \Delta f(x) \), où \( \eta \) est un petit nombre (généralement entre 0 et 1).
+
+### 3. Avantages
+- **Réduction du sur-apprentissage** : En limitant l'impact de chaque arbre, le shrinkage aide à éviter que le modèle s'ajuste trop précisément aux bruits ou aux fluctuations des données d'entraînement.
+- **Amélioration de la généralisation** : Bien qu'il ralentisse l'entraînement, le shrinkage améliore souvent les performances du modèle sur des données de test (généralisation).
+
+### 4. Inconvénients
+- **Temps d'entraînement plus long** : En raison de la réduction de l'impact de chaque arbre, il peut être nécessaire de former plus d'arbres pour atteindre une performance similaire à celle d'un modèle sans shrinkage.
+
+## Conclusion
+En résumé, le shrinkage dans le contexte du gradient boosting consiste à appliquer un facteur de réduction à chaque nouvel arbre pour modérer ses effets sur le modèle final, afin d'améliorer la stabilité et la capacité de généralisation du modèle.
