@@ -83,9 +83,8 @@ Choses importantes à mettre en avant:
 
 -   Le boosting est fondamentalement différent des forêts aléatoires. See ESL, chapitre 10.
 -   Toute la mécanique est indépendante de la fonction de perte choisie. En particulier, elle est applicable indifféremment à des problèmes de classification et de régression.
--   Les poids sont calculés par une formule explicite, ce qui rend les calculs très rapides.
--   Les termes de régularisation sont directement intégrées à la mécanique du _gradient boosting_.
 -   Le boosting est fait pour overfitter; contrairement aux RF, il n'y a pas de limite à l'overfitting. Donc lutter contre le surapprentissage est un élément particulièrement important de l'usage des algorithmes de _gradient boosting_.
+-   Les termes de régularisation sont directement intégrées à la mécanique du _gradient boosting_.
 -   Comment on interprète le gradient et la hessienne: cas avec une fonction de perte quadratique.
 
 #### Le modèle à entraîner
@@ -100,7 +99,7 @@ Chaque arbre $f$ est défini par trois paramètres:
 -   son nombre de feuilles terminales $T$;
 -   les valeurs figurant sur ses feuilles terminales $\mathbf{w}\in \mathbb{R}^T$ (appelées poids ou *weights*).
 
-Le modèle est entraîné avec une **fonction-objectif** constituée d'une **fonction de perte** $l$ et d'une **fonction de régularisation** $\Omega$. La fonction de perte mesure la distance entre la prédiction $hat(y)$ et la vraie valeur $y$ et présente généralement les propriétés suivantes: elle est convexe et dérivable deux fois, et atteint son minimum lorsque $\hat{y} = y$. La fonction de régularisation pénalise la complexité du modèle. Dans le cas présent, elle pénalise les arbres avec un grand nombre de feuilles ($T$ élevé) et les arbres avec des poids élevés ($w_t$ élevés en valeur absolue).
+Le modèle est entraîné avec une **fonction-objectif** constituée d'une **fonction de perte** $l$ et d'une **fonction de régularisation** $\Omega$. La fonction de perte mesure la distance entre la prédiction $\hat(y)$ et la vraie valeur $y$ et présente généralement les propriétés suivantes: elle est convexe et dérivable deux fois, et atteint son minimum lorsque $\hat{y} = y$. La fonction de régularisation pénalise la complexité du modèle. Dans le cas présent, elle pénalise les arbres avec un grand nombre de feuilles ($T$ élevé) et les arbres avec des poids élevés ($w_j$ élevés en valeur absolue).
 
 $$ \mathcal{L}(\phi) = \underbrace{\sum_i l(\hat{y}_{i}, y_{i})}_{\substack{\text{Perte sur les} \\ \text{observations}}} + \underbrace{\sum_k \Omega(f_{k})}_{\substack{\text{Fonction de} \\ \text{régularisation}}}\,\,\text{avec}\,\,\Omega(f) = \gamma T + \frac{1}{2} \lambda \sum_{t=1}^T \sum_{j=1}^{J_t} w_j^2 
 $$ {#eq-fct-obj-initial}
