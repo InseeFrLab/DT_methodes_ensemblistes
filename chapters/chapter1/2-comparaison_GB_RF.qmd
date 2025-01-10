@@ -15,7 +15,6 @@ Les forêts aléatoires et le *gradient boosting* paraissent très similaires au
 ### Quelle approche choisir?
 
 Le point de départ recommandé est de commencer par entraîner une forêt aléatoire avec les hyperparamètres par défaut.
-- 
 
 
 

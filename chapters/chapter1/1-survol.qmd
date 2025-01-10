@@ -37,6 +37,7 @@ Si les approches de _deep learning_ sont sans conteste très performantes pour l
 
 Ce paragraphe présente d'abord le modèle de base sur lesquelles sont construites les méthodes ensemblistes à base d'arbres: l'arbre de classification et de régression (CART) (@sec-cart-intuition). Bien que simples et intuitifs, les arbres CART sont souvent insuffisants en termes de performance lorsqu'ils sont utilisés isolément.
 
+
 Elle introduit ensuite les **deux grandes familles de méthodes ensemblistes** décrites dans ce document: le _bagging_ et les forêts aléatoires (@sec-rf-intuition), et le _gradient boosting_ (@sec-gb-intuition).
 
 
@@ -124,6 +125,7 @@ Pour atteindre ce second objectif, la forêt aléatoire introduit une nouvelle s
 ![Représentation schématique d'un algorithme de forêt aléatoire](/figures/rf.svg){#fig-rf}
 
 La figure @fig-rf propose une représentation schématique d'une forêt aléatoire. La logique d'ensemble reste la même que celle du _bagging_. L'échantillonnage _bootstrap_ est inchangé, mais l'étape de construction de chaque arbre est modifiée pour n'utiliser, à chaque nouvelle division, qu'un sous-ensemble aléatoire de variables. L'agrégation des prédictions se fait ensuite de la même manière que pour le _bagging_.
+
 
 <!--Cette restriction de la liste des variables considérées permet de réduire l'utilisation des variables les plus prédictives et de mieux mobiliser l'information disponible dans les variables peu corrélées avec $y$.-->
 

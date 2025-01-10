@@ -1,28 +1,28 @@
-# Le bagging {#sec-bagging-detail}
+# Le _bagging_ {#sec-bagging-detail}
 
-Le bagging, ou "bootstrap aggregating", est une méthode ensembliste qui vise à améliorer la stabilité et la précision des algorithmes d'apprentissage automatique en agrégeant plusieurs modèles (@breiman1996bagging). Chaque modèle est entraîné sur un échantillon distinct généré par une technique de rééchantillonnage (_bootstrap_). Ces modèles sont ensuite combinés pour produire une prédiction agrégée, souvent plus robuste et généralisable que celle obtenue par un modèle unique.
+Le _bagging_, ou "bootstrap aggregating", est une méthode ensembliste qui vise à améliorer la stabilité et la précision des algorithmes d'apprentissage automatique en agrégeant plusieurs modèles (@breiman1996bagging). Chaque modèle est entraîné sur un échantillon distinct généré par une technique de rééchantillonnage (_bootstrap_). Ces modèles sont ensuite combinés pour produire une prédiction agrégée, souvent plus robuste et généralisable que celle obtenue par un modèle unique.
 
 
 <!-- , qui consiste à créer des échantillons par tirage aléatoires avec remise à partir du jeu de données initial -->
 
-## Principe du bagging
+## Principe du _bagging_
 
-Le bagging comporte trois étapes principales:
+Le _bagging_ comporte trois étapes principales:
 
 -   **L'échantillonnage bootstrap** : L'échantillonnage bootstrap consiste à créer des échantillons distincts en tirant aléatoirement avec remise des observations du jeu de données initial. Chaque échantillon *bootstrap* contient le même nombre d'observations que le jeu de données initial, mais certaines observations sont répétées (car sélectionnées plusieurs fois), tandis que d'autres sont omises.
 
--   **L'entraînement de plusieurs modèles** : Un modèle (aussi appelé *apprenant de base* ou *weak learner*) est entraîné sur chaque échantillon bootstrap. Les modèles peuvent être des arbres de décision, des régressions ou tout autre algorithme d'apprentissage. Le bagging est particulièrement efficace avec des modèles instables, tels que les arbres de décision non élagués.
+-   **L'entraînement de plusieurs modèles** : Un modèle (aussi appelé *apprenant de base* ou *weak learner*) est entraîné sur chaque échantillon bootstrap. Les modèles peuvent être des arbres de décision, des régressions ou tout autre algorithme d'apprentissage. Le _bagging_ est particulièrement efficace avec des modèles instables, tels que les arbres de décision non élagués.
 
 -   **L'agrégation des prédictions** : Les prédictions de tous les modèles sont ensuite agrégées, en procédant généralement à la moyenne (ou à la médiane) des prédictions dans le cas de la régression, et au vote majoritaire (ou à la moyenne des probabilités prédites pour chaque classe) dans le cas de la classification, afin d'obtenir des prédictions plus précises et généralisables.
 
 
-## Pourquoi (et dans quelles situations) le bagging fonctionne
+## Pourquoi (et dans quelles situations) le _bagging_ fonctionne
 
-Certains modèles sont très sensibles aux données d'entraînement, et leurs prédictions sont très instables d'un échantillon à l'autre. L'objectif du bagging est de construire un prédicteur plus précis en agrégeant les prédictions de plusieurs modèles entraînés sur des échantillons (légèrement) différents les uns des autres. 
+Certains modèles sont très sensibles aux données d'entraînement, et leurs prédictions sont très instables d'un échantillon à l'autre. L'objectif du _bagging_ est de construire un prédicteur plus précis en agrégeant les prédictions de plusieurs modèles entraînés sur des échantillons (légèrement) différents les uns des autres. 
 
 @breiman1996bagging montre que cette méthode est particulièrement efficace lorsqu'elle est appliquée à des modèles très instables, dont les performances sont particulièrement sensibles aux variations du jeu de données d'entraînement, et peu biaisés.
 
-Cette section vise à mieux comprendre comment (et sous quelles conditions) l'agrégation par bagging permet de construire un prédicteur plus performant. 
+Cette section vise à mieux comprendre comment (et sous quelles conditions) l'agrégation par _bagging_ permet de construire un prédicteur plus performant. 
 
 Dans la suite, nous notons $φ(x, L)$ un prédicteur (d'une valeur numérique dans le cas de la *régression* ou d'un label dans le cas de la *classification*), entraîné sur un ensemble d'apprentissage $L$, et prenant en entrée un vecteur de caractéristiques $x$. 
 
@@ -73,13 +73,13 @@ $ \text{Var}(\phi_A(x)) = \text{Var}(E_L[\phi(x, L)]) \leq E_L[\text{Var}(\phi(x
 
 Autrement dit, le processus d'agrégation réduit l'erreur de prédiction globale en réduisant la **variance** des prédictions, tout en conservant un biais constant.
 
-Ce résultat ouvre la voie à des considérations pratiques immédiates. Lorsque le modèle individuel est instable et présente une variance élevée, l'inégalité $Var(\phi_A(x)) \leq E_L[Var(\phi(x,L))]$ est forte, ce qui signifie que l'agrégation peut améliorer significativement la performance globale du modèle. En revanche, si $ϕ(x,L)$ varie peu d'un ensemble d'entraînement à un autre (modèle stable avec variance faible), alors $Var(\phi_A(x))$ est proche de $E_L[Var(\phi(x,L))]$, et la réduction de variance apportée par l'agrégation est faible. Ainsi, __le bagging est particulièrement efficace pour les modèles instables__, tels que les arbres de décision, mais moins efficace pour les modèles stables tels que les méthodes des k plus proches voisins.
+Ce résultat ouvre la voie à des considérations pratiques immédiates. Lorsque le modèle individuel est instable et présente une variance élevée, l'inégalité $Var(\phi_A(x)) \leq E_L[Var(\phi(x,L))]$ est forte, ce qui signifie que l'agrégation peut améliorer significativement la performance globale du modèle. En revanche, si $ϕ(x,L)$ varie peu d'un ensemble d'entraînement à un autre (modèle stable avec variance faible), alors $Var(\phi_A(x))$ est proche de $E_L[Var(\phi(x,L))]$, et la réduction de variance apportée par l'agrégation est faible. Ainsi, __le _bagging_ est particulièrement efficace pour les modèles instables__, tels que les arbres de décision, mais moins efficace pour les modèles stables tels que les méthodes des k plus proches voisins.
 
 
 
 ### La classification: vers un classificateur presque optimal par agrégation
 
-Dans le cas de la classification, le mécanisme de réduction de la variance par le bagging permet, sous une certaine condition, d'atteindre un **classificateur presque optimal** (*nearly optimal classifier*). Ce concept a été introduit par @breiman1996bagging pour décrire un modèle qui tend à classer une observation dans la classe la plus probable, avec une performance approchant celle du classificateur Bayésien optimal (la meilleure performance théorique qu'un modèle de classification puisse atteindre).
+Dans le cas de la classification, le mécanisme de réduction de la variance par le _bagging_ permet, sous une certaine condition, d'atteindre un **classificateur presque optimal** (*nearly optimal classifier*). Ce concept a été introduit par @breiman1996bagging pour décrire un modèle qui tend à classer une observation dans la classe la plus probable, avec une performance approchant celle du classificateur Bayésien optimal (la meilleure performance théorique qu'un modèle de classification puisse atteindre).
 
 Pour comprendre ce résutlat, introduisons $Q(j|x) = E_L(1_{φ(x, L) = j}) = P(φ(x, L) = j)$, la probabilité qu'un modèle $φ(x, L)$ prédise la classe $j$ pour l'observation $x$, et $P(j|x)$, la probabilité réelle (conditionnelle) que $x$ appartienne à la classe $j$.
 
@@ -118,7 +118,7 @@ Cependant, dans les régions de l’espace où les classificateurs individuels n
 
 ## L'échantillage par bootstrap peut détériorer les performances théoriques du modèle agrégé
 
-En pratique, au lieu d'utiliser tous les ensembles d'entraînement possibles $L$, le bagging repose sur un nombre limité d'échantillons bootstrap tirés avec remise à partir d'un même jeu de données initial, ce qui peut introduire des biais par rapport au prédicteur agrégé théorique.
+En pratique, au lieu d'utiliser tous les ensembles d'entraînement possibles $L$, le _bagging_ repose sur un nombre limité d'échantillons bootstrap tirés avec remise à partir d'un même jeu de données initial, ce qui peut introduire des biais par rapport au prédicteur agrégé théorique.
 
 Les échantillons bootstrap présentent les limites suivantes :
 
@@ -128,36 +128,36 @@ Les échantillons bootstrap présentent les limites suivantes :
 
 - Une __couverture incomplète de l'ensemble des échantillons possibles__: Les échantillons bootstrap ne couvrent pas l'ensemble des échantillons d'entraînement possibles, ce qui peut introduire un biais supplémentaire par rapport au prédicteur agrégé théorique.
 
-## Le bagging en pratique
+## Le _bagging_ en pratique
 
-### Quand utiliser le bagging en pratique
+### Quand utiliser le _bagging_ en pratique
 
-Le bagging est particulièrement utile lorsque les modèles individuels présentent une variance élevée et sont instables. Dans de tels cas, l'agrégation des prédictions peut réduire significativement la variance globale, améliorant ainsi la performance du modèle agrégé. Les situations où le bagging est recommandé incluent typiquement:
+Le _bagging_ est particulièrement utile lorsque les modèles individuels présentent une variance élevée et sont instables. Dans de tels cas, l'agrégation des prédictions peut réduire significativement la variance globale, améliorant ainsi la performance du modèle agrégé. Les situations où le _bagging_ est recommandé incluent typiquement:
 
-- Les modèles instables : Les modèles tels que les arbres de décision non élagués, qui sont sensibles aux variations des données d'entraînement, bénéficient grandement du bagging. L'agrégation atténue les fluctuations des prédictions dues aux différents échantillons.
+- Les modèles instables : Les modèles tels que les arbres de décision non élagués, qui sont sensibles aux variations des données d'entraînement, bénéficient grandement du _bagging_. L'agrégation atténue les fluctuations des prédictions dues aux différents échantillons.
 
-- Les modèles avec biais faibles: En classification, si les modèles individuels sont order-corrects pour la majorité des observations, le bagging peut améliorer la précision en renforçant les prédictions correctes et en réduisant les erreurs aléatoires.
+- Les modèles avec biais faibles: En classification, si les modèles individuels sont order-corrects pour la majorité des observations, le _bagging_ peut améliorer la précision en renforçant les prédictions correctes et en réduisant les erreurs aléatoires.
 
-Inversement, le bagging peut être moins efficace ou même néfaste dans certaines situations :
+Inversement, le _bagging_ peut être moins efficace ou même néfaste dans certaines situations :
 
-- Les modèles stables avec variance faible : Si les modèles individuels sont déjà stables et présentent une faible variance (par exemple, la régression linéaire), le bagging n'apporte que peu d'amélioration, car la réduction de variance supplémentaire est minimale.
+- Les modèles stables avec variance faible : Si les modèles individuels sont déjà stables et présentent une faible variance (par exemple, la régression linéaire), le _bagging_ n'apporte que peu d'amélioration, car la réduction de variance supplémentaire est minimale.
 
-- La présence de biais élevée : Si les modèles individuels sont biaisés, entraînant des erreurs systématiques, le bagging peut amplifier ces erreurs plutôt que de les corriger. Dans de tels cas, il est préférable de s'attaquer d'abord au biais des modèles avant de considérer l'agrégation.
+- La présence de biais élevée : Si les modèles individuels sont biaisés, entraînant des erreurs systématiques, le _bagging_ peut amplifier ces erreurs plutôt que de les corriger. Dans de tels cas, il est préférable de s'attaquer d'abord au biais des modèles avant de considérer l'agrégation.
 
-- Les échantillons de petite taille : Avec des ensembles de données limités, les échantillons bootstrap peuvent ne pas être suffisamment diversifiés ou représentatifs, ce qui réduit l'efficacité du bagging et peut augmenter le biais des modèles.
-
-
-**Ce qui qu'il faut retenir**: le bagging peut améliorer substantiellement la performance des modèles d'apprentissage automatique lorsqu'il est appliqué dans des conditions appropriées. Il est essentiel d'évaluer la variance et le biais des modèles individuels, ainsi que la taille et la représentativité du jeu de données, pour déterminer si le bagging est une stratégie adaptée. Lorsqu'il est utilisé judicieusement, le bagging peut conduire à des modèles plus robustes et précis, exploitant efficacement la puissance de l'agrégation pour améliorer la performance des modèles individuels.
+- Les échantillons de petite taille : Avec des ensembles de données limités, les échantillons bootstrap peuvent ne pas être suffisamment diversifiés ou représentatifs, ce qui réduit l'efficacité du _bagging_ et peut augmenter le biais des modèles.
 
 
-### Comment utiliser le bagging en pratique
+**Ce qui qu'il faut retenir**: le _bagging_ peut améliorer substantiellement la performance des modèles d'apprentissage automatique lorsqu'il est appliqué dans des conditions appropriées. Il est essentiel d'évaluer la variance et le biais des modèles individuels, ainsi que la taille et la représentativité du jeu de données, pour déterminer si le _bagging_ est une stratégie adaptée. Lorsqu'il est utilisé judicieusement, le _bagging_ peut conduire à des modèles plus robustes et précis, exploitant efficacement la puissance de l'agrégation pour améliorer la performance des modèles individuels.
+
+
+### Comment utiliser le _bagging_ en pratique
 
 #### Combien de modèles agréger?
-"Optimal performance is often found by bagging 50–500 trees. Data sets that have a few strong predictors typically require less trees; whereas data sets with lots of noise or multiple strong predictors may need more. Using too many trees will not lead to overfitting. However, it’s important to realize that since multiple models are being run, the more iterations you perform the more computational and time requirements you will have. As these demands increase, performing k-fold CV can become computationally burdensome."
+"Optimal performance is often found by _bagging_ 50–500 trees. Data sets that have a few strong predictors typically require less trees; whereas data sets with lots of noise or multiple strong predictors may need more. Using too many trees will not lead to overfitting. However, it’s important to realize that since multiple models are being run, the more iterations you perform the more computational and time requirements you will have. As these demands increase, performing k-fold CV can become computationally burdensome."
 
 #### Evaluation du modèle: cross validation et échantillon Out-of-bag (OOB)
 
-"A benefit to creating ensembles via bagging, which is based on resampling with replacement, is that it can provide its own internal estimate of predictive performance with the out-of-bag (OOB) sample (see Section 2.4.2). The OOB sample can be used to test predictive performance and the results usually compare well compared to k-fold CV assuming your data set is sufficiently large (say n≥1,000). Consequently, as your data sets become larger and your bagging iterations increase, it is common to use the OOB error estimate as a proxy for predictive performance."
+"A benefit to creating ensembles via _bagging_, which is based on resampling with replacement, is that it can provide its own internal estimate of predictive performance with the out-of-bag (OOB) sample (see Section 2.4.2). The OOB sample can be used to test predictive performance and the results usually compare well compared to k-fold CV assuming your data set is sufficiently large (say n≥1,000). Consequently, as your data sets become larger and your _bagging_ iterations increase, it is common to use the OOB error estimate as a proxy for predictive performance."
 
 
 ## Mise en pratique (exemple avec code)

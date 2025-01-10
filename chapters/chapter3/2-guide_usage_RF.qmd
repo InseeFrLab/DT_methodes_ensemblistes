@@ -1,8 +1,7 @@
 
-# Guide d'entraînement des forêts aléatoires {#sec-guide-rf}
+# Guide d'usage des forêts aléatoires {#sec-guide-rf}
 
-Ce guide d'entraînement des forêts aléatoires rassemble et synthétise des recommandations sur l'entraînement des forêts aléatoires disponibles dans la littérature, en particulier dans @probst2019hyperparameters. Ce guide comporte un certain nombre de choix méthodologiques forts, comme les implémentations recommandées ou la procédure d'entraînement proposée, et d'autres choix sont évidemment possibles. Les recommandations de ce guide doivent donc être considérées comme un point de départ raisonnable, pas comme un ensemble de règles devant être respectées à tout prix.
-
+Ce guide d'entraînement des forêts aléatoires rassemble et synthétise des recommandations sur l'entraînement des forêts aléatoires disponibles dans la littérature, en particulier dans @probst2019hyperparameters. Ce guide comporte un certain nombre de choix méthodologiques forts, comme les implémentations recommandées ou la procédure d'entraînement proposée, et d'autres choix pertinents sont évidemment possibles. C'est pourquoi les recommandations de ce guide doivent être considérées comme un point de départ raisonnable, pas comme un ensemble de règles devant être respectées à tout prix.
 
 ## Quelles implémentations utiliser? {#sec-implementation-rf}
 
@@ -10,7 +9,7 @@ Il existe de multiples implémentations des forêts aléatoires. Le présent doc
 
 ## Les hyperparamètres clés des forêts aléatoires {#sec-hyperparam-rf}
  
-Cette section décrit en détail les principaux hyperparamètres des forêts aléatoires listés dans le tableau `@tbl-hyp-rf`{=typst}. Les noms des hyperparamètres utilisés sont ceux figurant dans le _package_ `R` `ranger`, et dans le _package_ `Python` `scikit-learn`. Il arrive qu'ils portent un nom différent dans d'autres implémentations des _random forests_, mais il est généralement facile de s'y retrouver en lisant attentivement la documentation.
+Cette section décrit en détail les principaux hyperparamètres des forêts aléatoires listés dans le tableau `@tbl-hyp-rf`{=typst}. Les noms des hyperparamètres utilisés sont ceux figurant dans le _package_ `R` `ranger`, et dans le _package_ `Python` `scikit-learn`. Il arrive qu'ils portent un nom différent dans d'autres implémentations des forêts aléatoires, mais il est généralement facile de s'y retrouver en lisant attentivement la documentation.
 
 ::: {.content-visible unless-format="html"}
 
@@ -18,7 +17,7 @@ Cette section décrit en détail les principaux hyperparamètres des forêts al�
 
 #figure(
   table(
-    columns: (3fr, 3fr, 6fr,),
+    columns: (3fr, 3fr, 5fr,),
     // align: (center, center, center),
     table.header(
       table.cell(colspan: 2)[
@@ -28,14 +27,15 @@ Cette section décrit en détail les principaux hyperparamètres des forêts al�
       ],
       [Description]
     ),
-    [ `mtry`   ], [ `max_features`                 ], [Le nombre de variables candidates à chaque noeud                              ],
-    [ `replacement`   ], [                         ], [L'échantillonnage des données se fait-il avec ou sans remise?                 ],
-    [ `sample.fraction`   ], [ `max_samples`       ], [Le taux d'échantillonnage des données                                         ],
-    [ `min.node.size`   ], [ `min_samples_leaf`    ], [Nombre minimal d'observations nécessaire pour qu'un noeud puisse être partagé ],
     [ `num.trees`   ], [ `n_estimators`            ], [Le nombre d'arbres                                                            ],
-    [ `splitrule` ], [ `criterion`                 ], [Le critère de choix de la règle de division des noeuds intermédiaires         ],
+    [ `mtry`   ], [ `max_features`                 ], [Le nombre de variables candidates à chaque noeud                              ],
+    [ `sample.fraction`   ], [ `max_samples`       ], [Le taux d'échantillonnage des données                                         ],
+    [ `replacement`   ], [                         ], [L'échantillonnage des données se fait-il avec ou sans remise?                 ],
+    [ `min.node.size`   ], [ `min_samples_leaf`    ], [Nombre minimal d'observations nécessaire pour qu'un noeud puisse être partagé ],
     [ `min.bucket`  ], [ `min_samples_split`       ], [Nombre minimal d'observations dans les noeuds terminaux                       ],
     [ `max.depth`  ], [ `max_depth`                ], [Profondeur maximale des arbres                                                ],
+    [ `splitrule` ], [ `criterion`                 ], [Le critère de choix de la règle de division des noeuds intermédiaires         ],
+    [ `oob.error` ], [ `oob_score`                 ], [Calculer la performance de la forêt par l'erreur OOB (et choix de la métrique pour `scikit`) ],
   ),
     caption: [ Les principaux hyperparamètres des forêts aléatoires],
 ) <tbl-hyp-rf>
@@ -61,14 +61,10 @@ Cette section décrit en détail les principaux hyperparamètres des forêts al�
 
 :::
 
-- Le __nombre d'arbres__ par défaut varie selon les implémentations (500 dans `ranger`, 100 dans `scikit-learn`).  Il s'agit d'un hyperparamètre particulier car il n'est associé à aucun arbitrage en matière de performance: la performance de la forêt aléatoire croît avec le nombre d'arbres, puis se stabilise. Le nombre optimal d'arbres est celui à partir duquel la performance de la forêt ne croît plus (ce point est détaillé plus bas) où à partir duquel l'ajout d'arbres supplémentaires génère des gains marginaux. Il est important de noter que ce nombre optimal dépend des autres hyperparamètres. Par exemple, un taux d'échantillonnage faible et un nombre faible de variables candidates à chaque noeud aboutissent à des arbres peu corrélés, mais peu performants, ce qui requiert probablement un plus grand nombre d'arbres. L'utilisation de mesures comme le score de Brier est recommandée pour évaluer la convergence plutôt que le taux d'erreur.
+- Le __nombre d'arbres__ par défaut varie selon les implémentations (500 dans `ranger`, 100 dans `scikit-learn`).  Il s'agit d'un hyperparamètre particulier car il n'est associé à aucun arbitrage en matière de performance: la performance de la forêt aléatoire croît avec le nombre d'arbres, puis se stabilise. Le nombre optimal d'arbres est celui à partir duquel la performance de la forêt ne croît plus (ce point est détaillé plus bas) où à partir duquel l'ajout d'arbres supplémentaires génère des gains marginaux. Il est important de noter que ce nombre optimal dépend des autres hyperparamètres. Par exemple, un taux d'échantillonnage faible et un nombre faible de variables candidates à chaque noeud aboutissent à des arbres peu corrélés, mais peu performants, ce qui requiert probablement un plus grand nombre d'arbres. Dans le cas d'une classification, l'utilisation de mesures comme le score de Brier ou la fonction de perte logarithmique est recommandée pour évaluer la convergence plutôt que la précision (métrique par défaut de `ranger` et `scikit-learn`).
 
 
-- Le __nombre (ou la part) de variables candidates à chaque noeud__ (souvent appelé `mtry`) est un hyperparamètre fondamental qui détermine le nombre de variables prédictives sélectionnées aléatoirement à chaque nœud lors de la construction des arbres. Ce paramètre exerce la plus forte influence sur les performances du modèle.
-
-Un nombre plus faible de variables candidates conduit à des arbres moins performants mais plus diversifiés et donc moins corrélés entre eux. À l'inverse, un nombre plus élevé de variables candidates améliore la précision des arbres individuels mais accroît leur corrélation (les mêmes variables ayant tendance à être sélectionnées dans tous les arbres), limitant ainsi les bénéfices de l'agrégation en termes de réduction de variance. Un compromis doit être trouvé et le choix optimal dépend du nombre de variables réellement pertinentes dans les données. Une faible valeur de `mtry` est préférable lorsque la plupart des variables sont pertinentes, tandis qu'une valeur élevé est meilleure lorsqu'il y a peu de variables pertinentes parmi l'ensemble des variables considérées. Par ailleurs, une valeur élevée de `mtry` est préférable si les données comprennent un grand nombre de variables binaires issues du _one-hot-encoding_ des variables catégorielles (LIEN AVEC LA PARTIE PREPROCESSING).
-
-Par défaut, cette valeur est fréquemment fixée à $\sqrt{p}$ pour les problèmes de classification et à $p/3$ pour les problèmes de régression, où $p$ représente le nombre total de variables prédictives disponibles. Ces choix par défaut reposent sur des heuristiques empiriques qui offrent généralement un bon compromis entre la précision des prédictions et la diversité des arbres.
+- Le __nombre (ou la part) de variables candidates à chaque noeud__ (souvent appelé `mtry`) est un hyperparamètre essentiel qui détermine le nombre de variables prédictives sélectionnées aléatoirement à chaque nœud lors de la construction des arbres. Ce paramètre exerce la plus forte influence sur les performances du modèle, et un compromis doit être trouvé entre puissance prédictive des arbres et corrélation entre arbres. Une faible valeur de `mtry` conduit à des arbres moins performants mais plus diversifiés et donc moins corrélés entre eux. Inversement, une valeur plus élevée améliore la précision des arbres individuels mais accroît leur corrélation (les mêmes variables ayant tendance à être sélectionnées dans tous les arbres). La valeur optimale de `mtry` dépend du nombre de variables réellement pertinentes dans les données: elle est plus faible lorsque la plupart des variables sont pertinentes, et plus élevée lorsqu'il y a peu de variables pertinentes. Par ailleurs, une valeur élevée de `mtry` est préférable si les données comprennent un grand nombre de variables binaires issues du _one-hot-encoding_ des variables catégorielles (LIEN AVEC LA PARTIE PREPROCESSING). Par défaut, cette valeur est fréquemment fixée à $\sqrt{p}$ pour les problèmes de classification et à $p/3$ pour les problèmes de régression, où $p$ représente le nombre total de variables prédictives disponibles.
 
 
 - Le __taux d'échantillonnage__ et le __mode de tirage__ contrôlent le plan d'échantillonnage des données d'entraînement. Les valeurs par défaut varient d'une implémentation à l'autre; dans le cas de `ranger`, le taux d'échantillonnage est de 63,2% sans remise, et de 100% avec remise. L'implémentation `scikit-learn` ne propose pas le tirage sans remise. Ces hyperparamètres ont des effets sur la performance similaires à ceux du nombre de variables candidates, mais d'une moindre ampleur. Un taux d'échantillonnage plus faible aboutit à des arbres plus diversifiés et donc moins corrélés (car ils sont entraînés sur des échantillons très différents), mais ces arbres peuvent être peu performants car ils sont entraînés sur des échantillons de petite taille. Inversement, un taux d'échantillonnage élevé aboutit à des arbres plus performants mais plus corrélés. Les effets de l'échantillonnage avec ou sans remise sur la performance de la forêt aléatoire sont moins clairs et ne font pas consensus. Les travaux les plus récents semblent toutefois suggérer qu'il est préférable d'échantillonner sans remise (@probst2019hyperparameters).
@@ -82,22 +78,22 @@ Par défaut, cette valeur est fréquemment fixée à $\sqrt{p}$ pour les problè
 
 ## Comment entraîner une forêt aléatoire? {#sec-procedure-training-rf}
 
-Les forêts aléatoires nécessitent généralement moins d’optimisation que d’autres modèles de _machine learning_, car leurs performances varient relativement peu en fonction des hyperparamètres. Les valeurs par défaut fournissent souvent des résultats satisfaisants, ce qui réduit le besoin d'optimisation intensive. Cependant, un ajustement précis des hyperparamètres peut apporter des gains de performance, notamment sur des jeux de données complexes.
+Les forêts aléatoires nécessitent généralement moins d'optimisation que d’autres modèles de _machine learning_, car leurs performances varient relativement peu en fonction des hyperparamètres. Les valeurs par défaut fournissent souvent des résultats satisfaisants, ce qui réduit le besoin d'optimisation intensive. Cependant, un ajustement précis des hyperparamètres peut apporter des gains de performance, notamment sur des jeux de données complexes.
 
-Comme indiqué dans la partie __REFERENCE A AJOUTER__, la performance prédictive d'une forêt aléatoire varie en fonction de deux critères essentiels: elle croît avec le pouvoir prédictif des arbres, et décroît avec la corrélation des arbres entre eux. L'entraînement d'une forêt aléatoire implique de trouver un équilibre optimal où les arbres sont suffisamment puissants pour être prédictifs, tout en étant suffisamment diversifiés pour que leurs erreurs ne soient pas trop corrélées. Cet arbitrage s'opère en ajustant certains hyperparamètres clés comme le nombre de variables candidates à chaque division, la taille de l'échantillon ou encore la taille minimale des feuilles. L'ajustement du nombre d'arbre relève plutôt d'un arbitrage entre performance et temps de calcul. Il est recommandé de fixer le nombre d'arbre à une valeur au-delà de laquelle les gains de performance peuvent être considérés comme marginaux.
+Comme indiqué dans la partie @sec-facteur-perf-rf, la performance prédictive d'une forêt aléatoire varie en fonction de deux critères essentiels: elle croît avec le pouvoir prédictif des arbres, et décroît avec la corrélation des arbres entre eux. L'optimisation des hyperparamètres d'une forêt aléatoire vise donc à trouver un équilibre optimal où les arbres sont suffisamment puissants pour être prédictifs, tout en étant suffisamment diversifiés pour que leurs erreurs ne soient pas trop corrélées. 
 
-Il existe plusieurs méthodes permettant d'optimiser simultanément plusieurs hyperparamètres: la recherche par grille, la recherche aléatoire et l'optimisation basée sur modèle séquentiel (SMBO). 
+La littérature propose de multiples approches pour optimiser simultanément plusieurs hyperparamètres: la recherche par grille (_grid search_), la recherche aléatoire (_random search_) et l'optimisation basée sur modèle séquentiel (SMBO), et il peut être difficile de savoir quelle approche adopter. Ce guide propose donc une première approche délibérément simple, avant de présenter les approches plus avancées.
 
+### Approche simple
 
-### Première approche exploratoire
+Voici une procédure simple pour entraîner une forêt aléatoire. Elle ne garantit pas l'obtention d'un modèle optimal, mais elle est lisible et permet d'obtenir rapidement un modèle raisonnablement performant. 
 
-Voici une procédure simple pour entraîner une forêt aléatoire. Elle ne garantit pas l'obtention d'un modèle optimal, mais elle est lisible et permet d'obtenir rapidement un modèle raisonnablement performant.
-
-- __Commencer par entraîner une forêt aléatoire avec les valeurs des hyperparamètres par défaut__. Ce premier modèle servira de point de comparaison pour la suite.
-- __Ajuster le nombre d’arbres__: entraîner une forêt aléatoire avec les hyperparamètres par défaut en augmentant progressivement le nombre d'arbres, puis déterminer à partir de quel nombre d'arbres la performance se stabilise. Fixer le nombre d'arbres à cette valeur par la suite.
-- __Ajuster le nombre minimal d'observations dans les noeuds terminaux__: optimiser cet hyperparamètre grâce à une méthode de _grid search_ évaluée par une approche de validation-croisée. Ce n'est pas l'hyperparamètre le plus important, mais il est utile de vérifier s'il est possible de le fixer à une valeur plus élevée que la valeur par défaut sans perte de performance, car cela permet d'accélérer le reste de la procédure.
-- __Ajuster le nombre de variables candidates et le taux d'échantillonnage__: optimiser ces deux hyperparamètres grâce à une méthode de _grid search_ évaluée par une approche de validation-croisée. 
-- __Evaluation du modèle final__: mesurer la performance du modèle final soit avec l'approche Out-of-Bag (OOB), soit avec un ensemble de test. Il est souvent instructif de comparer les performances du modèle final et du modèle entraîné avec les valeurs des hyperparamètres par défaut.
+- __Entraîner une forêt aléatoire avec les valeurs des hyperparamètres par défaut__. Ce premier modèle servira de point de comparaison pour la suite.
+- __Ajuster le nombre d’arbres__: entraîner une forêt aléatoire avec les hyperparamètres par défaut en augmentant progressivement le nombre d'arbres, puis déterminer à partir de quel nombre d'arbres la performance se stabilise (en mesurant la performance avec l'erreur OOB avec pour métrique le [score de Brier](https://scikit-learn.org/dev/modules/model_evaluation.html#brier-score-loss)). Fixer le nombre d'arbres à cette valeur par la suite.
+- __Ajuster le nombre de variables candidates et le taux d'échantillonnage__: optimiser ces deux hyperparamètres grâce à une méthode de _grid search_ évaluée par une approche de validation-croisée, ou par une approche reposant sur l'erreur OOB. 
+- __Ajuster le nombre minimal d'observations dans les noeuds terminaux__: optimiser cet hyperparamètre grâce à une méthode de _grid search_ évaluée par une approche de validation-croisée, ou par une approche reposant sur l'erreur OOB. Ce n'est pas l'hyperparamètre le plus important, mais s'il est possible de le fixer à une valeur plus élevée que la valeur par défaut sans perte de performance, cela permet d'accélérer le reste de la procédure.
+- __Entraîner du modèle final__: entraîner une forêt aléatoire avec les hyperparamètres optimisés déduits des étapes précédentes.
+- __Évaluer du modèle final__: mesurer la performance du modèle final soit avec l'approche _out-of-bag_ (OOB), soit avec un ensemble de test. Il est souvent instructif de comparer les performances du modèle final et du modèle entraîné avec les valeurs des hyperparamètres par défaut (parfois pour se rendre compte que ce dernier était déjà suffisamment performant...).
 
 ### Approches plus avancées
 
@@ -122,11 +118,11 @@ En pratique, il est recommandé d'utiliser des méthodes d'importance des variab
 
 On conseille l'utilisation de trois implémentations pour comparer l'importances des variables d'une forêt aléatoire:
 
-- Pour la MDI: l'algorithme CIF proposé par @strobl2007bias et implémenté en R
+- Pour la MDI: l'algorithme CIF proposé par @strobl2007bias et implémenté en `R`
 
-- Pour la MDA: l'algorithme Sobol-MDA proposé par @benard2022mda et implémenté en R
+- Pour la MDA: l'algorithme Sobol-MDA proposé par @benard2022mda et implémenté en `R`
 
-- Pour les valeurs de shapley : l'alogrithme SHAFF proposé par @benard2022shaff et implémenté en R
+- Pour les valeurs de Shapley : l'alogrithme SHAFF proposé par @benard2022shaff et implémenté en `R`
 
 Enfin, nous recommandons de combiner plusieurs méthodes pour une analyse plus robuste et de tenir compte des prétraitements des données afin de minimiser les biais potentiels.
 

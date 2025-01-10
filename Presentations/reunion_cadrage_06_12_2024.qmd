@@ -1,0 +1,333 @@
+---
+title: "Introduction aux méthodes ensemblistes"
+subtitle: "Réunion de cadrage"
+author:
+    - "Mélina Hillion et Olivier Meslin"
+date: "2024-12-06"
+date-format: long
+lang: fr-FR
+format:
+  revealjs:
+    pdf-export: true
+    output-file: reunion_cadrage_06_12_2024.html
+    slide-number: true
+    chalkboard: true
+    css: custom.css
+---
+
+
+
+
+# Introduction
+
+---
+
+**Objectif principal**
+
+- Intégrer les méthodes ensemblistes dans la boîte à outils des statisticiens publics, au même titre que la régression linéaire ou logistique.
+
+. . .
+
+
+**Pourquoi s'y intéresser ?**
+
+- État de l'art: méthodes devenues standard
+
+- Pertinence pour la statistique publique
+
+- Performance souvent supérieure
+
+- Facilité d'implémentation
+ 
+
+---
+
+## Pourquoi cette réunion de cadrage ?
+
+- **Valider les choix éditoriaux et pédagogiques** 
+
+- **Collecter vos besoins et vos suggestions**  
+  + Qu'attendez-vous d'un tel document méthodologique? 
+  + Qu'est-ce qui faciliterait l'adoption de ces méthodes ?
+
+- **Délimiter les contours du document**
+
+
+---
+
+**Ordre du jour**
+
+1. Présentation du projet
+2. Présentation du plan détaillé
+3. Discussion sur les choix éditoriaux
+4. _Notebooks_ et cas d'usage
+5. Vos besoins et attentes
+6. Prochaines étapes
+
+
+# Présentation du projet
+
+---
+
+**Objectif du document méthodologique**
+
+- Fournir un guide **complet et accessible** sur les méthodes ensemblistes pour les statisticiens publics.
+- Deux livrables: 
+    - un document pdf ($\approx$ 80-100 pages) et un site web (avec le même contenu)
+    - 6 _notebooks_ (voire plus)
+
+---
+
+
+**Bénéfices attendus**
+
+- **Acquérir de nouvelles compétences** 
+
+- **Améliorer la production de données et d'analyses** 
+
+- **Encourager l'adoption de techniques à l'état de l'art**
+
+
+# Présentation du plan détaillé
+
+---
+
+**1. Introduction**
+
+- Contexte et objectifs.
+
+. . .
+
+**2. Aperçu des méthodes ensemblistes** (10-15 pages) 
+
+- Présentation intuitive sans formalisme.
+- Pourquoi et comment les utiliser.
+
+
+. . .
+
+**3. Présentation formelle des méthodes** (25-30 pages) 
+
+- Références aux travaux fondateurs.
+- Détails mathématiques essentiels, propriétés clés.
+- Points avancés (variables catégorielles, fonctions de perte...)
+
+
+---
+
+**4. Mise en pratique** (environ 15 pages) 
+
+- Préparation des données
+- Guides d'entraînement
+- Recommandations et bonnes pratiques.
+
+
+. . .
+
+**5. Cas d'usage dans la statistique publique** (environ 2 pages) 
+
+- Exemples concrets d'applications.
+
+
+. . .
+
+**6. Annexes et ressources**
+
+- Références, liens utiles.
+
+
+---
+
+## Angles éditoriaux
+
+- **Approche progressive** : du général au spécifique, avec peu de prérequis techniques.
+
+- **Orientation pratique** : focus sur l'application et l'implémentation.
+
+- **Accessibilité** : illustrations, exemples concrets.
+
+## Angles éditoriaux
+
+Ce que cette introduction n'est pas:
+
+- une introduction générale au _machine learning_;
+- une formation aux outils standard (`scikit-learn`).
+
+Cette introduction requiert donc un bagage minimal en _machine learning_.
+
+# Discussion sur les choix éditoriaux
+
+---
+
+**1. Niveaux de lecture** :
+
+- Aperçu intuitif
+- Présentation formelle
+- Guide pratique
+
+. . .
+
+- Option A : 
+
+  + Séparation claire entre présentation des méthodes (théorie) et guide pratique (application).
+
+- Option B : Approche intégrée par méthode :
+
+  + Section Forêts Aléatoires : Théorie + Pratique
+  
+  + Section Gradient Boosting : Théorie + Pratique
+
+<!--
+**Questions** :
+
+- Quelle option faciliterait la compréhension et l'appropriation des méthodes ?
+
+- Comment structurer le document pour qu'il soit le plus utile possible ?
+
+-->
+
+---  
+
+**2. Approche pédagogique** :
+
+- Sections existantes suffisamment claires ?
+
+- Niveau de détail approprié ?
+
+
+. . .
+
+**3. Optimisation des hyperparamètres** :
+
+- Niveau de détail suffisant ?
+
+- Approuvez-vous l'idée de proposer une procédure d'entraînement?
+
+- Ajouter plus d'exemples ou de recommandations pratiques ?
+
+---
+
+**4. Présentation des algorithmes** :
+
+- Inclure une présentation des algorithmes en pseudocode ? 
+
+- Susceptible de nuire à la clarté ?
+
+. . .
+
+**5. Interprétabilité des modèles** :
+
+
+- Dédier une section entière à l'interprétabilité des modèles ?
+
+- Quelles approches d'interprétation souhaitez-vous voir expliquées ?
+
+- Comment gérer les différences d'implémentation entre R et Python ?
+
+
+---
+
+**6. Recommandations d'implémentation** :
+
+- Les implémentations recommandées (`ranger`, `scikit-learn`, `XGBoost`, `LightGBM`) vous conviennent-elles ?
+
+- **Évaluation des performances** :
+
+    - Erreur Out-of-Bag (OOB) vs Validation Croisée (CV)
+    - Présenter les deux approches, en soulignant que l'OOB est spécifique aux forêts aléatoires?
+ 
+ 
+## _Notebooks_ et cas d'usage
+ 
+
+- **Deux applications simples** :
+
+  + Prédire les prix immobiliers (régression)
+
+  + Prédire le niveau de diplôme (classification)
+  
+  
+. . .
+
+- **Utilisation de données open data** :
+
+  + Données individuelles du recensement de la population.
+  + Données sur les transactions immobilières
+
+. . . 
+ 
+- **Question**: L'accompagnement est-il suffisant ? 
+
+
+## _Notebooks_ et cas d'usage
+
+- **Langages et librairies** :
+
+  - En R : Forêts aléatoires avec `ranger`.
+
+  - En Python :
+
+      + Forêts aléatoires avec `scikit-learn`.
+    
+      + Gradient boosting avec `xgboost` ou `lightgbm`.
+
+  - éventuellement des _notebooks_ avancés (gestion des variables catégorielles, interpolation spatiale...)
+
+  - __Choix__: le _gradient boosting_ se fait uniquement en Python.
+ 
+ 
+## _Notebooks_ et cas d'usage
+ 
+**Utilisation des _pipelines_ `scikit-learn`** :
+
+- Inclure cette approche pour diffuser les bonnes pratiques ?
+
+- Avantage : Automatisation et reproductibilité, acculturation aux bonnes pratiques.
+
+- Inconvénient : rend les _notebooks_ moins accessibles.
+ 
+
+. . .
+
+**Couverture des cas d'usage** :
+
+- Les exemples proposés sont-ils pertinents ?
+
+- Y a-t-il d'autres cas d'usage que vous aimeriez voir abordés ?
+
+
+
+
+## Vos besoins et attentes
+
+- Qu'attendez-vous de ce document méthodologique ?
+
+  + Formation, référence, guide pratique ?
+  
+- Quels sont les obstacles actuels à l'adoption des méthodes ensemblistes selon vous ?
+
+- Quelles ressources ou outils supplémentaires faciliteraient leur appropriation ?
+
+- Avez-vous des suggestions pour améliorer la clarté, l'accessibilité ou la pertinence du document ?
+
+
+
+
+## Prochaines étapes
+
+- Synthèse des retours 
+
+- Rédaction et révision
+
+  + Finalisation des sections en cours.
+
+- Développement des _notebooks_
+  + Ajout de nouvelles implémentations.
+  + Mise à disposition sur le SSPCloud.
+  
+  
+## Merci pour votre participation ! 
+  
+- Des questions supplémentaires ?
+
+- Des commentaires ou suggestions ?

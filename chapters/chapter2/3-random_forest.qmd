@@ -129,7 +129,7 @@ Bien qu'elle s'avèrent très performantes en pratique, __il n'est pas prouvé �
 
 Par ailleurs, une propriété importante des forêts aléatoires démontrée par @breiman2001random est que leur erreur de généralisation, c'est-à-dire l'écart entre les prédictions du modèle et les résultats attendus sur des données jamais vues (donc hors de l'échantillon d'entraînement), diminue à mesure que le nombre d'arbres augmente et converge vers une valeur constante. Autrement dit, __la forêt aléatoire ne souffre pas d'un surapprentissage croissant avec le nombre d'arbres__. La conséquence pratique de ce résultat est qu'inclure un (trop) grand nombre d'arbres dans le modèle n'en dégrade pas la qualité, ce qui contribue à la rendre particulièrement robuste. En revanche, une forêt aléatoire peut souffrir de surapprentissage si ses autres hyperparamètres sont mal choisis (des arbres trop profonds par exemple).
 
-### Facteurs influençant l'erreur de généralisation
+### Facteurs influençant l'erreur de généralisation {#sec-facteur-perf-rf}
 
 L'erreur de généralisation des forêts aléatoires est influencée par deux facteurs principaux :
 
@@ -172,14 +172,14 @@ L'objectif de l'entraînement des forêts aléatoires est donc de minimiser la c
 
 ## Evaluation des performances par l'erreur _Out-of-Bag_ (OOB) {#sec-rf-oob}
 
-La forêt aléatoire présente une particularité intéressante et très utile en pratique: __il est possible d'évaluer les performances d'une forêt aléatoire directement à partir des données d'entraînement__, grâce à l'estimation de l'erreur _Out-of-Bag_ (OOB). Cette technique repose sur le fait que chaque arbre est construit à partir d'un échantillon _bootstrap_, c'est-à-dire un échantillon tiré avec remise. Cela implique qu'une part conséquente des observations ne sont pas utilisées pour entraîner un arbre donné. Ces observations laissées de côté forment un **échantillon dit _out-of-bag_**, que l'on peut utiliser pour évaluer la performance de chaque arbre. On peut donc construire pour chaque observation du jeu d'entraînement une prédiction qui agrège uniquement les prédictions des arbres pour lesquels cette observation est _out-of-bag_; cette prédiction n'est pas affectée par le surapprentissage (puisque cette observation n'a jamais été utilisée pour entraîner ces arbres). De cette façon, il est possible d'évaluer correctement la performance de la forêt aléatoire.
+La forêt aléatoire présente une particularité intéressante et très utile en pratique: __il est possible d'évaluer les performances d'une forêt aléatoire directement à partir des données d'entraînement__, grâce à l'estimation de l'erreur _Out-of-Bag_ (OOB). Cette technique repose sur le fait que chaque arbre est construit à partir d'un échantillon _bootstrap_, c'est-à-dire un échantillon tiré avec remise. Cela implique qu'une part conséquente des observations ne sont pas utilisées pour entraîner un arbre donné. Ces observations laissées de côté forment un **échantillon dit _out-of-bag_**, que l'on peut utiliser pour évaluer la performance de chaque arbre. On peut donc construire pour chaque observation du jeu d'entraînement une prédiction qui agrège uniquement les prédictions des arbres pour lesquels cette observation est _out-of-bag_; cette prédiction n'est pas affectée par le surapprentissage (puisque cette observation n'a jamais été utilisée pour entraîner ces arbres). De cette façon, il est possible d'évaluer correctement la performance de la forêt aléatoire en comparant ces prédictions avec la variable-cible à l'aide d'une métrique bien choisie.
 
 La procédure d'estimation de l'erreur OOB se déroule comme ceci:
 
 1. **Entraînement de la forêt aléatoire**: la forêt aléatoire est entraînée sur les données d'entraînement selon la procédure détaillée ci-dessus.
 2. **Prédiction _out-of-bag_** : Pour chaque observation $(x_i, y_i)$ des données d'entraînement, on calcule la prédiction de tous les arbres pour lesquels elle fait partie de l'échantillon _out-of-bag_.
 3. **Agrégation des prédictions** : La prédiction finale est obtenue en agrégeant les prédictions selon la procédure standard détaillée ci-dessus (moyenne pour la régression, vote majoritaire pour la classification).
-4. **Calcul de l'erreur OOB** : L'erreur OOB est ensuite calculée en calculant une métrique (précision, rappel, AUC, erreur quadratique moyenne...) qui compare les prédictions avec la variable-cible $y$ sur toutes les observations.
+4. **Calcul de l'erreur OOB** : L'erreur OOB est ensuite calculée en comparant les prédictions avec la variable-cible $y$ sur toutes les observations, à l'aide d'une métrique (précision, rappel, AUC, erreur quadratique moyenne, score de Brier...).
 
 L'utilisation de l'erreur OOB présente de multiples avantages:
 

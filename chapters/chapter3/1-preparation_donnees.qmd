@@ -9,12 +9,12 @@
 
 - **Échelle des Variables** : Pas nécessaire de normaliser, les arbres sont invariants aux transformations monotones.
 
-### Process: utiliser les pipelines
+### Process: utiliser les pipelines scikit, pour expliciter la structure du modèle complet et réduire les risques d'erreur
 
 
 ### Train-test
 
-Pas indispensable pour RF, mais faisable. Indispensable pour GB.
+Pas indispensable pour RF, mais souhaitable. Indispensable pour GB.
 
 
 ## Evaluation des performances du modèle et optimisation des hyper-paramètres

@@ -1,0 +1,10 @@
+project:
+  type: website
+  render:
+    - index.qmd
+
+css: custom.css
+
+
+website:
+  title: "Introduction aux méthodes ensemblistes"
