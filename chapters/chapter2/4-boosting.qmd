@@ -18,7 +18,7 @@ En termes plus techniques, les algorithmes de *boosting* partagent trois caract�
 
 $$ F\left(\mathbf{x}\right) = \sum_{m=1}^M \beta_m f\left(\mathbf{x}, \mathbf{\theta}_m\right) $$
 
--   ils reposent sur une **modélisation additive par étapes**, qui décompose l'entraînement de ce modèle complexe en une **séquence d'entraînements de petits modèles**. Chaque étape de l'entraînement cherche le modèle simple $f$ qui améliore la puissance prédictive du modèle complet, sans modifier les modèles précédents, puis l'ajoute de façon incrémentale à ces derniers:
+-   Ils reposent sur une **modélisation additive par étapes** (_forward stagewise additive modeling_), qui décompose l'entraînement de ce modèle complexe en une **séquence d'entraînements de petits modèles**. Chaque étape de l'entraînement cherche le modèle simple $f$ qui améliore la puissance prédictive du modèle complet, sans modifier les modèles précédents, puis l'ajoute de façon incrémentale à ces derniers:
 
 $$ F_m(\mathbf{x}) = F_{m-1}(\mathbf{x}) + \hat{\beta}_m f(\mathbf{x}_i, \mathbf{\hat{\theta}_m}) $$
 
