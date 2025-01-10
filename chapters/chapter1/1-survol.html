@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.39">
+<meta name="generator" content="quarto-1.6.40">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -57,10 +57,10 @@ div.csl-indent {
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-dd46fb5618761ebd9d837d90bdadab9c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-0e028902ae6628a3067983886a8836b9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -310,7 +310,7 @@ Et par rapport au <em>deep learning</em>?
 </section>
 <section id="comment-fonctionnent-les-méthodes-ensemblistes" class="level2">
 <h2 class="anchored" data-anchor-id="comment-fonctionnent-les-méthodes-ensemblistes">Comment fonctionnent les méthodes ensemblistes?</h2>
-<p>Cette section présente d’abord le modèle de base sur lesquelles sont construites les méthodes ensemblistes à base d’arbres: l’arbre de classification et de régression (CART) (<a href="#sec-cart-intuition" class="quarto-xref">Section&nbsp;1.3.1</a>). Bien que simples et intuitifs, les arbres CART sont souvent insuffisants en termes de performance lorsqu’ils sont utilisés isolément.</p>
+<p>Ce paragraphe présente d’abord le modèle de base sur lesquelles sont construites les méthodes ensemblistes à base d’arbres: l’arbre de classification et de régression (CART) (<a href="#sec-cart-intuition" class="quarto-xref">Section&nbsp;1.3.1</a>). Bien que simples et intuitifs, les arbres CART sont souvent insuffisants en termes de performance lorsqu’ils sont utilisés isolément.</p>
 <p>Elle introduit ensuite les <strong>deux grandes familles de méthodes ensemblistes</strong> décrites dans ce document: le <em>bagging</em> et les forêts aléatoires (<a href="#sec-rf-intuition" class="quarto-xref">Section&nbsp;1.3.2</a>), et le <em>gradient boosting</em> (<a href="#sec-gb-intuition" class="quarto-xref">Section&nbsp;1.3.3</a>).</p>
 <section id="sec-cart-intuition" class="level3">
 <h3 class="anchored" data-anchor-id="sec-cart-intuition">Le modèle de base: l’arbre de classification et de régression</h3>
@@ -398,7 +398,7 @@ Figure&nbsp;2: Représentation schématique d’un algorithme de forêt aléatoi
 </figcaption>
 </figure>
 </div>
-<p>La <a href="#fig-rf" class="quarto-xref">Figure&nbsp;2</a> propose une représentation schématique d’une forêt aléatoire. La logique d’ensemble reste la même que celle du <em>bagging</em>. L’échantillonnage <em>bootstrap</em> est inchangé, mais l’étape de construction de chaque arbre est modifiée pour n’utiliser, à chaque nouvelle division, qu’un sous-ensemble aléatoire de variables. L’agrégation des prédictions se fait ensuite de la même manière que pour le <em>bagging</em>.</p>
+<p>La figure <a href="#fig-rf" class="quarto-xref">Figure&nbsp;2</a> propose une représentation schématique d’une forêt aléatoire. La logique d’ensemble reste la même que celle du <em>bagging</em>. L’échantillonnage <em>bootstrap</em> est inchangé, mais l’étape de construction de chaque arbre est modifiée pour n’utiliser, à chaque nouvelle division, qu’un sous-ensemble aléatoire de variables. L’agrégation des prédictions se fait ensuite de la même manière que pour le <em>bagging</em>.</p>
 <!--Cette restriction de la liste des variables considérées permet de réduire l'utilisation des variables les plus prédictives et de mieux mobiliser l'information disponible dans les variables peu corrélées avec $y$.-->
 <p>Le principal enjeu de l’entraînement d’une forêt aléatoire est de trouver le bon arbitrage entre puissance prédictive des arbres individuels (que l’on souhaite maximiser) et corrélation entre les arbres (que l’on souhaite minimiser). L’optimisation des hyper-paramètres des forêts aléatoires (dont le plus important est le nombre de variables sélectionnées à chaque noeud) vise précisément à choisir le meilleur compromis possible entre pouvoir prédictif invividuel et diversité des arbres.</p>
 <p>Les forêts aléatoires sont très populaires car elles sont faciles à implémenter, peu sensibles aux hyperparamètres (elles fonctionnent bien avec les valeurs par défaut de la plupart des implémentations proposées en <code>R</code> ou en Python), et offrent de très bonnes performances dans de nombreux cas. Cependant, comme toute méthode d’apprentissage automatique, elles restent sujettes au surapprentissage (voir encadré), bien que dans une moindre mesure par rapport à d’autres techniques comme le <em>gradient boosting</em>.</p>
@@ -423,7 +423,7 @@ Qu’est-ce que le surapprentissage?
 <section id="sec-gb-intuition" class="level3">
 <h3 class="anchored" data-anchor-id="sec-gb-intuition">Le <em>gradient boosting</em></h3>
 <p>Contrairement aux forêts aléatoires qui combinent des arbres de décision complexes et indépendants, le <em>gradient boosting</em> construit un ensemble d’arbres plus simples et entraînés de manière séquentielle. Chaque arbre vise à corriger les erreurs commises par les arbres précédents, améliorant progressivement la précision du modèle global. Cette approche repose sur des fondements théoriques très différents de ceux du <em>bagging</em>.</p>
-<p>La logique du <em>gradient boosting</em> est illustrée par La <a href="#fig-gb" class="quarto-xref">Figure&nbsp;3</a>:</p>
+<p>La logique du <em>gradient boosting</em> est illustrée par la figure <a href="#fig-gb" class="quarto-xref">Figure&nbsp;3</a>:</p>
 <div id="fig-gb" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-gb-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
