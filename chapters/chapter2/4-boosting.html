@@ -347,9 +347,8 @@ Commentaire: On pourrait peut-être donner la version formelle de la GBM, mais c
 <ul>
 <li>Le boosting est fondamentalement différent des forêts aléatoires. See ESL, chapitre 10.</li>
 <li>Toute la mécanique est indépendante de la fonction de perte choisie. En particulier, elle est applicable indifféremment à des problèmes de classification et de régression.</li>
-<li>Les poids sont calculés par une formule explicite, ce qui rend les calculs très rapides.</li>
-<li>Les termes de régularisation sont directement intégrées à la mécanique du <em>gradient boosting</em>.</li>
 <li>Le boosting est fait pour overfitter; contrairement aux RF, il n’y a pas de limite à l’overfitting. Donc lutter contre le surapprentissage est un élément particulièrement important de l’usage des algorithmes de <em>gradient boosting</em>.</li>
+<li>Les termes de régularisation sont directement intégrées à la mécanique du <em>gradient boosting</em>.</li>
 <li>Comment on interprète le gradient et la hessienne: cas avec une fonction de perte quadratique.</li>
 </ul>
 <section id="le-modèle-à-entraîner" class="level4">
@@ -362,7 +361,7 @@ Commentaire: On pourrait peut-être donner la version formelle de la GBM, mais c
 <li>son nombre de feuilles terminales <span class="math inline">\(T\)</span>;</li>
 <li>les valeurs figurant sur ses feuilles terminales <span class="math inline">\(\mathbf{w}\in \mathbb{R}^T\)</span> (appelées poids ou <em>weights</em>).</li>
 </ul>
-<p>Le modèle est entraîné avec une <strong>fonction-objectif</strong> constituée d’une <strong>fonction de perte</strong> <span class="math inline">\(l\)</span> et d’une <strong>fonction de régularisation</strong> <span class="math inline">\(\Omega\)</span>. La fonction de perte mesure la distance entre la prédiction <span class="math inline">\(hat(y)\)</span> et la vraie valeur <span class="math inline">\(y\)</span> et présente généralement les propriétés suivantes: elle est convexe et dérivable deux fois, et atteint son minimum lorsque <span class="math inline">\(\hat{y} = y\)</span>. La fonction de régularisation pénalise la complexité du modèle. Dans le cas présent, elle pénalise les arbres avec un grand nombre de feuilles (<span class="math inline">\(T\)</span> élevé) et les arbres avec des poids élevés (<span class="math inline">\(w_t\)</span> élevés en valeur absolue).</p>
+<p>Le modèle est entraîné avec une <strong>fonction-objectif</strong> constituée d’une <strong>fonction de perte</strong> <span class="math inline">\(l\)</span> et d’une <strong>fonction de régularisation</strong> <span class="math inline">\(\Omega\)</span>. La fonction de perte mesure la distance entre la prédiction <span class="math inline">\(\hat(y)\)</span> et la vraie valeur <span class="math inline">\(y\)</span> et présente généralement les propriétés suivantes: elle est convexe et dérivable deux fois, et atteint son minimum lorsque <span class="math inline">\(\hat{y} = y\)</span>. La fonction de régularisation pénalise la complexité du modèle. Dans le cas présent, elle pénalise les arbres avec un grand nombre de feuilles (<span class="math inline">\(T\)</span> élevé) et les arbres avec des poids élevés (<span class="math inline">\(w_j\)</span> élevés en valeur absolue).</p>
 <p><span id="eq-fct-obj-initial"><span class="math display">\[ \mathcal{L}(\phi) = \underbrace{\sum_i l(\hat{y}_{i}, y_{i})}_{\substack{\text{Perte sur les} \\ \text{observations}}} + \underbrace{\sum_k \Omega(f_{k})}_{\substack{\text{Fonction de} \\ \text{régularisation}}}\,\,\text{avec}\,\,\Omega(f) = \gamma T + \frac{1}{2} \lambda \sum_{t=1}^T \sum_{j=1}^{J_t} w_j^2
 \tag{1}\]</span></span></p>
 </section>
