@@ -98,7 +98,7 @@ Chaque arbre $f$ est défini par trois paramètres:
 -   son nombre de feuilles terminales $T$;
 -   les valeurs figurant sur ses feuilles terminales $\mathbf{w}\in \mathbb{R}^T$ (appelées poids ou *weights*).
 
-Le modèle est entraîné avec une **fonction-objectif** constituée d'une **fonction de perte** $l$ et d'une **fonction de régularisation** $\Omega$. La fonction de perte mesure la distance entre la prédiction $hat(y)$ et la vraie valeur $y$ et présente généralement les propriétés suivantes: elle est convexe et dérivable deux fois, et atteint son minimum lorsque $hat(y) = y$. La fonction de régularisation pénalise la complexité du modèle. Dans le cas présent, elle pénalise les arbres avec un grand nombre de feuilles ($T$ élevé) et les arbres avec des poids élevés ($w_t$ élevés en valeur absolue).
+Le modèle est entraîné avec une **fonction-objectif** constituée d'une **fonction de perte** $l$ et d'une **fonction de régularisation** $\Omega$. La fonction de perte mesure la distance entre la prédiction $hat(y)$ et la vraie valeur $y$ et présente généralement les propriétés suivantes: elle est convexe et dérivable deux fois, et atteint son minimum lorsque $\hat{y} = y$. La fonction de régularisation pénalise la complexité du modèle. Dans le cas présent, elle pénalise les arbres avec un grand nombre de feuilles ($T$ élevé) et les arbres avec des poids élevés ($w_t$ élevés en valeur absolue).
 
 $$ \mathcal{L}(\phi) = \underbrace{\sum_i l(\hat{y}_{i}, y_{i})}_{\substack{\text{Perte sur les} \\ \text{observations}}} + \underbrace{\sum_k \Omega(f_{k})}_{\substack{\text{Fonction de} \\ \text{régularisation}}}\text{avec}\Omega(f) = \gamma T + \frac{1}{2} \lambda \sum_{t=1}^T w_j^2 $$ {#eq-fct-obj-initial}
 
