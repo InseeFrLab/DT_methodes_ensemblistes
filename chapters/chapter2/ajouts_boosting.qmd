@@ -23,7 +23,7 @@ Interprétation intuitive: $\gamma$ est le gain minimal nécessaire pour diviser
 
 __L'algorithme de détermination des critères de partition (_split-finding algorithm_) est un enjeu de performance essentiel dans les méthodes ensemblistes.__ En effet, l'algorithme le plus simple qui consiste à énumérer tous les critères de partition possibles (en balayant toutes les valeurs de toutes les variables) s'avère très coûteux à utiliser dès lors que les données contiennent soit un grand nombre de variables, soit des variables continues prenant un grand nombre de valeurs. C'est pourquoi cet algorithme a fait l'objet de multiples améliorations et optimisations visant à réduire leur coût computationnel sans dégrader la qualité des critères de partition.
 
-L'utilisation d'histogrammes (_histogram-based algorithms_) est une approche efficace qui permet de réduire de manière significative le coût computationnel lié à la recherche des _splits_ optimaux en discrétisant les variables continues. Elle est notamment utilisée par trois implémentations du _gradient boosting_ (XGBoost, LightGBM et CatBoost). Elle comprend deux caractéristiques principales:
+L'utilisation d'histogrammes (_histogram-based algorithms_) est une approche efficace qui permet de réduire de manière significative le coût computationnel lié à la recherche des _splits_ optimaux en discrétisant les variables continues. Elle est proposée par toutes les implémentations courantes du _gradient boosting_ (XGBoost, LightGBM, CatBoost et scikit-learn). Elle comprend deux caractéristiques principales:
 
 - __Discrétisation__: avant le début de l'entraînement, chaque variable continue est discrétisée en un nombre limité d'intervalles (_bins_), construits le plus souvent à partir de ses quantiles. Ce processus est appelé *binning*. Par exemple, une variable continue uniformément distribuée de 0 à 100 peut être divisée en dix intervalles ($[0, 10), [10, 20), \dots, [90, 100)$). Le nombre maximal de _bins_ est un hyperparamètre qui peut parfois jouer un rôle important.
 <!-- - __Construction de l'histogramme__: après la discrétisation, un histogramme est construit pour chaque variable continue; il résume combien d'observations appartiennent à chaque _bin_, ainsi que la somme des gradients et la somme des hessiennes de ces observations (il s'agit des quantités $\sum_{i \in \text{bin}} g_i$ et $\sum_{i \in \text{bin}} h_i$ mentionnées dans l'équation @eq-w-j-optimal. -->
@@ -32,9 +32,34 @@ L'utilisation d'histogrammes (_histogram-based algorithms_) est une approche eff
 
 #### Le traitement des variables catégorielles: une diversité d'approches
 
-- OHE;
-- Conversion en entier;
-- Fisher 1958.
+Les variables catégorielles, c'est compliqué. Quatre approches possibles. 
+
+Les trois premières sont des approches d'encodage, qui visent à transformer les variables catégorielles en variables numériques et qui ne sont pas spécifiques aux méthodes ensemblistes à base d'arbres:
+
+- Le **_one-hot encoding_** consiste à transformer une variable catégorielle en une série de variables binaires qui représentent chacune une modalité de la variable; pour chaque observation, seule la colonne correspondant à la modalité de la variable catégorielle aura la valeur 1, et toutes les autres auront la valeur 0. Cette approche permet de représenter des catégories de manière numérique de façon très simple et sans leur attribuer un ordre. Toutefois, le _one-hot encoding_ augmente fortement la dimensionnalité des données (ce qui ralentit l'entraînement et augmente les besoins en mémoire), et est inutilisable lorsque les variables catégorielles présentent un nombre de modalités[^note_OHE].
+
+- L'**_ordinal encoding_** consiste à attribuer un entier unique à chaque modalité d'une variable catégorielle. Par exemple, la catégorie "Sans diplôme" sera encodée par la valeur 0, la catégorie "Baccalauréat ou moins" sera encodée par 1, etc. Simple à mettre en œuvre, cette approche permet de remplacer la variable catégorielle par une unique variable numérique et est donc utile pour traiter les variables présentant un grand nombre de modalités, pour lesquelles le _one-hot encoding_ est impraticable. Elle est particulièrement adaptée aux variables catégorielles qui sont naturellement ordonnées (exemples: niveau de diplôme, catégorie d'âge, étage d'un appartement...). En revanche, cette approche est peu adaptée aux variables non ordonnées (exemples: secteur d'activité, département, pays...) car elle introduit un ordre fictif qui peut perturber les modèles qui interprètent les entiers comme des valeurs ordonnées.
+
+- Le **_target encoding_** consiste à remplacer chaque modalité d'une variable catégorielle par la moyenne de la variable cible pour cette modalité. Comme l'_ordinal encoding_, cette approche permet d'obtenir une unique variable numérique et est donc utile pour traiter les variables présentant un grand nombre de modalités. Par ailleurs, le _target encoding_ fonctionne bien avec la méthode des histogrammes décrite précédemment, dans la mesure où les valeurs encodées sont par construction ordonnées en fonction de leur association avec la variable cible. Toutefois, le _target encoding_ étant sujet au surapprentissage, il est important de l'utiliser en lissant la moyenne ou en recourant à une validation croisée. Cette approche est notamment proposée par CatBoost[^note_catboost] et par scikit-learn[^note_scikit].
+
+- La dernière approche est spécifique aux méthodes ensemblistes à base
+
+
+Cette approche a été introduite par [LightGBM](https://lightgbm.readthedocs.io/en/latest/Features.html#optimal-split-for-categorical-features), puis reprise par [XGBoost](https://xgboost.readthedocs.io/en/latest/tutorials/categorical.html) et [scikit-learn](https://scikit-learn.org/stable/modules/ensemble.html#categorical-features-support).
+
+
+@fisher1958grouping
+
+Fisher 1958.
+
+
+[^note_OHE] Il est bien sûr possible de n'encoder que les modalités les plus fréquentes, et de regrouper toutes les autres dans une seule variable binaire.
+[^note_catboost] Le _target encoding_ utilisé par CatBoost est présenté en détail dans @prokhorenkova2018catboost et sur ce [billet de blog](https://blog.dataiku.com/how-do-gradient-boosting-algorithms-handle-categorical-variables).
+[^note_scikit] Voir cet [exemple](https://scikit-learn.org/dev/auto_examples/preprocessing/plot_target_encoder.html#sphx-glr-auto-examples-preprocessing-plot-target-encoder-py) dans la documentation de scikit-learn.
+
+
+
+
 
 # Le Shrinkage en Apprentissage Automatique
 
