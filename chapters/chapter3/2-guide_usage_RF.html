@@ -298,28 +298,20 @@ window.Quarto = {
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>mtry</code> / <code>max_features</code></td>
-<td>Le nombre de variables candidates à chaque noeud</td>
+<td><code>num.trees</code> / <code>n_estimators</code></td>
+<td>Le nombre d’arbres</td>
 </tr>
 <tr class="even">
-<td><code>replacement</code> / absent</td>
-<td>L’échantillonnage des données se fait-il avec ou sans remise?</td>
+<td><code>mtry</code> / <code>max_features</code></td>
+<td>Le nombre de variables candidates à chaque noeud</td>
 </tr>
 <tr class="odd">
 <td><code>sample.fraction</code> / <code>max_samples</code></td>
 <td>Le taux d’échantillonnage des données (ou la taille de l’échantillon)</td>
 </tr>
 <tr class="even">
-<td><code>min.node.size</code> / <code>min_samples_split</code></td>
-<td>Nombre minimal d’observations nécessaire pour qu’un noeud puisse être partagé</td>
-</tr>
-<tr class="odd">
-<td><code>num.trees</code> / <code>n_estimators</code></td>
-<td>Le nombre d’arbres</td>
-</tr>
-<tr class="even">
-<td><code>splitrule</code> / <code>criterion</code></td>
-<td>Le critère de choix de la règle de division des noeuds intermédiaires</td>
+<td><code>replacement</code> / absent</td>
+<td>L’échantillonnage des données se fait-il avec ou sans remise?</td>
 </tr>
 <tr class="odd">
 <td><code>min.bucket</code> / <code>min_samples_leaf</code></td>
@@ -328,6 +320,18 @@ window.Quarto = {
 <tr class="even">
 <td><code>max.depth</code> / <code>max_depth</code></td>
 <td>Profondeur maximale des arbres</td>
+</tr>
+<tr class="odd">
+<td><code>min.node.size</code> / <code>min_samples_split</code></td>
+<td>Nombre minimal d’observations nécessaire pour qu’un noeud puisse être partagé</td>
+</tr>
+<tr class="even">
+<td><code>splitrule</code> / <code>criterion</code></td>
+<td>Le critère de choix de la règle de division des noeuds intermédiaires</td>
+</tr>
+<tr class="odd">
+<td><code>oob.error</code> / <code>oob_score</code></td>
+<td>Calculer la performance de la forêt par l’erreur OOB (et choix de la métrique pour <code>scikit</code>)</td>
 </tr>
 </tbody>
 </table>
