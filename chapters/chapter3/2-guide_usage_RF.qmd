@@ -34,7 +34,7 @@ Cette section décrit en détail les principaux hyperparamètres des forêts al�
     [ `min.node.size`   ], [ `min_samples_leaf`    ], [Nombre minimal d'observations nécessaire pour qu'un noeud puisse être partagé ],
     [ `min.bucket`  ], [ `min_samples_split`       ], [Nombre minimal d'observations dans les noeuds terminaux                       ],
     [ `max.depth`  ], [ `max_depth`                ], [Profondeur maximale des arbres                                                ],
-    [ `splitrule` ], [ `criterion`                 ], [La métrique utilisée pour le choix des _splits_         ],
+    [ `splitrule` ], [ `criterion`                 ], [La métrique utilisée pour le choix des _splits_                               ],
     [ `oob.error` ], [ `oob_score`                 ], [Calculer la performance de la forêt par l'erreur OOB (et choix de la métrique pour `scikit`) ],
   ),
     caption: [ Les principaux hyperparamètres des forêts aléatoires],
