@@ -28,13 +28,13 @@ Cette section décrit en détail les principaux hyperparamètres des forêts al�
       [Description]
     ),
     [ `num.trees`   ], [ `n_estimators`            ], [Le nombre d'arbres                                                            ],
-    [ `mtry`   ], [ `max_features`                 ], [Le nombre de variables candidates à chaque noeud                              ],
+    [ `mtry`   ], [ `max_features`                 ], [Le nombre ou la proportion de variables candidates à chaque noeud             ],
     [ `sample.fraction`   ], [ `max_samples`       ], [Le taux d'échantillonnage des données                                         ],
     [ `replacement`   ], [                         ], [L'échantillonnage des données se fait-il avec ou sans remise?                 ],
     [ `min.node.size`   ], [ `min_samples_leaf`    ], [Nombre minimal d'observations nécessaire pour qu'un noeud puisse être partagé ],
     [ `min.bucket`  ], [ `min_samples_split`       ], [Nombre minimal d'observations dans les noeuds terminaux                       ],
     [ `max.depth`  ], [ `max_depth`                ], [Profondeur maximale des arbres                                                ],
-    [ `splitrule` ], [ `criterion`                 ], [Le critère de choix de la règle de division des noeuds intermédiaires         ],
+    [ `splitrule` ], [ `criterion`                 ], [La métrique utilisée pour le choix des _splits_         ],
     [ `oob.error` ], [ `oob_score`                 ], [Calculer la performance de la forêt par l'erreur OOB (et choix de la métrique pour `scikit`) ],
   ),
     caption: [ Les principaux hyperparamètres des forêts aléatoires],
@@ -47,14 +47,15 @@ Cette section décrit en détail les principaux hyperparamètres des forêts al�
 
 | Hyperparamètre (`ranger` / `scikit-learn`) |                                  Description                                  |
 | ------------------------------------------ | ----------------------------------------------------------------------------- |
-| `mtry`   / `max_features`                  | Le nombre de variables candidates à chaque noeud                              |
-| `replacement`   / absent                   | L'échantillonnage des données se fait-il avec ou sans remise?                 |
-| `sample.fraction`   / `max_samples`        | Le taux d'échantillonnage des données (ou la taille de l'échantillon)         |
-| `min.node.size`   / `min_samples_split`    | Nombre minimal d'observations nécessaire pour qu'un noeud puisse être partagé |
 | `num.trees`   / `n_estimators`             | Le nombre d'arbres                                                            |
-| `splitrule` / `criterion`                  | Le critère de choix de la règle de division des noeuds intermédiaires         |
+| `mtry`   / `max_features`                  | Le nombre de variables candidates à chaque noeud                              |
+| `sample.fraction`   / `max_samples`        | Le taux d'échantillonnage des données (ou la taille de l'échantillon)         |
+| `replacement`   / absent                   | L'échantillonnage des données se fait-il avec ou sans remise?                 |
 | `min.bucket`  / `min_samples_leaf`         | Nombre minimal d'observations dans les noeuds terminaux                       |
 | `max.depth`  / `max_depth`                 | Profondeur maximale des arbres                                                |
+| `min.node.size`   / `min_samples_split`    | Nombre minimal d'observations nécessaire pour qu'un noeud puisse être partagé |
+| `splitrule` / `criterion`                  | Le critère de choix de la règle de division des noeuds intermédiaires         |
+| `oob.error`  / `oob_score`                 | Calculer la performance de la forêt par l'erreur OOB (et choix de la métrique pour `scikit`) |
 
 : Les principaux hyperparamètres des forêts aléatoires {tbl-colwidths="[30,70]"}
 
