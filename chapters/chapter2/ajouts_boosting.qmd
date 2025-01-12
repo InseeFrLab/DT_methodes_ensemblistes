@@ -62,6 +62,65 @@ Fisher 1958.
 
 
 
+::: {.content-visible when-format="typst"}
+
+
+```{=typst}
+#import "@preview/fontawesome:0.5.0": *
+
+// Define shorthands for Fontawesome icons
+#let present() = {
+  text(fa-icon("circle-check", fill: rgb("#2c9b2d")), size: 14pt)
+}
+
+#let absent() = {
+  fa-icon("circle-xmark", fill: red)
+}
+
+#let unknown() = {
+  fa-icon("circle-question")
+}
+
+
+#present()
+
+#absent()
+
+#figure(
+  table(
+    columns: (8fr, 2fr, 2fr, 2fr, 2fr, 2fr,),
+    align: center + horizon,
+    // table.header(
+    //   table.cell(colspan: 2)[
+    //     Hyperparamètre \ 
+    //     #text(box(image("/icons/logo-R.svg", height:2.4em))) #h(2.7cm) #text(box(image("/icons/logo-python.svg", height:2em))) \
+    //     #h(0.8cm) #text(weight: "regular")[`ranger`] #h(1.8cm)   #text(weight: "regular")[`scikit-learn`]
+    //   ],
+    //   [Description]
+    // ),
+    table.header(
+
+      [Approche], [`ranger`], [`scikit-learn`], [`XGBoost`], [`LightGBM`], [`CatBoost`]
+    ),
+    [ Approche par histogramme], [#absent()], [#present()], [#present()], [#present()], [#present()], 
+    [ _One-hot-encoding_], [#absent()], [#unknown()], [#unknown()], [#unknown()], [#unknown()], 
+    [ _Ordinal encoding_], [#present()], [#unknown()], [#unknown()], [#unknown()], [#unknown()], 
+    [ _Target encoding_],  [#present()], [#absent()], [#absent()], [#absent()], [#present()], 
+    [ Support natif des variables catégorielles], [#absent()], [#present()], [#present()], [#present()], [#absent()], 
+  ),
+    caption: [_Preprocessing_ des variables dans les implémentations des méthodes ensemblistes],
+) <tbl-preprocessing>
+```
+:::
+
+
+
+Dans le _package_ `ranger`, le traitement des variables catégorielles (`factors`) est contrôlé par l'argument `respect.unordered.factors`, qui peut prendre trois valeurs: `ignore` (_ordinal encoding_),  `order` (_target encoding_) et `partition` (essayer toutes les combinaisons possibles). L'usage de cet argument est détaillé dans la documentation de la fonction `ranger()`. L'usage de la modalité `partition` n'est pas recommandé.
+
+
+
+
+
 
 # Le Shrinkage en Apprentissage Automatique
 
