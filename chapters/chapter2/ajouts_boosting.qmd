@@ -50,9 +50,7 @@ La dernière approche, appelée __support natif des variables catégorielles__ (
 [^note_native] Il s'agit de l'équation @eq-w-j-optimal avec $\lambda = 0$.
 
 
-Certaines implémentations des méthodes ensemblistes prennent en charge directement certaines des quatre approches présentées ci-dessus; dans les autres cas, il faut préparer les données en amont de l'entraînement et de la prédiction. Le tableau suivant
-
-
+Certaines implémentations des méthodes ensemblistes prennent en charge directement certaines des quatre approches présentées ci-dessus; dans les autres cas, il faut préparer les données en amont de l'entraînement et de la prédiction, par exemple en utilisant un `ColumnTransformer` de `scikit-learn` ([`OneHotEncoder()`](https://scikit-learn.org/dev/modules/generated/sklearn.preprocessing.OneHotEncoder.html), [`TargetEncoder()`](https://scikit-learn.org/dev/modules/generated/sklearn.preprocessing.TargetEncoder.html), [`OrdinalEncoder()`](https://scikit-learn.org/dev/modules/generated/sklearn.preprocessing.OrdinalEncoder.html)). Le tableau suivant résume quelles approches sont proposées par chaque implémentations des méthodes ensemblistes.
 
 ::: {.content-visible when-format="typst"}
 
@@ -82,40 +80,46 @@ Certaines implémentations des méthodes ensemblistes prennent en charge directe
   table(
     columns: (8fr, 2fr, 2fr, 2fr, 2fr, 2fr,),
     align: center + horizon,
-    // table.header(
-    //   table.cell(colspan: 2)[
-    //     Hyperparamètre \ 
-    //     #text(box(image("/icons/logo-R.svg", height:2.4em))) #h(2.7cm) #text(box(image("/icons/logo-python.svg", height:2em))) \
-    //     #h(0.8cm) #text(weight: "regular")[`ranger`] #h(1.8cm)   #text(weight: "regular")[`scikit-learn`]
-    //   ],
-    //   [Description]
-    // ),
     table.header(
-
-      [Approche], [`ranger`], [`scikit-learn`], [`XGBoost`], [`LightGBM`], [`CatBoost`]
+      [Approche],                                 [`ranger`],   [`scikit-learn`], [`XGBoost`],  [`LightGBM`], [`CatBoost`]
     ),
-    // [ Approche par histogramme], [#absent()], [#present()], [#present()], [#present()], [#present()], 
-    [ _One-hot-encoding_], [#absent()], [#unknown()], [#unknown()], [#unknown()], [#unknown()], 
-    [ _Ordinal encoding_], [#present()], [#unknown()], [#unknown()], [#unknown()], [#unknown()], 
-    [ _Target encoding_],  [#present()], [#absent()], [#absent()], [#absent()], [#present()], 
-    [ Support natif des variables catégorielles], [#absent()], [#present()], [#present()], [#present()], [#absent()], 
+    [ _One-hot-encoding_],                        [#absent()],  [#absent()],      [#present()], [#present()], [#present()], 
+    [ _Ordinal encoding_],                        [#present()], [#absent()],      [#absent()],  [#absent()],  [#absent()], 
+    [ _Target encoding_],                         [#present()], [#absent()],      [#absent()],  [#absent()],  [#present()], 
+    [ Support natif des variables catégorielles], [#absent()],  [#present()],     [#present()], [#present()], [#absent()], 
   ),
     caption: [_Preprocessing_ des variables catégorielles dans les implémentations des méthodes ensemblistes],
-) <tbl-preprocessing>
+) <tbl-preprocessing-cat>
 ```
 :::
+
+::: {.content-visible when-format="html"}
+
+Cette section décrit en détail les principaux hyperparamètres des forêts aléatoires listés dans le tableau @tbl-hyp-rf. Les noms des hyperparamètres utilisés sont ceux figurant dans le _package_ `R` `ranger`, et dans le _package_ `Python` `scikit-learn`. Il arrive qu'ils portent un nom différent dans d'autres implémentations des forêts aléatoires, mais il est généralement facile de s'y retrouver en lisant attentivement la documentation.
+ 
+| Approche                                   | `ranger`   | `scikit-learn` | `XGBoost`  | `LightGBM` | `CatBoost`  |
+| ------------------------------------------ | ---------- | -------------- | ---------- | ---------- | ----------- |
+| _One-hot-encoding_                         | {{< fa circle-xmark >}} | {{< fa circle-xmark >}} | {{< fa circle-check >}} | {{< fa circle-check >}} | {{< fa circle-check >}} |
+| _Ordinal encoding_                         | {{< fa circle-check >}} | {{< fa circle-xmark >}} | {{< fa circle-xmark >}} | {{< fa circle-xmark >}} | {{< fa circle-xmark >}} |
+| _Target encoding_                          | {{< fa circle-check >}} | {{< fa circle-xmark >}} | {{< fa circle-xmark >}} | {{< fa circle-xmark >}} | {{< fa circle-check >}} |
+| Support natif des variables catégorielles  | {{< fa circle-xmark >}} | {{< fa circle-check >}} | {{< fa circle-check >}} | {{< fa circle-check >}} | {{< fa circle-xmark >}} | 
+
+: _Preprocessing_ des variables catégorielles dans les implémentations des méthodes ensemblistes {#tbl-preprocessing-cat tbl-colwidths="[50,10,10,10,10,10]"}
+:::
+
+{{< fa circle-check >}}
+{{< fa circle-xmark >}}
 
 
 - `ranger`: le traitement des variables catégorielles (`factors`) est contrôlé par l'argument `respect.unordered.factors`, qui peut prendre trois valeurs: `ignore` (_ordinal encoding_),  `order` (_target encoding_) et `partition` (essayer toutes les combinaisons possibles). L'usage de cet argument est détaillé dans la documentation de la fonction `ranger()`. L'usage de la modalité `partition` n'est pas recommandé. En revanche, `ranger` ne prend pas en charge le _one-hot-encoding_.
 
-- `LightGBM`: cette implémentation utilise par défaut le _one-hot-encoding_ pour les variables catégorielles comprenant 4 modalités ou moins, et le support natif des variables catégorielles pour les autres. Le paramètre `max_cat_to_onehot` permet de contrôler ce seuil. En revanche, `LightGBM` ne prend pas en charge ni l'_ordinal encoding_ ni le _target encoding_.
+- `LightGBM`: cette implémentation utilise par défaut le _one-hot-encoding_ pour les variables catégorielles comprenant 4 modalités ou moins, et le support natif des variables catégorielles pour les autres. Ce seuil peut être modifié via le paramètre `max_cat_to_onehot`. En revanche, `LightGBM` ne prend pas en charge ni l'_ordinal encoding_ ni le _target encoding_.
 
 - `XGBoost`: le traitement des variables catégorielles est contrôlé par l'argument `enable_categorical`. Si `enable_categorical = True` (en Python), alors `XGBoost` applique le support natif des variables catégorielles. Par ailleurs, le paramètre `max_cat_to_onehot` permet d'utiliser le _one-hot-encoding_ pour les variables catégorielles comprenant moins de `max_cat_to_onehot` modalités, et le support natif pour les autres (voir la [documentation](https://xgboost.readthedocs.io/en/stable/tutorials/categorical.html)). En revanche, `XGBoost` ne prend pas en charge ni l'_ordinal encoding_ ni le _target encoding_.
 
+- `CatBoost`: cette implémentation est celle qui propose le plus d'options relatives aux variables catégorielles. Par défaut, elle utilise le _one-hot-encoding_ pour les variables catégorielles comprenant peu de modalités, et une variante de _target encoding_ aux autres. Le seuil par défaut varie selon le type de tâche et peut être modifié via le paramètre `one_hot_max_size`. La documentation de `CatBoost` propose un [_notebook_](https://github.com/catboost/catboost/blob/master/catboost/tutorials/categorical_features/categorical_features_parameters.ipynb) qui détaille les différents hyperparamètres.
 
-- `CatBoost`: 
-
-- `scikit-learn`: 
+- `scikit-learn`: l'implémentation du _gradient boosting_ ([`HistGradientBoostingClassifier`](https://scikit-learn.org/dev/modules/generated/sklearn.ensemble.HistGradientBoostingClassifier.html), [`HistGradientBoostingRegressor`](https://scikit-learn.org/dev/modules/generated/sklearn.ensemble.HistGradientBoostingRegressor.html)) propose le support natif des variables catégorielles. Cette implémentation ne propose pas de _one-hot-encoding_ pour les variables catégorielles comprenant peu de modalités, et ne prend pas en charge ni l'_ordinal encoding_ ni le _target encoding_.
 
 
 
