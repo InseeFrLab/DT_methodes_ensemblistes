@@ -32,6 +32,11 @@ L'utilisation d'histogrammes (_histogram-based algorithms_) est une approche eff
 
 #### Le traitement des variables catégorielles: une diversité d'approches
 
+<!-- IL NE FAUT PAS SUPPRIMER CE COMMENTAIRE. -->
+<!-- Faire en sorte que la police Font Awesome soit chargée -->
+<!-- {{< fa circle-xmark >}} -->
+<!-- IL NE FAUT PAS SUPPRIMER CE COMMENTAIRE. -->
+
 A l'origine, les arbres CART ont été conçus pour partitionner l'espace en utilisant exclusivement des variables numériques, et ne pouvaient pas mobiliser les variables catégorielles sans un retraitement préalable. Plusieurs __méthodes d'encodage__ (_one-hot-encoding_, _ordinal encoding_, _target encoding_) ont donc été développées pour surmonter ce problème en transformant les variables catégorielles en variables numériques; elles ne sont d'ailleurs pas spécifiques aux méthodes ensemblistes à base d'arbres. Depuis le milieu des années 2010, une nouvelle approche efficace et spécifique aux méthodes ensemblistes a été introduite dans les implémentations du _gradient boosting_ (_native support for categorical features_). Ce paragraphe présente ces différentes approches des variables catégorielles, et précise quelle approche est proposée par les différentes implémentations.
 
 Les trois approches d'encodage les plus courantes sont les suivantes:
@@ -50,7 +55,7 @@ La dernière approche, appelée __support natif des variables catégorielles__ (
 [^note_native] Il s'agit de l'équation @eq-w-j-optimal avec $\lambda = 0$.
 
 
-Certaines implémentations des méthodes ensemblistes prennent en charge directement certaines des quatre approches présentées ci-dessus; dans les autres cas, il faut préparer les données en amont de l'entraînement et de la prédiction, par exemple en utilisant un `ColumnTransformer` de `scikit-learn` ([`OneHotEncoder()`](https://scikit-learn.org/dev/modules/generated/sklearn.preprocessing.OneHotEncoder.html), [`TargetEncoder()`](https://scikit-learn.org/dev/modules/generated/sklearn.preprocessing.TargetEncoder.html), [`OrdinalEncoder()`](https://scikit-learn.org/dev/modules/generated/sklearn.preprocessing.OrdinalEncoder.html)). Le tableau suivant résume quelles approches sont proposées par chaque implémentations des méthodes ensemblistes.
+Certaines implémentations des méthodes ensemblistes prennent en charge directement certaines des quatre approches présentées ci-dessus, auquel cas il est possible d'entraîner le modèle sur des données contenant des variables catégorielles sans _preprocessing_ particulier; dans les autres cas, il faut préparer les données en amont de l'entraînement et de la prédiction, par exemple en utilisant un `ColumnTransformer` de `scikit-learn` ([`OneHotEncoder()`](https://scikit-learn.org/dev/modules/generated/sklearn.preprocessing.OneHotEncoder.html), [`TargetEncoder()`](https://scikit-learn.org/dev/modules/generated/sklearn.preprocessing.TargetEncoder.html), [`OrdinalEncoder()`](https://scikit-learn.org/dev/modules/generated/sklearn.preprocessing.OrdinalEncoder.html)). Le tableau et les notes ci-dessous résument quelles approches sont proposées par chaque implémentations des méthodes ensemblistes.
 
 ::: {.content-visible when-format="typst"}
 
@@ -60,7 +65,7 @@ Certaines implémentations des méthodes ensemblistes prennent en charge directe
 
 // Define shorthands for Fontawesome icons
 #let present() = {
-  text(fa-icon("circle-check", fill: rgb("#2c9b2d")), size: 14pt)
+  text(fa-icon("circle-check", fill: rgb("#2C9B2D")), size: 14pt)
 }
 
 #let absent() = {
@@ -93,23 +98,24 @@ Certaines implémentations des méthodes ensemblistes prennent en charge directe
 ```
 :::
 
+
 ::: {.content-visible when-format="html"}
 
-Cette section décrit en détail les principaux hyperparamètres des forêts aléatoires listés dans le tableau @tbl-hyp-rf. Les noms des hyperparamètres utilisés sont ceux figurant dans le _package_ `R` `ranger`, et dans le _package_ `Python` `scikit-learn`. Il arrive qu'ils portent un nom différent dans d'autres implémentations des forêts aléatoires, mais il est généralement facile de s'y retrouver en lisant attentivement la documentation.
- 
+:::: {#tbl-preprocessing tbl-colwidths="[30,10,10,10,10]"}
+
 | Approche                                   | `ranger`   | `scikit-learn` | `XGBoost`  | `LightGBM` | `CatBoost`  |
-| ------------------------------------------ | ---------- | -------------- | ---------- | ---------- | ----------- |
-| _One-hot-encoding_                         | {{< fa circle-xmark >}} | {{< fa circle-xmark >}} | {{< fa circle-check >}} | {{< fa circle-check >}} | {{< fa circle-check >}} |
-| _Ordinal encoding_                         | {{< fa circle-check >}} | {{< fa circle-xmark >}} | {{< fa circle-xmark >}} | {{< fa circle-xmark >}} | {{< fa circle-xmark >}} |
-| _Target encoding_                          | {{< fa circle-check >}} | {{< fa circle-xmark >}} | {{< fa circle-xmark >}} | {{< fa circle-xmark >}} | {{< fa circle-check >}} |
-| Support natif des variables catégorielles  | {{< fa circle-xmark >}} | {{< fa circle-check >}} | {{< fa circle-check >}} | {{< fa circle-check >}} | {{< fa circle-xmark >}} | 
+| :----------------------------------------- | :--------: | :------------: | :--------: | :--------: | :---------: |
+| _One-hot-encoding_                         | <i class="fa fa-circle-xmark" style="color: #FF0000; font-size: 24px;"></i> | <i class="fa fa-circle-xmark" style="color: #FF0000; font-size: 24px;"></i> | <i class="fa fa-circle-check" style="color: #2C9B2D; font-size: 24px;"></i> | <i class="fa fa-circle-check" style="color: #2C9B2D; font-size: 24px;"></i> | <i class="fa fa-circle-check" style="color: #2C9B2D; font-size: 24px;"></i> |
+| _Ordinal encoding_                         | <i class="fa fa-circle-check" style="color: #2C9B2D; font-size: 24px;"></i> | <i class="fa fa-circle-xmark" style="color: #FF0000; font-size: 24px;"></i> | <i class="fa fa-circle-xmark" style="color: #FF0000; font-size: 24px;"></i> | <i class="fa fa-circle-xmark" style="color: #FF0000; font-size: 24px;"></i> | <i class="fa fa-circle-xmark" style="color: #FF0000; font-size: 24px;"></i> |
+| _Target encoding_                          | <i class="fa fa-circle-check" style="color: #2C9B2D; font-size: 24px;"></i> | <i class="fa fa-circle-xmark" style="color: #FF0000; font-size: 24px;"></i> | <i class="fa fa-circle-xmark" style="color: #FF0000; font-size: 24px;"></i> | <i class="fa fa-circle-xmark" style="color: #FF0000; font-size: 24px;"></i> | <i class="fa fa-circle-check" style="color: #2C9B2D; font-size: 24px;"></i> |
+| Support natif des variables catégorielles  | <i class="fa fa-circle-xmark" style="color: #FF0000; font-size: 24px;"></i> | <i class="fa fa-circle-check" style="color: #2C9B2D; font-size: 24px;"></i> | <i class="fa fa-circle-check" style="color: #2C9B2D; font-size: 24px;"></i> | <i class="fa fa-circle-check" style="color: #2C9B2D; font-size: 24px;"></i> | <i class="fa fa-circle-xmark" style="color: #FF0000; font-size: 24px;"></i> |
 
-: _Preprocessing_ des variables catégorielles dans les implémentations des méthodes ensemblistes {#tbl-preprocessing-cat tbl-colwidths="[50,10,10,10,10,10]"}
+
+_Preprocessing_ des variables catégorielles dans les implémentations des méthodes ensemblistes
+
+::::
+
 :::
-
-{{< fa circle-check >}}
-{{< fa circle-xmark >}}
-
 
 - `ranger`: le traitement des variables catégorielles (`factors`) est contrôlé par l'argument `respect.unordered.factors`, qui peut prendre trois valeurs: `ignore` (_ordinal encoding_),  `order` (_target encoding_) et `partition` (essayer toutes les combinaisons possibles). L'usage de cet argument est détaillé dans la documentation de la fonction `ranger()`. L'usage de la modalité `partition` n'est pas recommandé. En revanche, `ranger` ne prend pas en charge le _one-hot-encoding_.
 
@@ -120,7 +126,6 @@ Cette section décrit en détail les principaux hyperparamètres des forêts al�
 - `CatBoost`: cette implémentation est celle qui propose le plus d'options relatives aux variables catégorielles. Par défaut, elle utilise le _one-hot-encoding_ pour les variables catégorielles comprenant peu de modalités, et une variante de _target encoding_ aux autres. Le seuil par défaut varie selon le type de tâche et peut être modifié via le paramètre `one_hot_max_size`. La documentation de `CatBoost` propose un [_notebook_](https://github.com/catboost/catboost/blob/master/catboost/tutorials/categorical_features/categorical_features_parameters.ipynb) qui détaille les différents hyperparamètres.
 
 - `scikit-learn`: l'implémentation du _gradient boosting_ ([`HistGradientBoostingClassifier`](https://scikit-learn.org/dev/modules/generated/sklearn.ensemble.HistGradientBoostingClassifier.html), [`HistGradientBoostingRegressor`](https://scikit-learn.org/dev/modules/generated/sklearn.ensemble.HistGradientBoostingRegressor.html)) propose le support natif des variables catégorielles. Cette implémentation ne propose pas de _one-hot-encoding_ pour les variables catégorielles comprenant peu de modalités, et ne prend pas en charge ni l'_ordinal encoding_ ni le _target encoding_.
-
 
 
 
