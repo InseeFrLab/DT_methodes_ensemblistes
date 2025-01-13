@@ -9,9 +9,10 @@ Il existe de multiples implémentations des forêts aléatoires. Le présent doc
 
 ## Les hyperparamètres clés des forêts aléatoires {#sec-hyperparam-rf}
  
-Cette section décrit en détail les principaux hyperparamètres des forêts aléatoires listés dans le tableau @tbl-hyp-rf. Les noms des hyperparamètres utilisés sont ceux figurant dans le _package_ `R` `ranger`, et dans le _package_ `Python` `scikit-learn`. Il arrive qu'ils portent un nom différent dans d'autres implémentations des forêts aléatoires, mais il est généralement facile de s'y retrouver en lisant attentivement la documentation.
-
 ::: {.content-visible unless-format="html"}
+
+Cette section décrit en détail les principaux hyperparamètres des forêts aléatoires listés dans le tableau `@tbl-hyp-rf`{=typst}. Les noms des hyperparamètres utilisés sont ceux figurant dans le _package_ `R` `ranger`, et dans le _package_ `Python` `scikit-learn`. Il arrive qu'ils portent un nom différent dans d'autres implémentations des forêts aléatoires, mais il est généralement facile de s'y retrouver en lisant attentivement la documentation.
+
 
 ```{=typst}
 
@@ -44,7 +45,8 @@ Cette section décrit en détail les principaux hyperparamètres des forêts al�
 
 ::: {.content-visible when-format="html"}
 
-
+Cette section décrit en détail les principaux hyperparamètres des forêts aléatoires listés dans le tableau @tbl-hyp-rf. Les noms des hyperparamètres utilisés sont ceux figurant dans le _package_ `R` `ranger`, et dans le _package_ `Python` `scikit-learn`. Il arrive qu'ils portent un nom différent dans d'autres implémentations des forêts aléatoires, mais il est généralement facile de s'y retrouver en lisant attentivement la documentation.
+ 
 | Hyperparamètre (`ranger` / `scikit-learn`) |                                  Description                                  |
 | ------------------------------------------ | ----------------------------------------------------------------------------- |
 | `num.trees`   / `n_estimators`             | Le nombre d'arbres                                                            |
