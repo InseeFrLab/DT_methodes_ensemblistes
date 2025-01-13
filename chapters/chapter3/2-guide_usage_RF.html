@@ -283,12 +283,17 @@ window.Quarto = {
 </section>
 <section id="sec-hyperparam-rf" class="level2">
 <h2 class="anchored" data-anchor-id="sec-hyperparam-rf">Les hyperparamètres clés des forêts aléatoires</h2>
-<p>Cette section décrit en détail les principaux hyperparamètres des forêts aléatoires listés dans le tableau . Les noms des hyperparamètres utilisés sont ceux figurant dans le <em>package</em> <code>R</code> <code>ranger</code>, et dans le <em>package</em> <code>Python</code> <code>scikit-learn</code>. Il arrive qu’ils portent un nom différent dans d’autres implémentations des forêts aléatoires, mais il est généralement facile de s’y retrouver en lisant attentivement la documentation.</p>
+<p>Cette section décrit en détail les principaux hyperparamètres des forêts aléatoires listés dans le tableau <strong>?@tbl-hyp-rf</strong>. Les noms des hyperparamètres utilisés sont ceux figurant dans le <em>package</em> <code>R</code> <code>ranger</code>, et dans le <em>package</em> <code>Python</code> <code>scikit-learn</code>. Il arrive qu’ils portent un nom différent dans d’autres implémentations des forêts aléatoires, mais il est généralement facile de s’y retrouver en lisant attentivement la documentation.</p>
+<div id="tbl-hyp-rf-tbl-colwidths3070" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-hyp-rf-tbl-colwidths3070-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: Les principaux hyperparamètres des forêts aléatoires
+</figcaption>
+<div aria-describedby="tbl-hyp-rf-tbl-colwidths3070-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
-<caption>Les principaux hyperparamètres des forêts aléatoires</caption>
 <colgroup>
-<col style="width: 30%">
-<col style="width: 70%">
+<col style="width: 35%">
+<col style="width: 64%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -335,6 +340,9 @@ window.Quarto = {
 </tr>
 </tbody>
 </table>
+</div>
+</figure>
+</div>
 <ul>
 <li><p>Le <strong>nombre d’arbres</strong> par défaut varie selon les implémentations (500 dans <code>ranger</code>, 100 dans <code>scikit-learn</code>). Il s’agit d’un hyperparamètre particulier car il n’est associé à aucun arbitrage en matière de performance: la performance de la forêt aléatoire croît avec le nombre d’arbres, puis se stabilise. Le nombre optimal d’arbres est celui à partir duquel la performance de la forêt ne croît plus (ce point est détaillé plus bas) où à partir duquel l’ajout d’arbres supplémentaires génère des gains marginaux. Il est important de noter que ce nombre optimal dépend des autres hyperparamètres. Par exemple, un taux d’échantillonnage faible et un nombre faible de variables candidates à chaque noeud aboutissent à des arbres peu corrélés, mais peu performants, ce qui requiert probablement un plus grand nombre d’arbres. Dans le cas d’une classification, l’utilisation de mesures comme le score de Brier ou la fonction de perte logarithmique est recommandée pour évaluer la convergence plutôt que la précision (métrique par défaut de <code>ranger</code> et <code>scikit-learn</code>).</p></li>
 <li><p>Le <strong>nombre (ou la part) de variables candidates à chaque noeud</strong> (souvent appelé <code>mtry</code>) est un hyperparamètre essentiel qui détermine le nombre de variables prédictives sélectionnées aléatoirement à chaque nœud lors de la construction des arbres. Ce paramètre exerce la plus forte influence sur les performances du modèle, et un compromis doit être trouvé entre puissance prédictive des arbres et corrélation entre arbres. Une faible valeur de <code>mtry</code> conduit à des arbres moins performants mais plus diversifiés et donc moins corrélés entre eux. Inversement, une valeur plus élevée améliore la précision des arbres individuels mais accroît leur corrélation (les mêmes variables ayant tendance à être sélectionnées dans tous les arbres). La valeur optimale de <code>mtry</code> dépend du nombre de variables réellement pertinentes dans les données: elle est plus faible lorsque la plupart des variables sont pertinentes, et plus élevée lorsqu’il y a peu de variables pertinentes. Par ailleurs, une valeur élevée de <code>mtry</code> est préférable si les données comprennent un grand nombre de variables binaires issues du <em>one-hot-encoding</em> des variables catégorielles (LIEN AVEC LA PARTIE PREPROCESSING). Par défaut, cette valeur est fréquemment fixée à <span class="math inline">\(\sqrt{p}\)</span> pour les problèmes de classification et à <span class="math inline">\(p/3\)</span> pour les problèmes de régression, où <span class="math inline">\(p\)</span> représente le nombre total de variables prédictives disponibles.</p></li>
