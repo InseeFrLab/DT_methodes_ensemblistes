@@ -57,7 +57,7 @@ Cette section décrit en détail les principaux hyperparamètres des forêts al�
 | `splitrule` / `criterion`                  | Le critère de choix de la règle de division des noeuds intermédiaires         |
 | `oob.error`  / `oob_score`                 | Calculer la performance de la forêt par l'erreur OOB (et choix de la métrique pour `scikit`) |
 
-: Les principaux hyperparamètres des forêts aléatoires {#tbl-hyp-rf, tbl-colwidths="[30,70]"}
+: Les principaux hyperparamètres des forêts aléatoires {#tbl-hyp-rf tbl-colwidths="[30,70]"}
 
 
 :::
