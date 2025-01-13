@@ -49,7 +49,7 @@ div.csl-indent {
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
-<link href="../../chapters/chapter3/0-intro.html" rel="next">
+<link href="../../chapters/chapter2/ajouts_boosting.html" rel="next">
 <link href="../../chapters/chapter2/3-random_forest.html" rel="prev">
 <link href="../../images/favicon.ico" rel="icon">
 <script src="../../site_libs/quarto-html/quarto.js"></script>
@@ -220,6 +220,12 @@ window.Quarto = {
  <span class="menu-text">Le <em>boosting</em></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/chapter2/ajouts_boosting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sujets avancés</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -337,7 +343,8 @@ Commentaire: On pourrait peut-être donner la version formelle de la GBM, mais c
     $$\left(\hat{\beta}_m, \hat{\theta}_m\right) = \argmin_{\beta, \mathbf{\theta}} \sum_{i=1}^N L\left(y_i, f_{m-1}\left(\mathbf{x}_i\right) + \beta b\left(\mathbf{x}_i, \mathbf{\theta}\right)\right)$$
     (b) Définir $f_m\left(\mathbf{x}\right) = f_{m-1}\left(\mathbf{x}\right) + \hat{\beta}_m b\left(\mathbf{x}_i, \mathbf{\hat{\theta}_m}\right)$
  -->
-<p>L’approche de <em>gradient boosting</em> proposée par <span class="citation" data-cites="friedman2001greedy">Friedman (<a href="#ref-friedman2001greedy" role="doc-biblioref">2001</a>)</span> présente deux grands avantages. D’une part, elle peut être utilisée avec n’importe quelle fonction de perte différentiable, ce qui permet d’appliquer le gradient boosting à de multiples problèmes (régression, classification binaire ou multiclasse, <em>learning-to-rank</em>…). D’autre part, elle offre souvent des performances comparables ou supérieures aux autres approches de <em>boosting</em>. Le <em>gradient boosting</em> d’arbres de décision (<em>Gradient boosted Decision Trees</em> - GBDT) est donc devenue l’approche de référence en matière de <em>boosting</em>. En particulier, les implémentations modernes du <em>gradient boosting</em> comme XGBoost, LightGBM, et CatBoost sont des extensions et améliorations de la <em>Gradient Boosting Machine</em>.</p>
+<p>L’approche de <em>gradient boosting</em> proposée par <span class="citation" data-cites="friedman2001greedy">Friedman (<a href="#ref-friedman2001greedy" role="doc-biblioref">2001</a>)</span> présente deux grands avantages. D’une part, elle peut être utilisée avec n’importe quelle fonction de perte différentiable, ce qui permet d’appliquer le gradient boosting à de multiples problèmes (régression, classification binaire ou multiclasse, <em>learning-to-rank</em>…). D’autre part, elle offre souvent des performances comparables ou supérieures aux autres approches de <em>boosting</em>. Le <em>gradient boosting</em> d’arbres de décision (<em>Gradient boosted Decision Trees</em> - GBDT) est donc devenue l’approche de référence en matière de <em>boosting</em>: toutes les implémentations modernes du <em>gradient boosting</em> comme <code>scikit-learn</code>, <code>XGBoost</code>, <code>LightGBM</code>, et <code>CatBoost</code> sont des extensions et améliorations de la <em>Gradient Boosting Machine</em>.</p>
+<p>AJOUTER ICI LA GBM en pseudo-code</p>
 </section>
 </section>
 <section id="la-mécanique-du-gradient-boosting" class="level3">
@@ -410,8 +417,13 @@ Commentaire: On pourrait peut-être donner la version formelle de la GBM, mais c
 <!-- $\text{Gain}_{\text{split}} = \frac{1}{2} \left[\frac{\left(\sum_{i\in I_L} g_i\right)^2}{\sum_{i\in I_L} h_i+\lambda}+\frac{\left(\sum_{i\in I_R} g_i\right)^2}{\sum_{i\in I_R} h_i+\lambda}-\frac{\left(\sum_{i\in I} g_i\right)^2}{\sum_{i\in I} h_i+\lambda}\right] - \gamma$ -->
 <p>L’équation <a href="#eq-fct-eval-split" class="quarto-xref">Equation&nbsp;5</a> est au coeur de la mécanique du <em>gradient boosting</em> car elle permet de comparer les critères de partition possibles. Plus précisément, l’algorithme de détermination des critère de partition (<em>split finding algorithm</em>) consiste en une double boucle sur les variables et les valeurs prises par ces variables, qui énumère un grand nombre de critères de partition et mesure le gain associé à chacun d’entre eux avec l’équation <a href="#eq-fct-eval-split" class="quarto-xref">Equation&nbsp;5</a>. Le critère de partition retenu est simplement celui dont le gain est le plus élevé.</p>
 </section>
-<section id="la-suite" class="level4">
-<h4 class="anchored" data-anchor-id="la-suite">La suite</h4>
+<section id="mettre-à-jour-le-modèle" class="level4">
+<h4 class="anchored" data-anchor-id="mettre-à-jour-le-modèle">Mettre à jour le modèle</h4>
+<p>Une fois qu’un arbre a été entraîné, on met à jour le modèle</p>
+<p>$ F_{m}(x)=F_{m-1}(x)+<em>{m}h</em>{m}(x) $</p>
+</section>
+<section id="le-grand-ennemi-du-gradient-boosting-le-surapprentissage" class="level4">
+<h4 class="anchored" data-anchor-id="le-grand-ennemi-du-gradient-boosting-le-surapprentissage">Le grand ennemi du <em>gradient boosting</em>: le surapprentissage</h4>
 <section id="les-moyens-de-lutter-contre-loverfitting" class="level5">
 <h5 class="anchored" data-anchor-id="les-moyens-de-lutter-contre-loverfitting">Les moyens de lutter contre l’<em>overfitting</em>:</h5>
 <ul>
@@ -1033,8 +1045,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../chapters/chapter3/0-intro.html" class="pagination-link" aria-label="Comment bien utiliser les algorithmes?">
-        <span class="nav-page-text">Comment bien utiliser les algorithmes?</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../../chapters/chapter2/ajouts_boosting.html" class="pagination-link" aria-label="Sujets avancés">
+        <span class="nav-page-text">Sujets avancés</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
