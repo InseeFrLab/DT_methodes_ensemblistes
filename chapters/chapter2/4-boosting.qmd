@@ -71,7 +71,11 @@ Commentaire: On pourrait peut-être donner la version formelle de la GBM, mais c
     (b) Définir $f_m\left(\mathbf{x}\right) = f_{m-1}\left(\mathbf{x}\right) + \hat{\beta}_m b\left(\mathbf{x}_i, \mathbf{\hat{\theta}_m}\right)$
  -->
 
-L'approche de *gradient boosting* proposée par @friedman2001greedy présente deux grands avantages. D'une part, elle peut être utilisée avec n'importe quelle fonction de perte différentiable, ce qui permet d'appliquer le gradient boosting à de multiples problèmes (régression, classification binaire ou multiclasse, *learning-to-rank*...). D'autre part, elle offre souvent des performances comparables ou supérieures aux autres approches de *boosting*. Le *gradient boosting* d'arbres de décision (*Gradient boosted Decision Trees* - GBDT) est donc devenue l'approche de référence en matière de *boosting*. En particulier, les implémentations modernes du *gradient boosting* comme XGBoost, LightGBM, et CatBoost sont des extensions et améliorations de la *Gradient Boosting Machine*.
+L'approche de *gradient boosting* proposée par @friedman2001greedy présente deux grands avantages. D'une part, elle peut être utilisée avec n'importe quelle fonction de perte différentiable, ce qui permet d'appliquer le gradient boosting à de multiples problèmes (régression, classification binaire ou multiclasse, *learning-to-rank*...). D'autre part, elle offre souvent des performances comparables ou supérieures aux autres approches de *boosting*. Le *gradient boosting* d'arbres de décision (*Gradient boosted Decision Trees* - GBDT) est donc devenue l'approche de référence en matière de *boosting*: toutes les implémentations modernes du *gradient boosting* comme `scikit-learn`, `XGBoost`, `LightGBM`, et `CatBoost` sont des extensions et améliorations de la *Gradient Boosting Machine*.
+
+AJOUTER ICI LA GBM en pseudo-code
+
+
 
 ### La mécanique du *gradient boosting*
 
@@ -170,12 +174,18 @@ $$ Gain = \frac{1}{2} \left[\frac{G_L^2}{H_L+\lambda}+\frac{G_R^2}{H_R+\lambda}-
 
 L'équation @eq-fct-eval-split est au coeur de la mécanique du *gradient boosting* car elle permet de comparer les critères de partition possibles. Plus précisément, l'algorithme de détermination des critère de partition (*split finding algorithm*) consiste en une double boucle sur les variables et les valeurs prises par ces variables, qui énumère un grand nombre de critères de partition et mesure le gain associé à chacun d'entre eux avec l'équation @eq-fct-eval-split. Le critère de partition retenu est simplement celui dont le gain est le plus élevé.
 
+#### Mettre à jour le modèle
+
+Une fois qu'un arbre a été entraîné, on met à jour le modèle
+
+$ F_{m}(x)=F_{m-1}(x)+\gamma _{m}h_{m}(x) $
 
 
 
 
+#### Le grand ennemi du _gradient boosting_: le surapprentissage
 
-#### La suite
+
 
 ##### Les moyens de lutter contre l'*overfitting*:
 
