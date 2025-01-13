@@ -14,6 +14,7 @@ project:
     - chapters/chapter2/2-bagging.qmd
     - chapters/chapter2/3-random_forest.qmd
     - chapters/chapter2/4-boosting.qmd
+    - chapters/chapter2/ajouts_boosting.qmd
     - chapters/chapter3/0-intro.qmd
     - chapters/chapter3/1-preparation_donnees.qmd
     - chapters/chapter3/2-guide_usage_RF.qmd
@@ -52,6 +53,7 @@ website:
           - chapters/chapter2/2-bagging.qmd
           - chapters/chapter2/3-random_forest.qmd
           - chapters/chapter2/4-boosting.qmd
+          - chapters/chapter2/ajouts_boosting.qmd
       - section: "Comment bien utiliser les algorithmes?"
         href: chapters/chapter3/0-intro.qmd
         contents:
