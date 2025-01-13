@@ -43,19 +43,12 @@ Les trois principales approches d'encodage sont les suivantes:
 - Le **_target encoding_** consiste à remplacer chaque modalité d'une variable catégorielle par la moyenne de la variable cible pour cette modalité. Cette approche est notamment proposée par CatBoost[^note_catboost] et par scikit-learn[^note_scikit]. Comme l'_ordinal encoding_, cette approche permet d'obtenir une unique variable numérique et est donc utile pour traiter les variables présentant un grand nombre de modalités. Par ailleurs, le _target encoding_ fonctionne bien avec la méthode des histogrammes décrite précédemment, dans la mesure où les valeurs encodées sont par construction ordonnées en fonction de leur association avec la variable cible. Toutefois, il est important d'utiliser le _target encoding_ en lissant la moyenne ou en recourant à une validation croisée car il est sujet au surapprentissage. De plus, les implémentations existantes réalisent l'encodage une seule fois avant l'entraînement au niveau de l'ensemble des données d'entraînement, pas au niveau de chaque _split_; l'ordre des modalités qui résulte de l'encodage peut être peu pertinent sur certaines parties des données d'entraînement si celles-ci présentent un haut degré d'hétérogénéité.
 
 
-La dernière approche, appelée __support natif des variables catégorielles__ (**_native support for categorical features_**) n'est pas une méthode d'encodage et est spécifique aux implémentations du _gradient boosting_. Dans cette approche, on essaie de définir le meilleur _split_ directement à partir d'une variable catégorielle en séparant ses modalités en deux sous-ensembles optimaux (exemple: `{'A', 'B', 'C'}` et `{'D', 'E', 'F'}` pour une variable comprenant six modalités). La force de cette approche est qu'elle évite de faire une énumération exhaustive des partitions possibles[^note_partition] en utilisant la méthode optimale proposée par @fisher1958grouping: à chaque _split_, les modalités sont triées en fonction de $-\frac{\sum_{i \in I_j} g_i}{\sum_{i \in I_j} h_i}$ [^note_native], puis le meilleur _split_ est choisi en testant les différentes segmentations possibles de cette liste triée. Par exemple, si à un _split_ donné les modalités sont triées dans l'ordre `ABDFEC`, l'algorithme testera les splits `A|BDFEC`, `AB|DFEC`, `ABD|FEC`, etc. 
+La dernière approche, appelée __support natif des variables catégorielles__ (**_native support for categorical features_**) n'est pas un encodage et est une spécificité des implémentations du _gradient boosting_. Dans cette approche, l'objectif est de déterminer le meilleur _split_ directement à partir des modalités d'une variable catégorielle, en les séparant en deux sous-ensembles optimaux (par exemple : {'A', 'B', 'C'} et {'D', 'E', 'F'} pour une variable comportant six modalités). L'avantage principal de cette approche est qu'elle évite de faire
+l'énumération exhaustive des partitions possibles[^note_partition], en recourant à la méthode optimale de @fisher1958grouping: à chaque split, les modalités sont triées selon $-\frac{\sum_{i} g_i}{\sum_{i} h_i}$ [^note_native], puis le meilleur split est choisi en testant les différentes divisions possibles de cette liste triée. Par exemple, si à un moment donné les modalités sont triées dans l'ordre ABDFEC, l'algorithme examinera les splits A|BDFEC, AB|DFEC, ABD|FEC, etc. 
 
-Cela revient à faire du _target encoding_.
-
-
+Cette approche peut être considérée comme une variante du _target encoding_, avec deux différences notables: l'encodage des modalités se fait à partir du gradient et de la hessienne de la fonction de perte (et non à partir de $y$), et cet encodage a lieu à chaque _split_ et non une seule fois avant l'entraînement.
 
 Cette approche a été introduite par [LightGBM](https://lightgbm.readthedocs.io/en/latest/Features.html#optimal-split-for-categorical-features), puis reprise par [XGBoost](https://xgboost.readthedocs.io/en/latest/tutorials/categorical.html) et [scikit-learn](https://scikit-learn.org/stable/modules/ensemble.html#categorical-features-support).
-
-
-Elle repose sur un résultat théorique @fisher1958grouping
-
-Fisher 1958.
-
 
 [^note_OHE] Il est bien sûr possible de n'encoder que les modalités les plus fréquentes, et de regrouper toutes les autres dans une seule variable binaire.
 [^note_catboost] Le _target encoding_ utilisé par CatBoost est présenté en détail dans @prokhorenkova2018catboost et sur ce [billet de blog](https://blog.dataiku.com/how-do-gradient-boosting-algorithms-handle-categorical-variables).
