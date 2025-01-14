@@ -70,7 +70,7 @@
     "href": "chapters/chapter2/ajouts_boosting.html#footnotes",
     "title": "Le Shrinkage en Apprentissage Automatique",
     "section": "Footnotes",
-    "text": "Footnotes\n\n\nla fonction de perte doit uniquement vérifier quelques conditions mathématiques peu contraignantes en pratique.↩︎\nIl est bien sûr possible de n’encoder que les modalités les plus fréquentes, et de regrouper toutes les autres dans une seule variable binaire.↩︎\nLe target encoding utilisé par CatBoost est présenté en détail dans Prokhorenkova et al. (2018) et sur ce billet de blog.↩︎\nVoir cet exemple dans la documentation de scikit-learn.↩︎\nIl s’agit de l’équation ?@eq-w-j-optimal avec \\(\\lambda = 0\\).↩︎",
+    "text": "Footnotes\n\n\nla fonction de perte doit uniquement vérifier quelques conditions mathématiques peu contraignantes en pratique.↩︎\nIl est bien sûr possible de n’encoder que les modalités les plus fréquentes, et de regrouper toutes les autres dans une seule variable binaire.↩︎\nLe target encoding utilisé par CatBoost est présenté en détail dans Prokhorenkova et al. (2018) et sur ce billet de blog.↩︎\nVoir cet exemple dans la documentation de scikit-learn.↩︎\nIl s’agit de l’équation ?@eq-w-j-optimal avec \\(\\lambda = 0\\).↩︎\nCet exemple s’appuie sur la documentation de scikit-learn.↩︎",
     "crumbs": [
       "Présentation formelle des algorithmes",
       "Sujets avancés"
