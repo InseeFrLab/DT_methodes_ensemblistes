@@ -1,4 +1,23 @@
-
 # Guide d'usage du _gradient boosting_ {#sec-guide-gb}
 
-A rédiger
+Ce guide propose des recommandations sur l'usage des algorithmes de _gradient boosting_ disponibles dans la littérature, notamment @bentejac2021comparative. 
+
+Contrairement aux forêts aléatoires, la littérature méthodologique sur l'usages des algorithmes de _gradient boosting_ est assez limitée et relativement peu conclusive. 
+
+
+. Ce guide comporte un certain nombre de choix méthodologiques forts, comme les implémentations recommandées ou la procédure d'entraînement proposée, et d'autres choix pertinents sont évidemment possibles. C'est pourquoi les recommandations de ce guide doivent être considérées comme un point de départ raisonnable, pas comme un ensemble de règles devant être respectées à tout prix.
+
+## Quelle implémentation utiliser? {#sec-implementation-gb}
+
+Il existe quatre implémentations du _gradient boosting_, qui sont très similaires, et ne diffèrent que sur des points mineurs: `XGBoost`, `LightGBM`, `CatBoost` et `scikit-learn`. De multiples publications les ont comparées, à la fois en matière de pouvoir prédictif et de rapidité d'entraînement (voir notamment @bentejac2021comparative et @alshari2021comparison). Cette littérature a abouti à trois conclusions. Premièrement, les différentes implémentations présentent des performances très proches (le classement exact variant d'une publication à l'autre). Deuxièmement, bien optimiser les hyperparamètres est nettement plus important que le choix de l'implémentation. Troisièmement, `LightGBM` est sensiblement plus rapide que les autres implémentations. Dans la mesure où l'optimisation des hyperparamètres est une étape à la fois essentielle et intense en calculs, l'efficacité computationnelle apparaît comme un critère majeur de choix de l'implémentation. C'est pourquoi le présent document décrit et recommande l'usage de `LightGBM`. Ceci étant, les autres implémentations peuvent également être utilisées, notamment si les données sont de taille limitée.
+
+## Les hyperparamètres clés du _gradient boosting_ {#sec-hyperparam-gb}
+
+
+Proposer une procédure pour l'optimisation des hyperparamètres s'avère plus délicat pour le _gradient boosting_ que pour les forêts aléatoires, pour deux raisons. D'une part, les algorithmes de _gradient boosting_ comprennent un nombre beaucoup plus élevé d'hyperparamètres. D'autre part, la littérature méthodologique sur l'usage pratique des algorithmes de _gradient boosting_ reste assez limitée et peu conclusive (en-dehors de nombreux tutoriels introductifs disponibles sur internet).
+
+
+
+
+
+
