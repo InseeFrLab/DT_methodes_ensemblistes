@@ -50,6 +50,40 @@ Commentaire: On pourrait peut-être donner la version Formelle de la GBM, mais c
 \end{algorithm}
 ```
 
+Commentaire: On pourrait peut-être donner la version formelle de la GBM, mais c'est peut-être inutile. 
+1.  Initialiser le modèle avec $f_0\left(\mathbf{x}\right) = y_0$.
+2.  Pour $m = 1, \dots, M:$
+    (a) Entraîner le $m$-ième modèle:
+    $ \left(\hat{\beta}_m, \hat{\theta}_m\right) = \argmin_{\beta, \mathbf{\theta}} \sum_{i=1}^N L\left(y_i, f_{m-1}\left(\mathbf{x}_i\right) + \beta b\left(\mathbf{x}_i, \mathbf{\theta}\right)\right) $
+    (b) Définir $f_m\left(\mathbf{x}\right) = f_{m-1}\left(\mathbf{x}\right) + \hat{\beta}_m b\left(\mathbf{x}_i, \mathbf{\hat{\theta}_m}\right)$
+
+
+```pseudocode
+#| label: alg-rf
+#| html-indent-size: "1.2em"
+#| html-comment-delimiter: "   --->"
+#| html-line-number: true
+#| html-line-number-punc: ":"
+#| html-no-end: false
+#| pdf-placement: "htb!"
+#| pdf-line-number: true
+
+
+\begin{algorithm}
+\caption{Algorithme de boosting}
+\begin{algorithmic}
+\INPUT Training dataset ${ \{(x_{i},y_{i})\}_{i=1}^{n}}$ with $n$ observations and $p$ features, number of trees $M > 0$.
+\State Initialize model with a constant value: $F_0\left(x\right) = y_0$.
+\For{$m = 1$ to $M$}
+    \State Compute so-called \textit{pseudo-residuals}: $ r_{im}=-\left[{\frac {\partial L(y_{i},F(x_{i}))}{\partial F(x_{i})}}\right]_{F(x)=F_{m-1}(x)}$
+    \State Train a tree $ f_m $ on the dataset ${ \{(x_{i},r_{im})\}_{i=1}^{n}}$
+    \State Update the model: $F_m(x) = F_{m-1}(x) + \eta f(x, \mathbf{\hat{\theta}_m})$
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+```
+
+
 ```pseudocode
 #| label: alg-rf
 #| html-indent-size: "1.2em"
