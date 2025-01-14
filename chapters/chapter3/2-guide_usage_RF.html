@@ -282,7 +282,7 @@ window.Quarto = {
 
 <section id="sec-guide-rf" class="level1">
 <h1>Guide d’usage des forêts aléatoires</h1>
-<p>Ce guide d’entraînement des forêts aléatoires rassemble et synthétise des recommandations sur l’entraînement des forêts aléatoires disponibles dans la littérature, en particulier dans <span class="citation" data-cites="probst2019hyperparameters">Probst, Wright, and Boulesteix (<a href="#ref-probst2019hyperparameters" role="doc-biblioref">2019</a>)</span>. Ce guide comporte un certain nombre de choix méthodologiques forts, comme les implémentations recommandées ou la procédure d’entraînement proposée, et d’autres choix pertinents sont évidemment possibles. C’est pourquoi les recommandations de ce guide doivent être considérées comme un point de départ raisonnable, pas comme un ensemble de règles devant être respectées à tout prix.</p>
+<p>Ce guide d’entraînement des forêts aléatoires rassemble et synthétise des recommandations sur l’entraînement des forêts aléatoires disponibles dans la littérature, en particulier dans <span class="citation" data-cites="probst2019hyperparameters">Probst, Wright, and Boulesteix (<a href="#ref-probst2019hyperparameters" role="doc-biblioref">2019</a>)</span> et <span class="citation" data-cites="biau2016random">Biau and Scornet (<a href="#ref-biau2016random" role="doc-biblioref">2016</a>)</span>. Ce guide comporte un certain nombre de choix méthodologiques forts, comme les implémentations recommandées ou la procédure proposée pour l’optimisation des hyperparamètres, et d’autres choix pertinents sont évidemment possibles. C’est pourquoi les recommandations de ce guide doivent être considérées comme un point de départ raisonnable, pas comme un ensemble de règles devant être respectées à tout prix.</p>
 <section id="sec-implementation-rf" class="level2">
 <h2 class="anchored" data-anchor-id="sec-implementation-rf">Quelles implémentations utiliser?</h2>
 <p>Il existe de multiples implémentations des forêts aléatoires. Le présent document présente et recommande l’usage de deux implémentations de référence: le <em>package</em> <code>R</code> <code>ranger</code> et le <em>package</em> <code>Python</code> <code>scikit-learn</code> pour leur rigueur, leur efficacité et leur simplicité d’utilisation. Il est à noter qu’il est possible d’entraîner des forêts aléatoires avec les algorithmes <code>XGBoost</code> et <code>LightGBM</code>, mais il s’agit d’un usage avancé qui n’est pas recommandé en première approche. Cette approche est présentée dans la partie <strong>REFERENCE A LA PARTIE USAGE AVANCE</strong>.</p>
@@ -309,40 +309,40 @@ Table&nbsp;1: Les principaux hyperparamètres des forêts aléatoires
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>num.trees</code> / <code>n_estimators</code></td>
-<td>Le nombre d’arbres</td>
+<td><code>num.trees</code></td>
+<td><code>n_estimators</code></td>
 </tr>
 <tr class="even">
-<td><code>mtry</code> / <code>max_features</code></td>
-<td>Le nombre de variables candidates à chaque noeud</td>
+<td><code>mtry</code></td>
+<td><code>max_features</code></td>
 </tr>
 <tr class="odd">
-<td><code>sample.fraction</code> / <code>max_samples</code></td>
-<td>Le taux d’échantillonnage des données (ou la taille de l’échantillon)</td>
+<td><code>sample.fraction</code></td>
+<td><code>max_samples</code></td>
 </tr>
 <tr class="even">
-<td><code>replacement</code> / absent</td>
-<td>L’échantillonnage des données se fait-il avec ou sans remise?</td>
+<td><code>replacement</code></td>
+<td>absent</td>
 </tr>
 <tr class="odd">
-<td><code>min.bucket</code> / <code>min_samples_leaf</code></td>
-<td>Nombre minimal d’observations dans les noeuds terminaux</td>
+<td><code>min.bucket</code></td>
+<td><code>min_samples_leaf</code></td>
 </tr>
 <tr class="even">
-<td><code>max.depth</code> / <code>max_depth</code></td>
-<td>Profondeur maximale des arbres</td>
+<td><code>max.depth</code></td>
+<td><code>max_depth</code></td>
 </tr>
 <tr class="odd">
-<td><code>min.node.size</code> / <code>min_samples_split</code></td>
-<td>Nombre minimal d’observations nécessaire pour qu’un noeud puisse être partagé</td>
+<td><code>min.node.size</code></td>
+<td><code>min_samples_split</code></td>
 </tr>
 <tr class="even">
-<td><code>splitrule</code> / <code>criterion</code></td>
-<td>Le critère de choix de la règle de division des noeuds intermédiaires</td>
+<td><code>splitrule</code></td>
+<td><code>criterion</code></td>
 </tr>
 <tr class="odd">
-<td><code>oob.error</code> / <code>oob_score</code></td>
-<td>Calculer la performance de la forêt par l’erreur OOB (et choix de la métrique pour <code>scikit</code>)</td>
+<td><code>oob.error</code></td>
+<td><code>oob_score</code></td>
 </tr>
 </tbody>
 </table>
@@ -408,6 +408,9 @@ Bénard, Clément, Gérard Biau, Sébastien Da Veiga, and Erwan Scornet. 2022. <
 </div>
 <div id="ref-benard2022mda" class="csl-entry" role="listitem">
 Bénard, Clément, Sébastien Da Veiga, and Erwan Scornet. 2022. <span>“Mean Decrease Accuracy for Random Forests: Inconsistency, and a Practical Solution via the Sobol-MDA.”</span> <em>Biometrika</em> 109 (4): 881–900. <a href="https://doi.org/10.1093/biomet/asac017">https://doi.org/10.1093/biomet/asac017</a>.
+</div>
+<div id="ref-biau2016random" class="csl-entry" role="listitem">
+Biau, Gérard, and Erwan Scornet. 2016. <span>“A Random Forest Guided Tour.”</span> <em>Test</em> 25: 197–227.
 </div>
 <div id="ref-probst2018tune" class="csl-entry" role="listitem">
 Probst, Philipp, and Anne-Laure Boulesteix. 2018. <span>“To Tune or Not to Tune the Number of Trees in Random Forest.”</span> <em>Journal of Machine Learning Research</em> 18 (181): 1–18.
