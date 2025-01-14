@@ -1,0 +1,104 @@
+
+---
+title: "Quarto Table with FontAwesome Icons"
+Format: html
+filters:
+  - pseudocode
+---
+
+Commentaire: On pourrait peut-être donner la version Formelle de la GBM, mais c'est peut-être inutile. 
+1.  Initialiser le modèle avec $f_0\left(\mathbf{x}\right) = y_0$.
+2.  Pour $m = 1, \dots, M:$
+    (a) Entraîner le $m$-ième modèle:
+    $$ \left(\hat{\beta}_m, \hat{\theta}_m\right) = argmin_{\beta, \mathbf{\theta}} \sum_{i=1}^N L\left(y_i, f_{m-1}\left(\mathbf{x}_i\right) + \beta b\left(\mathbf{x}_i, \mathbf{\theta}\right)\right) $$
+    (b) Définir $f_m\left(\mathbf{x}\right) = f_{m-1}\left(\mathbf{x}\right) + \hat{\beta}_m b\left(\mathbf{x}_i, \mathbf{\hat{\theta}_m}\right)$
+
+
+```pseudocode
+#| label: alg-quicksort
+#| html-indent-size: "1.2em"
+#| html-comment-delimiter: "//"
+#| html-line-number: true
+#| html-line-number-punc: ":"
+#| html-no-end: false
+#| pdf-placement: "htb!"
+#| pdf-line-number: true
+
+\begin{algorithm}
+\caption{Forêt aléatoire}
+\begin{algorithmic}
+\Procedure{Quicksort}{$A, p, r$}
+  \If{$p < r$}
+    \State $q = $ \Call{Partition}{$A, p, r$}
+    \State \Call{Quicksort}{$A, p, q - 1$}
+    \State \Call{Quicksort}{$A, q + 1, r$}
+  \EndIf
+\EndProcedure
+\Procedure{Partition}{$A, p, r$}
+  \State $x = A[r]$
+  \State $i = p - 1$
+  \For{$j = p, \dots, r - 1$}
+    \If{$A[j] < x$}
+      \State $i = i + 1$
+      \State exchange
+      $A[i]$ with     $A[j]$
+    \EndIf
+    \State exchange $A[i]$ with $A[r]$
+  \EndFor
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+```
+
+```pseudocode
+#| label: alg-rf
+#| html-indent-size: "1.2em"
+#| html-comment-delimiter: "   --->"
+#| html-line-number: true
+#| html-line-number-punc: ":"
+#| html-no-end: false
+#| pdf-placement: "htb!"
+#| pdf-line-number: true
+
+
+\begin{algorithm}
+\caption{Breiman's Random Forest Predicted Value at $x$}
+\begin{algorithmic}
+\INPUT Training dataset $\mathcal{D}$ with $n$ observations and $p$ features, number of trees $M > 0$, $a_n \in \{1, \dots, n\}$, $\text{mtry} \in \{1, \dots, p\}$, $ \text{nodesize} \in \{1, \dots, a_n\}$.
+\For{$j = 1$ to $M$}
+    \State Select $a_n$ points, with (or without) replacement, uniformly in $D_n$. Only these $a_n$ observations are used in the following steps.
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+```
+
+<!-- 
+
+\Require Training set $D_n$, number of trees $M > 0$, $a_n \in \{1, \dots, n\}$, $m_{\text{try}} \in \{1, \dots, p\}$, $n_{\text{odesize}} \in \{1, \dots, a_n\}$, and $x \in \mathcal{X}$.
+\Ensure Prediction of the random Forest at $x$.
+\For{$j = 1$ to $M$}
+    \State Select $a_n$ points, with (or without) replacement, unIFormly in $D_n$. Only these $a_n$ observations are used in subsequent steps.
+    \State Set $P = \mathcal{X}$, the list containing the cell associated with the root of the tree.
+    \State Set $P_{\text{final}} = \emptyset$, an empty list.
+    \While{$P \neq \emptyset$}
+        \State Let $A$ be the first element of $P$.
+        \If{$A$ contains less than $n_{\text{odesize}}$ points \textbf{or} all $X_i \in A$ are equal}
+            \State Remove the cell $A$ from $P$.
+            \State Concatenate $P_{\text{final}}$ with $A$.
+        \Else
+            \State Select unIFormly, without replacement, a subset $m_{\text{try}} \subset \{1, \dots, p\}$ of cardinality $m_{\text{try}}$.
+            \State Select the best split in $A$ by optimizing the CART-split criterion along the coordinates in $m_{\text{try}}$.
+            \State Cut the cell $A$ according to the best split. Call $A_L$ and $A_R$ the two resulting cells.
+            \State Remove the cell $A$ from $P$.
+            \State Concatenate $P$ with $A_L$ and $A_R$.
+        \EndIf
+    \EndWhile
+    \State Compute the predicted value $m_n(x; \Theta_j, D_n)$ at $x$ as the average of the $Y_i$ falling in the cell of $x$ in partition $P_{\text{final}}$.
+\EndFor
+\State Compute the random Forest estimate $m_{M,n}(x; \Theta_1, \dots, \Theta_M, D_n)$ at the query point $x$ according to:
+\[
+m_{M,n}(x; \Theta_1, \dots, \Theta_M, D_n) = \frac{1}{M} \sum_{j=1}^M m_n(x; \Theta_j, D_n).
+\]
+
+
+ -->
