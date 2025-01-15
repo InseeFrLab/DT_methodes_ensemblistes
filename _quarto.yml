@@ -74,6 +74,12 @@ format:
     code-copy: true
     code-overflow: wrap
     toc: true
+    number-sections: true    # Pour la numérotation des sections
+    fig_caption: true        # Pour la numérotation des figures
+    crossref:
+      fig-prefix: ""
+      tbl-prefix: ""
+      eq-prefix: ""
 #   typst:
 #     keep-typ: true
 #     template: _extensions/quarto-ext/ams/template.typ
