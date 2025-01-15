@@ -288,7 +288,8 @@ window.Quarto = {
 <p>. Ce guide comporte un certain nombre de choix méthodologiques forts, comme les implémentations recommandées ou la procédure d’entraînement proposée, et d’autres choix pertinents sont évidemment possibles. C’est pourquoi les recommandations de ce guide doivent être considérées comme un point de départ raisonnable, pas comme un ensemble de règles devant être respectées à tout prix.</p>
 <section id="sec-implementation-gb" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="sec-implementation-gb"><span class="header-section-number">1.1</span> Quelle implémentation utiliser?</h2>
-<p>Il existe quatre implémentations du <em>gradient boosting</em>: <code>XGBoost</code>, <code>LightGBM</code>, <code>CatBoost</code> et <code>scikit-learn</code>. Elles sont toutes des variantes optimisées de l’algorithme de <span class="citation" data-cites="friedman2001greedy">Friedman (<a href="#ref-friedman2001greedy" role="doc-biblioref">2001</a>)</span> et ne diffèrent que sur des points mineurs. De multiples publications les ont comparées, à la fois en matière de pouvoir prédictif et de rapidité d’entraînement (voir notamment <span class="citation" data-cites="bentejac2021comparative">Bentéjac, Csörgő, and Martínez-Muñoz (<a href="#ref-bentejac2021comparative" role="doc-biblioref">2021</a>)</span> et <span class="citation" data-cites="alshari2021comparison">Alshari, Saleh, and Odabaş (<a href="#ref-alshari2021comparison" role="doc-biblioref">2021</a>)</span>). Cette littérature a abouti à trois conclusions. Premièrement, les différentes implémentations présentent des performances très proches (le classement exact variant d’une publication à l’autre). Deuxièmement, bien optimiser les hyperparamètres est nettement plus important que le choix de l’implémentation. Troisièmement, le temps d’entraînement varie beaucoup d’une implémentation à l’autre, et <code>LightGBM</code> est sensiblement plus rapide que les autres. Dans la mesure où l’optimisation des hyperparamètres est une étape à la fois essentielle et intense en calcul, l’efficacité computationnelle apparaît comme un critère majeur de choix de l’implémentation. C’est pourquoi le présent document décrit et recommande l’usage de <code>LightGBM</code>. Ceci étant, les trois autres implémentations peuvent également être utilisées, notamment si les données sont de taille limitée.</p>
+<p>Il existe quatre implémentations du <em>gradient boosting</em>: <code>XGBoost</code>, <code>LightGBM</code>, <code>CatBoost</code> et <code>scikit-learn</code>. Elles sont toutes des variantes optimisées de l’algorithme de <span class="citation" data-cites="friedman2001greedy">Friedman (<a href="#ref-friedman2001greedy" role="doc-biblioref">2001</a>)</span> et ne diffèrent que sur des points mineurs. De multiples publications les ont comparées, à la fois en matière de pouvoir prédictif et de rapidité d’entraînement (voir notamment <span class="citation" data-cites="bentejac2021comparative">Bentéjac, Csörgő, and Martínez-Muñoz (<a href="#ref-bentejac2021comparative" role="doc-biblioref">2021</a>)</span> et <span class="citation" data-cites="alshari2021comparison">Alshari, Saleh, and Odabaş (<a href="#ref-alshari2021comparison" role="doc-biblioref">2021</a>)</span>). Cette littérature a abouti à trois conclusions. Premièrement, les différentes implémentations présentent des performances très proches (le classement exact variant d’une publication à l’autre). Deuxièmement, bien optimiser les hyperparamètres est nettement plus important que le choix de l’implémentation. Troisièmement, le temps d’entraînement varie beaucoup d’une implémentation à l’autre, et <code>LightGBM</code> est sensiblement plus rapide que les autres. Dans la mesure où l’optimisation des hyperparamètres est une étape à la fois essentielle et intense en calcul, l’efficacité computationnelle apparaît comme un critère majeur de choix de l’implémentation. C’est pourquoi <strong>le présent document décrit et recommande l’usage de <code>LightGBM</code></strong>. Ceci étant, les trois autres implémentations peuvent également être utilisées, notamment si les données sont de taille limitée.</p>
+<p>Par ailleurs, chacune de ces implémentations propose une interface de haut niveau compatible avec <code>scikit-learn</code>. <strong>Il est vivement recommandé d’utiliser cette interface car elle minimise les risques d’erreur, facilite la construction de modèles reproductibles et permet d’utiliser l’ensemble des outils proposés par <code>scikit-learn</code>.</strong></p>
 </section>
 <section id="sec-hyperparam-gb" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="sec-hyperparam-gb"><span class="header-section-number">1.2</span> Les hyperparamètres clés du <em>gradient boosting</em></h2>
@@ -434,6 +435,10 @@ Attention aux alias!
 </div>
 <p>Voici une présentation des principaux hyperparamètres et de leurs effets sur les performances sur le modèle de <em>gradient boosting</em>:</p>
 <ul>
+<li>L’hyperparamètre <code>objective</code> définit à la fois la <strong>nature du problème</strong> modélisé (régression, classification…) et la <strong>fonction de perte</strong> utilisée lors de l’entraînement du modèle.</li>
+</ul>
+<p>ifférente selon les cas, regression_l2 en cas de régression, binary_log_loss pour la classification binaire, LIEN PARTIE AVANCE.</p>
+<ul>
 <li><p>La <strong>complexité du modèle global</strong>:</p>
 <ul>
 <li><p>le <strong>nombre d’arbres</strong> est l’hyperparamètre qui contrôle la complexité générale de l’algorithme. Le point essentiel est que, contrairement aux forêts aléatoires, la performance du <em>gradient boosting</em> sur les données d’entraînement croît continûment avec le nombre d’arbres sans jamais se stabiliser. Le choix du nombre d’arbres est essentiel, et doit viser un équilibre entre augmentation du pouvoir prédictif du modèle (si les arbres supplémentaires permettent au modèle de corriger les erreurs résiduelles), et lutte contre le surajustement (si les arbres supplémentaires captent uniquement les bruits statistiques et les fluctuations spécifiques des données d’entraînement). Par ailleurs, Le choix du nombre d’arbres est très lié à celui du taux d’apprentissage, et il est nécessaire de les optimiser conjointement.</p></li>
@@ -482,24 +487,6 @@ Figure&nbsp;1: Les approches <em>depth-wise</em> et <em>leaf-wise</em>
 </div>
 </div>
 </div>
-<p><code>max_depth</code><br>
-<code>num_leaves</code><br>
-<code>min_child_samples</code><br>
-<code>min_child_weight</code><br>
-<code>lambda</code> ou <code>lambda_l2</code><br>
-<code>reg_alpha</code> ou <code>lambda_l1</code> <code>min_split_gain</code><br>
-<code>max_bin</code><br>
-<code>subsample</code><br>
-<code>colsample_bytree</code><br>
-<code>scale_pos_weight</code><br>
-<code>class_weight</code><br>
-<code>sample_weight</code><br>
-<code>max_cat_to_onehot</code><br>
-<code>max_cat_threshold</code></p>
-<ul>
-<li><p>Bien insister sur l’<code>objective</code>: fonction de perte?</p></li>
-<li><p>Mentionner qu’ <code>XGBoost</code> propose également <code>colsample_bylevel</code> et <code>colsample_bynode</code></p></li>
-</ul>
 </section>
 <section id="sec-procedure-training-gb" class="level2" data-number="1.3">
 <h2 data-number="1.3" class="anchored" data-anchor-id="sec-procedure-training-gb"><span class="header-section-number">1.3</span> Comment entraîner un algorithme de <em>gradient boosting</em>?</h2>
