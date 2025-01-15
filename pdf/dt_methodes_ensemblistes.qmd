@@ -55,8 +55,10 @@ functions:
 {{< include ../chapters/chapter2/2-bagging.qmd >}}
 {{< include ../chapters/chapter2/3-random_forest.qmd >}}
 {{< include ../chapters/chapter2/4-boosting.qmd >}}
+{{< include ../chapters/chapter2/ajouts_boosting.qmd >}}
 
 {{< include ../chapters/chapter3/0-intro.qmd >}}
 {{< include ../chapters/chapter3/1-preparation_donnees.qmd >}}
 {{< include ../chapters/chapter3/2-guide_usage_RF.qmd >}}
+{{< include ../chapters/chapter3/3-guide_usage_GB.qmd >}}
 
