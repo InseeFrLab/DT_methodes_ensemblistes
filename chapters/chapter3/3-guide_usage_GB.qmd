@@ -93,7 +93,7 @@ ifférente selon les cas, regression_l2 en cas de régression, binary_log_loss p
 
 
 ::: {.callout-warning title="Une différence entre `LightGBM` et `XGBoost`"}
-Une différence notable entre les versions initiales de `LightGBM` et `XGBoost` tient à la méthode de construction des arbres (figure @fig-leaf-wise):
+Une différence notable entre les versions initiales de `LightGBM` et `XGBoost` tient à la méthode de construction des arbres:
 
 - `LightGBM` construit les arbres selon une approche par feuille (dite _leaf-wise_): l'arbre est construit feuille par feuille, et c'est le _split_ avec le gain le plus élevé qui est retenu à chaque étape, et ce quelle que soit sa position dans l'arbre. L'approche _leaf-wise_ est très efficace pour minimiser la fonction de perte, car elle privilégie les _splits_ les plus porteurs de gain, mais elle peut aboutir à un surajustement et à des arbres complexes, déséquilibrés et très profonds. L'hyperparamètre-clé de cette approche est le nombre maximal de feuilles terminales (`num_leaves`).
 
@@ -101,7 +101,7 @@ Une différence notable entre les versions initiales de `LightGBM` et `XGBoost` 
 
 Il se trouve que l'approche _leaf-wise_ a été ajoutée par la suite à `XGBoost`, _via_ l'hyperparamètre `grow_policy` qui peut prendre les valeurs `depthwise` (valeur par défaut) et `lossguide` (approche _leaf-wise_).
 
-![Les approches _depth-wise_ et _leaf-wise_](/figures/leafwise-depthwise.png){#fig-leaf-wise width=60%}
+![](/figures/leafwise-depthwise.png){#fig-leaf-wise width=60%}
 :::
 
 
