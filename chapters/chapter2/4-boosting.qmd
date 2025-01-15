@@ -62,19 +62,23 @@ La *Gradient Boosting Machine* (GBM) propose une approche assez différente: ell
 -   Cette procédure est répétée en ajoutant de nouveaux modèles et en recalculant le gradient à chaque étape.
 -   La qualité du modèle final est évaluée sur un ensemble de test.
 
-<!-- 
+La mécanique de la *Gradient Boosting Machine* est résumée de façon plus formelle dans l'algorithem REFERENCE.
+
+
+
 Commentaire: On pourrait peut-être donner la version formelle de la GBM, mais c'est peut-être inutile. 
 1.  Initialiser le modèle avec $f_0\left(\mathbf{x}\right) = y_0$.
 2.  Pour $m = 1, \dots, M:$
     (a) Entraîner le $m$-ième modèle:
-    $$\left(\hat{\beta}_m, \hat{\theta}_m\right) = \argmin_{\beta, \mathbf{\theta}} \sum_{i=1}^N L\left(y_i, f_{m-1}\left(\mathbf{x}_i\right) + \beta b\left(\mathbf{x}_i, \mathbf{\theta}\right)\right)$$
+    $ \left(\hat{\beta}_m, \hat{\theta}_m\right) = \argmin_{\beta, \mathbf{\theta}} \sum_{i=1}^N L\left(y_i, f_{m-1}\left(\mathbf{x}_i\right) + \beta b\left(\mathbf{x}_i, \mathbf{\theta}\right)\right) $
     (b) Définir $f_m\left(\mathbf{x}\right) = f_{m-1}\left(\mathbf{x}\right) + \hat{\beta}_m b\left(\mathbf{x}_i, \mathbf{\hat{\theta}_m}\right)$
- -->
+
+
+
 
 L'approche de *gradient boosting* proposée par @friedman2001greedy présente deux grands avantages. D'une part, elle peut être utilisée avec n'importe quelle fonction de perte différentiable, ce qui permet d'appliquer le gradient boosting à de multiples problèmes (régression, classification binaire ou multiclasse, *learning-to-rank*...). D'autre part, elle offre souvent des performances comparables ou supérieures aux autres approches de *boosting*. Le *gradient boosting* d'arbres de décision (*Gradient boosted Decision Trees* - GBDT) est donc devenue l'approche de référence en matière de *boosting*: toutes les implémentations modernes du *gradient boosting* comme `scikit-learn`, `XGBoost`, `LightGBM`, et `CatBoost` sont des extensions et améliorations de la *Gradient Boosting Machine*.
 
 AJOUTER ICI LA GBM en pseudo-code
-
 
 
 ### La mécanique du *gradient boosting*
@@ -148,7 +152,7 @@ $$
 \begin{align*}
  \mathcal{\tilde{L}}^{(t)} =&   \sum_{j=1}^{T} \sum_{i\in I_{j}} \bigg[g_i f_t(\mathbf{x}_i)\phantom{\frac{1}{2}} &+ \frac{1}{2} h_i f^2_t(\mathbf{x}_i)\bigg]&+ \gamma T + \frac{1}{2} \lambda \sum_{j=1}^T w_i^2 \\
      &= \sum_{j=1}^{T} \sum_{i\in I_{j}} \bigg[g_i w_j &+ \frac{1}{2} h_i w_j^2\bigg] &+ \gamma T + \frac{1}{2} \lambda \sum_{j=1}^T w_i^2 \\
-     &= \sum^T_{j=1} \bigg[w_j\sum_{i\in I_{j}} g_i &+ \frac{1}{2} w_j^2 \sum_{i \in I_{j}} h_i + \lambda \bigg] &+ \gamma T
+     &= \sum^T_{j=1} \bigg[w_j\sum_{i\in I_{j}} g_i &+ \frac{1}{2} w_j^2 \left( \sum_{i \in I_{j}} h_i + \lambda \right) \bigg] &+ \gamma T
 \end{align*}
 $$
 
@@ -192,32 +196,6 @@ $ F_{m}(x)=F_{m-1}(x)+\gamma _{m}h_{m}(x) $
 -   le *shrinkage*;
 -   le subsampling des lignes et des colonnes;
 -   les différentes pénalisations.
-
-##### Les hyperparamètres
-
-| Hyperparamètre                                                      | Description                                                                 | Valeur par défaut |
-|---------------------------------------------------------------------|-----------------------------------------------------------------------------|:-----------------:|
-| `booster`                                                           | Le type de _weak learner_ utilisé                                           | `'gbtree'`        |
-| `learning_rate`                                                     | Le taux d'apprentissage                                                     | 0.3               |
-| `max_depth`                                                         | La profondeur maximale des arbres                                           | 6                 |
-| `max_leaves`                                                        | Le nombre maximal de feuilles des arbres                                    | 0                 |
-| `min_child_weight`                                                  | Le poids minimal qu'une feuille doit contenir                               | 1                 |
-| `n_estimators`                                                      | Le nombre d'arbres                                                          | 100               |
-| `lambda` ou `reg_lambda`                                            | La pénalisation L2                                                          | 1                 |
-| `alpha` ou `reg_alpha`                                              | La pénalisation L1                                                          | 0                 |
-| `gamma`                                                             | Le gain minimal nécessaire pour diviser un noeud                            | 0                 |
-| `tree_method`                                                       | La méthode utilisée pour rechercher les splits                              | `'hist'`          |
-| `max_bin`                                                           | Le nombre utilisés pour discrétiser les variables continues                 | 0                 |
-| `subsample`                                                         | Le taux d'échantillonnage des données d'entraîenment                        | 1                 |
-| `sampling_method`                                                   | La méthode utilisée pour échantillonner les données d'entraînement          | `'uniform'`       |
-| `colsample_bytree` <br> `colsample_bylevel` <br> `colsample_bynode` | Taux d'échantillonnage des colonnes par arbre, par niveau et par noeud      | 1, 1 et 1         |
-| `scale_pos_weight`                                                  | Le poids des observations de la classe positive (classification uniquement) | 1                 |
-| `sample_weight`                                                     | La pondération des données d'entraînement                                   | 1                 |
-| `enable_categorical`                                                | Activer le support des variables catégorielles                              | `False`           |
-| `max_cat_to_onehot`                                                 | Nombre de modalités en-deça duquel XGBoost utilise le _one-hot-encoding_    | A COMPLETER       |
-| `max_cat_threshold`                                                 | Nombre maximal de catégories considérées dans le partitionnement optimal des variables catégorielles                                   | A COMPLETER       | 
-
-: Les principaux hyperparamètres d'XGBoost {tbl-colwidths="[25,60,15]"}
 
 #### La préparation des données
 
