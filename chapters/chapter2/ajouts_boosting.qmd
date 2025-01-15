@@ -98,7 +98,7 @@ Certaines implémentations des méthodes ensemblistes prennent en charge directe
 }
 
 #let absent() = {
-  fa-icon("circle-xmark", fill: red)
+  fa-icon("circle-xmark", fill: red, size: 14pt)
 }
 
 #let unknown() = {
