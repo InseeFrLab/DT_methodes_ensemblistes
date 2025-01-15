@@ -48,7 +48,7 @@ Cette section décrit en détail les principaux hyperparamètres des forêts al�
 Cette section décrit en détail les principaux hyperparamètres des forêts aléatoires listés dans le tableau @tbl-hyp-rf. Les noms des hyperparamètres utilisés sont ceux figurant dans le _package_ `R` `ranger`, et dans le _package_ `Python` `scikit-learn`. Il arrive qu'ils portent un nom différent dans d'autres implémentations des forêts aléatoires, mais il est généralement facile de s'y retrouver en lisant attentivement la documentation.
  
 | Hyperparamètre (`ranger` / `scikit-learn`) |                                  Description                                  |
-| ------------------------------------------ | ----------------------------------------------------------------------------- |
+| ------------------------------------------ | :---------------------------------------------------------------------------- |
 | `num.trees`         / `n_estimators`       | Le nombre d'arbres                                                            |
 | `mtry`              / `max_features`       | Le nombre de variables candidates à chaque noeud                              |
 | `sample.fraction`   / `max_samples`        | Le taux d'échantillonnage des données (ou la taille de l'échantillon)         |
