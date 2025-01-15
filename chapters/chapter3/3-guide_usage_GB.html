@@ -469,19 +469,19 @@ Une différence entre <code>LightGBM</code> et <code>XGBoost</code>
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Une différence notable entre les versions initiales de <code>LightGBM</code> et <code>XGBoost</code> tient à la méthode de construction des arbres (figure <a href="#fig-leaf-wise" class="quarto-xref">1</a>):</p>
+<p>Une différence notable entre les versions initiales de <code>LightGBM</code> et <code>XGBoost</code> tient à la méthode de construction des arbres:</p>
 <ul>
 <li><p><code>LightGBM</code> construit les arbres selon une approche par feuille (dite <em>leaf-wise</em>): l’arbre est construit feuille par feuille, et c’est le <em>split</em> avec le gain le plus élevé qui est retenu à chaque étape, et ce quelle que soit sa position dans l’arbre. L’approche <em>leaf-wise</em> est très efficace pour minimiser la fonction de perte, car elle privilégie les <em>splits</em> les plus porteurs de gain, mais elle peut aboutir à un surajustement et à des arbres complexes, déséquilibrés et très profonds. L’hyperparamètre-clé de cette approche est le nombre maximal de feuilles terminales (<code>num_leaves</code>).</p></li>
 <li><p><code>XGBoost</code> construit les arbres selon une approche par niveau (dite <em>depth-wise</em>): l’arbre est construit niveau par niveau, en divisant tous les nœuds du même niveau avant de passer au niveau suivant. L’approche <em>depth-wise</em> n’est pas optimale pour minimiser la fonction de perte, car elle ne recherche pas systématiquement le <em>split</em> le plus performant, mais elle permet d’obtenir des arbres équilibrés et de profondeur limitée. L’hyperparamètre-clé de cette approche est la profondeur maximale des arbres (<code>max_depth</code>).</p></li>
 </ul>
 <p>Il se trouve que l’approche <em>leaf-wise</em> a été ajoutée par la suite à <code>XGBoost</code>, <em>via</em> l’hyperparamètre <code>grow_policy</code> qui peut prendre les valeurs <code>depthwise</code> (valeur par défaut) et <code>lossguide</code> (approche <em>leaf-wise</em>).</p>
-<div id="fig-leaf-wise" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-leaf-wise" class="quarto-float quarto-figure quarto-figure-center anchored" width="60%">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-leaf-wise-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../figures/leafwise-depthwise.png" class="img-fluid figure-img" style="width:60.0%">
+<img src="../../figures/leafwise-depthwise.png" id="fig-leaf-wise" class="img-fluid figure-img" style="width:60.0%">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-leaf-wise-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Les approches <em>depth-wise</em> et <em>leaf-wise</em>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-leaf-wise-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1
 </figcaption>
 </figure>
 </div>
