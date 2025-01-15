@@ -59,7 +59,8 @@ $ \frac{\sum_{i=1}^{n} 1_{x_{i j}=x_{i k}} g_{i}}{\sum_{i=1}^{n} 1_{x_{i j}=x_{i
 [^note_OHE]: Il est bien sûr possible de n'encoder que les modalités les plus fréquentes, et de regrouper toutes les autres dans une seule variable binaire.
 [^note_catboost]: Le _target encoding_ utilisé par CatBoost est présenté en détail dans @prokhorenkova2018catboost et sur ce [billet de blog](https://blog.dataiku.com/how-do-gradient-boosting-algorithms-handle-categorical-variables).
 [^note_scikit]: Voir cet [exemple](https://scikit-learn.org/dev/auto_examples/preprocessing/plot_target_encoder.html#sphx-glr-auto-examples-preprocessing-plot-target-encoder-py) dans la documentation de scikit-learn.
-[^note_native]: Il s'agit de l'équation @eq-w-j-optimal avec $\lambda = 0$.
+[^note_native]: Il s'agit de l'[équation donnant le poids optimal](4-boosting.qmd#eq-w-j-optimal) d'une feuille terminale, avec $\lambda = 0$.
+
 
 ##### Comparaison des différents approches
 
