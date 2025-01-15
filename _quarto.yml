@@ -18,6 +18,7 @@ project:
     - chapters/chapter3/0-intro.qmd
     - chapters/chapter3/1-preparation_donnees.qmd
     - chapters/chapter3/2-guide_usage_RF.qmd
+    - chapters/chapter3/3-guide_usage_GB.qmd
     - pdf/dt_methodes_ensemblistes.qmd
     - pdf/partie_toute_redigee.qmd
   resources: 
@@ -59,6 +60,7 @@ website:
         contents:
           - chapters/chapter3/1-preparation_donnees.qmd
           - chapters/chapter3/2-guide_usage_RF.qmd
+          - chapters/chapter3/3-guide_usage_GB.qmd
     background: "#D9E3E4"
     favicon: images/favicon.ico
     pinned: true
