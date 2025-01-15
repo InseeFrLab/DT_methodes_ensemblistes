@@ -49,18 +49,20 @@ Cette section décrit en détail les principaux hyperparamètres des forêts al�
  
 | Hyperparamètre (`ranger` / `scikit-learn`) |                                  Description                                  |
 | ------------------------------------------ | ----------------------------------------------------------------------------- |
-| `num.trees`         | `n_estimators`       | Le nombre d'arbres                                                            |
-| `mtry`              | `max_features`       | Le nombre de variables candidates à chaque noeud                              |
-| `sample.fraction`   | `max_samples`        | Le taux d'échantillonnage des données (ou la taille de l'échantillon)         |
-| `replacement`       | absent               | L'échantillonnage des données se fait-il avec ou sans remise?                 |
-| `min.bucket`        | `min_samples_leaf`   | Nombre minimal d'observations dans les noeuds terminaux                       |
-| `max.depth`         | `max_depth`          | Profondeur maximale des arbres                                                |
-| `min.node.size`     | `min_samples_split`  | Nombre minimal d'observations nécessaire pour qu'un noeud puisse être partagé |
-| `splitrule`         | `criterion`          | Le critère de choix de la règle de division des noeuds intermédiaires         |
-| `oob.error`         | `oob_score`          | Calculer la performance de la forêt par l'erreur OOB (et choix de la métrique pour `scikit`) |
+| `num.trees`         / `n_estimators`       | Le nombre d'arbres                                                            |
+| `mtry`              / `max_features`       | Le nombre de variables candidates à chaque noeud                              |
+| `sample.fraction`   / `max_samples`        | Le taux d'échantillonnage des données (ou la taille de l'échantillon)         |
+| `replacement`       / absent               | L'échantillonnage des données se fait-il avec ou sans remise?                 |
+| `min.bucket`        / `min_samples_leaf`   | Nombre minimal d'observations dans les noeuds terminaux                       |
+| `max.depth`         / `max_depth`          | Profondeur maximale des arbres                                                |
+| `min.node.size`     / `min_samples_split`  | Nombre minimal d'observations nécessaire pour qu'un noeud puisse être partagé |
+| `splitrule`         / `criterion`          | Le critère de choix de la règle de division des noeuds intermédiaires         |
+| `oob.error`         / `oob_score`          | Calculer la performance de la forêt par l'erreur OOB (et choix de la métrique pour `scikit`) |
 
 : Les principaux hyperparamètres des forêts aléatoires {#tbl-hyp-rf tbl-colwidths="[30,70]"}
 :::
+
+Voici une présentation des principaux hyperparamètres et de leurs effets sur les performances de la forêt aléatoire:
 
 - Le __nombre d'arbres__ par défaut varie selon les implémentations (500 dans `ranger`, 100 dans `scikit-learn`).  Il s'agit d'un hyperparamètre particulier car il n'est associé à aucun arbitrage en matière de performance: la performance de la forêt aléatoire croît avec le nombre d'arbres, puis se stabilise. Le nombre optimal d'arbres est celui à partir duquel la performance de la forêt ne croît plus (ce point est détaillé plus bas) où à partir duquel l'ajout d'arbres supplémentaires génère des gains marginaux. Il est important de noter que ce nombre optimal dépend des autres hyperparamètres. Par exemple, un taux d'échantillonnage faible et un nombre faible de variables candidates à chaque noeud aboutissent à des arbres peu corrélés, mais peu performants, ce qui requiert probablement un plus grand nombre d'arbres. Dans le cas d'une classification, l'utilisation de mesures comme le score de Brier ou la fonction de perte logarithmique est recommandée pour évaluer la convergence plutôt que la précision (métrique par défaut de `ranger` et `scikit-learn`).
 
