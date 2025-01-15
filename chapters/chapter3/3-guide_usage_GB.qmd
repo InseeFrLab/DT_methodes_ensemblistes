@@ -9,7 +9,9 @@ Contrairement aux forêts aléatoires, la littérature méthodologique sur l'usa
 
 ## Quelle implémentation utiliser? {#sec-implementation-gb}
 
-Il existe quatre implémentations du _gradient boosting_: `XGBoost`, `LightGBM`, `CatBoost` et `scikit-learn`. Elles sont toutes des variantes optimisées de l'algorithme de @friedman2001greedy et ne diffèrent que sur des points mineurs. De multiples publications les ont comparées, à la fois en matière de pouvoir prédictif et de rapidité d'entraînement (voir notamment @bentejac2021comparative et @alshari2021comparison). Cette littérature a abouti à trois conclusions. Premièrement, les différentes implémentations présentent des performances très proches (le classement exact variant d'une publication à l'autre). Deuxièmement, bien optimiser les hyperparamètres est nettement plus important que le choix de l'implémentation. Troisièmement, le temps d'entraînement varie beaucoup d'une implémentation à l'autre, et `LightGBM` est sensiblement plus rapide que les autres. Dans la mesure où l'optimisation des hyperparamètres est une étape à la fois essentielle et intense en calcul, l'efficacité computationnelle apparaît comme un critère majeur de choix de l'implémentation. C'est pourquoi le présent document décrit et recommande l'usage de `LightGBM`. Ceci étant, les trois autres implémentations peuvent également être utilisées, notamment si les données sont de taille limitée.
+Il existe quatre implémentations du _gradient boosting_: `XGBoost`, `LightGBM`, `CatBoost` et `scikit-learn`. Elles sont toutes des variantes optimisées de l'algorithme de @friedman2001greedy et ne diffèrent que sur des points mineurs. De multiples publications les ont comparées, à la fois en matière de pouvoir prédictif et de rapidité d'entraînement (voir notamment @bentejac2021comparative et @alshari2021comparison). Cette littérature a abouti à trois conclusions. Premièrement, les différentes implémentations présentent des performances très proches (le classement exact variant d'une publication à l'autre). Deuxièmement, bien optimiser les hyperparamètres est nettement plus important que le choix de l'implémentation. Troisièmement, le temps d'entraînement varie beaucoup d'une implémentation à l'autre, et `LightGBM` est sensiblement plus rapide que les autres. Dans la mesure où l'optimisation des hyperparamètres est une étape à la fois essentielle et intense en calcul, l'efficacité computationnelle apparaît comme un critère majeur de choix de l'implémentation. C'est pourquoi __le présent document décrit et recommande l'usage de `LightGBM`__. Ceci étant, les trois autres implémentations peuvent également être utilisées, notamment si les données sont de taille limitée.
+
+Par ailleurs, chacune de ces implémentations propose une interface de haut niveau compatible avec `scikit-learn`. __Il est vivement recommandé d'utiliser cette interface car elle minimise les risques d'erreur, facilite la construction de modèles reproductibles et permet d'utiliser l'ensemble des outils proposés par `scikit-learn`.__
 
 ## Les hyperparamètres clés du _gradient boosting_ {#sec-hyperparam-gb}
 
@@ -58,6 +60,15 @@ Il arrive fréquemment que les hyperparamètres des algorithmes de _gradient boo
 
 Voici une présentation des principaux hyperparamètres et de leurs effets sur les performances sur le modèle de _gradient boosting_:
 
+
+- L'hyperparamètre `objective` définit à la fois la __nature du problème__ modélisé (régression, classification...) et la __fonction de perte__ utilisée lors de l'entraînement du modèle. 
+
+
+ifférente selon les cas, regression_l2 en cas de régression, binary_log_loss pour la classification binaire, LIEN PARTIE AVANCE.
+
+
+
+
 - La __complexité du modèle global__:
     - le __nombre d'arbres__ est l'hyperparamètre qui contrôle la complexité générale de l'algorithme. Le point essentiel est que, contrairement aux forêts aléatoires, la performance du _gradient boosting_ sur les données d'entraînement croît continûment avec le nombre d'arbres sans jamais se stabiliser. Le choix du nombre d'arbres est essentiel, et doit viser un équilibre entre augmentation du pouvoir prédictif du modèle (si les arbres supplémentaires permettent au modèle de corriger les erreurs résiduelles), et lutte contre le surajustement (si les arbres supplémentaires captent uniquement les bruits statistiques et les fluctuations spécifiques des données d'entraînement). Par ailleurs, Le choix du nombre d'arbres est très lié à celui du taux d'apprentissage, et il est nécessaire de les optimiser conjointement.
 
@@ -92,33 +103,6 @@ Il se trouve que l'approche _leaf-wise_ a été ajoutée par la suite à `XGBoos
 
 ![Les approches _depth-wise_ et _leaf-wise_](/figures/leafwise-depthwise.png){#fig-leaf-wise width=60%}
 :::
-
-
-
-`max_depth`                
-`num_leaves`               
-`min_child_samples`        
-`min_child_weight`         
-`lambda` ou `lambda_l2`    
-`reg_alpha` ou `lambda_l1` 
-`min_split_gain`           
-`max_bin`                  
-`subsample`                
-`colsample_bytree`         
-`scale_pos_weight`         
-`class_weight`             
-`sample_weight`            
-`max_cat_to_onehot`        
-`max_cat_threshold`        
-
-
-
-
-- Bien insister sur l'`objective`: fonction de perte?
-
--  Mentionner qu' `XGBoost` propose également `colsample_bylevel` et `colsample_bynode`
-
-
 
 
 ## Comment entraîner un algorithme de _gradient boosting_? {#sec-procedure-training-gb}
