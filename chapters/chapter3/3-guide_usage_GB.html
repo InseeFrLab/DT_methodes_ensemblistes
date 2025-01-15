@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>guide_usage_rf – Introduction aux méthodes ensemblistes</title>
+<title>guide_usage_gb – Introduction aux méthodes ensemblistes</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -49,8 +49,7 @@ div.csl-indent {
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
-<link href="../../chapters/chapter3/3-guide_usage_GB.html" rel="next">
-<link href="../../chapters/chapter3/1-preparation_donnees.html" rel="prev">
+<link href="../../chapters/chapter3/2-guide_usage_RF.html" rel="prev">
 <link href="../../images/favicon.ico" rel="icon">
 <script src="../../site_libs/quarto-html/quarto.js"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
@@ -130,7 +129,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/chapter3/0-intro.html">Comment bien utiliser les algorithmes?</a></li><li class="breadcrumb-item"><a href="../../chapters/chapter3/2-guide_usage_RF.html">Guide d’usage des forêts aléatoires</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/chapter3/0-intro.html">Comment bien utiliser les algorithmes?</a></li><li class="breadcrumb-item"><a href="../../chapters/chapter3/3-guide_usage_GB.html">Guide d’usage du <em>gradient boosting</em></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -245,13 +244,13 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../chapters/chapter3/2-guide_usage_RF.html" class="sidebar-item-text sidebar-link active">
+  <a href="../../chapters/chapter3/2-guide_usage_RF.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Guide d’usage des forêts aléatoires</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../chapters/chapter3/3-guide_usage_GB.html" class="sidebar-item-text sidebar-link">
+  <a href="../../chapters/chapter3/3-guide_usage_GB.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Guide d’usage du <em>gradient boosting</em></span></a>
   </div>
 </li>
@@ -267,143 +266,245 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#sec-guide-rf" id="toc-sec-guide-rf" class="nav-link active" data-scroll-target="#sec-guide-rf"><span class="header-section-number">1</span> Guide d’usage des forêts aléatoires</a>
+  <li><a href="#sec-guide-gb" id="toc-sec-guide-gb" class="nav-link active" data-scroll-target="#sec-guide-gb"><span class="header-section-number">1</span> Guide d’usage du <em>gradient boosting</em></a>
   <ul class="collapse">
-  <li><a href="#sec-implementation-rf" id="toc-sec-implementation-rf" class="nav-link" data-scroll-target="#sec-implementation-rf"><span class="header-section-number">1.1</span> Quelles implémentations utiliser?</a></li>
-  <li><a href="#sec-hyperparam-rf" id="toc-sec-hyperparam-rf" class="nav-link" data-scroll-target="#sec-hyperparam-rf"><span class="header-section-number">1.2</span> Les hyperparamètres clés des forêts aléatoires</a></li>
-  <li><a href="#sec-procedure-training-rf" id="toc-sec-procedure-training-rf" class="nav-link" data-scroll-target="#sec-procedure-training-rf"><span class="header-section-number">1.3</span> Comment entraîner une forêt aléatoire?</a>
-  <ul class="collapse">
-  <li><a href="#approche-simple" id="toc-approche-simple" class="nav-link" data-scroll-target="#approche-simple"><span class="header-section-number">1.3.1</span> Approche simple</a></li>
-  <li><a href="#approches-plus-avancées" id="toc-approches-plus-avancées" class="nav-link" data-scroll-target="#approches-plus-avancées"><span class="header-section-number">1.3.2</span> Approches plus avancées</a></li>
-  </ul></li>
-  <li><a href="#mesurer-limportance-des-variables" id="toc-mesurer-limportance-des-variables" class="nav-link" data-scroll-target="#mesurer-limportance-des-variables"><span class="header-section-number">1.4</span> Mesurer l’importance des variables</a></li>
+  <li><a href="#sec-implementation-gb" id="toc-sec-implementation-gb" class="nav-link" data-scroll-target="#sec-implementation-gb"><span class="header-section-number">1.1</span> Quelle implémentation utiliser?</a></li>
+  <li><a href="#sec-hyperparam-gb" id="toc-sec-hyperparam-gb" class="nav-link" data-scroll-target="#sec-hyperparam-gb"><span class="header-section-number">1.2</span> Les hyperparamètres clés du <em>gradient boosting</em></a></li>
+  <li><a href="#sec-procedure-training-gb" id="toc-sec-procedure-training-gb" class="nav-link" data-scroll-target="#sec-procedure-training-gb"><span class="header-section-number">1.3</span> Comment entraîner un algorithme de <em>gradient boosting</em>?</a></li>
   </ul></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/edit/main/chapters/chapter3/2-guide_usage_RF.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/blob/main/chapters/chapter3/2-guide_usage_RF.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/edit/main/chapters/chapter3/3-guide_usage_GB.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/blob/main/chapters/chapter3/3-guide_usage_GB.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/chapter3/0-intro.html">Comment bien utiliser les algorithmes?</a></li><li class="breadcrumb-item"><a href="../../chapters/chapter3/2-guide_usage_RF.html">Guide d’usage des forêts aléatoires</a></li></ol></nav></header>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/chapter3/0-intro.html">Comment bien utiliser les algorithmes?</a></li><li class="breadcrumb-item"><a href="../../chapters/chapter3/3-guide_usage_GB.html">Guide d’usage du <em>gradient boosting</em></a></li></ol></nav></header>
 
 
 
 
-<section id="sec-guide-rf" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Guide d’usage des forêts aléatoires</h1>
-<p>Ce guide d’entraînement des forêts aléatoires rassemble et synthétise des recommandations sur l’entraînement des forêts aléatoires disponibles dans la littérature, en particulier dans <span class="citation" data-cites="probst2019hyperparameters">Probst, Wright, and Boulesteix (<a href="#ref-probst2019hyperparameters" role="doc-biblioref">2019</a>)</span> et <span class="citation" data-cites="biau2016random">Biau and Scornet (<a href="#ref-biau2016random" role="doc-biblioref">2016</a>)</span>. Ce guide comporte un certain nombre de choix méthodologiques forts, comme les implémentations recommandées ou la procédure proposée pour l’optimisation des hyperparamètres, et d’autres choix pertinents sont évidemment possibles. C’est pourquoi les recommandations de ce guide doivent être considérées comme un point de départ raisonnable, pas comme un ensemble de règles devant être respectées à tout prix.</p>
-<section id="sec-implementation-rf" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="sec-implementation-rf"><span class="header-section-number">1.1</span> Quelles implémentations utiliser?</h2>
-<p>Il existe de multiples implémentations des forêts aléatoires. Le présent document présente et recommande l’usage de deux implémentations de référence: le <em>package</em> <code>R</code> <code>ranger</code> et le <em>package</em> <code>Python</code> <code>scikit-learn</code> pour leur rigueur, leur efficacité et leur simplicité d’utilisation. Il est à noter qu’il est possible d’entraîner des forêts aléatoires avec les algorithmes <code>XGBoost</code> et <code>LightGBM</code>, mais il s’agit d’un usage avancé qui n’est pas recommandé en première approche. Cette approche est présentée dans la partie <strong>REFERENCE A LA PARTIE USAGE AVANCE</strong>.</p>
+<section id="sec-guide-gb" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Guide d’usage du <em>gradient boosting</em></h1>
+<p>Ce guide propose des recommandations sur l’usage des algorithmes de <em>gradient boosting</em> disponibles dans la littérature, notamment <span class="citation" data-cites="bentejac2021comparative">Bentéjac, Csörgő, and Martínez-Muñoz (<a href="#ref-bentejac2021comparative" role="doc-biblioref">2021</a>)</span>.</p>
+<p>Contrairement aux forêts aléatoires, la littérature méthodologique sur l’usages des algorithmes de <em>gradient boosting</em> est assez limitée et relativement peu conclusive.</p>
+<p>. Ce guide comporte un certain nombre de choix méthodologiques forts, comme les implémentations recommandées ou la procédure d’entraînement proposée, et d’autres choix pertinents sont évidemment possibles. C’est pourquoi les recommandations de ce guide doivent être considérées comme un point de départ raisonnable, pas comme un ensemble de règles devant être respectées à tout prix.</p>
+<section id="sec-implementation-gb" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="sec-implementation-gb"><span class="header-section-number">1.1</span> Quelle implémentation utiliser?</h2>
+<p>Il existe quatre implémentations du <em>gradient boosting</em>: <code>XGBoost</code>, <code>LightGBM</code>, <code>CatBoost</code> et <code>scikit-learn</code>. Elles sont toutes des variantes optimisées de l’algorithme de <span class="citation" data-cites="friedman2001greedy">Friedman (<a href="#ref-friedman2001greedy" role="doc-biblioref">2001</a>)</span> et ne diffèrent que sur des points mineurs. De multiples publications les ont comparées, à la fois en matière de pouvoir prédictif et de rapidité d’entraînement (voir notamment <span class="citation" data-cites="bentejac2021comparative">Bentéjac, Csörgő, and Martínez-Muñoz (<a href="#ref-bentejac2021comparative" role="doc-biblioref">2021</a>)</span> et <span class="citation" data-cites="alshari2021comparison">Alshari, Saleh, and Odabaş (<a href="#ref-alshari2021comparison" role="doc-biblioref">2021</a>)</span>). Cette littérature a abouti à trois conclusions. Premièrement, les différentes implémentations présentent des performances très proches (le classement exact variant d’une publication à l’autre). Deuxièmement, bien optimiser les hyperparamètres est nettement plus important que le choix de l’implémentation. Troisièmement, le temps d’entraînement varie beaucoup d’une implémentation à l’autre, et <code>LightGBM</code> est sensiblement plus rapide que les autres. Dans la mesure où l’optimisation des hyperparamètres est une étape à la fois essentielle et intense en calcul, l’efficacité computationnelle apparaît comme un critère majeur de choix de l’implémentation. C’est pourquoi le présent document décrit et recommande l’usage de <code>LightGBM</code>. Ceci étant, les trois autres implémentations peuvent également être utilisées, notamment si les données sont de taille limitée.</p>
 </section>
-<section id="sec-hyperparam-rf" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="sec-hyperparam-rf"><span class="header-section-number">1.2</span> Les hyperparamètres clés des forêts aléatoires</h2>
-<p>Cette section décrit en détail les principaux hyperparamètres des forêts aléatoires listés dans le tableau <a href="#tbl-hyp-rf" class="quarto-xref">1</a>. Les noms des hyperparamètres utilisés sont ceux figurant dans le <em>package</em> <code>R</code> <code>ranger</code>, et dans le <em>package</em> <code>Python</code> <code>scikit-learn</code>. Il arrive qu’ils portent un nom différent dans d’autres implémentations des forêts aléatoires, mais il est généralement facile de s’y retrouver en lisant attentivement la documentation.</p>
-<div id="tbl-hyp-rf" class="quarto-float quarto-figure quarto-figure-center anchored" data-tbl-colwidths="[30,70]">
+<section id="sec-hyperparam-gb" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="sec-hyperparam-gb"><span class="header-section-number">1.2</span> Les hyperparamètres clés du <em>gradient boosting</em></h2>
+<p>Cette section décrit en détail les principaux hyperparamètres des algorithmes de <em>gradient boosting</em> listés dans le tableau <a href="#tbl-hyp-lightgbm" class="quarto-xref">1</a>. Les noms des hyperparamètres utilisés sont ceux figurant dans le <em>package</em> <code>R</code> <code>LightGBM</code>. Les hyperparamètres portent généralement le même nom dans les autres implémentations; si ce n’est pas le cas, il est facile de s’y retrouver en lisant attentivement la documentation. Il est à noter que, dans cette liste d’hyperparamètres, seuls le nombre d’arbres et le taux d’apprentissage concernent l’algorithme de <em>boosting</em> au sens strict; tous les autres hyperparamètres portent sur la construction des arbres pris isolément.</p>
+<div id="tbl-hyp-lightgbm" class="quarto-float quarto-figure quarto-figure-center anchored" data-tbl-colwidths="[25,60,15]">
 <figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-hyp-rf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;1: Les principaux hyperparamètres des forêts aléatoires
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-hyp-lightgbm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: Les principaux hyperparamètres de <code>LightGBM</code>
 </figcaption>
-<div aria-describedby="tbl-hyp-rf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div aria-describedby="tbl-hyp-lightgbm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
 <colgroup>
-<col style="width: 30%">
-<col style="width: 70%">
+<col style="width: 25%">
+<col style="width: 60%">
+<col style="width: 15%">
 </colgroup>
 <thead>
 <tr class="header">
-<th>Hyperparamètre (<code>ranger</code> / <code>scikit-learn</code>)</th>
+<th style="text-align: left;">Hyperparamètre</th>
 <th style="text-align: left;">Description</th>
+<th style="text-align: center;">Valeur par défaut</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>num.trees</code> / <code>n_estimators</code></td>
-<td style="text-align: left;">Le nombre d’arbres</td>
+<td style="text-align: left;"><code>objective</code></td>
+<td style="text-align: left;">Fonction de perte utilisée</td>
+<td style="text-align: center;">Variable</td>
 </tr>
 <tr class="even">
-<td><code>mtry</code> / <code>max_features</code></td>
-<td style="text-align: left;">Le nombre de variables candidates à chaque noeud</td>
+<td style="text-align: left;"><code>n_estimators</code> ou <code>num_trees</code></td>
+<td style="text-align: left;">Nombre d’arbres</td>
+<td style="text-align: center;">100</td>
 </tr>
 <tr class="odd">
-<td><code>sample.fraction</code> / <code>max_samples</code></td>
-<td style="text-align: left;">Le taux d’échantillonnage des données (ou la taille de l’échantillon)</td>
+<td style="text-align: left;"><code>learning_rate</code> ou <code>eta</code></td>
+<td style="text-align: left;">Taux d’apprentissage</td>
+<td style="text-align: center;">0.1</td>
 </tr>
 <tr class="even">
-<td><code>replacement</code> / absent</td>
-<td style="text-align: left;">L’échantillonnage des données se fait-il avec ou sans remise?</td>
-</tr>
-<tr class="odd">
-<td><code>min.bucket</code> / <code>min_samples_leaf</code></td>
-<td style="text-align: left;">Nombre minimal d’observations dans les noeuds terminaux</td>
-</tr>
-<tr class="even">
-<td><code>max.depth</code> / <code>max_depth</code></td>
+<td style="text-align: left;"><code>max_depth</code></td>
 <td style="text-align: left;">Profondeur maximale des arbres</td>
+<td style="text-align: center;">-1 (pas de limite)</td>
 </tr>
 <tr class="odd">
-<td><code>min.node.size</code> / <code>min_samples_split</code></td>
-<td style="text-align: left;">Nombre minimal d’observations nécessaire pour qu’un noeud puisse être partagé</td>
+<td style="text-align: left;"><code>num_leaves</code></td>
+<td style="text-align: left;">Nombre de feuilles terminales des arbres</td>
+<td style="text-align: center;">31</td>
 </tr>
 <tr class="even">
-<td><code>splitrule</code> / <code>criterion</code></td>
-<td style="text-align: left;">Le critère de choix de la règle de division des noeuds intermédiaires</td>
+<td style="text-align: left;"><code>min_child_samples</code></td>
+<td style="text-align: left;">Nombre minimal d’observations qu’une feuille terminale doit contenir</td>
+<td style="text-align: center;">20</td>
 </tr>
 <tr class="odd">
-<td><code>oob.error</code> / <code>oob_score</code></td>
-<td style="text-align: left;">Calculer la performance de la forêt par l’erreur OOB (et choix de la métrique pour <code>scikit</code>)</td>
+<td style="text-align: left;"><code>min_child_weight</code></td>
+<td style="text-align: left;">Poids minimal qu’une feuille terminale doit contenir</td>
+<td style="text-align: center;">0.001</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>lambda</code> ou <code>lambda_l2</code></td>
+<td style="text-align: left;">Pénalisation quadratique sur la valeur des feuilles terminales</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>reg_alpha</code> ou <code>lambda_l1</code></td>
+<td style="text-align: left;">Pénalisation absolue (L1) sur la valeur des feuilles terminales</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>min_split_gain</code></td>
+<td style="text-align: left;">Gain minimal nécessaire pour diviser un noeud</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>bagging_fraction</code></td>
+<td style="text-align: left;">Taux d’échantillonnage des données d’entraînement</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>feature_fraction</code></td>
+<td style="text-align: left;">Taux d’échantillonnage des colonnes par arbre</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>feature_fraction_bynode</code></td>
+<td style="text-align: left;">Taux d’échantillonnage des colonnes par noeud</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>max_bin</code></td>
+<td style="text-align: left;">Nombre de <em>bins</em> utilisés pour discrétiser les variables continues</td>
+<td style="text-align: center;">255</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>max_cat_to_onehot</code></td>
+<td style="text-align: left;">Nombre de modalités en-deça duquel <code>LightGBM</code> utilise le <em>one-hot-encoding</em></td>
+<td style="text-align: center;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>max_cat_threshold</code></td>
+<td style="text-align: left;">Nombre maximal de <em>splits</em> considérés <br> dans le traitement des variables catégorielles</td>
+<td style="text-align: center;">32</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>sample_weight</code></td>
+<td style="text-align: left;">Pondération des observations dans les données d’entraînement</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>scale_pos_weight</code></td>
+<td style="text-align: left;">Poids des observations de la classe positive (classification binaire uniquement)</td>
+<td style="text-align: center;">Aucun</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>class_weight</code></td>
+<td style="text-align: left;">Poids des observations de chaque classe (classification multiclasse uniquement)</td>
+<td style="text-align: center;">Aucun</td>
 </tr>
 </tbody>
 </table>
 </div>
 </figure>
 </div>
-<p>Voici une présentation des principaux hyperparamètres et de leurs effets sur les performances de la forêt aléatoire:</p>
+<div class="callout callout-style-default callout-warning callout-titled" title="Attention aux alias!">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Attention aux alias!
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Il arrive fréquemment que les hyperparamètres des algorithmes de <em>gradient boosting</em> portent plusieurs noms. Par exemple dans <code>LightGBM</code>, le nombre d’arbres porte les noms suivants: <code>num_iterations</code>, <code>num_iteration</code>, <code>n_iter</code>, <code>num_tree</code>, <code>num_trees</code>, <code>num_round</code>, <code>num_rounds</code>, <code>nrounds</code>, <code>num_boost_round</code>, <code>n_estimators</code> et <code>max_iter</code> (ouf!). C’est une source récurrente de confusion, mais il est facile de s’y retrouver en consultant la page de la documentation sur les hyperparamètres, qui liste les <em>alias</em>:</p>
 <ul>
-<li><p>Le <strong>nombre d’arbres</strong> par défaut varie selon les implémentations (500 dans <code>ranger</code>, 100 dans <code>scikit-learn</code>). Il s’agit d’un hyperparamètre particulier car il n’est associé à aucun arbitrage en matière de performance: la performance de la forêt aléatoire croît avec le nombre d’arbres, puis se stabilise. Le nombre optimal d’arbres est celui à partir duquel la performance de la forêt ne croît plus (ce point est détaillé plus bas) où à partir duquel l’ajout d’arbres supplémentaires génère des gains marginaux. Il est important de noter que ce nombre optimal dépend des autres hyperparamètres. Par exemple, un taux d’échantillonnage faible et un nombre faible de variables candidates à chaque noeud aboutissent à des arbres peu corrélés, mais peu performants, ce qui requiert probablement un plus grand nombre d’arbres. Dans le cas d’une classification, l’utilisation de mesures comme le score de Brier ou la fonction de perte logarithmique est recommandée pour évaluer la convergence plutôt que la précision (métrique par défaut de <code>ranger</code> et <code>scikit-learn</code>).</p></li>
-<li><p>Le <strong>nombre (ou la part) de variables candidates à chaque noeud</strong> (souvent appelé <code>mtry</code>) est un hyperparamètre essentiel qui détermine le nombre de variables prédictives sélectionnées aléatoirement à chaque nœud lors de la construction des arbres. Ce paramètre exerce la plus forte influence sur les performances du modèle, et un compromis doit être trouvé entre puissance prédictive des arbres et corrélation entre arbres. Une faible valeur de <code>mtry</code> conduit à des arbres moins performants mais plus diversifiés et donc moins corrélés entre eux. Inversement, une valeur plus élevée améliore la précision des arbres individuels mais accroît leur corrélation (les mêmes variables ayant tendance à être sélectionnées dans tous les arbres). La valeur optimale de <code>mtry</code> dépend du nombre de variables réellement pertinentes dans les données: elle est plus faible lorsque la plupart des variables sont pertinentes, et plus élevée lorsqu’il y a peu de variables pertinentes. Par ailleurs, une valeur élevée de <code>mtry</code> est préférable si les données comprennent un grand nombre de variables binaires issues du <em>one-hot-encoding</em> des variables catégorielles (LIEN AVEC LA PARTIE PREPROCESSING). Par défaut, cette valeur est fréquemment fixée à <span class="math inline">\(\sqrt{p}\)</span> pour les problèmes de classification et à <span class="math inline">\(p/3\)</span> pour les problèmes de régression, où <span class="math inline">\(p\)</span> représente le nombre total de variables prédictives disponibles.</p></li>
-<li><p>Le <strong>taux d’échantillonnage</strong> et le <strong>mode de tirage</strong> contrôlent le plan d’échantillonnage des données d’entraînement. Les valeurs par défaut varient d’une implémentation à l’autre; dans le cas de <code>ranger</code>, le taux d’échantillonnage est de 63,2% sans remise, et de 100% avec remise. L’implémentation <code>scikit-learn</code> ne propose pas le tirage sans remise. Ces hyperparamètres ont des effets sur la performance similaires à ceux du nombre de variables candidates, mais d’une moindre ampleur. Un taux d’échantillonnage plus faible aboutit à des arbres plus diversifiés et donc moins corrélés (car ils sont entraînés sur des échantillons très différents), mais ces arbres peuvent être peu performants car ils sont entraînés sur des échantillons de petite taille. Inversement, un taux d’échantillonnage élevé aboutit à des arbres plus performants mais plus corrélés. Les effets de l’échantillonnage avec ou sans remise sur la performance de la forêt aléatoire sont moins clairs et ne font pas consensus. Les travaux les plus récents semblent toutefois suggérer qu’il est préférable d’échantillonner sans remise (<span class="citation" data-cites="probst2019hyperparameters">Probst, Wright, and Boulesteix (<a href="#ref-probst2019hyperparameters" role="doc-biblioref">2019</a>)</span>).</p></li>
-<li><p>Le <strong>nombre minimal d’observations dans les noeuds terminaux</strong> contrôle la taille des noeuds terminaux. La valeur par défaut est faible dans la plupart des implémentations (entre 1 et 5). Il n’y a pas vraiment de consensus sur l’effet de cet hyperparamètre sur les performances, bien qu’une valeur plus faible augmente le risque de sur-apprentissage. En revanche, il est certain que le temps d’entraînement décroît fortement avec cet hyperparamètre: une valeur faible implique des arbres très profonds, avec un grand nombre de noeuds. Il peut donc être utile de fixer ce nombre à une valeur plus élevée pour accélérer l’entraînement, en particulier si les données sont volumineuses et si on utilise une méthode de validation croisée pour le choix des autres hyperparamètres. Cela se fait généralement sans perte significative de performance.</p></li>
-<li><p>Le <strong>critère de choix de la règle de division des noeuds intermédiaires</strong>: la plupart des implémentations des forêts aléatoires retiennent par défaut l’impureté de Gini pour la classification et la variance pour la régression, même si d’autres critères de choix ont été proposés dans la littérature (p-value dans les forêts d’inférence conditionnelle, arbres extrêmement randomisés, etc.). Chaque règle présente des avantages et des inconvénients, notamment en termes de biais de sélection des variables et de vitesse de calcul. A ce stade, aucun critère de choix ne paraît systématiquement supérieur aux autres en matière de performance. Modifier cet hyperparamètre relève d’un usage avancé des forêts aléatoires. Le lecteur intéressé pourra se référer à la discussion détaillée dans <span class="citation" data-cites="probst2019hyperparameters">Probst, Wright, and Boulesteix (<a href="#ref-probst2019hyperparameters" role="doc-biblioref">2019</a>)</span>.</p></li>
+<li><a href="https://lightgbm.readthedocs.io/en/latest/Parameters.html">hyperparamètres de <code>LightGBM</code></a>;</li>
+<li><a href="https://xgboost.readthedocs.io/en/stable/parameter.html">hyperparamètres de <code>XGBoost</code></a>;</li>
+<li><a href="https://catboost.ai/docs/en/references/training-parameters/">hyperparamètres de <code>CatBoost</code></a>;</li>
+<li><a href="https://scikit-learn.org/1.5/modules/generated/sklearn.ensemble.HistGradientBoostingRegressor.html">hyperparamètres de <code>scikit-learn</code></a>.</li>
+</ul>
+</div>
+</div>
+<p>Voici une présentation des principaux hyperparamètres et de leurs effets sur les performances sur le modèle de <em>gradient boosting</em>:</p>
+<ul>
+<li><p>La <strong>complexité du modèle global</strong>:</p>
+<ul>
+<li><p>le <strong>nombre d’arbres</strong> est l’hyperparamètre qui contrôle la complexité générale de l’algorithme. Le point essentiel est que, contrairement aux forêts aléatoires, la performance du <em>gradient boosting</em> sur les données d’entraînement croît continûment avec le nombre d’arbres sans jamais se stabiliser. Le choix du nombre d’arbres est essentiel, et doit viser un équilibre entre augmentation du pouvoir prédictif du modèle (si les arbres supplémentaires permettent au modèle de corriger les erreurs résiduelles), et lutte contre le surajustement (si les arbres supplémentaires captent uniquement les bruits statistiques et les fluctuations spécifiques des données d’entraînement). Par ailleurs, Le choix du nombre d’arbres est très lié à celui du taux d’apprentissage, et il est nécessaire de les optimiser conjointement.</p></li>
+<li><p>le <strong>taux d’apprentissage</strong> (<em>learning rate</em>) contrôle l’influence de chaque arbre sur le modèle global; il s’agit de <span class="math inline">\(\eta\)</span> dans l’équation REFERENCE PARTIE OVERFITTING. Un taux d’apprentissage faible réduit la contribution de chaque arbre, rendant l’apprentissage plus progressif; cela évite qu’un arbre donné ait une influence trop importante sur le modèle global et contribue donc à réduire le surajustement, mais cela nécessite un plus grand nombre d’arbres pour converger vers une solution optimale. Inversement, un taux d’apprentissage élevé accélère l’entraînement mais peut rendre le modèle instable (car trop sensible à un arbre donné), entraîner un surajustement et/ou aboutir à un modèle sous-optimal. La règle générale est de privilégier un taux d’apprentissage faible (entre 0.01 ou 0.3). Le choix du taux d’apprentissage est très lié à celui du nombre d’arbres: plus le taux d’apprentissage sera faible, plus le nombre d’arbres nécessaires pour converger vers une solution optimale sera élevé. Ces deux hyperparamètres doivent donc être optimisés conjointement.</p></li>
+</ul></li>
+<li><p>La <strong>complexité des arbres</strong>: la profondeur maximale des arbres, le nombre de feuilles terminales et le nombre minimal d’observations par feuille terminale contrôlent la complexité des <em>weak learners</em>: une profondeur élevée, un grand nombre de feuilles et un faible nombre d’observations par feuille terminale aboutissent à des arbres complexes au pouvoir prédictif plus élevé, mais induisent un risque de surajustement. Par ailleurs, de tels arbres sont plus longs à entraîner que des arbres peu profonds avec un nombre limité de feuilles.</p></li>
+<li><p>La <strong>lutte contre le surajustement</strong>: les pénalisations quadratique et absolue et le gain minimal nécessaire pour diviser un noeud sont des hyperparamètres de régularisation qui jouent un rôle important dans le contrôle de la complexité des <em>weak learners</em> et contribuent à éviter le surajustement. Les pénalisations tendent à réduire le poids <span class="math inline">\(w_j\)</span> des feuilles terminales: la pénalisation quadratique réduit la valeur absolue des poids sans les annuler (il s’agit de <span class="math inline">\(\lambda\)</span> dans l’<a href="4-boosting.qmd#eq-w-j-optimal">équation donnant le poids optimal</a> d’une feuille terminale), tandis que la pénalisation absolue élevée pousse certains poids à être nuls. La pénalisation quadratique est la plus utilisée, notamment parce qu’elle permet d’amoindrir l’influence des points aberrants. Le gain minimal définit la quantité minimale de réduction de la perte requise pour qu’un nœud soit divisé (il s’agit du paramètre <span class="math inline">\(\gamma\)</span> dans l’<a href="4-boosting.qmd#eq-fct-eval-split">équation donnant le gain potentiel d’un <em>split</em></a>); il contribue à réduire la complexité des arbres et à limiter le surajustement en empêchant l’algorithme de créer des <em>splits</em> dont l’apport est très faible et probablement dû à de petites variations non significatives des données d’entraînement.</p></li>
+<li><p>Les <strong>hyperparamètres d’échantillonnage</strong>: le taux d’échantillonnage des données d’entraînement, le taux d’échantillonnage des colonnes par arbre et le taux d’échantillonnage des colonnes par noeud servent à lutter contre le surajustement et à accélérer l’entraînement (en réduisant la taille des données). L’échantillonnage des observations par arbre et l’échantillonnage des colonnes par noeud jouent exactement le même rôle que <code>sample.fraction</code> ou <code>max_samples</code>, et <code>mtry</code> dans la forêt aléatoire. Il est à noter que l’échantillonnage des données se fait systématiquement sans remise. Comme pour la forêt aléatoire, la valeur optimale du taux d’échantillonnage des colonnes par noeud dépend du nombre de variables réellement pertinentes dans les données, et une valeur plus élevée est préférable si les données comprennent un grand nombre de variables binaires issues du <em>one-hot-encoding</em> des variables catégorielles.</p></li>
+<li><p>Les <strong>réglages relatifs au retraitement des colonnes</strong>:</p>
+<ul>
+<li>le nombre de <em>bins</em> utilisés pour discrétiser les variables continues (voir partie PREPROCESSING pour le détail): un faible de <em>bins</em> contribue à accélérer l’entraînement (car le nombre de <em>splits</em> potentiels est faible), mais peut dégrader le pouvoir prédictif si de faibles variations de la variable continue ont un impact notable sur la variable-cible. Inversement, une valeur élevée permet de conserver davantage d’information sur la distribution de la variable continue, mais peut ralentir l’entraînement.</li>
+<li>le nombre de modalités en-deça duquel les variables catégorielles font l’objet d’un <em>one-hot-encoding</em> et le nombre maximal de <em>splits</em> considérés dans le traitement des variables catégorielles définissent la méthode utilisée pour traiter les variables catégorielles (voir partie PREPROCESSING pour le détail).</li>
+</ul></li>
+<li><p>Les <strong>pondérations</strong>:</p>
+<ul>
+<li>la pondération des observations sert à pondérer les données d’entraînement (voir PARTIE USAGE AVANCE).</li>
+<li>le poids des observations de la classe positive sert à rééquilibrer les données d’entraînement lorsque la classe positive est sous-représentée. Cet hyperparamètre ne sert que pour la classification binaire. Par défaut les deux classes ont le même poids.</li>
+<li>le poids des observations de chaque classe sert à rééquilibrer les données d’entraînement lorsque la part des différentes classes est hétérogène. Cet hyperparamètre ne sert que pour la classification binaire multiclasse. Par défaut toutes les classes ont le même poids.</li>
+</ul></li>
+</ul>
+<div class="callout callout-style-default callout-warning callout-titled" title="Une différence entre `LightGBM` et `XGBoost`">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Une différence entre <code>LightGBM</code> et <code>XGBoost</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Une différence notable entre les versions initiales de <code>LightGBM</code> et <code>XGBoost</code> tient à la méthode de construction des arbres (figure <a href="#fig-leaf-wise" class="quarto-xref">1</a>):</p>
+<ul>
+<li><p><code>LightGBM</code> construit les arbres selon une approche par feuille (dite <em>leaf-wise</em>): l’arbre est construit feuille par feuille, et c’est le <em>split</em> avec le gain le plus élevé qui est retenu à chaque étape, et ce quelle que soit sa position dans l’arbre. L’approche <em>leaf-wise</em> est très efficace pour minimiser la fonction de perte, car elle privilégie les <em>splits</em> les plus porteurs de gain, mais elle peut aboutir à un surajustement et à des arbres complexes, déséquilibrés et très profonds. L’hyperparamètre-clé de cette approche est le nombre maximal de feuilles terminales (<code>num_leaves</code>).</p></li>
+<li><p><code>XGBoost</code> construit les arbres selon une approche par niveau (dite <em>depth-wise</em>): l’arbre est construit niveau par niveau, en divisant tous les nœuds du même niveau avant de passer au niveau suivant. L’approche <em>depth-wise</em> n’est pas optimale pour minimiser la fonction de perte, car elle ne recherche pas systématiquement le <em>split</em> le plus performant, mais elle permet d’obtenir des arbres équilibrés et de profondeur limitée. L’hyperparamètre-clé de cette approche est la profondeur maximale des arbres (<code>max_depth</code>).</p></li>
+</ul>
+<p>Il se trouve que l’approche <em>leaf-wise</em> a été ajoutée par la suite à <code>XGBoost</code>, <em>via</em> l’hyperparamètre <code>grow_policy</code> qui peut prendre les valeurs <code>depthwise</code> (valeur par défaut) et <code>lossguide</code> (approche <em>leaf-wise</em>).</p>
+<div id="fig-leaf-wise" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-leaf-wise-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../../figures/leafwise-depthwise.png" class="img-fluid figure-img" style="width:60.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-leaf-wise-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Les approches <em>depth-wise</em> et <em>leaf-wise</em>
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><code>max_depth</code><br>
+<code>num_leaves</code><br>
+<code>min_child_samples</code><br>
+<code>min_child_weight</code><br>
+<code>lambda</code> ou <code>lambda_l2</code><br>
+<code>reg_alpha</code> ou <code>lambda_l1</code> <code>min_split_gain</code><br>
+<code>max_bin</code><br>
+<code>subsample</code><br>
+<code>colsample_bytree</code><br>
+<code>scale_pos_weight</code><br>
+<code>class_weight</code><br>
+<code>sample_weight</code><br>
+<code>max_cat_to_onehot</code><br>
+<code>max_cat_threshold</code></p>
+<ul>
+<li><p>Bien insister sur l’<code>objective</code>: fonction de perte?</p></li>
+<li><p>Mentionner qu’ <code>XGBoost</code> propose également <code>colsample_bylevel</code> et <code>colsample_bynode</code></p></li>
 </ul>
 </section>
-<section id="sec-procedure-training-rf" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="sec-procedure-training-rf"><span class="header-section-number">1.3</span> Comment entraîner une forêt aléatoire?</h2>
-<p>Les forêts aléatoires nécessitent généralement moins d’optimisation que d’autres modèles de <em>machine learning</em>, car leurs performances varient relativement peu en fonction des hyperparamètres. Les valeurs par défaut fournissent souvent des résultats satisfaisants, ce qui réduit le besoin d’optimisation intensive. Cependant, un ajustement précis des hyperparamètres peut apporter des gains de performance, notamment sur des jeux de données complexes.</p>
-<p>Comme indiqué dans la partie <strong>?@sec-facteur-perf-rf</strong>, la performance prédictive d’une forêt aléatoire varie en fonction de deux critères essentiels: elle croît avec le pouvoir prédictif des arbres, et décroît avec la corrélation des arbres entre eux. L’optimisation des hyperparamètres d’une forêt aléatoire vise donc à trouver un équilibre optimal où les arbres sont suffisamment puissants pour être prédictifs, tout en étant suffisamment diversifiés pour que leurs erreurs ne soient pas trop corrélées.</p>
-<p>La littérature propose de multiples approches pour optimiser simultanément plusieurs hyperparamètres: la recherche par grille (<em>grid search</em>), la recherche aléatoire (<em>random search</em>) et l’optimisation basée sur modèle séquentiel (SMBO), et il peut être difficile de savoir quelle approche adopter. Ce guide propose donc une première approche délibérément simple, avant de présenter les approches plus avancées.</p>
-<section id="approche-simple" class="level3" data-number="1.3.1">
-<h3 data-number="1.3.1" class="anchored" data-anchor-id="approche-simple"><span class="header-section-number">1.3.1</span> Approche simple</h3>
-<p>Voici une procédure simple pour entraîner une forêt aléatoire. Elle ne garantit pas l’obtention d’un modèle optimal, mais elle est lisible et permet d’obtenir rapidement un modèle raisonnablement performant.</p>
-<ul>
-<li><strong>Entraîner une forêt aléatoire avec les valeurs des hyperparamètres par défaut</strong>. Ce premier modèle servira de point de comparaison pour la suite.</li>
-<li><strong>Ajuster le nombre d’arbres</strong>: entraîner une forêt aléatoire avec les hyperparamètres par défaut en augmentant progressivement le nombre d’arbres, puis déterminer à partir de quel nombre d’arbres la performance se stabilise (en mesurant la performance avec l’erreur OOB avec pour métrique le <a href="https://scikit-learn.org/dev/modules/model_evaluation.html#brier-score-loss">score de Brier</a>). Fixer le nombre d’arbres à cette valeur par la suite.</li>
-<li><strong>Ajuster le nombre de variables candidates et le taux d’échantillonnage</strong>: optimiser ces deux hyperparamètres grâce à une méthode de <em>grid search</em> évaluée par une approche de validation-croisée, ou par une approche reposant sur l’erreur OOB.</li>
-<li><strong>Ajuster le nombre minimal d’observations dans les noeuds terminaux</strong>: optimiser cet hyperparamètre grâce à une méthode de <em>grid search</em> évaluée par une approche de validation-croisée, ou par une approche reposant sur l’erreur OOB. Ce n’est pas l’hyperparamètre le plus important, mais s’il est possible de le fixer à une valeur plus élevée que la valeur par défaut sans perte de performance, cela permet d’accélérer le reste de la procédure.</li>
-<li><strong>Entraîner du modèle final</strong>: entraîner une forêt aléatoire avec les hyperparamètres optimisés déduits des étapes précédentes.</li>
-<li><strong>Évaluer du modèle final</strong>: mesurer la performance du modèle final soit avec l’approche <em>out-of-bag</em> (OOB), soit avec un ensemble de test. Il est souvent instructif de comparer les performances du modèle final et du modèle entraîné avec les valeurs des hyperparamètres par défaut (parfois pour se rendre compte que ce dernier était déjà suffisamment performant…).</li>
-</ul>
-</section>
-<section id="approches-plus-avancées" class="level3" data-number="1.3.2">
-<h3 data-number="1.3.2" class="anchored" data-anchor-id="approches-plus-avancées"><span class="header-section-number">1.3.2</span> Approches plus avancées</h3>
-<p>Lorsque l’espace des hyperparamètres est large ou que les performances initiales sont insuffisantes, adopter des méthodes avancées comme l’ptimisation basée sur un modèle séquentiel (SMBO). En <code>R</code>, il existe plusieurs implémentations d’appuyant sur cette méthode: <code>tuneRF</code> (limité à l’optimisation de <code>mtry</code>), tuneRanger (optimise simultanément <code>mtry</code>, node size, et sample size). La méthode SMBO est généralement la plus performante, mais demande un temps de calcul plus important.</p>
-<p>Il est également possible de remplacer les critères classiques (le taux d’erreur pour une classification par exemple) par d’autres critères de performance, comme le score de Brier ou la fonction de perte logarithmique (<span class="citation" data-cites="probst2018tune">Probst and Boulesteix (<a href="#ref-probst2018tune" role="doc-biblioref">2018</a>)</span>).</p>
-<p>Pour gérer la contrainte computationnelle, il est possible de commencer par utiliser des échantillons réduits pour les étapes exploratoires, puis d’augmenter la taille de l’échantillon pour les tests finaux.</p>
-<!-- #### Classification ordonnée versus non ordonnée
-
-
-#### Classes équilibrées versus non équilibrées -->
-</section>
-</section>
-<section id="mesurer-limportance-des-variables" class="level2" data-number="1.4">
-<h2 data-number="1.4" class="anchored" data-anchor-id="mesurer-limportance-des-variables"><span class="header-section-number">1.4</span> Mesurer l’importance des variables</h2>
-<p>Les méthodes classiques d’évaluation de l’importance des variables, telles que l’indice de Gini (Mean Decrease in Impurity - MDI) et l’importance par permutation (Mean Decrease Accuracy - MDA), peuvent produire des résultats biaisés dans certaines situations (<span class="citation" data-cites="strobl2007bias">Strobl et al. (<a href="#ref-strobl2007bias" role="doc-biblioref">2007</a>)</span>, <span class="citation" data-cites="benard2022mda">Bénard, Da Veiga, and Scornet (<a href="#ref-benard2022mda" role="doc-biblioref">2022</a>)</span>, <span class="citation" data-cites="benard2022shaff">Bénard et al. (<a href="#ref-benard2022shaff" role="doc-biblioref">2022</a>)</span>). Notamment, lorsque les variables prédictives sont fortement corrélées, présentent des échelles de mesure différentes ou possèdent un nombre variable de catégories, ces méthodes peuvent surestimer l’importance de certaines variables. Par exemple, les variables avec un grand nombre de catégories ou des échelles continues étendues peuvent être artificiellement privilégiées, même si leur contribution réelle à la prédiction est limitée.</p>
-<p>En pratique, il est recommandé d’utiliser des méthodes d’importance des variables moins sensibles aux biais, comme les CIF ou la Sobol-MDA. Les valeurs de Shapley, issues de la théorie des jeux, sont également une alternative intéressante. Elles attribuent à chaque variable une contribution proportionnelle à son impact sur la prédiction. Cependant, leur calcul est souvent complexe et coûteux en ressources computationnelles, surtout en présence de nombreuses variables. Des méthodes comme SHAFF (SHApley eFfects via random Forests) ont été développées pour estimer efficacement ces valeurs, même en présence de dépendances entre variables.</p>
-<p>On conseille l’utilisation de trois implémentations pour comparer l’importances des variables d’une forêt aléatoire:</p>
-<ul>
-<li><p>Pour la MDI: l’algorithme CIF proposé par <span class="citation" data-cites="strobl2007bias">Strobl et al. (<a href="#ref-strobl2007bias" role="doc-biblioref">2007</a>)</span> et implémenté en <code>R</code></p></li>
-<li><p>Pour la MDA: l’algorithme Sobol-MDA proposé par <span class="citation" data-cites="benard2022mda">Bénard, Da Veiga, and Scornet (<a href="#ref-benard2022mda" role="doc-biblioref">2022</a>)</span> et implémenté en <code>R</code></p></li>
-<li><p>Pour les valeurs de Shapley : l’alogrithme SHAFF proposé par <span class="citation" data-cites="benard2022shaff">Bénard et al. (<a href="#ref-benard2022shaff" role="doc-biblioref">2022</a>)</span> et implémenté en <code>R</code></p></li>
-</ul>
-<p>Enfin, nous recommandons de combiner plusieurs méthodes pour une analyse plus robuste et de tenir compte des prétraitements des données afin de minimiser les biais potentiels.</p>
+<section id="sec-procedure-training-gb" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="sec-procedure-training-gb"><span class="header-section-number">1.3</span> Comment entraîner un algorithme de <em>gradient boosting</em>?</h2>
+<p>Proposer une procédure pour l’optimisation des hyperparamètres s’avère plus délicat pour le <em>gradient boosting</em> que pour les forêts aléatoires, pour deux raisons. D’une part, les algorithmes de <em>gradient boosting</em> comprennent un nombre beaucoup plus élevé d’hyperparamètres. D’autre part, la littérature méthodologique sur l’usage pratique des algorithmes de <em>gradient boosting</em> reste assez limitée et peu conclusive (en-dehors de nombreux tutoriels introductifs disponibles sur internet). La</p>
+<p><strong>Contrairement aux forêts aléatoires, les valeurs par défaut des hyperparamètres ne constituent pas un point de départ raisonnable</strong> (<span class="citation" data-cites="bentejac2021comparative">Bentéjac, Csörgő, and Martínez-Muñoz (<a href="#ref-bentejac2021comparative" role="doc-biblioref">2021</a>)</span>)</p>
 
 
 
@@ -411,23 +512,14 @@ Table&nbsp;1: Les principaux hyperparamètres des forêts aléatoires
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
-<div id="ref-benard2022shaff" class="csl-entry" role="listitem">
-Bénard, Clément, Gérard Biau, Sébastien Da Veiga, and Erwan Scornet. 2022. <span>“SHAFF: Fast and Consistent SHApley eFfect Estimates via Random Forests.”</span> In <em>International Conference on Artificial Intelligence and Statistics</em>, 5563–82. PMLR.
+<div id="ref-alshari2021comparison" class="csl-entry" role="listitem">
+Alshari, Haithm, Abdulrazak Yahya Saleh, and Alper Odabaş. 2021. <span>“Comparison of Gradient Boosting Decision Tree Algorithms for CPU Performance.”</span> <em>Journal of Institue Of Science and Technology</em> 37 (1): 157–68.
 </div>
-<div id="ref-benard2022mda" class="csl-entry" role="listitem">
-Bénard, Clément, Sébastien Da Veiga, and Erwan Scornet. 2022. <span>“Mean Decrease Accuracy for Random Forests: Inconsistency, and a Practical Solution via the Sobol-MDA.”</span> <em>Biometrika</em> 109 (4): 881–900. <a href="https://doi.org/10.1093/biomet/asac017">https://doi.org/10.1093/biomet/asac017</a>.
+<div id="ref-bentejac2021comparative" class="csl-entry" role="listitem">
+Bentéjac, Candice, Anna Csörgő, and Gonzalo Martínez-Muñoz. 2021. <span>“A Comparative Analysis of Gradient Boosting Algorithms.”</span> <em>Artificial Intelligence Review</em> 54: 1937–67.
 </div>
-<div id="ref-biau2016random" class="csl-entry" role="listitem">
-Biau, Gérard, and Erwan Scornet. 2016. <span>“A Random Forest Guided Tour.”</span> <em>Test</em> 25: 197–227.
-</div>
-<div id="ref-probst2018tune" class="csl-entry" role="listitem">
-Probst, Philipp, and Anne-Laure Boulesteix. 2018. <span>“To Tune or Not to Tune the Number of Trees in Random Forest.”</span> <em>Journal of Machine Learning Research</em> 18 (181): 1–18.
-</div>
-<div id="ref-probst2019hyperparameters" class="csl-entry" role="listitem">
-Probst, Philipp, Marvin N Wright, and Anne-Laure Boulesteix. 2019. <span>“Hyperparameters and Tuning Strategies for Random Forest.”</span> <em>Wiley Interdisciplinary Reviews: Data Mining and Knowledge Discovery</em> 9 (3): e1301.
-</div>
-<div id="ref-strobl2007bias" class="csl-entry" role="listitem">
-Strobl, Carolin, Anne-Laure Boulesteix, Achim Zeileis, and Torsten Hothorn. 2007. <span>“Bias in Random Forest Variable Importance Measures: Illustrations, Sources and a Solution.”</span> <em>BMC Bioinformatics</em> 8: 1–21.
+<div id="ref-friedman2001greedy" class="csl-entry" role="listitem">
+Friedman, Jerome H. 2001. <span>“Greedy Function Approximation: A Gradient Boosting Machine.”</span> <em>Annals of Statistics</em>, 1189–1232.
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -849,14 +941,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../../chapters/chapter3/1-preparation_donnees.html" class="pagination-link" aria-label="Préparation des données">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Préparation des données</span>
+      <a href="../../chapters/chapter3/2-guide_usage_RF.html" class="pagination-link" aria-label="Guide d'usage des forêts aléatoires">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Guide d’usage des forêts aléatoires</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../chapters/chapter3/3-guide_usage_GB.html" class="pagination-link" aria-label="Guide d'usage du _gradient boosting_">
-        <span class="nav-page-text">Guide d’usage du <em>gradient boosting</em></span> <i class="bi bi-arrow-right-short"></i>
-      </a>
   </div>
 </nav>
 </div> <!-- /content -->
@@ -867,7 +956,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/edit/main/chapters/chapter3/2-guide_usage_RF.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/blob/main/chapters/chapter3/2-guide_usage_RF.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/edit/main/chapters/chapter3/3-guide_usage_GB.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/blob/main/chapters/chapter3/3-guide_usage_GB.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
 <p>This page is built with <a href="https://quarto.org/">Quarto</a>.</p>
 </div>
