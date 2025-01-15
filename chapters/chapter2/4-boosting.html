@@ -335,14 +335,8 @@ C'est un problème très compliqué dès que $M$ est élevé! -->
 <li>Cette procédure est répétée en ajoutant de nouveaux modèles et en recalculant le gradient à chaque étape.</li>
 <li>La qualité du modèle final est évaluée sur un ensemble de test.</li>
 </ul>
-<!-- 
-Commentaire: On pourrait peut-être donner la version formelle de la GBM, mais c'est peut-être inutile. 
-1.  Initialiser le modèle avec $f_0\left(\mathbf{x}\right) = y_0$.
-2.  Pour $m = 1, \dots, M:$
-    (a) Entraîner le $m$-ième modèle:
-    $$\left(\hat{\beta}_m, \hat{\theta}_m\right) = \argmin_{\beta, \mathbf{\theta}} \sum_{i=1}^N L\left(y_i, f_{m-1}\left(\mathbf{x}_i\right) + \beta b\left(\mathbf{x}_i, \mathbf{\theta}\right)\right)$$
-    (b) Définir $f_m\left(\mathbf{x}\right) = f_{m-1}\left(\mathbf{x}\right) + \hat{\beta}_m b\left(\mathbf{x}_i, \mathbf{\hat{\theta}_m}\right)$
- -->
+<p>La mécanique de la <em>Gradient Boosting Machine</em> est résumée de façon plus formelle dans l’algorithem REFERENCE.</p>
+<p>Commentaire: On pourrait peut-être donner la version formelle de la GBM, mais c’est peut-être inutile. 1. Initialiser le modèle avec <span class="math inline">\(f_0\left(\mathbf{x}\right) = y_0\)</span>. 2. Pour <span class="math inline">\(m = 1, \dots, M:\)</span> (a) Entraîner le <span class="math inline">\(m\)</span>-ième modèle: $ (<em>m, <em>m) = </em>{, } </em>{i=1}^N L(y_i, f_{m-1}(_i) + b(_i, )) $ (b) Définir <span class="math inline">\(f_m\left(\mathbf{x}\right) = f_{m-1}\left(\mathbf{x}\right) + \hat{\beta}_m b\left(\mathbf{x}_i, \mathbf{\hat{\theta}_m}\right)\)</span></p>
 <p>L’approche de <em>gradient boosting</em> proposée par <span class="citation" data-cites="friedman2001greedy">Friedman (<a href="#ref-friedman2001greedy" role="doc-biblioref">2001</a>)</span> présente deux grands avantages. D’une part, elle peut être utilisée avec n’importe quelle fonction de perte différentiable, ce qui permet d’appliquer le gradient boosting à de multiples problèmes (régression, classification binaire ou multiclasse, <em>learning-to-rank</em>…). D’autre part, elle offre souvent des performances comparables ou supérieures aux autres approches de <em>boosting</em>. Le <em>gradient boosting</em> d’arbres de décision (<em>Gradient boosted Decision Trees</em> - GBDT) est donc devenue l’approche de référence en matière de <em>boosting</em>: toutes les implémentations modernes du <em>gradient boosting</em> comme <code>scikit-learn</code>, <code>XGBoost</code>, <code>LightGBM</code>, et <code>CatBoost</code> sont des extensions et améliorations de la <em>Gradient Boosting Machine</em>.</p>
 <p>AJOUTER ICI LA GBM en pseudo-code</p>
 </section>
@@ -401,7 +395,7 @@ Commentaire: On pourrait peut-être donner la version formelle de la GBM, mais c
 \begin{align*}
 \mathcal{\tilde{L}}^{(t)} =&amp;   \sum_{j=1}^{T} \sum_{i\in I_{j}} \bigg[g_i f_t(\mathbf{x}_i)\phantom{\frac{1}{2}} &amp;+ \frac{1}{2} h_i f^2_t(\mathbf{x}_i)\bigg]&amp;+ \gamma T + \frac{1}{2} \lambda \sum_{j=1}^T w_i^2 \\
      &amp;= \sum_{j=1}^{T} \sum_{i\in I_{j}} \bigg[g_i w_j &amp;+ \frac{1}{2} h_i w_j^2\bigg] &amp;+ \gamma T + \frac{1}{2} \lambda \sum_{j=1}^T w_i^2 \\
-     &amp;= \sum^T_{j=1} \bigg[w_j\sum_{i\in I_{j}} g_i &amp;+ \frac{1}{2} w_j^2 \sum_{i \in I_{j}} h_i + \lambda \bigg] &amp;+ \gamma T
+     &amp;= \sum^T_{j=1} \bigg[w_j\sum_{i\in I_{j}} g_i &amp;+ \frac{1}{2} w_j^2 \left( \sum_{i \in I_{j}} h_i + \lambda \right) \bigg] &amp;+ \gamma T
 \end{align*}
 \]</span></p>
 <p>Dans la dernière expression, la fonction de perte simplifiée se reformule comme une combinaison quadratique des poids <span class="math inline">\(w_j\)</span>, dans laquelle les dérivées première et seconde de la fonction de perte interviennent sous forme de pondérations (<span class="math inline">\(\sum_{i \in I_j} g_i\)</span> et <span class="math inline">\(\sum_{i \in I_j} h_i\)</span>). Pour un arbre donné, les poids optimaux <span class="math inline">\(w_j\)</span> sont ceux minimisent cette fonction de perte, compte tenu de ces pondérations. Il se trouve que le calcul de ces poids optimaux est très simple: le poids optimal <span class="math inline">\(w_j^{\ast}\)</span> de la feuille <span class="math inline">\(j\)</span> est donné par l’équation:</p>
@@ -431,121 +425,6 @@ Commentaire: On pourrait peut-être donner la version formelle de la GBM, mais c
 <li>le subsampling des lignes et des colonnes;</li>
 <li>les différentes pénalisations.</li>
 </ul>
-</section>
-<section id="les-hyperparamètres" class="level5">
-<h5 class="anchored" data-anchor-id="les-hyperparamètres">Les hyperparamètres</h5>
-<table class="caption-top table">
-<caption>Les principaux hyperparamètres d’XGBoost</caption>
-<colgroup>
-<col style="width: 25%">
-<col style="width: 60%">
-<col style="width: 15%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Hyperparamètre</th>
-<th>Description</th>
-<th style="text-align: center;">Valeur par défaut</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>booster</code></td>
-<td>Le type de <em>weak learner</em> utilisé</td>
-<td style="text-align: center;"><code>'gbtree'</code></td>
-</tr>
-<tr class="even">
-<td><code>learning_rate</code></td>
-<td>Le taux d’apprentissage</td>
-<td style="text-align: center;">0.3</td>
-</tr>
-<tr class="odd">
-<td><code>max_depth</code></td>
-<td>La profondeur maximale des arbres</td>
-<td style="text-align: center;">6</td>
-</tr>
-<tr class="even">
-<td><code>max_leaves</code></td>
-<td>Le nombre maximal de feuilles des arbres</td>
-<td style="text-align: center;">0</td>
-</tr>
-<tr class="odd">
-<td><code>min_child_weight</code></td>
-<td>Le poids minimal qu’une feuille doit contenir</td>
-<td style="text-align: center;">1</td>
-</tr>
-<tr class="even">
-<td><code>n_estimators</code></td>
-<td>Le nombre d’arbres</td>
-<td style="text-align: center;">100</td>
-</tr>
-<tr class="odd">
-<td><code>lambda</code> ou <code>reg_lambda</code></td>
-<td>La pénalisation L2</td>
-<td style="text-align: center;">1</td>
-</tr>
-<tr class="even">
-<td><code>alpha</code> ou <code>reg_alpha</code></td>
-<td>La pénalisation L1</td>
-<td style="text-align: center;">0</td>
-</tr>
-<tr class="odd">
-<td><code>gamma</code></td>
-<td>Le gain minimal nécessaire pour diviser un noeud</td>
-<td style="text-align: center;">0</td>
-</tr>
-<tr class="even">
-<td><code>tree_method</code></td>
-<td>La méthode utilisée pour rechercher les splits</td>
-<td style="text-align: center;"><code>'hist'</code></td>
-</tr>
-<tr class="odd">
-<td><code>max_bin</code></td>
-<td>Le nombre utilisés pour discrétiser les variables continues</td>
-<td style="text-align: center;">0</td>
-</tr>
-<tr class="even">
-<td><code>subsample</code></td>
-<td>Le taux d’échantillonnage des données d’entraîenment</td>
-<td style="text-align: center;">1</td>
-</tr>
-<tr class="odd">
-<td><code>sampling_method</code></td>
-<td>La méthode utilisée pour échantillonner les données d’entraînement</td>
-<td style="text-align: center;"><code>'uniform'</code></td>
-</tr>
-<tr class="even">
-<td><code>colsample_bytree</code> <br> <code>colsample_bylevel</code> <br> <code>colsample_bynode</code></td>
-<td>Taux d’échantillonnage des colonnes par arbre, par niveau et par noeud</td>
-<td style="text-align: center;">1, 1 et 1</td>
-</tr>
-<tr class="odd">
-<td><code>scale_pos_weight</code></td>
-<td>Le poids des observations de la classe positive (classification uniquement)</td>
-<td style="text-align: center;">1</td>
-</tr>
-<tr class="even">
-<td><code>sample_weight</code></td>
-<td>La pondération des données d’entraînement</td>
-<td style="text-align: center;">1</td>
-</tr>
-<tr class="odd">
-<td><code>enable_categorical</code></td>
-<td>Activer le support des variables catégorielles</td>
-<td style="text-align: center;"><code>False</code></td>
-</tr>
-<tr class="even">
-<td><code>max_cat_to_onehot</code></td>
-<td>Nombre de modalités en-deça duquel XGBoost utilise le <em>one-hot-encoding</em></td>
-<td style="text-align: center;">A COMPLETER</td>
-</tr>
-<tr class="odd">
-<td><code>max_cat_threshold</code></td>
-<td>Nombre maximal de catégories considérées dans le partitionnement optimal des variables catégorielles</td>
-<td style="text-align: center;">A COMPLETER</td>
-</tr>
-</tbody>
-</table>
 </section>
 </section>
 <section id="la-préparation-des-données" class="level4">
