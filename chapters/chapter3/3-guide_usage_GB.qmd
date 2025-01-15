@@ -9,45 +9,106 @@ Contrairement aux forêts aléatoires, la littérature méthodologique sur l'usa
 
 ## Quelle implémentation utiliser? {#sec-implementation-gb}
 
-Il existe quatre implémentations du _gradient boosting_, qui sont très similaires, et ne diffèrent que sur des points mineurs: `XGBoost`, `LightGBM`, `CatBoost` et `scikit-learn`. De multiples publications les ont comparées, à la fois en matière de pouvoir prédictif et de rapidité d'entraînement (voir notamment @bentejac2021comparative et @alshari2021comparison). Cette littérature a abouti à trois conclusions. Premièrement, les différentes implémentations présentent des performances très proches (le classement exact variant d'une publication à l'autre). Deuxièmement, bien optimiser les hyperparamètres est nettement plus important que le choix de l'implémentation. Troisièmement, `LightGBM` est sensiblement plus rapide que les autres implémentations. Dans la mesure où l'optimisation des hyperparamètres est une étape à la fois essentielle et intense en calcul, l'efficacité computationnelle apparaît comme un critère majeur de choix de l'implémentation. C'est pourquoi le présent document décrit et recommande l'usage de `LightGBM`. Ceci étant, les trois autres implémentations peuvent également être utilisées, notamment si les données sont de taille limitée.
+Il existe quatre implémentations du _gradient boosting_, qui sont très similaires, et ne diffèrent que sur des points mineurs: `XGBoost`, `LightGBM`, `CatBoost` et `scikit-learn`. De multiples publications les ont comparées, à la fois en matière de pouvoir prédictif et de rapidité d'entraînement (voir notamment @bentejac2021comparative et @alshari2021comparison). Cette littérature a abouti à trois conclusions. Premièrement, les différentes implémentations présentent des performances très proches (le classement exact variant d'une publication à l'autre). Deuxièmement, bien optimiser les hyperparamètres est nettement plus important que le choix de l'implémentation. Troisièmement, le temps d'entraînement varie beaucoup d'une implémentation à l'autre, et `LightGBM` est sensiblement plus rapide que les autres. Dans la mesure où l'optimisation des hyperparamètres est une étape à la fois essentielle et intense en calcul, l'efficacité computationnelle apparaît comme un critère majeur de choix de l'implémentation. C'est pourquoi le présent document décrit et recommande l'usage de `LightGBM`. Ceci étant, les trois autres implémentations peuvent également être utilisées, notamment si les données sont de taille limitée.
 
 ## Les hyperparamètres clés du _gradient boosting_ {#sec-hyperparam-gb}
 
+::: {.content-visible when-format="html"}
 
-| Hyperparamètre                                                      | Description                                                                 | Valeur par défaut |
-|---------------------------------------------------------------------|-----------------------------------------------------------------------------|:-----------------:|
-| `boosting_type`                                                     | L'algorithme utilisé (forêt aléatoire ou _gradient boosting_)               | `'gbdt'`          |
-| `objective`                                                         | La fonction de perte utilisée                                               | Variable          |
-| `n_estimators`                                                      | Le nombre d'arbres                                                          | 100               |
-| `learning_rate`                                                     | Le taux d'apprentissage                                                     | 0.1               |
-| `max_depth`                                                         | La profondeur maximale des arbres                                           | -1 (pas de limite)|
-| `num_leaves`                                                        | Le nombre maximal de feuilles des arbres                                    | 31                |
-| `min_child_samples`                                                 | Le nombre minimal d'observations qu'une feuille terminale doit contenir     | 20                |
-| `min_child_weight`                                                  | Le poids minimal qu'une feuille terminale doit contenir                     | 0.001             |
-| `lambda` ou `lambda_l2`                                             | La pénalisation L2                                                          | 0                 |
-| `reg_alpha` ou `lambda_l1`                                          | La pénalisation L1                                                          | 0                 |
-| `min_split_gain`                                                    | Le gain minimal nécessaire pour diviser un noeud                            | 0                 |
-| `max_bin`                                                           | Le nombre utilisés pour discrétiser les variables continues                 | 255               |
-| `subsample`                                                         | Le taux d'échantillonnage des données d'entraînement                        | 1                 |
-| `colsample_bytree`                                                  | Taux d'échantillonnage des colonnes par arbre                               | 1                 |
-| `scale_pos_weight`                                                  | Le poids des observations de la classe positive (classification binaire uniquement) | Aucun     |
-| `class_weight`                                                      | Le poids des observations de chaque classe (classification multiclasse uniquement)  | Aucun     |
-| `sample_weight`                                                     | La pondération des observations dans les données d'entraînement             | 1                 |
-| `max_cat_to_onehot`                                                 | Nombre de modalités en-deça duquel `LightGBM` utilise le _one-hot-encoding_ | 4                 |
-| `max_cat_threshold`                                                 | Nombre maximal de _splits_ considérés <br> dans le traitement des variables catégorielles  | 32       | 
+Cette section décrit en détail les principaux hyperparamètres des algorithmes de _gradient boosting_ listés dans le tableau @tbl-hyp-lightgbm. Les noms des hyperparamètres utilisés sont ceux figurant dans le _package_ `R` `LightGBM`. Les hyperparamètres portent généralement le même nom dans les autres implémentations; si ce n'est pas le cas, il est facile de s'y retrouver en lisant attentivement la documentation. Il est à noter que, dans cette liste d'hyperparamètres, seuls le nombre d'arbres et le taux d'apprentissage concernent l'algorithme de _boosting_ au sens strict; tous les autres hyperparamètres portent sur la construction des arbres pris isolément.
 
-: Les principaux hyperparamètres de `LightGBM` {tbl-colwidths="[25,60,15]"}
+
+| Hyperparamètre                         | Description                                                                                | Valeur par défaut |
+|----------------------------------------|--------------------------------------------------------------------------------------------|:-----------------:|
+<!-- | `boosting_type`                        | L'algorithme utilisé (forêt aléatoire ou _gradient boosting_)                              | `'gbdt'`          | -->
+| `objective`                            | La fonction de perte utilisée                                                              | Variable          |
+| `n_estimators` ou `num_trees`          | Le nombre d'arbres                                                                         | 100               |
+| `learning_rate` ou `eta`               | Le taux d'apprentissage                                                                    | 0.1               |
+| `max_depth`                            | La profondeur maximale des arbres                                                          | -1 (pas de limite)|
+| `num_leaves`                           | Le nombre de feuilles terminales des arbres                                                | 31                |
+| `min_child_samples`                    | Le nombre minimal d'observations qu'une feuille terminale doit contenir                    | 20                |
+| `min_child_weight`                     | Le poids minimal qu'une feuille terminale doit contenir                                    | 0.001             |
+| `lambda` ou `lambda_l2`                | La pénalisation L2                                                                         | 0                 |
+| `reg_alpha` ou `lambda_l1`             | La pénalisation L1                                                                         | 0                 |
+| `min_split_gain`                       | Le gain minimal nécessaire pour diviser un noeud                                           | 0                 |
+| `max_bin`                              | Le nombre utilisés pour discrétiser les variables continues                                | 255               |
+| `subsample`                            | Le taux d'échantillonnage des données d'entraînement                                       | 1                 |
+| `colsample_bytree`                     | Taux d'échantillonnage des colonnes par arbre                                              | 1                 |
+| `scale_pos_weight`                     | Le poids des observations de la classe positive (classification binaire uniquement)        | Aucun             |
+| `class_weight`                         | Le poids des observations de chaque classe (classification multiclasse uniquement)         | Aucun             |
+| `sample_weight`                        | La pondération des observations dans les données d'entraînement                            | 1                 |
+| `max_cat_to_onehot`                    | Nombre de modalités en-deça duquel `LightGBM` utilise le _one-hot-encoding_                | 4                 |
+| `max_cat_threshold`                    | Nombre maximal de _splits_ considérés <br> dans le traitement des variables catégorielles  | 32                | 
+
+: Les principaux hyperparamètres de `LightGBM` {#tbl-hyp-lightgbm tbl-colwidths="[25,60,15]"}
+
+:::
+
+::: {.callout-warning title="Attention aux alias!"}
+
+Il arrive fréquemment que les hyperparamètres des algorithmes de _gradient boosting_ portent plusieurs noms. Par exemple dans `LightGBM`, le nombre d'arbres porte les noms suivants: `num_iterations`, `num_iteration`, `n_iter`, `num_tree`, `num_trees`, `num_round`, `num_rounds`, `nrounds`, `num_boost_round`, `n_estimators` et `max_iter` (ouf!). C'est une source récurrente de confusion, mais il est facile de s'y retrouver en consultant la page de la documentation sur les hyperparamètres, qui liste les _alias_:
+
+- [hyperparamètres de `LightGBM`](https://lightgbm.readthedocs.io/en/latest/Parameters.html);
+- [hyperparamètres de `XGBoost`](https://xgboost.readthedocs.io/en/stable/parameter.html);
+- [hyperparamètres de `CatBoost`](https://catboost.ai/docs/en/references/training-parameters/);
+- [hyperparamètres de `scikit-learn`](https://scikit-learn.org/1.5/modules/generated/sklearn.ensemble.HistGradientBoostingRegressor.html).
+
+:::
+
+Voici une présentation des principaux hyperparamètres et de leurs effets sur les performances de la forêt aléatoire:
+
+
+- Le __nombre d'arbres__ est l'hyperparamètre qui contrôle la complexité générale de l'algorithme. Le point essentiel est que, contrairement aux forêts aléatoires, la performance du _gradient boosting_ sur les données d'entraînement croît continûment avec le nombre d'arbres sans jamais se stabiliser. Le choix du nombre d'arbres est essentiel, et doit viser un équilibre entre augmentation du pouvoir prédictif du modèle (si les arbres supplémentaires permettent au modèle de corriger les erreurs résiduelles), et lutte contre le surajustement (si les arbres supplémentaires captent uniquement les bruits statistiques et les fluctuations spécifiques des données d'entraînement). Par ailleurs, Le choix du nombre d'arbres est très lié à celui du taux d'apprentissage, et il est nécessaire de les optimiser conjointement.
+
+- le __taux d'apprentissage__ (_learning rate_) contrôle l'influence de chaque arbre sur le modèle global REFERENCE PARTIE OVERFITTING. Un taux d'apprentissage faible réduit la contribution de chaque arbre, rendant l'apprentissage plus progressif; cela évite qu'un arbre donné ait une influence trop importante sur le modèle global et contribue donc à réduire le surajustement, mais cela nécessite un plus grand nombre d'arbres pour converger vers une solution optimale. Inversement, un taux d'apprentissage élevé accélère l'entraînement mais peut rendre le modèle instable (car trop sensible à un arbre donné), entraîner un surajustement et/ou aboutir à un modèle sous-optimal. La règle générale est de privilégier un taux d'apprentissage faible (entre 0.01 ou 0.3). Le choix du taux d'apprentissage est très lié à celui du nombre d'arbres: plus le taux d'apprentissage sera faible, plus le nombre d'arbres nécessaires pour converger vers une solution optimale sera élevé. Ces deux hyperparamètres doivent donc être optimisés conjointement.
+
+- la __profondeur maximale des arbres__, le __nombre de feuilles terminales__ et le __nombre minimal d'observations par feuille terminale__ contrôlent la complexité des _weak learners_: une profondeur élevée, un grand nombre de feuilles et un faible nombre d'observations par feuille terminale aboutissent à des arbres complexes au pouvoir prédictif plus élevé, mais induisent un risque de surajustement. Par ailleurs, de tels arbres sont plus longs à entraîner que des arbres peu profonds avec un nombre limité de feuilles.
+
+
+::: {.callout-info title="Une différence entre "}
+
+Une différence notable entre les versions initiales de `LightGBM` et `XGBoost` tient à la méthode de construction des arbres (figure @leaf-wise):
+
+- `LightGBM` construit les arbres selon une approche par feuille (dite _leaf-wise_): l'arbre est construit feuille par feuille, et c'est le _split_ avec le gain le plus élevé qui est retenu à chaque étape, et ce quelle que soit sa position dans l'arbre. L'approche _leaf-wise_ est très efficace pour minimiser la fonction de perte, car elle privilégie les _splits_ les plus porteurs de gain, mais elle peut aboutir à un surajustement et à des arbres complexes, déséquilibrés et très profonds. L'hyperparamètre-clé de cette approche est le nombre maximal de feuilles terminales (`num_leaves`).
+
+- `XGBoost` construit les arbres selon une approche par niveau (dite _depth-wise_): l'arbre est construit niveau par niveau, en divisant tous les nœuds du même niveau avant de passer au niveau suivant. L'approche _depth-wise_ n'est pas optimale pour minimiser la fonction de perte, car elle ne recherche pas systématiquement le _split_ le plus performant, mais elle permet d'obtenir des arbres équilibrés et de profondeur limitée. L'hyperparamètre-clé de cette approche est la profondeur maximale des arbres (`max_depth`).
+
+![Les approches _depth-wise_ et _leaf-wise_](/figures/leafwise-depthwise.svg){#leaf-wise}
+
+:::
+
+`max_depth`                
+`num_leaves`               
+`min_child_samples`        
+`min_child_weight`         
+`lambda` ou `lambda_l2`    
+`reg_alpha` ou `lambda_l1` 
+`min_split_gain`           
+`max_bin`                  
+`subsample`                
+`colsample_bytree`         
+`scale_pos_weight`         
+`class_weight`             
+`sample_weight`            
+`max_cat_to_onehot`        
+`max_cat_threshold`        
+
+
+
 
 - Bien insister sur l'`objective`: fonction de perte?
 
 -  Mentionner qu' `XGBoost` propose également `colsample_bylevel` et `colsample_bynode`
 
+- Expliquer que LightGBM a une approche _leafwise_
+
+## Comment entraîner un algorithme de _gradient boosting_? {#sec-procedure-training-gb}
 
 
-Proposer une procédure pour l'optimisation des hyperparamètres s'avère plus délicat pour le _gradient boosting_ que pour les forêts aléatoires, pour deux raisons. D'une part, les algorithmes de _gradient boosting_ comprennent un nombre beaucoup plus élevé d'hyperparamètres. D'autre part, la littérature méthodologique sur l'usage pratique des algorithmes de _gradient boosting_ reste assez limitée et peu conclusive (en-dehors de nombreux tutoriels introductifs disponibles sur internet).
+Proposer une procédure pour l'optimisation des hyperparamètres s'avère plus délicat pour le _gradient boosting_ que pour les forêts aléatoires, pour deux raisons. D'une part, les algorithmes de _gradient boosting_ comprennent un nombre beaucoup plus élevé d'hyperparamètres. D'autre part, la littérature méthodologique sur l'usage pratique des algorithmes de _gradient boosting_ reste assez limitée et peu conclusive (en-dehors de nombreux tutoriels introductifs disponibles sur internet). La 
 
 
-
+__Contrairement aux forêts aléatoires, les valeurs par défaut des hyperparamètres ne constituent pas un point de départ raisonnable__ (@bentejac2021comparative)
 
 
 
