@@ -20,7 +20,6 @@ Cette section décrit en détail les principaux hyperparamètres des algorithmes
 
 | Hyperparamètre                         | Description                                                                                | Valeur par défaut |
 |----------------------------------------|--------------------------------------------------------------------------------------------|:-----------------:|
-<!-- | `boosting_type`                        | L'algorithme utilisé (forêt aléatoire ou _gradient boosting_)                              | `'gbdt'`          | -->
 | `objective`                            | La fonction de perte utilisée                                                              | Variable          |
 | `n_estimators` ou `num_trees`          | Le nombre d'arbres                                                                         | 100               |
 | `learning_rate` ou `eta`               | Le taux d'apprentissage                                                                    | 0.1               |
@@ -39,6 +38,8 @@ Cette section décrit en détail les principaux hyperparamètres des algorithmes
 | `sample_weight`                        | La pondération des observations dans les données d'entraînement                            | 1                 |
 | `max_cat_to_onehot`                    | Nombre de modalités en-deça duquel `LightGBM` utilise le _one-hot-encoding_                | 4                 |
 | `max_cat_threshold`                    | Nombre maximal de _splits_ considérés <br> dans le traitement des variables catégorielles  | 32                | 
+
+<!-- | `boosting_type`                        | L'algorithme utilisé (forêt aléatoire ou _gradient boosting_)                              | `'gbdt'`          | -->
 
 : Les principaux hyperparamètres de `LightGBM` {#tbl-hyp-lightgbm tbl-colwidths="[25,60,15]"}
 
