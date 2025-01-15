@@ -13,6 +13,6 @@ Une bien belle introduction pour le site et le DT.
 
 ::: {.content-visible when-format="html"}
 
-La version pdf de ce document est disponible [ici](https://oliviermeslin.github.io/DT_methodes_ensemblistes/pdf/dt_methodes_ensemblistes.pdf).
+La version pdf de ce document est disponible [ici](https://inseefrlab.github.io/DT_methodes_ensemblistes/pdf/dt_methodes_ensemblistes.pdf).
 
 :::
