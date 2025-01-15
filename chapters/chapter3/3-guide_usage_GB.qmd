@@ -17,7 +17,7 @@ Par ailleurs, chacune de ces implémentations propose une interface de haut nive
 
 ::: {.content-visible when-format="html"}
 
-Cette section décrit en détail les principaux hyperparamètres des algorithmes de _gradient boosting_ listés dans le tableau @tbl-hyp-lightgbm. Les noms des hyperparamètres utilisés sont ceux figurant dans le _package_ `R` `LightGBM`. Les hyperparamètres portent généralement le même nom dans les autres implémentations; si ce n'est pas le cas, il est facile de s'y retrouver en lisant attentivement la documentation. Il est à noter que, dans cette liste d'hyperparamètres, seuls le nombre d'arbres et le taux d'apprentissage concernent l'algorithme de _boosting_ au sens strict; tous les autres hyperparamètres portent sur la construction des arbres pris isolément.
+Cette section décrit en détail les principaux hyperparamètres des algorithmes de _gradient boosting_ listés dans le tableau @tbl-hyp-lightgbm. Les noms des hyperparamètres sont ceux utilisés dans `LightGBM`. Les hyperparamètres portent généralement le même nom dans les autres implémentations; si ce n'est pas le cas, il est facile de s'y retrouver en lisant attentivement la documentation. Il est à noter que, dans cette liste d'hyperparamètres, seuls le nombre d'arbres et le taux d'apprentissage concernent l'algorithme de _boosting_ au sens strict; tous les autres hyperparamètres portent sur la construction des arbres pris isolément.
 
 
 | Hyperparamètre                         | Description                                                                                | Valeur par défaut |
