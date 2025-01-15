@@ -17,7 +17,7 @@ Par ailleurs, chacune de ces implémentations propose une interface de haut nive
 
 ::: {.content-visible when-format="html"}
 
-Cette section décrit en détail les principaux hyperparamètres des algorithmes de _gradient boosting_ listés dans le tableau @tbl-hyp-lightgbm. Les noms des hyperparamètres sont ceux utilisés dans `LightGBM`. Les hyperparamètres portent généralement le même nom dans les autres implémentations; si ce n'est pas le cas, il est facile de s'y retrouver en lisant attentivement la documentation. Il est à noter que, dans cette liste d'hyperparamètres, seuls le nombre d'arbres et le taux d'apprentissage concernent l'algorithme de _boosting_ au sens strict; tous les autres hyperparamètres portent sur la construction des arbres pris isolément.
+Cette section décrit en détail les principaux hyperparamètres des algorithmes de _gradient boosting_ listés dans le tableau @tbl-hyp-lightgbm. Les noms des hyperparamètres sont ceux utilisés dans `LightGBM`. Les hyperparamètres portent généralement le même nom dans les autres implémentations; si ce n'est pas le cas, il est facile de s'y retrouver en lisant attentivement la documentation.
 
 
 | Hyperparamètre                         | Description                                                                                | Valeur par défaut |
@@ -60,17 +60,11 @@ Il arrive fréquemment que les hyperparamètres des algorithmes de _gradient boo
 
 Voici une présentation des principaux hyperparamètres et de leurs effets sur les performances sur le modèle de _gradient boosting_:
 
+- La __mécanique du *gradient boosting*__ est contrôlée par seulement trois hyperparamètres (tous les autres hyperparamètres portant sur la construction des arbres pris isolément):
 
-- L'hyperparamètre `objective` définit à la fois la __nature du problème__ modélisé (régression, classification...) et la __fonction de perte__ utilisée lors de l'entraînement du modèle. 
+    - L'hyperparamètre `objective` définit à la fois la __nature du problème__ modélisé (régression, classification...) et la __fonction de perte__ utilisée lors de l'entraînement du modèle. Valeur par défaut différente selon les cas, regression_l2 en cas de régression, binary_log_loss pour la classification binaire, LIEN PARTIE AVANCE. A COMPLETER.
 
-
-ifférente selon les cas, regression_l2 en cas de régression, binary_log_loss pour la classification binaire, LIEN PARTIE AVANCE.
-
-
-
-
-- La __complexité du modèle global__:
-    - le __nombre d'arbres__ est l'hyperparamètre qui contrôle la complexité générale de l'algorithme. Le point essentiel est que, contrairement aux forêts aléatoires, la performance du _gradient boosting_ sur les données d'entraînement croît continûment avec le nombre d'arbres sans jamais se stabiliser. Le choix du nombre d'arbres est essentiel, et doit viser un équilibre entre augmentation du pouvoir prédictif du modèle (si les arbres supplémentaires permettent au modèle de corriger les erreurs résiduelles), et lutte contre le surajustement (si les arbres supplémentaires captent uniquement les bruits statistiques et les fluctuations spécifiques des données d'entraînement). Par ailleurs, Le choix du nombre d'arbres est très lié à celui du taux d'apprentissage, et il est nécessaire de les optimiser conjointement.
+    - le __nombre d'arbres__ contrôle la complexité générale de l'algorithme. Le point essentiel est que, contrairement aux forêts aléatoires, la performance du _gradient boosting_ sur les données d'entraînement croît continûment avec le nombre d'arbres sans jamais se stabiliser. Le choix du nombre d'arbres est essentiel, et doit viser un équilibre entre augmentation du pouvoir prédictif du modèle (si les arbres supplémentaires permettent au modèle de corriger les erreurs résiduelles), et lutte contre le surajustement (si les arbres supplémentaires captent uniquement les bruits statistiques et les fluctuations spécifiques des données d'entraînement). Par ailleurs, Le choix du nombre d'arbres est très lié à celui du taux d'apprentissage, et il est nécessaire de les optimiser conjointement.
 
     - le __taux d'apprentissage__ (_learning rate_) contrôle l'influence de chaque arbre sur le modèle global; il s'agit de $\eta$ dans l'équation REFERENCE PARTIE OVERFITTING. Un taux d'apprentissage faible réduit la contribution de chaque arbre, rendant l'apprentissage plus progressif; cela évite qu'un arbre donné ait une influence trop importante sur le modèle global et contribue donc à réduire le surajustement, mais cela nécessite un plus grand nombre d'arbres pour converger vers une solution optimale. Inversement, un taux d'apprentissage élevé accélère l'entraînement mais peut rendre le modèle instable (car trop sensible à un arbre donné), entraîner un surajustement et/ou aboutir à un modèle sous-optimal. La règle générale est de privilégier un taux d'apprentissage faible (entre 0.01 ou 0.3). Le choix du taux d'apprentissage est très lié à celui du nombre d'arbres: plus le taux d'apprentissage sera faible, plus le nombre d'arbres nécessaires pour converger vers une solution optimale sera élevé. Ces deux hyperparamètres doivent donc être optimisés conjointement.
 
