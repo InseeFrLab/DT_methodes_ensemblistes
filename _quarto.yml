@@ -27,8 +27,8 @@ project:
 website: 
   page-navigation: true
   title: "Introduction aux méthodes ensemblistes"
-  site-url: "https://github.com/oliviermeslin/DT_methodes_ensemblistes" 
-  repo-url: "https://github.com/oliviermeslin/DT_methodes_ensemblistes"
+  site-url: "https://github.com/inseefrlab/DT_methodes_ensemblistes" 
+  repo-url: "https://github.com/inseefrlab/DT_methodes_ensemblistes"
   repo-actions: [edit, source, issue]
   favicon: images/favicon.ico
   
