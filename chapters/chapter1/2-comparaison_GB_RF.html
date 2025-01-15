@@ -212,12 +212,12 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#comparaison-entre-forêts-aléatoires-et-gradient-boosting" id="toc-comparaison-entre-forêts-aléatoires-et-gradient-boosting" class="nav-link active" data-scroll-target="#comparaison-entre-forêts-aléatoires-et-gradient-boosting">Comparaison entre forêts aléatoires et <em>gradient boosting</em></a>
+  <li><a href="#comparaison-entre-forêts-aléatoires-et-gradient-boosting" id="toc-comparaison-entre-forêts-aléatoires-et-gradient-boosting" class="nav-link active" data-scroll-target="#comparaison-entre-forêts-aléatoires-et-gradient-boosting"><span class="header-section-number">1</span> Comparaison entre forêts aléatoires et <em>gradient boosting</em></a>
   <ul class="collapse">
-  <li><a href="#quelle-approche-choisir" id="toc-quelle-approche-choisir" class="nav-link" data-scroll-target="#quelle-approche-choisir">Quelle approche choisir?</a></li>
+  <li><a href="#quelle-approche-choisir" id="toc-quelle-approche-choisir" class="nav-link" data-scroll-target="#quelle-approche-choisir"><span class="header-section-number">1.1</span> Quelle approche choisir?</a></li>
   </ul></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/oliviermeslin/DT_methodes_ensemblistes/edit/main/chapters/chapter1/2-comparaison_GB_RF.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/oliviermeslin/DT_methodes_ensemblistes/blob/main/chapters/chapter1/2-comparaison_GB_RF.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/oliviermeslin/DT_methodes_ensemblistes/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/edit/main/chapters/chapter1/2-comparaison_GB_RF.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/blob/main/chapters/chapter1/2-comparaison_GB_RF.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/chapter1/0-intro.qmd">Survol des méthodes ensemblistes</a></li><li class="breadcrumb-item"><a href="../../chapters/chapter1/2-comparaison_GB_RF.html">Comparaison entre forêts aléatoires et <em>gradient boosting</em></a></li></ol></nav></header>
@@ -225,8 +225,8 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<section id="comparaison-entre-forêts-aléatoires-et-gradient-boosting" class="level2">
-<h2 class="anchored" data-anchor-id="comparaison-entre-forêts-aléatoires-et-gradient-boosting">Comparaison entre forêts aléatoires et <em>gradient boosting</em></h2>
+<section id="comparaison-entre-forêts-aléatoires-et-gradient-boosting" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="comparaison-entre-forêts-aléatoires-et-gradient-boosting"><span class="header-section-number">1</span> Comparaison entre forêts aléatoires et <em>gradient boosting</em></h2>
 <p>Les forêts aléatoires et le <em>gradient boosting</em> paraissent très similaires au premier abord: il s’agit de deux approches ensemblistes, qui construisent des modèles très prédictifs performants en combinant un grand nombre d’arbres de décision. Mais en réalité, ces deux approches présentent plusieurs différences fondamentales:</p>
 <ul>
 <li><p>Les deux approches reposent sur des <strong>fondements théoriques différents</strong>: la loi des grands nombres pour les forêts aléatoires, la théorie de l’apprentissage statistique pour le <em>boosting</em>.</p></li>
@@ -235,8 +235,8 @@ ul.task-list li input[type="checkbox"] {
 <li><p><strong>Complexité d’usage</strong>: les forêts aléatoires s’avèrent plus faciles à prendre en main que le <em>gradient boosting</em>, car elles comprennent moins d’hyperparamètres dont l’optimisation est moins complexe.</p></li>
 <li><p><strong>Conditions d’utilisation</strong>: il est possible d’évaluer la qualité d’une forêt aléatoire en utilisant les données sur lesquelles elle a été entraînée grâce à l’approche <em>out-of-bag</em>, alors que c’est impossible avec le <em>gradient boosting</em>, pour lequel il faut impérativement conserver un ensemble de test. Cette différence peut sembler purement technique en apparence, mais elle s’avère importante en pratique dans de nombreuses situations, par exemple lorsque les données disponibles sont de taille restreinte ou lorsque les ressources informatiques disponibles ne sont pas suffisantes pour mener un exercice de validation croisée.</p></li>
 </ul>
-<section id="quelle-approche-choisir" class="level3">
-<h3 class="anchored" data-anchor-id="quelle-approche-choisir">Quelle approche choisir?</h3>
+<section id="quelle-approche-choisir" class="level3" data-number="1.1">
+<h3 data-number="1.1" class="anchored" data-anchor-id="quelle-approche-choisir"><span class="header-section-number">1.1</span> Quelle approche choisir?</h3>
 <p>Le point de départ recommandé est de commencer par entraîner une forêt aléatoire avec les hyperparamètres par défaut.</p>
 
 
@@ -334,7 +334,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp("https:\/\/github\.com\/oliviermeslin\/DT_methodes_ensemblistes");
+      var filterRegex = new RegExp("https:\/\/github\.com\/inseefrlab\/DT_methodes_ensemblistes");
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
@@ -681,7 +681,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/oliviermeslin/DT_methodes_ensemblistes/edit/main/chapters/chapter1/2-comparaison_GB_RF.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/oliviermeslin/DT_methodes_ensemblistes/blob/main/chapters/chapter1/2-comparaison_GB_RF.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/oliviermeslin/DT_methodes_ensemblistes/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/edit/main/chapters/chapter1/2-comparaison_GB_RF.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/blob/main/chapters/chapter1/2-comparaison_GB_RF.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
 <p>This page is built with <a href="https://quarto.org/">Quarto</a>.</p>
 </div>

@@ -260,19 +260,19 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#sec-guide-rf" id="toc-sec-guide-rf" class="nav-link active" data-scroll-target="#sec-guide-rf">Guide d’usage des forêts aléatoires</a>
+  <li><a href="#sec-guide-rf" id="toc-sec-guide-rf" class="nav-link active" data-scroll-target="#sec-guide-rf"><span class="header-section-number">1</span> Guide d’usage des forêts aléatoires</a>
   <ul class="collapse">
-  <li><a href="#sec-implementation-rf" id="toc-sec-implementation-rf" class="nav-link" data-scroll-target="#sec-implementation-rf">Quelles implémentations utiliser?</a></li>
-  <li><a href="#sec-hyperparam-rf" id="toc-sec-hyperparam-rf" class="nav-link" data-scroll-target="#sec-hyperparam-rf">Les hyperparamètres clés des forêts aléatoires</a></li>
-  <li><a href="#sec-procedure-training-rf" id="toc-sec-procedure-training-rf" class="nav-link" data-scroll-target="#sec-procedure-training-rf">Comment entraîner une forêt aléatoire?</a>
+  <li><a href="#sec-implementation-rf" id="toc-sec-implementation-rf" class="nav-link" data-scroll-target="#sec-implementation-rf"><span class="header-section-number">1.1</span> Quelles implémentations utiliser?</a></li>
+  <li><a href="#sec-hyperparam-rf" id="toc-sec-hyperparam-rf" class="nav-link" data-scroll-target="#sec-hyperparam-rf"><span class="header-section-number">1.2</span> Les hyperparamètres clés des forêts aléatoires</a></li>
+  <li><a href="#sec-procedure-training-rf" id="toc-sec-procedure-training-rf" class="nav-link" data-scroll-target="#sec-procedure-training-rf"><span class="header-section-number">1.3</span> Comment entraîner une forêt aléatoire?</a>
   <ul class="collapse">
-  <li><a href="#approche-simple" id="toc-approche-simple" class="nav-link" data-scroll-target="#approche-simple">Approche simple</a></li>
-  <li><a href="#approches-plus-avancées" id="toc-approches-plus-avancées" class="nav-link" data-scroll-target="#approches-plus-avancées">Approches plus avancées</a></li>
+  <li><a href="#approche-simple" id="toc-approche-simple" class="nav-link" data-scroll-target="#approche-simple"><span class="header-section-number">1.3.1</span> Approche simple</a></li>
+  <li><a href="#approches-plus-avancées" id="toc-approches-plus-avancées" class="nav-link" data-scroll-target="#approches-plus-avancées"><span class="header-section-number">1.3.2</span> Approches plus avancées</a></li>
   </ul></li>
-  <li><a href="#mesurer-limportance-des-variables" id="toc-mesurer-limportance-des-variables" class="nav-link" data-scroll-target="#mesurer-limportance-des-variables">Mesurer l’importance des variables</a></li>
+  <li><a href="#mesurer-limportance-des-variables" id="toc-mesurer-limportance-des-variables" class="nav-link" data-scroll-target="#mesurer-limportance-des-variables"><span class="header-section-number">1.4</span> Mesurer l’importance des variables</a></li>
   </ul></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/oliviermeslin/DT_methodes_ensemblistes/edit/main/chapters/chapter3/2-guide_usage_RF.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/oliviermeslin/DT_methodes_ensemblistes/blob/main/chapters/chapter3/2-guide_usage_RF.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/oliviermeslin/DT_methodes_ensemblistes/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/edit/main/chapters/chapter3/2-guide_usage_RF.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/blob/main/chapters/chapter3/2-guide_usage_RF.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/chapter3/0-intro.html">Comment bien utiliser les algorithmes?</a></li><li class="breadcrumb-item"><a href="../../chapters/chapter3/2-guide_usage_RF.html">Guide d’usage des forêts aléatoires</a></li></ol></nav></header>
@@ -280,16 +280,16 @@ window.Quarto = {
 
 
 
-<section id="sec-guide-rf" class="level1">
-<h1>Guide d’usage des forêts aléatoires</h1>
+<section id="sec-guide-rf" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Guide d’usage des forêts aléatoires</h1>
 <p>Ce guide d’entraînement des forêts aléatoires rassemble et synthétise des recommandations sur l’entraînement des forêts aléatoires disponibles dans la littérature, en particulier dans <span class="citation" data-cites="probst2019hyperparameters">Probst, Wright, and Boulesteix (<a href="#ref-probst2019hyperparameters" role="doc-biblioref">2019</a>)</span> et <span class="citation" data-cites="biau2016random">Biau and Scornet (<a href="#ref-biau2016random" role="doc-biblioref">2016</a>)</span>. Ce guide comporte un certain nombre de choix méthodologiques forts, comme les implémentations recommandées ou la procédure proposée pour l’optimisation des hyperparamètres, et d’autres choix pertinents sont évidemment possibles. C’est pourquoi les recommandations de ce guide doivent être considérées comme un point de départ raisonnable, pas comme un ensemble de règles devant être respectées à tout prix.</p>
-<section id="sec-implementation-rf" class="level2">
-<h2 class="anchored" data-anchor-id="sec-implementation-rf">Quelles implémentations utiliser?</h2>
+<section id="sec-implementation-rf" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="sec-implementation-rf"><span class="header-section-number">1.1</span> Quelles implémentations utiliser?</h2>
 <p>Il existe de multiples implémentations des forêts aléatoires. Le présent document présente et recommande l’usage de deux implémentations de référence: le <em>package</em> <code>R</code> <code>ranger</code> et le <em>package</em> <code>Python</code> <code>scikit-learn</code> pour leur rigueur, leur efficacité et leur simplicité d’utilisation. Il est à noter qu’il est possible d’entraîner des forêts aléatoires avec les algorithmes <code>XGBoost</code> et <code>LightGBM</code>, mais il s’agit d’un usage avancé qui n’est pas recommandé en première approche. Cette approche est présentée dans la partie <strong>REFERENCE A LA PARTIE USAGE AVANCE</strong>.</p>
 </section>
-<section id="sec-hyperparam-rf" class="level2">
-<h2 class="anchored" data-anchor-id="sec-hyperparam-rf">Les hyperparamètres clés des forêts aléatoires</h2>
-<p>Cette section décrit en détail les principaux hyperparamètres des forêts aléatoires listés dans le tableau <a href="#tbl-hyp-rf" class="quarto-xref">Table&nbsp;1</a>. Les noms des hyperparamètres utilisés sont ceux figurant dans le <em>package</em> <code>R</code> <code>ranger</code>, et dans le <em>package</em> <code>Python</code> <code>scikit-learn</code>. Il arrive qu’ils portent un nom différent dans d’autres implémentations des forêts aléatoires, mais il est généralement facile de s’y retrouver en lisant attentivement la documentation.</p>
+<section id="sec-hyperparam-rf" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="sec-hyperparam-rf"><span class="header-section-number">1.2</span> Les hyperparamètres clés des forêts aléatoires</h2>
+<p>Cette section décrit en détail les principaux hyperparamètres des forêts aléatoires listés dans le tableau <a href="#tbl-hyp-rf" class="quarto-xref">1</a>. Les noms des hyperparamètres utilisés sont ceux figurant dans le <em>package</em> <code>R</code> <code>ranger</code>, et dans le <em>package</em> <code>Python</code> <code>scikit-learn</code>. Il arrive qu’ils portent un nom différent dans d’autres implémentations des forêts aléatoires, mais il est généralement facile de s’y retrouver en lisant attentivement la documentation.</p>
 <div id="tbl-hyp-rf" class="quarto-float quarto-figure quarto-figure-center anchored" data-tbl-colwidths="[30,70]">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-hyp-rf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -358,13 +358,13 @@ Table&nbsp;1: Les principaux hyperparamètres des forêts aléatoires
 <li><p>Le <strong>critère de choix de la règle de division des noeuds intermédiaires</strong>: la plupart des implémentations des forêts aléatoires retiennent par défaut l’impureté de Gini pour la classification et la variance pour la régression, même si d’autres critères de choix ont été proposés dans la littérature (p-value dans les forêts d’inférence conditionnelle, arbres extrêmement randomisés, etc.). Chaque règle présente des avantages et des inconvénients, notamment en termes de biais de sélection des variables et de vitesse de calcul. A ce stade, aucun critère de choix ne paraît systématiquement supérieur aux autres en matière de performance. Modifier cet hyperparamètre relève d’un usage avancé des forêts aléatoires. Le lecteur intéressé pourra se référer à la discussion détaillée dans <span class="citation" data-cites="probst2019hyperparameters">Probst, Wright, and Boulesteix (<a href="#ref-probst2019hyperparameters" role="doc-biblioref">2019</a>)</span>.</p></li>
 </ul>
 </section>
-<section id="sec-procedure-training-rf" class="level2">
-<h2 class="anchored" data-anchor-id="sec-procedure-training-rf">Comment entraîner une forêt aléatoire?</h2>
+<section id="sec-procedure-training-rf" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="sec-procedure-training-rf"><span class="header-section-number">1.3</span> Comment entraîner une forêt aléatoire?</h2>
 <p>Les forêts aléatoires nécessitent généralement moins d’optimisation que d’autres modèles de <em>machine learning</em>, car leurs performances varient relativement peu en fonction des hyperparamètres. Les valeurs par défaut fournissent souvent des résultats satisfaisants, ce qui réduit le besoin d’optimisation intensive. Cependant, un ajustement précis des hyperparamètres peut apporter des gains de performance, notamment sur des jeux de données complexes.</p>
 <p>Comme indiqué dans la partie <strong>?@sec-facteur-perf-rf</strong>, la performance prédictive d’une forêt aléatoire varie en fonction de deux critères essentiels: elle croît avec le pouvoir prédictif des arbres, et décroît avec la corrélation des arbres entre eux. L’optimisation des hyperparamètres d’une forêt aléatoire vise donc à trouver un équilibre optimal où les arbres sont suffisamment puissants pour être prédictifs, tout en étant suffisamment diversifiés pour que leurs erreurs ne soient pas trop corrélées.</p>
 <p>La littérature propose de multiples approches pour optimiser simultanément plusieurs hyperparamètres: la recherche par grille (<em>grid search</em>), la recherche aléatoire (<em>random search</em>) et l’optimisation basée sur modèle séquentiel (SMBO), et il peut être difficile de savoir quelle approche adopter. Ce guide propose donc une première approche délibérément simple, avant de présenter les approches plus avancées.</p>
-<section id="approche-simple" class="level3">
-<h3 class="anchored" data-anchor-id="approche-simple">Approche simple</h3>
+<section id="approche-simple" class="level3" data-number="1.3.1">
+<h3 data-number="1.3.1" class="anchored" data-anchor-id="approche-simple"><span class="header-section-number">1.3.1</span> Approche simple</h3>
 <p>Voici une procédure simple pour entraîner une forêt aléatoire. Elle ne garantit pas l’obtention d’un modèle optimal, mais elle est lisible et permet d’obtenir rapidement un modèle raisonnablement performant.</p>
 <ul>
 <li><strong>Entraîner une forêt aléatoire avec les valeurs des hyperparamètres par défaut</strong>. Ce premier modèle servira de point de comparaison pour la suite.</li>
@@ -375,8 +375,8 @@ Table&nbsp;1: Les principaux hyperparamètres des forêts aléatoires
 <li><strong>Évaluer du modèle final</strong>: mesurer la performance du modèle final soit avec l’approche <em>out-of-bag</em> (OOB), soit avec un ensemble de test. Il est souvent instructif de comparer les performances du modèle final et du modèle entraîné avec les valeurs des hyperparamètres par défaut (parfois pour se rendre compte que ce dernier était déjà suffisamment performant…).</li>
 </ul>
 </section>
-<section id="approches-plus-avancées" class="level3">
-<h3 class="anchored" data-anchor-id="approches-plus-avancées">Approches plus avancées</h3>
+<section id="approches-plus-avancées" class="level3" data-number="1.3.2">
+<h3 data-number="1.3.2" class="anchored" data-anchor-id="approches-plus-avancées"><span class="header-section-number">1.3.2</span> Approches plus avancées</h3>
 <p>Lorsque l’espace des hyperparamètres est large ou que les performances initiales sont insuffisantes, adopter des méthodes avancées comme l’ptimisation basée sur un modèle séquentiel (SMBO). En <code>R</code>, il existe plusieurs implémentations d’appuyant sur cette méthode: <code>tuneRF</code> (limité à l’optimisation de <code>mtry</code>), tuneRanger (optimise simultanément <code>mtry</code>, node size, et sample size). La méthode SMBO est généralement la plus performante, mais demande un temps de calcul plus important.</p>
 <p>Il est également possible de remplacer les critères classiques (le taux d’erreur pour une classification par exemple) par d’autres critères de performance, comme le score de Brier ou la fonction de perte logarithmique (<span class="citation" data-cites="probst2018tune">Probst and Boulesteix (<a href="#ref-probst2018tune" role="doc-biblioref">2018</a>)</span>).</p>
 <p>Pour gérer la contrainte computationnelle, il est possible de commencer par utiliser des échantillons réduits pour les étapes exploratoires, puis d’augmenter la taille de l’échantillon pour les tests finaux.</p>
@@ -386,8 +386,8 @@ Table&nbsp;1: Les principaux hyperparamètres des forêts aléatoires
 #### Classes équilibrées versus non équilibrées -->
 </section>
 </section>
-<section id="mesurer-limportance-des-variables" class="level2">
-<h2 class="anchored" data-anchor-id="mesurer-limportance-des-variables">Mesurer l’importance des variables</h2>
+<section id="mesurer-limportance-des-variables" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="mesurer-limportance-des-variables"><span class="header-section-number">1.4</span> Mesurer l’importance des variables</h2>
 <p>Les méthodes classiques d’évaluation de l’importance des variables, telles que l’indice de Gini (Mean Decrease in Impurity - MDI) et l’importance par permutation (Mean Decrease Accuracy - MDA), peuvent produire des résultats biaisés dans certaines situations (<span class="citation" data-cites="strobl2007bias">Strobl et al. (<a href="#ref-strobl2007bias" role="doc-biblioref">2007</a>)</span>, <span class="citation" data-cites="benard2022mda">Bénard, Da Veiga, and Scornet (<a href="#ref-benard2022mda" role="doc-biblioref">2022</a>)</span>, <span class="citation" data-cites="benard2022shaff">Bénard et al. (<a href="#ref-benard2022shaff" role="doc-biblioref">2022</a>)</span>). Notamment, lorsque les variables prédictives sont fortement corrélées, présentent des échelles de mesure différentes ou possèdent un nombre variable de catégories, ces méthodes peuvent surestimer l’importance de certaines variables. Par exemple, les variables avec un grand nombre de catégories ou des échelles continues étendues peuvent être artificiellement privilégiées, même si leur contribution réelle à la prédiction est limitée.</p>
 <p>En pratique, il est recommandé d’utiliser des méthodes d’importance des variables moins sensibles aux biais, comme les CIF ou la Sobol-MDA. Les valeurs de Shapley, issues de la théorie des jeux, sont également une alternative intéressante. Elles attribuent à chaque variable une contribution proportionnelle à son impact sur la prédiction. Cependant, leur calcul est souvent complexe et coûteux en ressources computationnelles, surtout en présence de nombreuses variables. Des méthodes comme SHAFF (SHApley eFfects via random Forests) ont été développées pour estimer efficacement ces valeurs, même en présence de dépendances entre variables.</p>
 <p>On conseille l’utilisation de trois implémentations pour comparer l’importances des variables d’une forêt aléatoire:</p>
@@ -513,7 +513,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp("https:\/\/github\.com\/oliviermeslin\/DT_methodes_ensemblistes");
+      var filterRegex = new RegExp("https:\/\/github\.com\/inseefrlab\/DT_methodes_ensemblistes");
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
@@ -857,7 +857,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/oliviermeslin/DT_methodes_ensemblistes/edit/main/chapters/chapter3/2-guide_usage_RF.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/oliviermeslin/DT_methodes_ensemblistes/blob/main/chapters/chapter3/2-guide_usage_RF.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/oliviermeslin/DT_methodes_ensemblistes/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/edit/main/chapters/chapter3/2-guide_usage_RF.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/blob/main/chapters/chapter3/2-guide_usage_RF.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
 <p>This page is built with <a href="https://quarto.org/">Quarto</a>.</p>
 </div>
