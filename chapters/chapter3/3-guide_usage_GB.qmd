@@ -106,7 +106,7 @@ Il se trouve que l'approche _leaf-wise_ a été ajoutée par la suite à `XGBoos
 ## Comment entraîner un algorithme de _gradient boosting_? {#sec-procedure-training-gb}
 
 
-Proposer une procédure pour l'optimisation des hyperparamètres s'avère plus délicat pour le _gradient boosting_ que pour les forêts aléatoires, pour deux raisons. D'une part, les algorithmes de _gradient boosting_ comprennent un nombre beaucoup plus élevé d'hyperparamètres. D'autre part, la littérature méthodologique sur l'usage pratique de ces algorithmes reste assez limitée et peu conclusive (en-dehors des nombreux tutoriels introductifs disponibles sur internet). Un constat semble néanmoins bien établi: __contrairement aux forêts aléatoires, les valeurs par défaut des hyperparamètres des implémentations ne constituent pas un point de départ raisonnable__ (@bentejac2021comparative), en particulier pour les hyperparamètres de régularisation dont la valeur par défaut est nulle.
+Proposer une procédure pour l'optimisation des hyperparamètres s'avère plus délicat pour le _gradient boosting_ que pour les forêts aléatoires, pour deux raisons. D'une part, les algorithmes de _gradient boosting_ comprennent un nombre beaucoup plus élevé d'hyperparamètres. D'autre part, la littérature méthodologique sur l'usage pratique de ces algorithmes reste assez limitée et peu conclusive (en-dehors des nombreux tutoriels introductifs disponibles sur internet). Un constat semble néanmoins bien établi: __contrairement aux forêts aléatoires, les valeurs par défaut des hyperparamètres des implémentations ne constituent pas un point de départ raisonnable__ (@bentejac2021comparative), en particulier pour les hyperparamètres de régularisation dont la valeur par défaut est souvent nulle.
 
 
 
