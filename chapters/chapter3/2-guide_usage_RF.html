@@ -309,46 +309,47 @@ Table&nbsp;1: Les principaux hyperparamètres des forêts aléatoires
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>num.trees</code></td>
-<td><code>n_estimators</code></td>
+<td><code>num.trees</code> / <code>n_estimators</code></td>
+<td>Le nombre d’arbres</td>
 </tr>
 <tr class="even">
-<td><code>mtry</code></td>
-<td><code>max_features</code></td>
+<td><code>mtry</code> / <code>max_features</code></td>
+<td>Le nombre de variables candidates à chaque noeud</td>
 </tr>
 <tr class="odd">
-<td><code>sample.fraction</code></td>
-<td><code>max_samples</code></td>
+<td><code>sample.fraction</code> / <code>max_samples</code></td>
+<td>Le taux d’échantillonnage des données (ou la taille de l’échantillon)</td>
 </tr>
 <tr class="even">
-<td><code>replacement</code></td>
-<td>absent</td>
+<td><code>replacement</code> / absent</td>
+<td>L’échantillonnage des données se fait-il avec ou sans remise?</td>
 </tr>
 <tr class="odd">
-<td><code>min.bucket</code></td>
-<td><code>min_samples_leaf</code></td>
+<td><code>min.bucket</code> / <code>min_samples_leaf</code></td>
+<td>Nombre minimal d’observations dans les noeuds terminaux</td>
 </tr>
 <tr class="even">
-<td><code>max.depth</code></td>
-<td><code>max_depth</code></td>
+<td><code>max.depth</code> / <code>max_depth</code></td>
+<td>Profondeur maximale des arbres</td>
 </tr>
 <tr class="odd">
-<td><code>min.node.size</code></td>
-<td><code>min_samples_split</code></td>
+<td><code>min.node.size</code> / <code>min_samples_split</code></td>
+<td>Nombre minimal d’observations nécessaire pour qu’un noeud puisse être partagé</td>
 </tr>
 <tr class="even">
-<td><code>splitrule</code></td>
-<td><code>criterion</code></td>
+<td><code>splitrule</code> / <code>criterion</code></td>
+<td>Le critère de choix de la règle de division des noeuds intermédiaires</td>
 </tr>
 <tr class="odd">
-<td><code>oob.error</code></td>
-<td><code>oob_score</code></td>
+<td><code>oob.error</code> / <code>oob_score</code></td>
+<td>Calculer la performance de la forêt par l’erreur OOB (et choix de la métrique pour <code>scikit</code>)</td>
 </tr>
 </tbody>
 </table>
 </div>
 </figure>
 </div>
+<p>Voici une présentation des principaux hyperparamètres et de leurs effets sur les performances de la forêt aléatoire:</p>
 <ul>
 <li><p>Le <strong>nombre d’arbres</strong> par défaut varie selon les implémentations (500 dans <code>ranger</code>, 100 dans <code>scikit-learn</code>). Il s’agit d’un hyperparamètre particulier car il n’est associé à aucun arbitrage en matière de performance: la performance de la forêt aléatoire croît avec le nombre d’arbres, puis se stabilise. Le nombre optimal d’arbres est celui à partir duquel la performance de la forêt ne croît plus (ce point est détaillé plus bas) où à partir duquel l’ajout d’arbres supplémentaires génère des gains marginaux. Il est important de noter que ce nombre optimal dépend des autres hyperparamètres. Par exemple, un taux d’échantillonnage faible et un nombre faible de variables candidates à chaque noeud aboutissent à des arbres peu corrélés, mais peu performants, ce qui requiert probablement un plus grand nombre d’arbres. Dans le cas d’une classification, l’utilisation de mesures comme le score de Brier ou la fonction de perte logarithmique est recommandée pour évaluer la convergence plutôt que la précision (métrique par défaut de <code>ranger</code> et <code>scikit-learn</code>).</p></li>
 <li><p>Le <strong>nombre (ou la part) de variables candidates à chaque noeud</strong> (souvent appelé <code>mtry</code>) est un hyperparamètre essentiel qui détermine le nombre de variables prédictives sélectionnées aléatoirement à chaque nœud lors de la construction des arbres. Ce paramètre exerce la plus forte influence sur les performances du modèle, et un compromis doit être trouvé entre puissance prédictive des arbres et corrélation entre arbres. Une faible valeur de <code>mtry</code> conduit à des arbres moins performants mais plus diversifiés et donc moins corrélés entre eux. Inversement, une valeur plus élevée améliore la précision des arbres individuels mais accroît leur corrélation (les mêmes variables ayant tendance à être sélectionnées dans tous les arbres). La valeur optimale de <code>mtry</code> dépend du nombre de variables réellement pertinentes dans les données: elle est plus faible lorsque la plupart des variables sont pertinentes, et plus élevée lorsqu’il y a peu de variables pertinentes. Par ailleurs, une valeur élevée de <code>mtry</code> est préférable si les données comprennent un grand nombre de variables binaires issues du <em>one-hot-encoding</em> des variables catégorielles (LIEN AVEC LA PARTIE PREPROCESSING). Par défaut, cette valeur est fréquemment fixée à <span class="math inline">\(\sqrt{p}\)</span> pour les problèmes de classification et à <span class="math inline">\(p/3\)</span> pour les problèmes de régression, où <span class="math inline">\(p\)</span> représente le nombre total de variables prédictives disponibles.</p></li>
