@@ -270,7 +270,11 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#sec-implementation-gb" id="toc-sec-implementation-gb" class="nav-link" data-scroll-target="#sec-implementation-gb"><span class="header-section-number">1.1</span> Quelle implémentation utiliser?</a></li>
   <li><a href="#sec-hyperparam-gb" id="toc-sec-hyperparam-gb" class="nav-link" data-scroll-target="#sec-hyperparam-gb"><span class="header-section-number">1.2</span> Les hyperparamètres clés du <em>gradient boosting</em></a></li>
-  <li><a href="#sec-procedure-training-gb" id="toc-sec-procedure-training-gb" class="nav-link" data-scroll-target="#sec-procedure-training-gb"><span class="header-section-number">1.3</span> Comment entraîner un algorithme de <em>gradient boosting</em>?</a></li>
+  <li><a href="#sec-procedure-training-gb" id="toc-sec-procedure-training-gb" class="nav-link" data-scroll-target="#sec-procedure-training-gb"><span class="header-section-number">1.3</span> Comment entraîner un algorithme de <em>gradient boosting</em>?</a>
+  <ul class="collapse">
+  <li><a href="#préparer-lentraînement" id="toc-préparer-lentraînement" class="nav-link" data-scroll-target="#préparer-lentraînement"><span class="header-section-number">1.3.1</span> Préparer l’entraînement</a></li>
+  <li><a href="#optimiser-les-hyperparamètres" id="toc-optimiser-les-hyperparamètres" class="nav-link" data-scroll-target="#optimiser-les-hyperparamètres"><span class="header-section-number">1.3.2</span> Optimiser les hyperparamètres</a></li>
+  </ul></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/edit/main/chapters/chapter3/3-guide_usage_GB.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/blob/main/chapters/chapter3/3-guide_usage_GB.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -441,15 +445,15 @@ Attention aux alias!
 <li><p>le <strong>nombre d’arbres</strong> contrôle la complexité générale de l’algorithme. Le point essentiel est que, contrairement aux forêts aléatoires, la performance du <em>gradient boosting</em> sur les données d’entraînement croît continûment avec le nombre d’arbres sans jamais se stabiliser. Le choix du nombre d’arbres est essentiel, et doit viser un équilibre entre augmentation du pouvoir prédictif du modèle (si les arbres supplémentaires permettent au modèle de corriger les erreurs résiduelles), et lutte contre le surajustement (si les arbres supplémentaires captent uniquement les bruits statistiques et les fluctuations spécifiques des données d’entraînement). Par ailleurs, Le choix du nombre d’arbres est très lié à celui du taux d’apprentissage, et il est nécessaire de les optimiser conjointement.</p></li>
 <li><p>le <strong>taux d’apprentissage</strong> (<em>learning rate</em>) contrôle l’influence de chaque arbre sur le modèle global; il s’agit de <span class="math inline">\(\eta\)</span> dans l’équation REFERENCE PARTIE OVERFITTING. Un taux d’apprentissage faible réduit la contribution de chaque arbre, rendant l’apprentissage plus progressif; cela évite qu’un arbre donné ait une influence trop importante sur le modèle global et contribue donc à réduire le surajustement, mais cela nécessite un plus grand nombre d’arbres pour converger vers une solution optimale. Inversement, un taux d’apprentissage élevé accélère l’entraînement mais peut rendre le modèle instable (car trop sensible à un arbre donné), entraîner un surajustement et/ou aboutir à un modèle sous-optimal. La règle générale est de privilégier un taux d’apprentissage faible (entre 0.01 ou 0.3). Le choix du taux d’apprentissage est très lié à celui du nombre d’arbres: plus le taux d’apprentissage sera faible, plus le nombre d’arbres nécessaires pour converger vers une solution optimale sera élevé. Ces deux hyperparamètres doivent donc être optimisés conjointement.</p></li>
 </ul></li>
-<li><p>La <strong>complexité des arbres</strong>: la profondeur maximale des arbres, le nombre de feuilles terminales et le nombre minimal d’observations par feuille terminale contrôlent la complexité des <em>weak learners</em>: une profondeur élevée, un grand nombre de feuilles et un faible nombre d’observations par feuille terminale aboutissent à des arbres complexes au pouvoir prédictif plus élevé, mais induisent un risque de surajustement. Par ailleurs, de tels arbres sont plus longs à entraîner que des arbres peu profonds avec un nombre limité de feuilles.</p></li>
+<li><p>La <strong>complexité des arbres</strong>: la profondeur maximale des arbres, le nombre de feuilles terminales et le nombre minimal d’observations par feuille terminale contrôlent la complexité des <em>weak learners</em>: une profondeur élevée, un grand nombre de feuilles et un faible nombre d’observations par feuille terminale aboutissent à des arbres complexes au pouvoir prédictif plus élevé, mais induisent un risque de surajustement. Par ailleurs, de tels arbres sont plus longs à entraîner que des arbres peu profonds avec un nombre limité de feuilles. Il est à noter que le nombre de feuilles terminales a un effet linéaire sur la complexité des arbres, tandis que la profondeur maximale a un effet exponentiel: un arbre pleinement développé de profondeur <span class="math inline">\(k\)</span> comprend <span class="math inline">\(2^k\)</span> feuilles terminales et <span class="math inline">\(2^k - 1\)</span> <em>splits</em>. Augmenter la profondeur d’une unité a donc pour effet de doubler le temps d’entraînement de chaque arbre.</p></li>
 <li><p>La <strong>lutte contre le surajustement</strong>: ces hyperparamètres de régularisation jouent un rôle important dans le contrôle de la complexité des <em>weak learners</em> et contribuent à éviter le surajustement:</p>
 <ul>
 <li>Les pénalisations tendent à réduire le poids <span class="math inline">\(w_j\)</span> des feuilles terminales: la pénalisation quadratique réduit la valeur absolue des poids sans les annuler (il s’agit de <span class="math inline">\(\lambda\)</span> dans l’<a href="4-boosting.qmd#eq-w-j-optimal">équation donnant le poids optimal</a> d’une feuille terminale), tandis que la pénalisation absolue élevée pousse certains poids à être nuls. La pénalisation quadratique est la plus utilisée, notamment parce qu’elle permet d’amoindrir l’influence des points aberrants.</li>
-<li>Le gain minimal définit la quantité minimale de réduction de la perte requise pour qu’un nœud soit divisé (il s’agit du paramètre <span class="math inline">\(\gamma\)</span> dans l’<a href="4-boosting.qmd#eq-fct-eval-split">équation donnant le gain potentiel d’un <em>split</em></a>); il contribue à réduire la complexité des arbres et à limiter le surajustement en empêchant l’algorithme de créer des <em>splits</em> dont l’apport est très faible et potentiellement dû à des variations non significatives des données d’entraînement.</li>
+<li>Le gain minimal définit la quantité minimale de réduction de la perte requise pour qu’un nœud soit divisé (il s’agit du paramètre <span class="math inline">\(\gamma\)</span> dans l’<a href="4-boosting.qmd#eq-fct-eval-split">équation donnant le gain potentiel d’un <em>split</em></a>); une valeur plus élevée contribue à réduire la complexité des arbres et à limiter le surajustement en empêchant l’algorithme de créer des <em>splits</em> dont l’apport est très faible et potentiellement dû à des variations non significatives des données d’entraînement.</li>
 </ul></li>
 <li><p>Les <strong>hyperparamètres d’échantillonnage</strong>:</p>
 <ul>
-<li>le taux d’échantillonnage des données d’entraînement et le taux d’échantillonnage des colonnes par noeud jouent exactement le même rôle que <code>sample.fraction</code> ou <code>max_samples</code>, et <code>mtry</code> dans la forêt aléatoire: échantillonner les données d’entraînement accélère l’entraînement, et échantillonner les colonnes au niveau de chaque noeud aboutit à des arbres plus variés. Il est à noter que l’échantillonnage des données se fait systématiquement sans remise. Comme pour la forêt aléatoire, la valeur optimale du taux d’échantillonnage des colonnes par noeud dépend du nombre de variables réellement pertinentes dans les données, et une valeur plus élevée est préférable si les données comprennent un grand nombre de variables binaires issues du <em>one-hot-encoding</em> des variables catégorielles.</li>
+<li>le taux d’échantillonnage des données d’entraînement et le taux d’échantillonnage des colonnes par noeud jouent exactement le même rôle que <code>sample.fraction</code> ou <code>max_samples</code>, et <code>mtry</code> dans la forêt aléatoire: échantillonner les données d’entraînement accélère l’entraînement, et échantillonner les colonnes au niveau de chaque noeud aboutit à des arbres plus variés. Il est à noter que l’échantillonnage des données se fait systématiquement sans remise dans les algorithmes de <em>gradient boosting</em>. Comme pour la forêt aléatoire, la valeur optimale du taux d’échantillonnage des colonnes par noeud dépend du nombre de variables réellement pertinentes dans les données, et une valeur plus élevée est préférable si les données comprennent un grand nombre de variables binaires issues du <em>one-hot-encoding</em> des variables catégorielles.</li>
 <li>L’échantillonnage des colonnes par arbre sert essentiellement à accélérer l’entraînement. Si les colonnes sont échantillonnées par arbre et par noeud, alors le taux d’échantillonnage final est le produit des deux taux.</li>
 </ul></li>
 <li><p>Les <strong>réglages relatifs au retraitement des colonnes</strong>:</p>
@@ -495,10 +499,52 @@ Figure&nbsp;1
 </section>
 <section id="sec-procedure-training-gb" class="level2" data-number="1.3">
 <h2 data-number="1.3" class="anchored" data-anchor-id="sec-procedure-training-gb"><span class="header-section-number">1.3</span> Comment entraîner un algorithme de <em>gradient boosting</em>?</h2>
-<p>Proposer une procédure pour l’optimisation des hyperparamètres s’avère plus délicat pour le <em>gradient boosting</em> que pour les forêts aléatoires, pour deux raisons. D’une part, les algorithmes de <em>gradient boosting</em> comprennent un nombre beaucoup plus élevé d’hyperparamètres. D’autre part, la littérature méthodologique sur l’usage pratique de ces algorithmes reste assez limitée et peu conclusive (en-dehors des nombreux tutoriels introductifs disponibles sur internet). Un constat semble néanmoins bien établi: <strong>contrairement aux forêts aléatoires, les valeurs par défaut des hyperparamètres des implémentations ne constituent pas un point de départ raisonnable</strong> (<span class="citation" data-cites="bentejac2021comparative">Bentéjac, Csörgő, and Martínez-Muñoz (<a href="#ref-bentejac2021comparative" role="doc-biblioref">2021</a>)</span>), en particulier pour les hyperparamètres de régularisation dont la valeur par défaut est souvent nulle.</p>
+<p>Proposer une procédure pour l’optimisation des hyperparamètres s’avère plus délicat pour les algorithmes de <em>gradient boosting</em> que pour les forêts aléatoires, car ces algorithmes comprennent un nombre beaucoup plus élevé d’hyperparamètres, et la littérature méthodologique sur leur usage pratique reste assez limitée et peu conclusive (en-dehors des nombreux tutoriels introductifs disponibles sur internet). Trois constats sont néanmoins bien établis. Premièrement, <strong>bien optimiser les hyperparamètres est essentiel pour la performance du modèle final</strong>. Deuxièmement, <strong>cette optimisation est complexe et longue</strong>, il faut donc la mener de façon rigoureuse et organisée pour ne pas perdre de temps. Troisièmement, <strong>contrairement aux forêts aléatoires, les valeurs par défaut des hyperparamètres des implémentations ne constituent pas un point de départ raisonnable</strong> (<span class="citation" data-cites="bentejac2021comparative">Bentéjac, Csörgő, and Martínez-Muñoz (<a href="#ref-bentejac2021comparative" role="doc-biblioref">2021</a>)</span>), en particulier pour les hyperparamètres de régularisation dont la valeur par défaut est souvent nulle.</p>
+<section id="préparer-lentraînement" class="level3" data-number="1.3.1">
+<h3 data-number="1.3.1" class="anchored" data-anchor-id="préparer-lentraînement"><span class="header-section-number">1.3.1</span> Préparer l’entraînement</h3>
+<ul>
+<li><p><strong>Définir des valeurs de départ raisonnables pour les hyperpararamètres</strong>. Comme il est impossible d’optimiser conjointement tous les hyperparamètres, il est nécessaire de mener cette optimisation de façon itérative, en optimisant certains hyperparamètres conditionnellement aux valeurs des autres. Il est donc essentiel de retenir des valeurs de départ raisonnables pour les hyperpararamètres qui ne sont pas optimisés en premier. <strong>Ce choix prend du temps</strong> et doit reposer sur une bonne compréhension du fonctionnement de l’algorithme et sur une connaissance approfondie des données utilisées. Voici quelques suggestions de valeurs de départ (voir notamment <span class="citation" data-cites="bentejac2021comparative">Bentéjac, Csörgő, and Martínez-Muñoz (<a href="#ref-bentejac2021comparative" role="doc-biblioref">2021</a>)</span>); il est tout à fait possible de s’en écarter lorsqu’on pense que le problème modélisé le justifie:</p>
+<ul>
+<li><code>max_depth</code>: entre 4 et 10;</li>
+<li><code>num_leaves</code>: entre 30 et 255;</li>
+<li><code>min_split_gain</code>: valeur strictement positive, commencer entre 0.1 et 1;</li>
+<li><code>lambda</code>: valeur strictement positive; commencer avec une valeur entre 0.5 et 2; choisir une valeur plus élevée s’il y a des valeurs aberrantes sur <span class="math inline">\(y\)</span> ou de clairs signes de surajustement;</li>
+<li><code>bagging_fraction</code> : valeur strictement inférieure à 1, commencer entre 0.6 et 0.8;</li>
+<li><code>feature_fraction_bynode</code> : valeur strictement inférieure à 1, commencer entre 0.5 et 0.7; choisir une valeur plus élevée si les données comprennent un grand nombre de variables binaires issues d’un <em>one-hot-encoding</em>;</li>
+<li><code>max_bin</code> : garder la valeur par défaut; choisir éventuellement une valeur plus élevée si la la valeur par défaut ne suffit pas à refléter la distribution des variables continues;</li>
+<li><code>max_cat_to_onehot</code> : garder la valeur par défaut;</li>
+<li><code>max_cat_threshold</code> : garder la valeur par défaut.</li>
+</ul></li>
+<li><p><strong>Choisir la méthode d’optimisation des hyperparamètres</strong>: validation croisée ou ensemble de validation.</p></li>
+</ul>
+</section>
+<section id="optimiser-les-hyperparamètres" class="level3" data-number="1.3.2">
+<h3 data-number="1.3.2" class="anchored" data-anchor-id="optimiser-les-hyperparamètres"><span class="header-section-number">1.3.2</span> Optimiser les hyperparamètres</h3>
+<p>Voici une procédure simple pour optimiser les hyperparamètres d’un algorithme de <em>gradient boosting</em>. Elle ne garantit pas l’obtention d’un modèle optimal, mais elle est lisible et permet d’obtenir rapidement un modèle raisonnablement performant.</p>
+<ul>
+<li><strong>Ajuster conjointement le nombre d’arbres et le taux d’apprentissage</strong>.</li>
+<li><strong>Ajuster la complexité des arbres</strong>.</li>
+<li><strong>Ajuster les hyperparamètres de lutte contre le surajustement</strong>.</li>
+<li><strong>Entraîner du modèle final</strong>: entraîner une forêt aléatoire avec les hyperparamètres optimisés déduits des étapes précédentes.</li>
+<li><strong>Évaluer du modèle final</strong>: mesurer la performance du modèle final sur un ensemble de test.</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled" title="Parfois, une forêt aléatoire suffit...">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Parfois, une forêt aléatoire suffit…
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Avant de se lancer dans le <em>gradient boosting</em>, il peut être utile d’entraîner une forêt aléatoire selon la procédure décrite dans la section <strong>?@sec-procedure-training-rf.__</strong> Ce modèle servira de point de comparaison pour la suite, et permettra notamment de voir si le <em>gradient boosting</em> offre des gains de performances qui justifient le temps passé à l’optimisation des hyperparamètres.</p>
+</div>
+</div>
 
 
 
+</section>
 </section>
 </section>
 
