@@ -115,7 +115,7 @@ supplement: none
 // Put all links in blue
 #show link: it => [
   #set text(fill: rgb("#0000FF"))
-  it.body
+  #text(it.body)
 ]
 
 #set page(margin: 1.25in)
