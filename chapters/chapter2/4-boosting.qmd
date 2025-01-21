@@ -87,12 +87,6 @@ La méthode de *gradient boosting* proposée @friedman2001greedy a fait l'objet 
 
 [^1]: Cette partie reprend la structure et les notations de la partie 2 de @chen2016xgboost.
 
-Choses importantes à mettre en avant:
-
--   Le boosting est fait pour overfitter; contrairement aux RF, il n'y a pas de limite à l'overfitting. Donc lutter contre le surajustement est un élément particulièrement important de l'usage des algorithmes de _gradient boosting_.
--   Les termes de régularisation sont directement intégrées à la mécanique du _gradient boosting_.
--   Comment on interprète le gradient et la hessienne: cas avec une fonction de perte quadratique.
-
 #### Le modèle à entraîner
 
 On veut entraîner un modèle comprenant $K$ arbres de régression ou de classification:
