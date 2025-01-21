@@ -445,32 +445,24 @@ C'est un problème très compliqué dès que $M$ est élevé! -->
 <li><p>l’<strong>hyperparamètre de régularisation <span class="math inline">\(\gamma\)</span></strong> intervient dans l’équation <a href="#eq-fct-eval-split" class="quarto-xref">5</a>. Ce paramètre mesure la réduction minimale de la perte requise pour qu’un nœud soit divisé; une valeur plus élevée aboutit à des arbres moins profonds et contribue à limiter le surajustement en empêchant l’algorithme de créer des <em>splits</em> dont l’apport est très faible et potentiellement dû à des variations non significatives des données d’entraînement.</p></li>
 <li><p>la dernière approche consiste à <strong>entraîner les arbres sur un échantillon d’observations et/ou de variables</strong>. L’échantillonnage des observations permet de réduire l’influence des éventuels points extrêmes contenus dans les données (car ils n’apparaissent pas dans les données d’entraînement de certains arbres); l’échantillonnage des variables permet de varier les variables utilisées dans les <em>splits</em>.</p></li>
 </ul>
-<section id="la-préparation-des-données" class="level4" data-number="1.5.1">
-<h4 data-number="1.5.1" class="anchored" data-anchor-id="la-préparation-des-données"><span class="header-section-number">1.5.1</span> La préparation des données</h4>
-<ul>
-<li>les variables catégorielles:
-<ul>
-<li>ordonnées: passer en integer;</li>
-<li>non-ordonnées: OHE ou approche de Fisher.</li>
-</ul></li>
-<li>les variables continues:
-<ul>
-<li>inutile de faire des transformations monotones.</li>
-<li>Utile d’ajouter des transformations non monotones.</li>
-</ul></li>
-</ul>
-</section>
-<section id="les-fonctions-de-perte" class="level4" data-number="1.5.2">
+<!-- #### La préparation des données
 
+-   les variables catégorielles:
+    -   ordonnées: passer en integer;
+    -   non-ordonnées: OHE ou approche de Fisher.
+-   les variables continues:
+    -   inutile de faire des transformations monotones.
+    -   Utile d'ajouter des transformations non monotones.
+
+#### Les fonctions de perte -->
 
 
 
 </section>
 </section>
-</section>
 
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">1.5.2 Les fonctions de perte</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-breiman1998rejoinder" class="csl-entry" role="listitem">
 Breiman, Leo. 1998. <span>“Rejoinder: Arcing Classifiers.”</span> <em>The Annals of Statistics</em> 26 (3): 841–49.
 </div>
