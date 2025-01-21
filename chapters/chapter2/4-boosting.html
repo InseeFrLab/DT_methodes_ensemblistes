@@ -360,7 +360,7 @@ C'est un problème très compliqué dès que $M$ est élevé! -->
 <section id="le-modèle-à-entraîner" class="level4" data-number="1.3.1">
 <h4 data-number="1.3.1" class="anchored" data-anchor-id="le-modèle-à-entraîner"><span class="header-section-number">1.3.1</span> Le modèle à entraîner</h4>
 <p>On veut entraîner un modèle comprenant <span class="math inline">\(K\)</span> arbres de régression ou de classification:</p>
-<p><span class="math display">\[ \hat{y}_{i} = \phi\left(\mathbf{x}_i\right) = \sum_{k=1}^{K} f_k\left(\mathbf{x}_i\right) \]</span></p>
+<p><span class="math display">\[ \hat{y}_{i} =F\left(\mathbf{x}_i\right) = \sum_{k=1}^{K} f_k\left(\mathbf{x}_i\right) \]</span></p>
 <p>Chaque arbre <span class="math inline">\(f\)</span> est défini par trois paramètres:</p>
 <ul>
 <li>sa structure qui est une fonction <span class="math inline">\(q: \mathbb{R}^m \rightarrow \{1, \dots, T\}\)</span> qui à un vecteur <span class="math inline">\(\mathbf{x}\)</span> de dimension <span class="math inline">\(m\)</span> associe une feuille terminale de l’arbre;</li>
@@ -369,7 +369,7 @@ C'est un problème très compliqué dès que $M$ est élevé! -->
 </ul>
 <p>Le modèle est entraîné avec une <strong>fonction-objectif</strong> constituée d’une <strong>fonction de perte</strong> <span class="math inline">\(l\)</span> et d’une <strong>fonction de régularisation</strong> <span class="math inline">\(\Omega\)</span>:</p>
 <ul>
-<li>La fonction de perte mesure la distance entre la prédiction <span class="math inline">\(\hat(y)\)</span> et la vraie valeur <span class="math inline">\(y\)</span> et présente généralement les propriétés suivantes: elle est convexe et dérivable deux fois, et atteint son minimum lorsque <span class="math inline">\(\hat{y} = y\)</span>.</li>
+<li>La fonction de perte mesure la distance entre la prédiction <span class="math inline">\(\hat{y}\)</span> et la vraie valeur <span class="math inline">\(y\)</span> et présente généralement les propriétés suivantes: elle est convexe et dérivable deux fois, et atteint son minimum lorsque <span class="math inline">\(\hat{y} = y\)</span>.</li>
 <li>La fonction de régularisation pénalise la complexité du modèle. Dans le cas présent, elle pénalise les arbres avec un grand nombre de feuilles (<span class="math inline">\(T\)</span> élevé) et les arbres avec des poids élevés (<span class="math inline">\(w_j\)</span> élevés en valeur absolue).</li>
 </ul>
 <p><span id="eq-fct-obj-initial"><span class="math display">\[ \mathcal{L}(\phi) = \underbrace{\sum_i l(\hat{y}_{i}, y_{i})}_{\substack{\text{Perte sur les} \\ \text{observations}}} + \underbrace{\sum_k \Omega(f_{k})}_{\substack{\text{Fonction de} \\ \text{régularisation}}}\,\,\text{avec}\,\,\Omega(f) = \gamma T + \frac{1}{2} \lambda \sum_{t=1}^T \sum_{j=1}^{J_t} w_j^2
