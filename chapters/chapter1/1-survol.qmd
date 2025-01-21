@@ -55,9 +55,10 @@ Trois caractéristiques essentielles définissent un arbre CART :
 - Une fois l’arbre construit, chaque feuille produit une prédiction en se basant sur les données de la région correspondante. En classification, la prédiction est généralement la classe la plus fréquente parmi les observations de la région. En régression, la prédiction est souvent la moyenne des valeurs observées dans la région.
 
 
-Deux conséquences importantes découlent de cette construction :
-- L'algorithme CART ne fait **aucune hypothèse _a priori_** sur la relation entre les variables explicatives $\mathbf{X}$ et la variable cible $y$. C'est une différence majeure avec les modèles économétriques standard, tels que la régression linéaire qui suppose une relation linéaire de la forme $E(y) = \mathbf{X \beta}$.
--  **L'arbre final est une fonction constante par morceaux**: la prédiction est **la même** pour toutes les observations situées dans la même région ; elle ne peut varier qu'entre régions. 
+Deux conséquences importantes découlent de cette construction:
+
+- L'algorithme CART ne fait **aucune hypothèse _a priori_** sur la relation entre les variables explicatives $\mathbf{X}$ et la variable cible $y$. C'est une différence majeure avec les modèles économétriques standards, tels que la régression linéaire qui suppose une relation linéaire de la forme $E(y) = \mathbf{X \beta}$.
+-  **L'arbre final est une fonction constante par morceaux**: la prédiction est **identique** pour toutes les observations situées dans la même région; elle ne peut varier qu'entre régions. 
 
 
 Illustration, et représentation graphique (sous forme d'arbre et de graphique).
