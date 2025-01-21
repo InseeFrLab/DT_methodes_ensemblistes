@@ -138,7 +138,7 @@ Voici une procédure simple pour optimiser les hyperparamètres d'un algorithme 
 
 ::: {.callout-tip title="Parfois, une forêt aléatoire suffit..."}
 
-Avant de se lancer dans le _gradient boosting_, il peut être utile d'entraîner une forêt aléatoire selon la procédure décrite dans la section @sec-procedure-training-rf.__ Ce modèle servira de point de comparaison pour la suite, et permettra notamment de voir si le _gradient boosting_ offre des gains de performances qui justifient le temps passé à l'optimisation des hyperparamètres.
+Avant de se lancer dans le _gradient boosting_, il peut être utile d'entraîner une forêt aléatoire selon la procédure décrite dans la section @sec-procedure-training-rf. Ce modèle servira de point de comparaison pour la suite, et permettra notamment de voir si le _gradient boosting_ offre des gains de performances qui justifient le temps passé à l'optimisation des hyperparamètres.
 
 :::
 
