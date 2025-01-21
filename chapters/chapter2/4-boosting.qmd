@@ -89,9 +89,7 @@ La méthode de *gradient boosting* proposée @friedman2001greedy a fait l'objet 
 
 Choses importantes à mettre en avant:
 
--   Le boosting est fondamentalement différent des forêts aléatoires. See ESL, chapitre 10.
--   Toute la mécanique est indépendante de la fonction de perte choisie. En particulier, elle est applicable indifféremment à des problèmes de classification et de régression.
--   Le boosting est fait pour overfitter; contrairement aux RF, il n'y a pas de limite à l'overfitting. Donc lutter contre le surapprentissage est un élément particulièrement important de l'usage des algorithmes de _gradient boosting_.
+-   Le boosting est fait pour overfitter; contrairement aux RF, il n'y a pas de limite à l'overfitting. Donc lutter contre le surajustement est un élément particulièrement important de l'usage des algorithmes de _gradient boosting_.
 -   Les termes de régularisation sont directement intégrées à la mécanique du _gradient boosting_.
 -   Comment on interprète le gradient et la hessienne: cas avec une fonction de perte quadratique.
 
@@ -193,23 +191,35 @@ La méthode de construction des arbres dans les algorithmes de _gradient boostin
 L'algorithme de détermination des critère de partition est le composant le plus intense en calcul des algorithmes de _gradient boosting_. Les différentes implémentations du _gradient boosting_ proposent donc de multiples améliorations et optimisations visant à le rendre le plus efficace possible. Certaines de ces optimisations sont présentées dans la partie LIEN A LA PARTIE HISTOGRAMME/CATVAR.
 
 
-#### Mettre à jour le modèle
+#### Mettre à jour itérativement le modèle
 
 Une fois qu'un arbre a été entraîné, on met à jour le modèle par la formule suivante: 
 
-$$ F_{m}(x)=F_{m-1}(x)+ \eta f_{m}(x) $$ {#eq-update-model}
+$$ F_{t}(x)=F_{t-1}(x)+ \eta f_{t}(x) $$ {#eq-update-model}
 
 Il est alors possible de commencer l'entraînement de l'arbre suivant, selon la même logique que précédemment. La raison d'être du paramètre $\eta$ est expliquée dans le paragraphe suivant.
 
-#### Le grand ennemi du _gradient boosting_: le surapprentissage
+### Un exemple sur un cas simple: la régression avec une fonction de perte quadratique
 
 
 
-##### Les moyens de lutter contre l'*overfitting*:
+### Le grand ennemi du _gradient boosting_: le surajustement
+
+Une différence majeure entre les forêts aléatoires et les algorithmes de _boosting_ est que ces derniers ne contiennent pas de limite inhérente au surajustement, bien au contraire: plus la complexité d'un modèle de boosting augmente (arbres plus nombreux ou plus complexes), plus les performances sur les données d'entraînement augmentent. Par conséquent, __tous les algorithmes de _gradient boosting_ sont très vulnérables au surajustement__. Il y a deux raisons à cela. Premièrement, lors de l'entraînement d'un modèle de _gradient boosting_, chaque nouvel arbre essaie de réduire l'erreur résiduelle en s'ajustant toujours plus finement aux données. Ainsi, au fur et mesure que le nombre d'arbres augmente, l'algorithme capture non seulement des relations pertinentes entre $X$ et $y$, mais aussi le bruit et les particularités aléatoires de l'échantillon d'entraînement. Deuxièmement, les arbres de décision utilisés sont très flexibles et conçus pour refléter les relations entre $X$ et $y$ présentes dans les données d'entraînement, y compris celles qui ne se généralisent pas bien aux nouvelles données. Par exemple, un arbre très profond peut correspondre finement aux données d'entraînement, mais risque de manquer de robustesse sur les données de test. 
+
+__La lutte contre le surajustement est donc un enjeu majeur de l'entraînement des modèles de _gradient boosting_.__ De multiples méthodes ont été proposées pour lutter contre le surajustement:
+
+- la __technique de réduction__ (*shrinkage technique*) consiste à réduire l'influence de chaque arbre sur le modèle global en multipliant la prédiction de cet arbre par un facteur d'échelle compris entre 0 et 1 et appelé __taux d'apprentissage__ (_learning rate_); il s'agit du paramètre $\eta$ dans l'équation @eq-update-model. L'avantage principal de cette technique est que le modèle s'ajuste progressivement aux données, et est moins altéré par les erreurs dues à des variations aléatoires ou au bruit dans les données. Un taux d'apprentissage bas et un nombre d'itérations suffisant permettent souvent d'obtenir un modèle final plus performant sur des données de test. L'inconvénient est que réduire le taux d'apprentissage nécessite d'augmenter le nombre d'itérations pour obtenir des performances comparables, ce qui peut rallonger le temps d'entraînement.
+- $\lambda$: privilégier les poids faibles;
+- $\gamma$: privilégier les arbres courts et les _splits_ porteurs de sens;
+- la dernière approche consiste à entraîner les _weak learners_ sur un sous-échantillon d'observation et/ou de variables.
+
+
+
+#### Les moyens de lutter contre l'*overfitting*:
 
 -   le *shrinkage*;
 -   le subsampling des lignes et des colonnes;
--   les différentes pénalisations:
 - $\lambda$: privilégier les poids faibles;
 - $\gamma$: privilégier les arbres courts et les _splits_ porteurs de sens.
 
