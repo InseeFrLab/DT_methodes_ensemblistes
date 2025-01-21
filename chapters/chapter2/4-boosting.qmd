@@ -173,9 +173,9 @@ $$ \mathcal{\tilde{L}}^{(t)}(q) = -\frac{1}{2} \sum_{j=1}^T \frac{\left(\sum_{i\
 
 Cette équation est utile car elle permet de comparer la qualité de deux arbres, et de déterminer lequel est le meilleur. On pourrait penser que l'équation @eq-fct-obj-optimal est à elle seule suffisante pour choisir le $t$-ième arbre: il suffirait d'énumérer les arbres possibles, de calculer la qualité de chacun d'entre eux, et de retenir le meilleur. Bien que cette approche soit possible en théorie, elle est inemployable en pratique car le nombre d'arbres possibles est extrêmement élevé. Par conséquent, le $t$-ième arbre n'est pas défini en une fois, mais construit de façon gloutonne (_greedy_), en utilisant l'équation @eq-fct-obj-optimal à chaque étape.
 
-Imaginons qu'on envisage de décomposer la feuille $I$ en deux nouvelles feuilles $I_L$ et $I_R$ (avec $I = I_L \cup I_R$), selon une condition logique reposant sur une variable et une valeur de cette variable (exemple: $x_6 > 11$). Par application de l'équation @eq-fct-obj-optimal, et en notant $G = \sum_i g_i$ le gain potentiel induit par ce critère de partition est égal à:
+Imaginons qu'on envisage de décomposer la feuille $I$ en deux nouvelles feuilles $I_L$ et $I_R$ (avec $I = I_L \cup I_R$), selon une condition logique reposant sur une variable et une valeur de cette variable (exemple: $x_6 > 11$). Par application de l'équation @eq-fct-obj-optimal, le gain potentiel induit par ce critère de partition est égal à:
 
-$$ Gain = \frac{1}{2} \left[\frac{G_L^2}{H_L+\lambda}+\frac{G_R^2}{H_R+\lambda}-\frac{(G_L+G_R)^2}{H_L+H_R+\lambda}\right] - \gamma $$ {#eq-fct-eval-split}
+$$ Gain = \frac{1}{2} \left[\frac{G_L^2}{H_L+\lambda}+\frac{G_R^2}{H_R+\lambda}-\frac{(G_L+G_R)^2}{H_L+H_R+\lambda}\right] - \gamma \,\,\text{avec}\,\, G = \sum_i g_i \,\,\text{et}\,\, H = \sum_i H_i$$ {#eq-fct-eval-split}
 
 
 <!-- $\text{Gain}_{\text{split}} = \frac{1}{2} \left[\frac{\left(\sum_{i\in I_L} g_i\right)^2}{\sum_{i\in I_L} h_i+\lambda}+\frac{\left(\sum_{i\in I_R} g_i\right)^2}{\sum_{i\in I_R} h_i+\lambda}-\frac{\left(\sum_{i\in I} g_i\right)^2}{\sum_{i\in I} h_i+\lambda}\right] - \gamma$ -->
