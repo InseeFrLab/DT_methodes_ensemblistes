@@ -211,7 +211,7 @@ __La lutte contre le surajustement est donc un enjeu majeur de l'entraînement d
 
 - la dernière approche consiste à __entraîner les arbres sur un échantillon d'observations et/ou de variables__. L'échantillonnage des observations permet de réduire l'influence des éventuels points extrêmes contenus dans les données (car ils n'apparaissent pas dans les données d'entraînement de certains arbres); l'échantillonnage des variables permet de varier les variables utilisées dans les _splits_.
 
-#### La préparation des données
+<!-- #### La préparation des données
 
 -   les variables catégorielles:
     -   ordonnées: passer en integer;
@@ -220,5 +220,5 @@ __La lutte contre le surajustement est donc un enjeu majeur de l'entraînement d
     -   inutile de faire des transformations monotones.
     -   Utile d'ajouter des transformations non monotones.
 
-#### Les fonctions de perte
+#### Les fonctions de perte -->
 
