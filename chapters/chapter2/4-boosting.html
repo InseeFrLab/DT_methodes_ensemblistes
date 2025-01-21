@@ -351,12 +351,6 @@ C'est un problème très compliqué dès que $M$ est élevé! -->
 <section id="la-mécanique-du-gradient-boosting" class="level3" data-number="1.3">
 <h3 data-number="1.3" class="anchored" data-anchor-id="la-mécanique-du-gradient-boosting"><span class="header-section-number">1.3</span> La mécanique du <em>gradient boosting</em></h3>
 <p>La méthode de <em>gradient boosting</em> proposée <span class="citation" data-cites="friedman2001greedy">Friedman (<a href="#ref-friedman2001greedy" role="doc-biblioref">2001</a>)</span> a fait l’objet de multiples implémentations intégrant de nombreuses optimisations et raffinements, parmi lesquelles XGBoost (<span class="citation" data-cites="chen2016xgboost">Chen and Guestrin (<a href="#ref-chen2016xgboost" role="doc-biblioref">2016</a>)</span>), LightGBM (<span class="citation" data-cites="ke2017lightgbm">Ke et al. (<a href="#ref-ke2017lightgbm" role="doc-biblioref">2017</a>)</span>) et CatBoost (<span class="citation" data-cites="prokhorenkova2018catboost">Prokhorenkova et al. (<a href="#ref-prokhorenkova2018catboost" role="doc-biblioref">2018</a>)</span>). S’il existe quelques différences entre ces implémentations, elles partagent néanmoins la même mécanique d’ensemble, que la section qui suit va présenter en détail en s’appuyant sur l’implémentation proposée par XBGoost.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
-<p>Choses importantes à mettre en avant:</p>
-<ul>
-<li>Le boosting est fait pour overfitter; contrairement aux RF, il n’y a pas de limite à l’overfitting. Donc lutter contre le surajustement est un élément particulièrement important de l’usage des algorithmes de <em>gradient boosting</em>.</li>
-<li>Les termes de régularisation sont directement intégrées à la mécanique du <em>gradient boosting</em>.</li>
-<li>Comment on interprète le gradient et la hessienne: cas avec une fonction de perte quadratique.</li>
-</ul>
 <section id="le-modèle-à-entraîner" class="level4" data-number="1.3.1">
 <h4 data-number="1.3.1" class="anchored" data-anchor-id="le-modèle-à-entraîner"><span class="header-section-number">1.3.1</span> Le modèle à entraîner</h4>
 <p>On veut entraîner un modèle comprenant <span class="math inline">\(K\)</span> arbres de régression ou de classification:</p>
