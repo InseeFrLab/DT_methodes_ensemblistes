@@ -60,7 +60,7 @@ div.csl-indent {
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-0e028902ae6628a3067983886a8836b9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-1959eab64d7f8dc8170c6f7139d73ad1.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -335,7 +335,11 @@ Et par rapport au <em>deep learning</em>?
 <li>Chaque région est définie par un ensemble de conditions, appelées régles de décision (<em>splitting rules</em>), appliquées successivement sur les variables explicatives. Par exemple, une première règle pourrait poser la question : “L’individu est-il en emploi ?”, et subdiviser les données en deux groupes (oui/non). Une deuxième règle pourrait alors affiner la segmentation en posant la question : “L’individu est-il diplômé du supérieur ?”. Une région spécifique serait ainsi définie par la condition combinée : “l’individu est en emploi et est diplômé du supérieur”.</li>
 <li>Une fois l’arbre construit, chaque feuille produit une prédiction en se basant sur les données de la région correspondante. En classification, la prédiction est généralement la classe la plus fréquente parmi les observations de la région. En régression, la prédiction est souvent la moyenne des valeurs observées dans la région.</li>
 </ul>
-<p>Deux conséquences importantes découlent de cette construction : - L’algorithme CART ne fait <strong>aucune hypothèse <em>a priori</em></strong> sur la relation entre les variables explicatives <span class="math inline">\(\mathbf{X}\)</span> et la variable cible <span class="math inline">\(y\)</span>. C’est une différence majeure avec les modèles économétriques standard, tels que la régression linéaire qui suppose une relation linéaire de la forme <span class="math inline">\(E(y) = \mathbf{X \beta}\)</span>. - <strong>L’arbre final est une fonction constante par morceaux</strong>: la prédiction est <strong>la même</strong> pour toutes les observations situées dans la même région ; elle ne peut varier qu’entre régions.</p>
+<p>Deux conséquences importantes découlent de cette construction:</p>
+<ul>
+<li>L’algorithme CART ne fait <strong>aucune hypothèse <em>a priori</em></strong> sur la relation entre les variables explicatives <span class="math inline">\(\mathbf{X}\)</span> et la variable cible <span class="math inline">\(y\)</span>. C’est une différence majeure avec les modèles économétriques standards, tels que la régression linéaire qui suppose une relation linéaire de la forme <span class="math inline">\(E(y) = \mathbf{X \beta}\)</span>.</li>
+<li><strong>L’arbre final est une fonction constante par morceaux</strong>: la prédiction est <strong>identique</strong> pour toutes les observations situées dans la même région; elle ne peut varier qu’entre régions.</li>
+</ul>
 <p>Illustration, et représentation graphique (sous forme d’arbre et de graphique).</p>
 <!-- #### Comment construit-on un arbre?
 
