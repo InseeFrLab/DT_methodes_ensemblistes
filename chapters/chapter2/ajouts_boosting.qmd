@@ -1,12 +1,10 @@
-## Sujets avancés
+## Sujets avancés {#sec-sujets-avances}
 
+### Le traitement des variables manquantes {#sec-missing-values}
 
+A COMPLETER
 
-## Les optimisations de l'entraînement
-
-### Le traitement des variables manquantes
-
-### Le traitement des variables continues: l'utilisation des histogrammes
+### Le traitement des variables continues: l'utilisation des histogrammes {#sec-continuous-variables-hist}
 
 __L'algorithme de détermination des critères de partition (_split-finding algorithm_) est un enjeu de performance essentiel dans les méthodes ensemblistes.__ En effet, l'algorithme le plus simple qui consiste à énumérer tous les critères de partition possibles (en balayant toutes les valeurs de toutes les variables) s'avère très coûteux à utiliser dès lors que les données contiennent soit un grand nombre de variables, soit des variables continues prenant un grand nombre de valeurs. C'est pourquoi cet algorithme a fait l'objet de multiples améliorations et optimisations visant à réduire leur coût computationnel sans dégrader la qualité des critères de partition.
 
@@ -17,7 +15,7 @@ L'utilisation d'histogrammes (_histogram-based algorithms_) est une approche eff
 - __Énumération restreinte__: l'algorithme de détermination des critères de partition ne considère que les bornes des intervalles précédemment définies (10, 20, 30, etc. dans l'exemple précédent) et non l'ensemble des valeurs prises par les variables continues. Cette modification se traduit par une nette accélération de l'entraînement, dans la mesure où le nombre de _bins_ est en général beaucoup plus faible que le nombre de valeurs uniques des variables continues.
 <!-- - __Mise à jour de l'histogramme__: G et H sont mis à jour après chaque arbre. -->
 
-### Le traitement des variables catégorielles
+### Le traitement des variables catégorielles {#sec-categorical-variables-encoding}
 
 <!-- IL NE FAUT PAS SUPPRIMER CE COMMENTAIRE. -->
 <!-- Faire en sorte que la police Font Awesome soit chargée -->
