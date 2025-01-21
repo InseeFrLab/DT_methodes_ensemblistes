@@ -99,7 +99,7 @@ Choses importantes à mettre en avant:
 
 On veut entraîner un modèle comprenant $K$ arbres de régression ou de classification:
 
-$ \hat{y}_{i} = \phi\left(\mathbf{x}_i\right) = \sum_{k=1}^{K} f_k\left(\mathbf{x}_i\right) $
+$$ \hat{y}_{i} = \phi\left(\mathbf{x}_i\right) = \sum_{k=1}^{K} f_k\left(\mathbf{x}_i\right) $$
 
 Chaque arbre $f$ est défini par trois paramètres:
 
@@ -130,11 +130,11 @@ $$
 
 Une fois isolé le $t$-ième arbre, on fait un développement limité d'ordre 2 de $l(y_i, \hat{y}_{i}^{(t-1)} + f_{t}(\mathbf{x}_i))$ au voisinage de $\hat{y}_{i}^{(t-1)}$, en considérant que la prédiction du $t$-ième arbre $f_{t}(\mathbf{x}_i)$ est un incrément de petite taille:
 
-$ \mathcal{L}^{(t)} \approx \sum_{i=1}^{n} [\underbrace{l(y_i, \hat{y}_{i}^{(t-1)})}_{\text{(A)}} + g_i f_t(\mathbf{x}_i)+ \frac{1}{2} h_i f^2_t(\mathbf{x}_i)] + \underbrace{\sum_{j=1}^{t-1}\Omega(f_j)}_{\text{(B)}} + \Omega(f_t) $
+$$ \mathcal{L}^{(t)} \approx \sum_{i=1}^{n} [\underbrace{l(y_i, \hat{y}_{i}^{(t-1)})}_{\text{(A)}} + g_i f_t(\mathbf{x}_i)+ \frac{1}{2} h_i f^2_t(\mathbf{x}_i)] + \underbrace{\sum_{j=1}^{t-1}\Omega(f_j)}_{\text{(B)}} + \Omega(f_t) $$
 
 avec 
 
-$ g_i = \frac{\partial l(y_i, \hat{y}_i^{(t-1)})}{\partial\hat{y}_i^{(t-1)}} \text{et} h_i = \frac{\partial^2 l(y_i, \hat{y}_i^{(t-1)})}{{\partial \hat{y}_i^{(t-1)}}^2} $
+$$ g_i = \frac{\partial l(y_i, \hat{y}_i^{(t-1)})}{\partial\hat{y}_i^{(t-1)}} \text{et} h_i = \frac{\partial^2 l(y_i, \hat{y}_i^{(t-1)})}{{\partial \hat{y}_i^{(t-1)}}^2} $$
 
 
 Les termes $g_i$ et $h_i$ désignent respectivement la dérivée première (le gradient) et la dérivée seconde (la hessienne) de la fonction de perte par rapport à la variable prédite. Dans cette équation, les termes (A) et (B) sont constants car les $t-1$ arbres précédents ont déjà été entraînés et ne sont pas modifiés par l'entraînement du $t$-ième arbre. <!-- Autrement dit, la seule façon d'améliorer le modèle sera de trouver un $t$-ième arbre $f_t$ qui minimise la fonction-objectif \mathcal{L}^{(t)} ainsi réécrite.  --> On peut donc retirer ces termes pour obtenir la fonction-objectif simplifiée $\tilde{L}^{(t)}$ qui sera utilisée pour l'entraînement du $t$-ième arbre.
@@ -158,19 +158,19 @@ $$
 
 Dans la dernière expression, la fonction de perte simplifiée se reformule comme une combinaison quadratique des poids $w_j$, dans laquelle les dérivées première et seconde de la fonction de perte interviennent sous forme de pondérations ($\sum_{i \in I_j} g_i$ et $\sum_{i \in I_j} h_i$). Pour un arbre donné, les poids optimaux $w_j$ sont ceux minimisent cette fonction de perte, compte tenu de ces pondérations. Il se trouve que le calcul de ces poids optimaux est très simple: le poids optimal $w_j^{\ast}$ de la feuille $j$ est donné par l'équation:
 
-$ w_j^{\ast} = -\frac{\sum_{i \in I_j} g_i}{\sum_{i \in I_j} h_i + \lambda} $ {#eq-w-j-optimal}
+$$ w_j^{\ast} = -\frac{\sum_{i \in I_j} g_i}{\sum_{i \in I_j} h_i + \lambda} $$ {#eq-w-j-optimal}
 
 #### Construire le $t$-ième arbre
 
 En combinant les équations @eq-fct-obj-final et @eq-w-j-optimal, on déduit que la valeur optimale de la fonction objectif pour l'arbre $q$ est égale à 
 
-$ \mathcal{\tilde{L}}^{(t)}(q) = -\frac{1}{2} \sum_{j=1}^T \frac{\left(\sum_{i\in I_j} g_i\right)^2}{\sum_{i\in I_j} h_i+\lambda} + \gamma T$ {#eq-fct-obj-optimal}
+$$ \mathcal{\tilde{L}}^{(t)}(q) = -\frac{1}{2} \sum_{j=1}^T \frac{\left(\sum_{i\in I_j} g_i\right)^2}{\sum_{i\in I_j} h_i+\lambda} + \gamma T $$ {#eq-fct-obj-optimal}
 
 Cette équation est utile car elle permet de comparer la qualité de deux arbres, et de déterminer lequel est le meilleur. On pourrait penser que l'équation @eq-fct-obj-optimal est à elle seule suffisante pour choisir le $t$-ième arbre: il suffirait d'énumérer les arbres possibles, de calculer la qualité de chacun d'entre eux, et de retenir le meilleur. Bien que cette approche soit possible en théorie, elle est inemployable en pratique car le nombre d'arbres possibles est extrêmement élevé. Par conséquent, le $t$-ième arbre n'est pas défini en une fois, mais construit de façon gloutonne (_greedy_), en utilisant l'équation @eq-fct-obj-optimal à chaque étape.
 
 Imaginons qu'on envisage de décomposer la feuille $I$ en deux nouvelles feuilles $I_L$ et $I_R$ (avec $I = I_L \cup I_R$), selon une condition logique reposant sur une variable et une valeur de cette variable (exemple: $x_6 > 11$). Par application de l'équation @eq-fct-obj-optimal, et en notant $G = \sum_i g_i$ le gain potentiel induit par ce critère de partition est égal à:
 
-$ Gain = \frac{1}{2} \left[\frac{G_L^2}{H_L+\lambda}+\frac{G_R^2}{H_R+\lambda}-\frac{(G_L+G_R)^2}{H_L+H_R+\lambda}\right] - \gamma $ {#eq-fct-eval-split}
+$$ Gain = \frac{1}{2} \left[\frac{G_L^2}{H_L+\lambda}+\frac{G_R^2}{H_R+\lambda}-\frac{(G_L+G_R)^2}{H_L+H_R+\lambda}\right] - \gamma $$ {#eq-fct-eval-split}
 
 
 <!-- $\text{Gain}_{\text{split}} = \frac{1}{2} \left[\frac{\left(\sum_{i\in I_L} g_i\right)^2}{\sum_{i\in I_L} h_i+\lambda}+\frac{\left(\sum_{i\in I_R} g_i\right)^2}{\sum_{i\in I_R} h_i+\lambda}-\frac{\left(\sum_{i\in I} g_i\right)^2}{\sum_{i\in I} h_i+\lambda}\right] - \gamma$ -->
@@ -192,7 +192,7 @@ L'algorithme de détermination des critère de partition est le composant le plu
 
 Une fois qu'un arbre a été entraîné, on met à jour le modèle par la formule suivante: 
 
-$ F_{m}(x)=F_{m-1}(x)+ \eta f_{m}(x) $ {#eq-update-model}
+$$ F_{m}(x)=F_{m-1}(x)+ \eta f_{m}(x) $$ {#eq-update-model}
 
 La raison d'être du paramètre $\eta$ est expliquée dans le paragraphe suivant.
 
