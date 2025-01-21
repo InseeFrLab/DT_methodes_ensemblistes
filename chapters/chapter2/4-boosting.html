@@ -433,6 +433,7 @@ C'est un problème très compliqué dès que $M$ est élevé! -->
 </section>
 <section id="un-exemple-sur-un-cas-simple-la-régression-avec-une-fonction-de-perte-quadratique" class="level3" data-number="1.4">
 <h3 data-number="1.4" class="anchored" data-anchor-id="un-exemple-sur-un-cas-simple-la-régression-avec-une-fonction-de-perte-quadratique"><span class="header-section-number">1.4</span> Un exemple sur un cas simple: la régression avec une fonction de perte quadratique</h3>
+<p>EST-CE UTILE?</p>
 </section>
 <section id="le-grand-ennemi-du-gradient-boosting-le-surajustement" class="level3" data-number="1.5">
 <h3 data-number="1.5" class="anchored" data-anchor-id="le-grand-ennemi-du-gradient-boosting-le-surajustement"><span class="header-section-number">1.5</span> Le grand ennemi du <em>gradient boosting</em>: le surajustement</h3>
@@ -441,21 +442,11 @@ C'est un problème très compliqué dès que $M$ est élevé! -->
 <ul>
 <li><p>la <strong>technique de réduction</strong> (<em>shrinkage technique</em>) consiste à réduire l’influence de chaque arbre sur le modèle global en multipliant la prédiction de cet arbre par un facteur d’échelle compris entre 0 et 1 au moment de mettre à jour le modèle par l’équation <a href="#eq-update-model" class="quarto-xref">6</a>. Ce facteur d’échelle est appelé <strong>taux d’apprentissage</strong> (<em>learning rate</em>); il s’agit du paramètre <span class="math inline">\(\eta\)</span> dans l’équation <a href="#eq-update-model" class="quarto-xref">6</a>. L’avantage principal de cette technique est que le modèle s’ajuste progressivement aux données, et est moins altéré par les erreurs dues à des variations aléatoires ou au bruit dans les données. Un taux d’apprentissage bas et un nombre d’itérations suffisant permettent souvent d’obtenir un modèle final plus performant sur des données de test. L’inconvénient est que réduire le taux d’apprentissage nécessite d’augmenter le nombre d’itérations pour obtenir des performances comparables, ce qui peut rallonger le temps d’entraînement.</p></li>
 <li><p>l’<strong>hyperparamètre de régularisation <span class="math inline">\(\lambda\)</span></strong> intervient dans l’équation <a href="#eq-w-j-optimal" class="quarto-xref">3</a> et réduit la valeur absolue des poids des feuilles terminales. Cet hyperparamètre contribue à ce que chaque arbre prévoie des valeurs peu élevées. L’intuition est la suivante: une feuille terminale qui contient un poids <span class="math inline">\(w_i\)</span> élevé en valeur absolue contient probablement des observations inhabituelles ou aberrantes (et dont le gradient <span class="math inline">\(g_i\)</span> prend une valeur extrême); il est donc préférable de réduire légèrement ce poids pour ne pas donner trop d’importance à des points aberrants.</p></li>
-<li><p>l’<strong>hyperparamètre de régularisation <span class="math inline">\(\gamma\)</span></strong> intervient dans l’équation <a href="#eq-fct-eval-split" class="quarto-xref">5</a></p></li>
-<li><p><span class="math inline">\(\gamma\)</span>: privilégier les arbres courts et les <em>splits</em> porteurs de sens;</p></li>
-<li><p>la dernière approche consiste à entraîner les <em>weak learners</em> sur un sous-échantillon d’observation et/ou de variables.</p></li>
+<li><p>l’<strong>hyperparamètre de régularisation <span class="math inline">\(\gamma\)</span></strong> intervient dans l’équation <a href="#eq-fct-eval-split" class="quarto-xref">5</a>. Ce paramètre mesure la réduction minimale de la perte requise pour qu’un nœud soit divisé; une valeur plus élevée aboutit à des arbres moins profonds et contribue à limiter le surajustement en empêchant l’algorithme de créer des <em>splits</em> dont l’apport est très faible et potentiellement dû à des variations non significatives des données d’entraînement.</p></li>
+<li><p>la dernière approche consiste à <strong>entraîner les arbres sur un échantillon d’observations et/ou de variables</strong>. L’échantillonnage des observations permet de réduire l’influence des éventuels points extrêmes contenus dans les données (car ils n’apparaissent pas dans les données d’entraînement de certains arbres); l’échantillonnage des variables permet de varier les variables utilisées dans les <em>splits</em>.</p></li>
 </ul>
-<section id="les-moyens-de-lutter-contre-loverfitting" class="level4" data-number="1.5.1">
-<h4 data-number="1.5.1" class="anchored" data-anchor-id="les-moyens-de-lutter-contre-loverfitting"><span class="header-section-number">1.5.1</span> Les moyens de lutter contre l’<em>overfitting</em>:</h4>
-<ul>
-<li>le <em>shrinkage</em>;</li>
-<li>le subsampling des lignes et des colonnes;</li>
-<li><span class="math inline">\(\lambda\)</span>: privilégier les poids faibles;</li>
-<li><span class="math inline">\(\gamma\)</span>: privilégier les arbres courts et les <em>splits</em> porteurs de sens.</li>
-</ul>
-</section>
-<section id="la-préparation-des-données" class="level4" data-number="1.5.2">
-<h4 data-number="1.5.2" class="anchored" data-anchor-id="la-préparation-des-données"><span class="header-section-number">1.5.2</span> La préparation des données</h4>
+<section id="la-préparation-des-données" class="level4" data-number="1.5.1">
+<h4 data-number="1.5.1" class="anchored" data-anchor-id="la-préparation-des-données"><span class="header-section-number">1.5.1</span> La préparation des données</h4>
 <ul>
 <li>les variables catégorielles:
 <ul>
@@ -469,7 +460,7 @@ C'est un problème très compliqué dès que $M$ est élevé! -->
 </ul></li>
 </ul>
 </section>
-<section id="les-fonctions-de-perte" class="level4" data-number="1.5.3">
+<section id="les-fonctions-de-perte" class="level4" data-number="1.5.2">
 
 
 
@@ -479,7 +470,7 @@ C'est un problème très compliqué dès que $M$ est élevé! -->
 </section>
 
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">1.5.3 Les fonctions de perte</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">1.5.2 Les fonctions de perte</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-breiman1998rejoinder" class="csl-entry" role="listitem">
 Breiman, Leo. 1998. <span>“Rejoinder: Arcing Classifiers.”</span> <em>The Annals of Statistics</em> 26 (3): 841–49.
 </div>
