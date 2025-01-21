@@ -120,7 +120,7 @@ Un point essentiel est que __toute la mécanique du _gradient boosting_ est ind�
 
 #### Isoler le $t$-ième arbre
 
-La fonction-objectif introduite précédemment est très complexe et ne peut être utilisée directement pour entraîner le modèle, car il faudrait entraîner tous les arbres en même temps. On reformule donc cette fonction objectif de façon à isoler le $t$-ième arbre, qui pourra ensuite être entraîné seul, une fois que les $t-1$ arbres précédents auront été entraînés. Pour cela, on note $\hat{y}_i^{(t)}$ la prédiction à l'issue de l'étape $t$: $\hat{y}_i^{(t)} = \sum_{j=1}^t f_j(\mathbf{x}_i)$, et on note $\mathcal{L}^{(t)}$ la fonction-objectif au moment de l'entraînement du $t$-ième arbre:
+La fonction-objectif introduite précédemment est très complexe et ne peut être utilisée directement pour entraîner le modèle, car il faudrait entraîner tous les arbres en même temps. On reformule donc cette fonction objectif de façon à isoler le $t$-ième arbre, qui pourra ensuite être entraîné seul, une fois que les $t-1$ arbres précédents auront été entraînés. Pour cela, on note $F_t(x) = \hat{y}_i^{(t)}$ la prédiction à l'issue de l'étape $t$: $\hat{y}_i^{(t)} = \sum_{k=1}^t f_k(\mathbf{x}_i)$, et on note $\mathcal{L}^{(t)}$ la fonction-objectif au moment de l'entraînement du $t$-ième arbre:
 
 $$
 \begin{aligned}
