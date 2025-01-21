@@ -151,7 +151,7 @@ $$ {#eq-fct-obj-final}
 
 #### Calculer les poids optimaux
 
-A partir de l'équation @eq-fct-obj-final, il est possible de faire apparaître les poids $w_j$ du $t$-ième arbre. Pour un arbre donné comprenant $T$ feuilles ($q: \mathbb{R}^T \rightarrow \{1, \dots, T\}$), on définit $I_j = \{ i | q(\mathbf{x}_i) = j \}$ l'ensemble des observations situées sur la feuille $j$, et $w_j$ la valeur prédite par l'arbre pour la feuille $j$. Avec cette notation, on réorganise $\mathcal{\tilde{L}}^{(t)}$ en regroupant les observations par feuille:
+A partir de l'équation @eq-fct-obj-final, il est possible de faire apparaître les poids $w_j$ du $t$-ième arbre. Pour un arbre donné comprenant $T$ feuilles ($q: \mathbb{R}^T \rightarrow \{1, \dots, T\}$), on définit $I_j = \{ i | q(\mathbf{x}_i) = j \}$ l'ensemble des observations situées sur la feuille terminale $j$, et $w_j$ la valeur prédite par l'arbre pour la feuille $j$. Avec cette notation, on réorganise $\mathcal{\tilde{L}}^{(t)}$ en regroupant les observations selon la feuille terminale à laquelle elles appartiennent:
 
 $$
 \begin{align*}
