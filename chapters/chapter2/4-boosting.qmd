@@ -55,10 +55,13 @@ L'algorithme Adaboost a été au coeur de la littérature sur le *boosting* à l
 
 La *Gradient Boosting Machine* (GBM) propose une approche assez différente: elle introduit le *gradient boosting* en reformulant le *boosting* sous la forme d'un problème de descente de gradient. Voici une esquisse du fonctionnement de la *Gradient Boosting Machine*:
 
--   Un premier modèle simple est entraîné sur les données d'entraînement, de façon à minimiser une fonction de perte qui mesure l'écart entre la variable à prédire et la prédiction du modèle.
--   A l'issue de cette première itération, on calcule la dérivée partielle (*gradient*) de la fonction de perte par rapport à la prédiction en chaque point de l'ensemble d'entraînement. Ce gradient indique à la fois dans quelle direction et dans quelle ampleur la prédiction devrait être modifiée afin de réduire la perte.
--   A la deuxième itération, on ajoute un deuxième modèle qui va tâcher d'améliorer le modèle complet en prédisant le mieux possible l'opposé de ce gradient.
--   Ce deuxième modèle est ajouté au premier, puis on recalcule la dérivée partielle de la fonction de perte par rapport à la prédiction de ce nouveau modèle.
+-   Le modèle global est initialisé à partir des données d'entraînement. A ce stade, le modèle prédit en général la moyenne de la variable-cible.
+-   A l'issue de cette initialisation, on calcule la dérivée partielle (*gradient*) de la fonction de perte par rapport à la prédiction pour chaque observation de l'ensemble d'entraînement. Cette dérivée partielle est parfois appelée __pseudo-résidu__. Ce gradient indique à la fois dans quelle direction et dans quelle ampleur la prédiction devrait être modifiée afin de réduire la perte.
+<!-- : si le gradient d'une observation est positif, il faut modifier à la baisse la prédiction associée à cette observation pour réduire la perte. -->
+-   Un premier arbre est entraîné à prédire l'opposé du gradient de la fonction de perte.
+-   Cet arbre est ajouté au modèle global (après multiplication par un facteur d'échelle).
+-   On recalcule la dérivée partielle de la fonction de perte par rapport aux nouvelles prédictions du modèle global qui vient d'être mis à jour.
+-   Un deuxième arbre est entraîné à prédire l'opposé du gradient de la fonction de perte, puis est ajouté au modèle global.
 -   Cette procédure est répétée en ajoutant de nouveaux modèles et en recalculant le gradient à chaque étape.
 -   La qualité du modèle final est évaluée sur un ensemble de test.
 
