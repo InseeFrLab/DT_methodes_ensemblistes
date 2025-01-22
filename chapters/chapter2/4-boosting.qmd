@@ -55,7 +55,7 @@ L'algorithme Adaboost a été au coeur de la littérature sur le *boosting* à l
 
 La *Gradient Boosting Machine* (GBM) propose une approche assez différente: elle introduit le *gradient boosting* en reformulant le *boosting* sous la forme d'un problème de descente de gradient. Voici une esquisse du fonctionnement de la *Gradient Boosting Machine*:
 
--   Le modèle global est initialisé à partir des données d'entraînement. A ce stade, le modèle prédit en général la moyenne de la variable-cible.
+-   Le modèle global est __initialisé__ à partir des données d'entraînement. A ce stade, le modèle prédit en général la moyenne de la variable-cible pour toutes les observations.
 -   A l'issue de cette initialisation, on calcule la dérivée partielle (*gradient*) de la fonction de perte par rapport à la prédiction pour chaque observation de l'ensemble d'entraînement. Cette dérivée partielle est parfois appelée __pseudo-résidu__. Ce gradient indique à la fois dans quelle direction et dans quelle ampleur la prédiction devrait être modifiée afin de réduire la perte.
 <!-- : si le gradient d'une observation est positif, il faut modifier à la baisse la prédiction associée à cette observation pour réduire la perte. -->
 -   Un premier arbre est entraîné à prédire l'opposé du gradient de la fonction de perte.
