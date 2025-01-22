@@ -335,14 +335,20 @@ C'est un problème très compliqué dès que $M$ est élevé! -->
 <h4 data-number="1.2.2" class="anchored" data-anchor-id="linvention-du-boosting-boosting-la-gradient-boosting-machine"><span class="header-section-number">1.2.2</span> L’invention du <em>boosting boosting</em> : la <em>Gradient Boosting Machine</em></h4>
 <p>La <em>Gradient Boosting Machine</em> (GBM) propose une approche assez différente: elle introduit le <em>gradient boosting</em> en reformulant le <em>boosting</em> sous la forme d’un problème de descente de gradient. Voici une esquisse du fonctionnement de la <em>Gradient Boosting Machine</em>:</p>
 <ul>
-<li>Le modèle global est <strong>initialisé</strong> à partir des données d’entraînement. A ce stade, le modèle prédit en général la moyenne de la variable-cible pour toutes les observations.</li>
-<li>A l’issue de cette initialisation, on calcule la dérivée partielle (<em>gradient</em>) de la fonction de perte par rapport à la prédiction pour chaque observation de l’ensemble d’entraînement. Cette dérivée partielle est parfois appelée <strong>pseudo-résidu</strong>. Ce gradient indique à la fois dans quelle direction et dans quelle ampleur la prédiction devrait être modifiée afin de réduire la perte. <!-- : si le gradient d'une observation est positif, il faut modifier à la baisse la prédiction associée à cette observation pour réduire la perte. --></li>
+<li><p>Le modèle global est <strong>initialisé</strong> à partir des données d’entraînement. A ce stade, le modèle prédit en général la moyenne de la variable-cible pour toutes les observations.</p></li>
+<li><p>Première itération de <em>boosting</em>:</p>
+<ul>
+<li>On calcule la dérivée partielle (<em>gradient</em>) de la fonction de perte par rapport à la prédiction pour chaque observation de l’ensemble d’entraînement. Cette dérivée partielle est parfois appelée <strong>pseudo-résidu</strong>. Ce gradient indique à la fois dans quelle direction et dans quelle ampleur la prédiction devrait être modifiée afin de réduire la perte.</li>
 <li>Un premier arbre est entraîné à prédire l’opposé du gradient de la fonction de perte.</li>
 <li>Cet arbre est ajouté au modèle global (après multiplication par un facteur d’échelle).</li>
-<li>On recalcule la dérivée partielle de la fonction de perte par rapport aux nouvelles prédictions du modèle global qui vient d’être mis à jour.</li>
+</ul></li>
+<li><p>Deuxième itération de <em>boosting</em>:</p>
+<ul>
+<li>On calcule la dérivée partielle de la fonction de perte par rapport aux nouvelles prédictions du modèle global qui vient d’être mis à jour.</li>
 <li>Un deuxième arbre est entraîné à prédire l’opposé du gradient de la fonction de perte, puis est ajouté au modèle global.</li>
-<li>Cette procédure est répétée en ajoutant de nouveaux modèles et en recalculant le gradient à chaque étape.</li>
-<li>La qualité du modèle final est évaluée sur un ensemble de test.</li>
+</ul></li>
+<li><p>Cette procédure est répétée en ajoutant de nouveaux modèles et en recalculant le gradient à chaque étape.</p></li>
+<li><p>La qualité du modèle final est évaluée sur un ensemble de test.</p></li>
 </ul>
 <p>La mécanique de la <em>Gradient Boosting Machine</em> est résumée de façon plus formelle dans l’algorithem REFERENCE.</p>
 <p>Commentaire: On pourrait peut-être donner la version formelle de la GBM, mais c’est peut-être inutile. 1. Initialiser le modèle avec <span class="math inline">\(f_0\left(\mathbf{x}\right) = y_0\)</span>. 2. Pour <span class="math inline">\(m = 1, \dots, M:\)</span> (a) Entraîner le <span class="math inline">\(m\)</span>-ième modèle: $ (<em>m, <em>m) = </em>{, } </em>{i=1}^N L(y_i, f_{m-1}(_i) + b(_i, )) $ (b) Définir <span class="math inline">\(f_m\left(\mathbf{x}\right) = f_{m-1}\left(\mathbf{x}\right) + \hat{\beta}_m b\left(\mathbf{x}_i, \mathbf{\hat{\theta}_m}\right)\)</span></p>
