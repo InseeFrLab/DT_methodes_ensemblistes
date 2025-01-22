@@ -335,7 +335,7 @@ C'est un problème très compliqué dès que $M$ est élevé! -->
 <h4 data-number="1.2.2" class="anchored" data-anchor-id="linvention-du-boosting-boosting-la-gradient-boosting-machine"><span class="header-section-number">1.2.2</span> L’invention du <em>boosting boosting</em> : la <em>Gradient Boosting Machine</em></h4>
 <p>La <em>Gradient Boosting Machine</em> (GBM) propose une approche assez différente: elle introduit le <em>gradient boosting</em> en reformulant le <em>boosting</em> sous la forme d’un problème de descente de gradient. Voici une esquisse du fonctionnement de la <em>Gradient Boosting Machine</em>:</p>
 <ul>
-<li>Le modèle global est initialisé à partir des données d’entraînement. A ce stade, le modèle prédit en général la moyenne de la variable-cible.</li>
+<li>Le modèle global est <strong>initialisé</strong> à partir des données d’entraînement. A ce stade, le modèle prédit en général la moyenne de la variable-cible pour toutes les observations.</li>
 <li>A l’issue de cette initialisation, on calcule la dérivée partielle (<em>gradient</em>) de la fonction de perte par rapport à la prédiction pour chaque observation de l’ensemble d’entraînement. Cette dérivée partielle est parfois appelée <strong>pseudo-résidu</strong>. Ce gradient indique à la fois dans quelle direction et dans quelle ampleur la prédiction devrait être modifiée afin de réduire la perte. <!-- : si le gradient d'une observation est positif, il faut modifier à la baisse la prédiction associée à cette observation pour réduire la perte. --></li>
 <li>Un premier arbre est entraîné à prédire l’opposé du gradient de la fonction de perte.</li>
 <li>Cet arbre est ajouté au modèle global (après multiplication par un facteur d’échelle).</li>
