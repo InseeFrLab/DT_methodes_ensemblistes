@@ -17,10 +17,16 @@ project:
     - chapters/chapter3/2-guide_usage_RF.qmd
     - chapters/chapter3/3-guide_usage_GB.qmd
     - pdf/dt_methodes_ensemblistes.qmd
-    - pdf/partie_toute_redigee.qmd
   resources: 
     - "*.svg"
 
+author:
+  - name: Mélina Hillion
+    url: https://github.com/melinahillion
+    email: melina.hillion@insee.fr
+  - name: Olivier Meslin
+    url: https://github.com/oliviermeslin
+    email: olivier.meslin@insee.fr
 
 website: 
   page-navigation: true
