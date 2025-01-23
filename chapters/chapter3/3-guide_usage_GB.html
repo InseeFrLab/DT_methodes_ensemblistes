@@ -540,13 +540,18 @@ Figure&nbsp;1
 <li><code>max_cat_threshold</code> : garder la valeur par défaut.</li>
 </ul></li>
 <li><p><strong>Définir le jeu de données utilisé pour la validation des hyperparamètres</strong>: indépendamment de la méthode d’optimisation des hyperparamètres (<em>grid search</em>, <em>random search</em>…), deux approches sont envisageables pour la validation des hyperparamètres: soit une validation croisée (par exemple avec la fonction <code>GridSearchCV</code> de <code>scikit-learn</code>), soit l’utilisation d’un ensemble de validation (dite approche <em>holdout</em>). La validation croisée est censée être plus robuste que l’utilisation d’un ensemble de validation, mais elle est coûteuse sur le plan computationnel (car il faut entraîner plusieurs fois un modèle pour chaque vecteur d’hyperparamètres). L’utilisation d’un ensemble de validation présente un intérêt si les données utilisées sont volumineuses (au-delà de plusieurs centaines de milliers d’observations) car elle offre un gain de temps appréciable pour une perte de précision souvent négligeable.</p></li>
+<li><p><strong>Utiliser l’<em>early stopping</em> avec l’ensemble de validation</strong>.</p></li>
 </ul>
 </section>
 <section id="optimiser-les-hyperparamètres" class="level3" data-number="1.3.2">
 <h3 data-number="1.3.2" class="anchored" data-anchor-id="optimiser-les-hyperparamètres"><span class="header-section-number">1.3.2</span> Optimiser les hyperparamètres</h3>
 <p>Voici une procédure simple pour optimiser les hyperparamètres d’un algorithme de <em>gradient boosting</em>. Elle ne garantit pas l’obtention d’un modèle optimal, mais elle est lisible et permet d’obtenir rapidement un modèle raisonnablement performant.</p>
 <ul>
-<li><strong>Ajuster conjointement le nombre d’arbres et le taux d’apprentissage</strong>.</li>
+<li><strong>Optimiser conjointement le nombre d’arbres et le taux d’apprentissage</strong>. Attention c’est long. Gridsearch avec ou sans CV, avec <em>early stopping</em>, avec des valeurs raisonnables pour les principaux HP. Nombre d’arbres: variable, <em>learning rate</em>: [0.05, 0.1, 0.15, 0.2]. Recommencer si le nombre d’arbres n’était pas suffisant. Une fois défini le bon nombre d’arbres, mettre 20% de plus.</li>
+</ul>
+<p>Pour les étapes suivantes: reprendre les étapes présentées <a href="https://medium.com/optuna/lightgbm-tuner-new-optuna-integration-for-hyperparameter-optimization-8b7095e99258">ici</a>.</p>
+<p>Regarder cette vidéo: https://www.bilibili.com/video/BV1DE41167cu/</p>
+<ul>
 <li><strong>Ajuster la complexité des arbres</strong>.</li>
 <li><strong>Ajuster les hyperparamètres de lutte contre le surajustement</strong>.</li>
 <li><strong>Entraîner du modèle final</strong>: entraîner une forêt aléatoire avec les hyperparamètres optimisés déduits des étapes précédentes.</li>
