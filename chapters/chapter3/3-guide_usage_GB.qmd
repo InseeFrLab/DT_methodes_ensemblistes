@@ -122,13 +122,20 @@ Proposer une procédure pour l'optimisation des hyperparamètres s'avère plus d
 
 - __Définir le jeu de données utilisé pour la validation des hyperparamètres__: indépendamment de la méthode d'optimisation des hyperparamètres (_grid search_, _random search_...), deux approches sont envisageables pour la validation des hyperparamètres: soit une validation croisée (par exemple avec la fonction `GridSearchCV` de `scikit-learn`), soit l'utilisation d'un ensemble de validation (dite approche _holdout_). La validation croisée est censée être plus robuste que l'utilisation d'un ensemble de validation, mais elle est coûteuse sur le plan computationnel (car il faut entraîner plusieurs fois un modèle pour chaque vecteur d'hyperparamètres). L'utilisation d'un ensemble de validation présente un intérêt si les données utilisées sont volumineuses (au-delà de plusieurs centaines de milliers d'observations) car elle offre un gain de temps appréciable pour une perte de précision souvent négligeable.
 
+- __Utiliser l'_early stopping_ avec l'ensemble de validation__.
+
 ### Optimiser les hyperparamètres
 
 Voici une procédure simple pour optimiser les hyperparamètres d'un algorithme de _gradient boosting_. Elle ne garantit pas l'obtention d'un modèle optimal, mais elle est lisible et permet d'obtenir rapidement un modèle raisonnablement performant. 
 
 
 
-- __Ajuster conjointement le nombre d'arbres et le taux d'apprentissage__.
+- __Optimiser conjointement le nombre d'arbres et le taux d'apprentissage__. Attention c'est long. Gridsearch avec ou sans CV, avec _early stopping_, avec des valeurs raisonnables pour les principaux HP. Nombre d'arbres: variable, _learning rate_: [0.05, 0.1, 0.15, 0.2]. Recommencer si le nombre d'arbres n'était pas suffisant. Une fois défini le bon nombre d'arbres, mettre 20% de plus.
+
+Pour les étapes suivantes: reprendre les étapes présentées [ici](https://medium.com/optuna/lightgbm-tuner-new-optuna-integration-for-hyperparameter-optimization-8b7095e99258).
+
+Regarder cette vidéo: https://www.bilibili.com/video/BV1DE41167cu/
+
 - __Ajuster la complexité des arbres__.
 - __Ajuster les hyperparamètres de lutte contre le surajustement__.
 - __Entraîner du modèle final__: entraîner une forêt aléatoire avec les hyperparamètres optimisés déduits des étapes précédentes.
