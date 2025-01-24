@@ -120,7 +120,7 @@ Proposer une procédure pour l'optimisation des hyperparamètres s'avère plus d
     - `max_cat_to_onehot`        : garder la valeur par défaut;
     - `max_cat_threshold`        : garder la valeur par défaut.
 
-- __Définir le jeu de données utilisé pour la validation des hyperparamètres__: indépendamment de la méthode d'optimisation des hyperparamètres (_grid search_, _random search_...), deux approches sont envisageables pour la validation des hyperparamètres: soit une validation croisée (par exemple avec la fonction `GridSearchCV` de `scikit-learn`), soit l'utilisation d'un ensemble de validation (dite approche _holdout_). La validation croisée est censée être plus robuste que l'utilisation d'un ensemble de validation, mais elle est coûteuse sur le plan computationnel (car il faut entraîner plusieurs fois un modèle pour chaque vecteur d'hyperparamètres). L'utilisation d'un ensemble de validation présente un intérêt si les données utilisées sont volumineuses (au-delà de plusieurs centaines de milliers d'observations) car elle offre un gain de temps appréciable pour une perte de précision souvent négligeable.
+- __Définir le jeu de données utilisé pour la validation des hyperparamètres__: indépendamment de la méthode d'optimisation des hyperparamètres (_grid search_, _random search_...), deux approches sont envisageables pour la validation des hyperparamètres: soit une validation croisée (par exemple avec la fonction `GridSearchCV` de `scikit-learn`), soit l'utilisation d'un ensemble de validation (dite approche _holdout_). L'utilisation d'un ensemble de validation est recommandée si les données utilisées sont volumineuses (au-delà de plusieurs centaines de milliers d'observations) car elle offre un gain de temps appréciable pour une perte de précision souvent négligeable. La validation croisée est censée être plus robuste que l'utilisation d'un ensemble de validation, mais elle est coûteuse sur le plan computationnel (car il faut entraîner plusieurs fois un modèle pour chaque vecteur d'hyperparamètres).
 
 - __Utiliser l'_early stopping_ avec l'ensemble de validation__.
 
@@ -128,9 +128,18 @@ Proposer une procédure pour l'optimisation des hyperparamètres s'avère plus d
 
 Voici une procédure simple pour optimiser les hyperparamètres d'un algorithme de _gradient boosting_. Elle ne garantit pas l'obtention d'un modèle optimal, mais elle est lisible et permet d'obtenir rapidement un modèle raisonnablement performant. 
 
+- __Optimiser conjointement le nombre d'arbres et le taux d'apprentissage__. Le principe est le suivant: on évalue les performances de différents couples de valeurs (nombre d'arbres, taux d'apprentissage) avec des valeurs raisonnables pour les autres hyperparamètres. Il y a deux approches:
+
+    - Évaluer conjointement les couples de valeurs (nombre d'arbres, taux d'apprentissage). Par exemple, on évalue les performances du modèle en testant les valeurs `[100, 200, 500, 1000]` pour le nombre d'arbres, et `[0.05, 0.1, 0.15, 0.2]` pour le taux d'apprentissage. On retient finalement le taux d'apprentissage et le nombre d'arbres du modèle le plus performant. Si l'un de ces hyperparamètres est la valeur minimale ou maximale testée (par exemple 1000 arbres, ou 0.05 pour le taux d'apprentissage), alors il est préférable de recommencer l'exercice en ajustant la liste des valeurs possibles (car le nombre optimal d'arbres est probablement supérieur à 1000).
+    - Mettre un nombre d'arbres très élevé et tester uniquement des valeurs du taux d'apprentissage. Par exemple, on fixe à 50000 le nombre d'arbres, et on teste les valeurs `[0.05, 0.1, 0.15, 0.2]` pour le taux d'apprentissage. Il est __indispensable__ d'utiliser l'_early stopping_ dans cette approche. L'intuition est la suivante: pour chaque valeur possible du taux d'apprentissage, on laisse l'entraînement se prolonger jusqu'à ce que les performances cessent de s'améliorer sur l'ensemble de validation. Chaque modèle entraîné se résume par trois informations: le taux d'apprentissage testé, le nombre d'arbres auquel l'entraînement s'est arrêté, et la performance sur l'ensemble de validation. On retient finalement le taux d'apprentissage et le nombre d'arbres du modèle le plus performant.
+    
+
+Gridsearch avec ou sans CV, avec _early stopping_, avec des valeurs raisonnables pour les principaux hyperparamètres. Nombre d'arbres: `[100, 200, 500, 1000]`, _learning rate_: `[0.05, 0.1, 0.15, 0.2]`. Si l'un des hyperparamètres considérés comme optimal est la valeur minimale ou maximale (1000 arbres dans l'exemple précédent, ou 0.05 pour ), alors il est préférable de recommencer l'exercice en ajustant la liste des valeurs possibles.
+
+Attention, il est essentiel d'utiliser l'_early stopping_
 
 
-- __Optimiser conjointement le nombre d'arbres et le taux d'apprentissage__. Attention c'est long. Gridsearch avec ou sans CV, avec _early stopping_, avec des valeurs raisonnables pour les principaux HP. Nombre d'arbres: variable, _learning rate_: [0.05, 0.1, 0.15, 0.2]. Recommencer si le nombre d'arbres n'était pas suffisant. Une fois défini le bon nombre d'arbres, mettre 20% de plus.
+ si le nombre d'arbres n'était pas suffisant. Une fois défini le bon nombre d'arbres, mettre 20% de plus.
 
 Pour les étapes suivantes: reprendre les étapes présentées [ici](https://medium.com/optuna/lightgbm-tuner-new-optuna-integration-for-hyperparameter-optimization-8b7095e99258).
 
