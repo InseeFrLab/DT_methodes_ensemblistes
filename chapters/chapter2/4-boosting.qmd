@@ -79,7 +79,7 @@ L'approche de *gradient boosting* proposée par @friedman2001greedy présente de
 
 ## Présentation formelle de la _Gradient Boosting Machine_
 
-On dispose d'un jeu de données ${(x_i, y_i)}_{i=1}^n$ avec $x_i \in \mathbb{R}^m$ et une cible $y_i$. On définit une fonction de perte $l$ qui mesure la distance entre la prédiction $\hat{y}$ et la vraie valeur $y$. Elle présente généralement les propriétés suivantes: elle est convexe et dérivable deux fois, et atteint son minimum lorsque $\hat{y} = y$. On veut entraîner un modèle comprenant $m$ arbres:
+On dispose d'un jeu de données ${(x_i, y_i)}_{i=1}^n$ avec $x_i \in \mathbb{R}^m$ et une cible $y_i$. On définit une fonction de perte $l$ qui mesure la distance entre la prédiction $\hat{y}$ et la vraie valeur $y$. Elle présente généralement les propriétés suivantes: elle est convexe et dérivable deux fois, et atteint son minimum lorsque $\hat{y} = y$. On veut entraîner un modèle comprenant $m$ arbres, chacun étant défini par les paramètres $\mathbf{a_m}$ (règles de décision et valeurs des feuilles terminales):
 
 $$ \hat{y}_{i} =F\left(\mathbf{x}_i\right) = \sum_{k=1}^{K} f_k\left(\mathbf{x}_i\right) $$
 
@@ -87,7 +87,7 @@ Procédure de construction du mo:
 1.  Initialiser le modèle avec $F_0\left(\mathbf{x}\right) = f_0\left(\mathbf{x}\right) = \frac{1}{n}\sum_{i=1}^n y_i$.
 2.  Pour $m = 1, \dots, M:$
     (a) Calculer le gradient (les pseudo-résidus) à l'issue des $m-1$ étapes précédentes: $ g_{im} = \frac{\partial l(y_i, F_{m-1}\left(\mathbf{x}\right))}{\partial F_{m-1}\left(\mathbf{x}\right)} $
-    (b) Entraîner le $m$-ième _weak learner_: on cherche l'arbre $f_m$ défini par les paramètres $\mathbf{a_m}$ qui prédit le mieux l'opposé du gradient de la fonction de perte:
+    (b) Entraîner le $m$-ième _weak learner_: on cherche l'arbre $f_m$ qui prédit le mieux l'opposé du gradient de la fonction de perte:
     $ \mathbf{\hat{a}_m} = \underset{\mathbf{a}}{\arg \min} \sum_{i=1}^n \left(- g_{im} - f_m\left(\mathbf{x}_i, \mathbf{a}\right)\right)^2 $
     (c) Mettre à jour le modèle global: $F_m\left(\mathbf{x}\right) = F_{m-1}\left(\mathbf{x}\right) + \rho f_m\left(\mathbf{x}_i, \mathbf{\hat{a}_m}\right)$
 
