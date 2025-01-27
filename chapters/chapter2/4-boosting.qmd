@@ -53,39 +53,45 @@ L'algorithme Adaboost a été au coeur de la littérature sur le *boosting* à l
 
 #### L'invention du *boosting boosting* : la *Gradient Boosting Machine*
 
-La *Gradient Boosting Machine* (GBM) propose une approche assez différente: elle introduit le *gradient boosting* en reformulant le *boosting* sous la forme d'un problème de descente de gradient. Voici une esquisse du fonctionnement de la *Gradient Boosting Machine*:
+La *Gradient Boosting Machine* (GBM) propose une approche assez différente: elle introduit le *gradient boosting* en reformulant le *boosting* sous la forme d'un problème d'optimisation qui se résout par une approche itérative de descente de gradient. Cette approche repose entièrement sur la notion de __fonction de perte__, qui mesure l'écart entre la variable-cible et la prédiction du modèle. La mécanique de la *Gradient Boosting Machine* est présentée de façon formelle dans l'encadré @gbm-pseudocode; en voici une présentation intuitive:
+
+<!-- -   Un premier modèle simple est entraîné sur les données d'entraînement, de façon à minimiser une fonction de perte qui mesure l'écart entre la variable à prédire et la prédiction du modèle.
+-   A l'issue de cette première itération, on calcule la dérivée partielle (*gradient*) de la fonction de perte par rapport à la prédiction en chaque point de l'ensemble d'entraînement. Ce gradient indique à la fois dans quelle direction et dans quelle ampleur la prédiction devrait être modifiée afin de réduire la perte.
+-   A la deuxième itération, on ajoute un deuxième modèle qui va tâcher d'améliorer le modèle complet en prédisant le mieux possible l'opposé de ce gradient.
+-   Ce deuxième modèle est ajouté au premier, puis on recalcule la dérivée partielle de la fonction de perte par rapport à la prédiction de ce nouveau modèle.
+-   Cette procédure est répétée en ajoutant de nouveaux modèles et en recalculant le gradient à chaque étape.
+-   La qualité du modèle final est évaluée sur un ensemble de test. -->
 
 -   Le modèle global est __initialisé__ à partir des données d'entraînement. A ce stade, le modèle prédit en général la moyenne de la variable-cible pour toutes les observations.
 -   Première itération de _boosting_:
 
-    -   On calcule la dérivée partielle (*gradient*) de la fonction de perte par rapport à la prédiction pour chaque observation de l'ensemble d'entraînement. Cette dérivée partielle est parfois appelée __pseudo-résidu__. Ce gradient indique à la fois dans quelle direction et dans quelle ampleur la prédiction devrait être modifiée afin de réduire la perte.
+    -   On calcule la dérivée partielle (*gradient*) de la fonction de perte par rapport à la prédiction pour chaque observation de l'ensemble d'entraînement. Cette dérivée partielle est parfois appelée __pseudo-résidu__. L'opposé de ce gradient indique à la fois dans quelle direction et dans quelle ampleur la prédiction devrait être modifiée afin de réduire la perte.
     -   Un premier arbre est entraîné à prédire l'opposé du gradient de la fonction de perte.
     -   Cet arbre est ajouté au modèle global (après multiplication par un facteur d'échelle).
     
-- Deuxième itération de _boosting_:    
-
-    -   On calcule la dérivée partielle de la fonction de perte par rapport aux nouvelles prédictions du modèle global qui vient d'être mis à jour.
-    -   Un deuxième arbre est entraîné à prédire l'opposé du gradient de la fonction de perte, puis est ajouté au modèle global.
+-   Deuxième itération de _boosting_: on calcule à nouveau la dérivée partielle de la fonction de perte par rapport aux nouvelles prédictions du modèle global, puis un deuxième arbre est entraîné à prédire l'opposé du gradient de la fonction de perte, et enfin cet arbre est ajouté au modèle global.
 -   Cette procédure est répétée en ajoutant de nouveaux modèles et en recalculant le gradient à chaque étape.
 -   La qualité du modèle final est évaluée sur un ensemble de test.
 
-La mécanique de la *Gradient Boosting Machine* est résumée de façon plus formelle dans l'algorithem REFERENCE.
-
-
-
-Commentaire: On pourrait peut-être donner la version formelle de la GBM, mais c'est peut-être inutile. 
-1.  Initialiser le modèle avec $f_0\left(\mathbf{x}\right) = y_0$.
-2.  Pour $m = 1, \dots, M:$
-    (a) Entraîner le $m$-ième modèle:
-    $ \left(\hat{\beta}_m, \hat{\theta}_m\right) = \argmin_{\beta, \mathbf{\theta}} \sum_{i=1}^N L\left(y_i, f_{m-1}\left(\mathbf{x}_i\right) + \beta b\left(\mathbf{x}_i, \mathbf{\theta}\right)\right) $
-    (b) Définir $f_m\left(\mathbf{x}\right) = f_{m-1}\left(\mathbf{x}\right) + \hat{\beta}_m b\left(\mathbf{x}_i, \mathbf{\hat{\theta}_m}\right)$
-
-
-
-
 L'approche de *gradient boosting* proposée par @friedman2001greedy présente deux grands avantages. D'une part, elle peut être utilisée avec n'importe quelle fonction de perte différentiable, ce qui permet d'appliquer le gradient boosting à de multiples problèmes (régression, classification binaire ou multiclasse, *learning-to-rank*...). D'autre part, elle offre souvent des performances comparables ou supérieures aux autres approches de *boosting*. Le *gradient boosting* d'arbres de décision (*Gradient boosted Decision Trees* - GBDT) est donc devenue l'approche de référence en matière de *boosting*: toutes les implémentations modernes du *gradient boosting* comme `scikit-learn`, `XGBoost`, `LightGBM`, et `CatBoost` sont des extensions et améliorations de la *Gradient Boosting Machine*.
 
-AJOUTER ICI LA GBM en pseudo-code
+::: {#gbm-pseudocode .callout-note}
+
+## Présentation formelle de la _Gradient Boosting Machine_
+
+On dispose d'un jeu de données ${(x_i, y_i)}_{i=1}^n$ avec $x_i \in \mathbb{R}^m$ et une cible $y_i$. On définit une fonction de perte $l$ qui mesure la distance entre la prédiction $\hat{y}$ et la vraie valeur $y$. Elle présente généralement les propriétés suivantes: elle est convexe et dérivable deux fois, et atteint son minimum lorsque $\hat{y} = y$. On veut entraîner un modèle comprenant $m$ arbres:
+
+$$ \hat{y}_{i} =F\left(\mathbf{x}_i\right) = \sum_{k=1}^{K} f_k\left(\mathbf{x}_i\right) $$
+
+Procédure de _boosting_:
+1.  Initialiser le modèle avec $F_0\left(\mathbf{x}\right) = f_0\left(\mathbf{x}\right) = y_0$.
+2.  Pour $m = 1, \dots, M:$
+    (a) Calculer le gradient (les pseudo-résidus) à l'issue des $m-1$ étapes précédentes: $ g_{im} = \frac{\partial l(y_i, F_{m-1}\left(\mathbf{x}\right))}{\partial F_{m-1}\left(\mathbf{x}\right)} $
+    (b) Entraîner le $m$-ième _weak learner_: on cherche l'arbre $f_m$ défini par les paramètres $\mathbf{a_m}$ qui prédit le mieux l'opposé du gradient de la fonction de perte:
+    $ \mathbf{\hat{a}_m} = \underset{\mathbf{a}}{\arg \min} \sum_{i=1}^n \left(- g_{im} - f_m\left(\mathbf{x}_i, \mathbf{a}\right)\right)^2 $
+    (c) Mettre à jour le modèle global: $F_m\left(\mathbf{x}\right) = F_{m-1}\left(\mathbf{x}\right) + \rho f_m\left(\mathbf{x}_i, \mathbf{\hat{a}_m}\right)$
+
+:::
 
 
 ### La mécanique du *gradient boosting*
