@@ -273,7 +273,7 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction"><span class="header-section-number">1.1</span> Introduction</a></li>
   <li><a href="#les-premières-approches-du-boosting" id="toc-les-premières-approches-du-boosting" class="nav-link" data-scroll-target="#les-premières-approches-du-boosting"><span class="header-section-number">1.2</span> Les premières approches du <em>boosting</em></a></li>
-  <li><a href="#la-mécanique-du-gradient-boosting" id="toc-la-mécanique-du-gradient-boosting" class="nav-link" data-scroll-target="#la-mécanique-du-gradient-boosting"><span class="header-section-number">1.3</span> La mécanique du <em>gradient boosting</em></a></li>
+  <li><a href="#les-implémentations-récentes-du-gradient-boosting" id="toc-les-implémentations-récentes-du-gradient-boosting" class="nav-link" data-scroll-target="#les-implémentations-récentes-du-gradient-boosting"><span class="header-section-number">1.3</span> Les implémentations récentes du <em>gradient boosting</em></a></li>
   <li><a href="#un-exemple-sur-un-cas-simple-la-régression-avec-une-fonction-de-perte-quadratique" id="toc-un-exemple-sur-un-cas-simple-la-régression-avec-une-fonction-de-perte-quadratique" class="nav-link" data-scroll-target="#un-exemple-sur-un-cas-simple-la-régression-avec-une-fonction-de-perte-quadratique"><span class="header-section-number">1.4</span> Un exemple sur un cas simple: la régression avec une fonction de perte quadratique</a></li>
   <li><a href="#le-grand-ennemi-du-gradient-boosting-le-surajustement" id="toc-le-grand-ennemi-du-gradient-boosting-le-surajustement" class="nav-link" data-scroll-target="#le-grand-ennemi-du-gradient-boosting-le-surajustement"><span class="header-section-number">1.5</span> Le grand ennemi du <em>gradient boosting</em>: le surajustement</a></li>
   </ul></li>
@@ -321,24 +321,11 @@ window.Quarto = {
 -   Le modèle final est la combinaison de l'ensemble des modèles simples. -->
 <p>En termes plus techniques, les différentes variantes du <em>boosting</em> partagent toutes trois caractéristiques communes:</p>
 <ul>
-<li>Ils visent à <strong>trouver une approximation</strong> <span class="math inline">\(\hat{F}\)</span> d’une fonction inconnue <span class="math inline">\(F^{\ast}: \mathbf{x} \mapsto y\)</span> à partir d’un ensemble d’entraînement <span class="math inline">\((y_i, \mathbf{x_i})_{i= 1,\dots,n}\)</span>;</li>
-<li>Ils supposent que la fonction <span class="math inline">\(F^{\ast}\)</span> peut être approchée par une <strong>somme pondérée de modèles simples</strong> <span class="math inline">\(f\)</span> de paramètres <span class="math inline">\(\theta\)</span>:</li>
+<li><p>Ils visent à <strong>trouver une approximation</strong> <span class="math inline">\(\hat{F}\)</span> d’une fonction inconnue <span class="math inline">\(F^{\ast}: \mathbf{x} \mapsto y\)</span> à partir d’un ensemble d’entraînement <span class="math inline">\((y_i, \mathbf{x_i})_{i= 1,\dots,n}\)</span>;</p></li>
+<li><p>Ils supposent que la fonction <span class="math inline">\(F^{\ast}\)</span> peut être approchée par une <strong>somme pondérée de modèles simples</strong> <span class="math inline">\(f\)</span> de paramètres <span class="math inline">\(\theta\)</span>: <span class="math display">\[ F\left(\mathbf{x}\right) = \sum_{m=1}^M \beta_m f\left(\mathbf{x}, \mathbf{\theta}_m\right) \]</span></p></li>
+<li><p>Ils reposent sur une <strong>modélisation additive par étapes</strong> (<em>forward stagewise additive modeling</em>), qui décompose l’entraînement de ce modèle complexe en une <strong>séquence d’entraînements de petits modèles</strong>. Chaque étape de l’entraînement cherche le modèle simple <span class="math inline">\(f\)</span> qui améliore la puissance prédictive du modèle complet, sans modifier les modèles précédents, puis l’ajoute de façon incrémentale à ces derniers:</p></li>
 </ul>
-<p>$ F() = _{m=1}^M _m f(, _m) $</p>
-<ul>
-<li>Ils reposent sur une <strong>modélisation additive par étapes</strong> (<em>forward stagewise additive modeling</em>), qui décompose l’entraînement de ce modèle complexe en une <strong>séquence d’entraînements de petits modèles</strong>. Chaque étape de l’entraînement cherche le modèle simple <span class="math inline">\(f\)</span> qui améliore la puissance prédictive du modèle complet, sans modifier les modèles précédents, puis l’ajoute de façon incrémentale à ces derniers:</li>
-</ul>
-<p>$ F_m() = F_{m-1}() + _m f(_i, ) $</p>
-<!-- Imaginons qu'on veuille entraîner le modèle suivant:
-
-$F\left(\mathbf{x}\right) = \sum_{m=1}^M \beta_m f\left(\mathbf{x}, \mathbf{\theta}_m\right)$
-
-
-$\hat{F}$ est caractérisée par les paramètres $\{\beta_m, \mathbf{\theta}_m\}_{m=1}^{M}$ tels que
-$\argmin_{\{\beta_m, \mathbf{\theta}_m\}_{m=1}^{M}} \sum_{i=1}^N L\left(y_i, \sum_{m=1}^M \beta_m f\left(\mathbf{x}_i, \mathbf{\theta}_m\right)\right)$
-
-
-C'est un problème très compliqué dès que $M$ est élevé! -->
+<p><span class="math display">\[ F_m(\mathbf{x}) = F_{m-1}(\mathbf{x}) + \hat{\beta}_m f(\mathbf{x}_i, \mathbf{\hat{\theta}_m}) \]</span></p>
 <p>METTRE ICI UNE FIGURE EN UNE DIMENSION, avec des points et des modèles en escalier qui s’affinent.</p>
 </section>
 <section id="les-premières-approches-du-boosting" class="level3" data-number="1.2">
@@ -389,14 +376,23 @@ Présentation formelle de la <em>Gradient Boosting Machine</em>
 <div class="callout-body-container callout-body">
 <p>On dispose d’un jeu de données <span class="math inline">\({(x_i, y_i)}_{i=1}^n\)</span> avec <span class="math inline">\(x_i \in \mathbb{R}^m\)</span> et une cible <span class="math inline">\(y_i\)</span>. On définit une fonction de perte <span class="math inline">\(l\)</span> qui mesure la distance entre la prédiction <span class="math inline">\(\hat{y}\)</span> et la vraie valeur <span class="math inline">\(y\)</span>. Elle présente généralement les propriétés suivantes: elle est convexe et dérivable deux fois, et atteint son minimum lorsque <span class="math inline">\(\hat{y} = y\)</span>. On veut entraîner un modèle comprenant <span class="math inline">\(m\)</span> arbres, chacun étant défini par les paramètres <span class="math inline">\(\mathbf{a_m}\)</span> (règles de décision et valeurs des feuilles terminales):</p>
 <p><span class="math display">\[ \hat{y}_{i} =F\left(\mathbf{x}_i\right) = \sum_{k=1}^{K} f_k\left(\mathbf{x}_i\right) \]</span></p>
-<p>Procédure de construction du mo: 1. Initialiser le modèle avec <span class="math inline">\(F_0\left(\mathbf{x}\right) = f_0\left(\mathbf{x}\right) = \frac{1}{n}\sum_{i=1}^n y_i\)</span>. 2. Pour <span class="math inline">\(m = 1, \dots, M:\)</span> (a) Calculer le gradient (les pseudo-résidus) à l’issue des <span class="math inline">\(m-1\)</span> étapes précédentes: $ g_{im} = $ (b) Entraîner le <span class="math inline">\(m\)</span>-ième <em>weak learner</em>: on cherche l’arbre <span class="math inline">\(f_m\)</span> qui prédit le mieux l’opposé du gradient de la fonction de perte: $ = <em>{i=1}^n (- g</em>{im} - f_m(_i, ))^2 $ (c) Mettre à jour le modèle global: <span class="math inline">\(F_m\left(\mathbf{x}\right) = F_{m-1}\left(\mathbf{x}\right) + \rho f_m\left(\mathbf{x}_i, \mathbf{\hat{a}_m}\right)\)</span></p>
+<p>Procédure de construction du modèle:</p>
+<ol type="1">
+<li><p>Initialiser le modèle avec <span class="math inline">\(F_0\left(\mathbf{x}\right) = f_0\left(\mathbf{x}\right) = \frac{1}{n}\sum_{i=1}^n y_i\)</span>.</p></li>
+<li><p>Pour <span class="math inline">\(m = 1, \dots, M:\)</span></p>
+<ol type="a">
+<li><p>Calculer le gradient (les pseudo-résidus) à l’issue des <span class="math inline">\(m-1\)</span> étapes précédentes: <span class="math inline">\(g_{im} = \frac{\partial l(y_i, F_{m-1}\left(\mathbf{x}\right))}{\partial F_{m-1}\left(\mathbf{x}\right)}\)</span></p></li>
+<li><p>Entraîner le <span class="math inline">\(m\)</span>-ième <em>weak learner</em>: on cherche l’arbre <span class="math inline">\(f_m\)</span> qui prédit le mieux l’opposé du gradient de la fonction de perte: <span class="math inline">\(\mathbf{\hat{a}_m} = \underset{\mathbf{a}}{\arg \min} \sum_{i=1}^n \left(- g_{im} - f_m\left(\mathbf{x}_i, \mathbf{a}\right)\right)^2\)</span></p></li>
+<li><p>Mettre à jour le modèle global: <span class="math inline">\(F_m\left(\mathbf{x}\right) = F_{m-1}\left(\mathbf{x}\right) + \rho f_m\left(\mathbf{x}_i, \mathbf{\hat{a}_m}\right)\)</span></p></li>
+</ol></li>
+</ol>
 </div>
 </div>
 </section>
 </section>
-<section id="la-mécanique-du-gradient-boosting" class="level3" data-number="1.3">
-<h3 data-number="1.3" class="anchored" data-anchor-id="la-mécanique-du-gradient-boosting"><span class="header-section-number">1.3</span> La mécanique du <em>gradient boosting</em></h3>
-<p>La méthode de <em>gradient boosting</em> proposée <span class="citation" data-cites="friedman2001greedy">Friedman (<a href="#ref-friedman2001greedy" role="doc-biblioref">2001</a>)</span> a fait l’objet de multiples implémentations intégrant de nombreuses optimisations et raffinements, parmi lesquelles XGBoost (<span class="citation" data-cites="chen2016xgboost">Chen and Guestrin (<a href="#ref-chen2016xgboost" role="doc-biblioref">2016</a>)</span>), LightGBM (<span class="citation" data-cites="ke2017lightgbm">Ke et al. (<a href="#ref-ke2017lightgbm" role="doc-biblioref">2017</a>)</span>) et CatBoost (<span class="citation" data-cites="prokhorenkova2018catboost">Prokhorenkova et al. (<a href="#ref-prokhorenkova2018catboost" role="doc-biblioref">2018</a>)</span>). S’il existe quelques différences entre ces implémentations, elles partagent néanmoins la même mécanique d’ensemble, que la section qui suit va présenter en détail en s’appuyant sur l’implémentation proposée par XBGoost.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<section id="les-implémentations-récentes-du-gradient-boosting" class="level3" data-number="1.3">
+<h3 data-number="1.3" class="anchored" data-anchor-id="les-implémentations-récentes-du-gradient-boosting"><span class="header-section-number">1.3</span> Les implémentations récentes du <em>gradient boosting</em></h3>
+<p>La méthode de <em>gradient boosting</em> proposée <span class="citation" data-cites="friedman2001greedy">Friedman (<a href="#ref-friedman2001greedy" role="doc-biblioref">2001</a>)</span> a fait l’objet de multiples implémentations, parmi lesquelles <code>XGBoost</code> (<span class="citation" data-cites="chen2016xgboost">Chen and Guestrin (<a href="#ref-chen2016xgboost" role="doc-biblioref">2016</a>)</span>), <code>LightGBM</code> (<span class="citation" data-cites="ke2017lightgbm">Ke et al. (<a href="#ref-ke2017lightgbm" role="doc-biblioref">2017</a>)</span>), <code>CatBoost</code> (<span class="citation" data-cites="prokhorenkova2018catboost">Prokhorenkova et al. (<a href="#ref-prokhorenkova2018catboost" role="doc-biblioref">2018</a>)</span>) et <code>scikit-learn</code>. Ces implémentations sont proches les unes des autres, et ne diffèrent que sur des points relativement mineurs. En revanche, elles s’éloignent quelque peu de la formulation initiale de la <em>Gradient Boosting Machine</em>, afin d’optimiser la construction des arbres. Cette section présente donc la mécanique d’ensemble de ces implémentations, en s’appuyant sur l’implémentation proposée par XBGoost.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <section id="le-modèle-à-entraîner" class="level4" data-number="1.3.1">
 <h4 data-number="1.3.1" class="anchored" data-anchor-id="le-modèle-à-entraîner"><span class="header-section-number">1.3.1</span> Le modèle à entraîner</h4>
 <p>On veut entraîner un modèle comprenant <span class="math inline">\(K\)</span> arbres de régression ou de classification:</p>
