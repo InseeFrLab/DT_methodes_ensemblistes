@@ -15,24 +15,12 @@ En termes plus techniques, les différentes variantes du *boosting* partagent to
 
 -   Ils visent à **trouver une approximation** $\hat{F}$ d'une fonction inconnue $F^{\ast}: \mathbf{x} \mapsto y$ à partir d'un ensemble d'entraînement $(y_i, \mathbf{x_i})_{i= 1,\dots,n}$;
 -   Ils supposent que la fonction $F^{\ast}$ peut être approchée par une **somme pondérée de modèles simples** $f$ de paramètres $\theta$:
-
-$ F\left(\mathbf{x}\right) = \sum_{m=1}^M \beta_m f\left(\mathbf{x}, \mathbf{\theta}_m\right) $
+$$ F\left(\mathbf{x}\right) = \sum_{m=1}^M \beta_m f\left(\mathbf{x}, \mathbf{\theta}_m\right) $$
 
 -   Ils reposent sur une **modélisation additive par étapes** (_forward stagewise additive modeling_), qui décompose l'entraînement de ce modèle complexe en une **séquence d'entraînements de petits modèles**. Chaque étape de l'entraînement cherche le modèle simple $f$ qui améliore la puissance prédictive du modèle complet, sans modifier les modèles précédents, puis l'ajoute de façon incrémentale à ces derniers:
 
-$ F_m(\mathbf{x}) = F_{m-1}(\mathbf{x}) + \hat{\beta}_m f(\mathbf{x}_i, \mathbf{\hat{\theta}_m}) $
+$$ F_m(\mathbf{x}) = F_{m-1}(\mathbf{x}) + \hat{\beta}_m f(\mathbf{x}_i, \mathbf{\hat{\theta}_m}) $$
 
-
-<!-- Imaginons qu'on veuille entraîner le modèle suivant:
-
-$F\left(\mathbf{x}\right) = \sum_{m=1}^M \beta_m f\left(\mathbf{x}, \mathbf{\theta}_m\right)$
-
-
-$\hat{F}$ est caractérisée par les paramètres $\{\beta_m, \mathbf{\theta}_m\}_{m=1}^{M}$ tels que
-$\argmin_{\{\beta_m, \mathbf{\theta}_m\}_{m=1}^{M}} \sum_{i=1}^N L\left(y_i, \sum_{m=1}^M \beta_m f\left(\mathbf{x}_i, \mathbf{\theta}_m\right)\right)$
-
-
-C'est un problème très compliqué dès que $M$ est élevé! -->
 
 METTRE ICI UNE FIGURE EN UNE DIMENSION, avec des points et des modèles en escalier qui s'affinent.
 
@@ -83,20 +71,25 @@ On dispose d'un jeu de données ${(x_i, y_i)}_{i=1}^n$ avec $x_i \in \mathbb{R}^
 
 $$ \hat{y}_{i} =F\left(\mathbf{x}_i\right) = \sum_{k=1}^{K} f_k\left(\mathbf{x}_i\right) $$
 
-Procédure de construction du mo:
+Procédure de construction du modèle:
+
 1.  Initialiser le modèle avec $F_0\left(\mathbf{x}\right) = f_0\left(\mathbf{x}\right) = \frac{1}{n}\sum_{i=1}^n y_i$.
+
 2.  Pour $m = 1, \dots, M:$
-    (a) Calculer le gradient (les pseudo-résidus) à l'issue des $m-1$ étapes précédentes: $ g_{im} = \frac{\partial l(y_i, F_{m-1}\left(\mathbf{x}\right))}{\partial F_{m-1}\left(\mathbf{x}\right)} $
+
+    (a) Calculer le gradient (les pseudo-résidus) à l'issue des $m-1$ étapes précédentes: $g_{im} = \frac{\partial l(y_i, F_{m-1}\left(\mathbf{x}\right))}{\partial F_{m-1}\left(\mathbf{x}\right)}$
+
     (b) Entraîner le $m$-ième _weak learner_: on cherche l'arbre $f_m$ qui prédit le mieux l'opposé du gradient de la fonction de perte:
-    $ \mathbf{\hat{a}_m} = \underset{\mathbf{a}}{\arg \min} \sum_{i=1}^n \left(- g_{im} - f_m\left(\mathbf{x}_i, \mathbf{a}\right)\right)^2 $
+    $\mathbf{\hat{a}_m} = \underset{\mathbf{a}}{\arg \min} \sum_{i=1}^n \left(- g_{im} - f_m\left(\mathbf{x}_i, \mathbf{a}\right)\right)^2$
+
     (c) Mettre à jour le modèle global: $F_m\left(\mathbf{x}\right) = F_{m-1}\left(\mathbf{x}\right) + \rho f_m\left(\mathbf{x}_i, \mathbf{\hat{a}_m}\right)$
 
 :::
 
 
-### La mécanique du *gradient boosting*
+### Les implémentations récentes du *gradient boosting*
 
-La méthode de *gradient boosting* proposée @friedman2001greedy a fait l'objet de multiples implémentations intégrant de nombreuses optimisations et raffinements, parmi lesquelles XGBoost (@chen2016xgboost), LightGBM (@ke2017lightgbm) et CatBoost (@prokhorenkova2018catboost). S'il existe quelques différences entre ces implémentations, elles partagent néanmoins la même mécanique d'ensemble, que la section qui suit va présenter en détail en s'appuyant sur l'implémentation proposée par XBGoost.[^1]
+La méthode de *gradient boosting* proposée @friedman2001greedy a fait l'objet de multiples implémentations, parmi lesquelles `XGBoost` (@chen2016xgboost), `LightGBM` (@ke2017lightgbm), `CatBoost` (@prokhorenkova2018catboost) et `scikit-learn`. Ces implémentations sont proches les unes des autres, et ne diffèrent que sur des points relativement mineurs. En revanche, elles s'éloignent quelque peu de la formulation initiale de la _Gradient Boosting Machine_, afin d'optimiser la construction des arbres. Cette section présente donc la mécanique d'ensemble de ces implémentations, en s'appuyant sur l'implémentation proposée par XBGoost.[^1]
 
 [^1]: Cette partie reprend la structure et les notations de la partie 2 de @chen2016xgboost.
 
