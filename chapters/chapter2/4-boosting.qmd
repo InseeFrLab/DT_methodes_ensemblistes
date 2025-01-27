@@ -53,7 +53,7 @@ L'algorithme Adaboost a été au coeur de la littérature sur le *boosting* à l
 
 #### L'invention du *boosting boosting* : la *Gradient Boosting Machine*
 
-La *Gradient Boosting Machine* (GBM) propose une approche assez différente: elle introduit le *gradient boosting* en reformulant le *boosting* sous la forme d'un problème d'optimisation qui se résout par une approche itérative de descente de gradient. Cette approche repose entièrement sur la notion de __fonction de perte__, qui mesure l'écart entre la variable-cible et la prédiction du modèle. La mécanique de la *Gradient Boosting Machine* est présentée de façon formelle dans l'encadré @gbm-pseudocode; en voici une présentation intuitive:
+La *Gradient Boosting Machine* (GBM) propose une approche assez différente: elle introduit le *gradient boosting* en reformulant le *boosting* sous la forme d'un problème d'optimisation qui se résout par une approche itérative de descente de gradient. Cette approche repose entièrement sur la notion de __fonction de perte__, qui mesure l'écart entre la variable-cible et la prédiction du modèle. La mécanique de la *Gradient Boosting Machine* est présentée de façon formelle dans l'encadré @note-gbm-pseudocode; en voici une présentation intuitive:
 
 <!-- -   Un premier modèle simple est entraîné sur les données d'entraînement, de façon à minimiser une fonction de perte qui mesure l'écart entre la variable à prédire et la prédiction du modèle.
 -   A l'issue de cette première itération, on calcule la dérivée partielle (*gradient*) de la fonction de perte par rapport à la prédiction en chaque point de l'ensemble d'entraînement. Ce gradient indique à la fois dans quelle direction et dans quelle ampleur la prédiction devrait être modifiée afin de réduire la perte.
@@ -75,7 +75,7 @@ La *Gradient Boosting Machine* (GBM) propose une approche assez différente: ell
 
 L'approche de *gradient boosting* proposée par @friedman2001greedy présente deux grands avantages. D'une part, elle peut être utilisée avec n'importe quelle fonction de perte différentiable, ce qui permet d'appliquer le gradient boosting à de multiples problèmes (régression, classification binaire ou multiclasse, *learning-to-rank*...). D'autre part, elle offre souvent des performances comparables ou supérieures aux autres approches de *boosting*. Le *gradient boosting* d'arbres de décision (*Gradient boosted Decision Trees* - GBDT) est donc devenue l'approche de référence en matière de *boosting*: toutes les implémentations modernes du *gradient boosting* comme `scikit-learn`, `XGBoost`, `LightGBM`, et `CatBoost` sont des extensions et améliorations de la *Gradient Boosting Machine*.
 
-::: {#gbm-pseudocode .callout-note}
+::: {#note-gbm-pseudocode .callout-note}
 
 ## Présentation formelle de la _Gradient Boosting Machine_
 
