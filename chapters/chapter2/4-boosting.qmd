@@ -61,7 +61,8 @@ La *Gradient Boosting Machine* (GBM) propose une approche assez différente: ell
 -   Cette procédure est répétée en ajoutant de nouveaux modèles et en recalculant le gradient à chaque étape.
 -   La qualité du modèle final est évaluée sur un ensemble de test.
 
-L'approche de *gradient boosting* proposée par @friedman2001greedy présente deux grands avantages. D'une part, elle peut être utilisée avec n'importe quelle fonction de perte différentiable, ce qui permet d'appliquer le gradient boosting à de multiples problèmes (régression, classification binaire ou multiclasse, *learning-to-rank*...). D'autre part, elle offre souvent des performances comparables ou supérieures aux autres approches de *boosting*. Le *gradient boosting* d'arbres de décision (*Gradient boosted Decision Trees* - GBDT) est donc devenue l'approche de référence en matière de *boosting*: toutes les implémentations modernes du *gradient boosting* comme `scikit-learn`, `XGBoost`, `LightGBM`, et `CatBoost` sont des extensions et améliorations de la *Gradient Boosting Machine*.
+L'approche de *gradient boosting* proposée par @friedman2001greedy présente deux grands avantages. D'une part, __toute la mécanique du _gradient boosting_ est indépendante de la fonction de perte choisie et de la nature du problème modélisé__. Autrement dit, cette approche peut être utilisée avec n'importe quelle fonction de perte différentiable, ce qui permet d'appliquer le _gradient boosting_ à de multiples problèmes (régression, classification binaire ou multiclasse, *learning-to-rank*...). D'autre part, __le *gradient boosting* offre souvent des performances comparables ou supérieures aux autres approches de *boosting*__. Le *gradient boosting* d'arbres de décision (*Gradient boosted Decision Trees* - GBDT) est donc devenue l'approche de référence en matière de *boosting*: toutes les implémentations modernes du *gradient boosting* comme `scikit-learn`, `XGBoost`, `LightGBM`, et `CatBoost` sont des extensions et améliorations de la *Gradient Boosting Machine*.
+
 
 ::: { .callout-note}
 
@@ -87,51 +88,66 @@ Procédure de construction du modèle:
 :::
 
 
-### Les implémentations récentes du *gradient boosting*
+### La mécanique du *gradient boosting*
 
-La méthode de *gradient boosting* proposée @friedman2001greedy a fait l'objet de multiples implémentations, parmi lesquelles `XGBoost` (@chen2016xgboost), `LightGBM` (@ke2017lightgbm), `CatBoost` (@prokhorenkova2018catboost) et `scikit-learn`. Ces implémentations sont proches les unes des autres, et ne diffèrent que sur des points relativement mineurs. En revanche, elles s'éloignent quelque peu de la formulation initiale de la _Gradient Boosting Machine_, afin d'optimiser la construction des arbres. Cette section présente donc la mécanique d'ensemble de ces implémentations, en s'appuyant sur l'implémentation proposée par XBGoost.[^1]
+La méthode de *gradient boosting* proposée @friedman2001greedy a fait l'objet de multiples implémentations, parmi lesquelles `XGBoost` (@chen2016xgboost), `LightGBM` (@ke2017lightgbm), `CatBoost` (@prokhorenkova2018catboost) et `scikit-learn`. Ces implémentations sont proches les unes des autres, et ne diffèrent que sur des points relativement mineurs. En revanche, elles s'éloignent quelque peu de la formulation initiale de la _Gradient Boosting Machine_, afin d'optimiser la construction des arbres. Bien comprendre la mécanique interne de ces implémentations s'avère important en pratique, notamment pour appréhender le rôle des multiples hyperparamètres. Cette section présente donc la mécanique d'ensemble de ces implémentations, en s'appuyant sur l'implémentation proposée par XBGoost.[^1]
 
 [^1]: Cette partie reprend la structure et les notations de la partie 2 de @chen2016xgboost.
 
 #### Le modèle à entraîner
 
-On veut entraîner un modèle comprenant $K$ arbres de régression ou de classification:
+On dispose d'un jeu de données ${(x_i, y_i)}_{i=1}^n$ avec $x_i \in \mathbb{R}^m$ et une cible $y_i$. On veut entraîner un modèle très prédictif qui soit une somme de $K$ arbres de régression ou de classification: $\hat{y}_i = F\left(\mathbf{x}_i\right) = \sum_{k=1}^K f_k(x_i)$. On rappelle que chaque arbre $f$ est défini par trois paramètres:
 
-$$ \hat{y}_{i} =F\left(\mathbf{x}_i\right) = \sum_{k=1}^{K} f_k\left(\mathbf{x}_i\right) $$
+-   sa __structure__ qui est une fonction $q: \mathbb{R}^m \rightarrow \{1, \dots, T\}$ qui à un vecteur $\mathbf{x}$ de dimension $m$ associe une feuille terminale de l'arbre;cette structure est définie par l'ensemble des règles de décision de l'arbre;
+-   son __nombre de feuilles terminales__ $T$;
+-   les __prédictions__ figurant sur ses feuilles terminales $\mathbf{w}\in \mathbb{R}^T$ (appelées poids ou *weights*).
 
-Chaque arbre $f$ est défini par trois paramètres:
+Le modèle complet est impossible à entraîner en une seule fois, car c'est un problème trop complexe. Le principe du _boosting_ consiste donc à construire le modèle complet de façon itérative, par **ajout successif d'arbres**. À l'itération $t$, on ajoute un nouvel arbre $f_t$ pour améliorer la prédiction actuelle $\hat{y}_i^{(t-1)}$. Le modèle devient:
+$$
+\hat{y}_i^{(t)} = \hat{y}_i^{(t-1)} + f_t(x_i).
+$$
 
--   sa structure qui est une fonction $q: \mathbb{R}^m \rightarrow \{1, \dots, T\}$ qui à un vecteur $\mathbf{x}$ de dimension $m$ associe une feuille terminale de l'arbre;
--   son nombre de feuilles terminales $T$;
--   les valeurs figurant sur ses feuilles terminales $\mathbf{w}\in \mathbb{R}^T$ (appelées poids ou *weights*).
+L'objectif de l'itération $t$ est donc de trouver le nouvel arbre $f_t(x_i)$ qui minimise la fonction-objectif. Pour éviter le sur-ajustement, l'algorithme `XGBoost` utilise une fonction-objectif qui comporte à la fois une fonction de perte, et un terme de régularisation:
 
-Le modèle est entraîné avec une **fonction-objectif** constituée d'une **fonction de perte** $l$ et d'une **fonction de régularisation** $\Omega$: 
-
-- La fonction de perte mesure la distance entre la prédiction $\hat{y}$ et la vraie valeur $y$ et présente généralement les propriétés suivantes: elle est convexe et dérivable deux fois, et atteint son minimum lorsque $\hat{y} = y$. 
-- La fonction de régularisation pénalise la complexité du modèle. Dans le cas présent, elle pénalise les arbres avec un grand nombre de feuilles ($T$ élevé) et les arbres avec des poids élevés ($w_j$ élevés en valeur absolue).
-
-$$ \mathcal{L}(\phi) = \underbrace{\sum_i l(\hat{y}_{i}, y_{i})}_{\substack{\text{Perte sur les} \\ \text{observations}}} + \underbrace{\sum_k \Omega(f_{k})}_{\substack{\text{Fonction de} \\ \text{régularisation}}}\,\,\text{avec}\,\,\Omega(f) = \gamma T + \frac{1}{2} \lambda \sum_{k=1}^K \sum_{j=1}^{T_k} w_j^2 
+$$
+L^{(t)} = \underbrace{ \sum_{i=1}^n \ell\bigl(y_i,\;\hat{y}_i^{(t-1)} + f_t(x_i)\bigr)}_{\substack{\text{Perte sur les} \\ \text{observations}}} + \underbrace{\Omega\bigl(f_t\bigr)}_{\substack{\text{Terme de} \\ \text{régularisation}}}\,\,\text{avec}\,\,\Omega(f) = \gamma \, T \;+\; \tfrac{1}{2} \, \lambda \, \|w\|^2
 $$ {#eq-fct-obj-initial}
 
-Un point essentiel est que __toute la mécanique du _gradient boosting_ est indépendante de la fonction de perte choisie et de la nature du problème modélisé__. En particulier, toutes les formules restent inchangées, que l'on traite un un problème de classification, de régression ou de classement (_ranking_). C'est là l'une des grandes forces du _gradient boosting_: un seul cadre conceptuel permet de traiter de multiples situations.
+Dans cette expression:
+
+- La fonction de perte $\ell$ mesure la distance entre la prédiction $\hat{y}$ et la vraie valeur $y$ (exemples: erreur quadratique moyenne, erreur absolue moyenne, perte d'entropie croisée binaire, etc.).  
+- Le terme de régularisation $\Omega(f)$ pénalise la complexité de l'arbre $f$ via deux termes: le terme $\gamma\,T$ pénalise les arbres avec un grand nombre de feuilles ($T$ élevé) et le terme $\tfrac{1}{2} \lambda\sum_{j=1}^{T_t} w_j^2$ pénalise les arbres avec des poids élevés ($w_j$ élevés en valeur absolue). Cette pénalisation privilégie les arbres plus « simples » (moins de feuilles, poids de feuilles plus petits) afin d'éviter le sur-ajustement (*overfitting*). $\gamma$ et $\lambda$ sont des hyperparamètres de régularisation qui contrôlent la complexité de l'arbre.
 
 
-#### Isoler le $t$-ième arbre
+#### L'entraînement du modèle
 
-La fonction-objectif introduite précédemment est très complexe et ne peut être utilisée directement pour entraîner le modèle, car il faudrait entraîner tous les arbres en même temps. On reformule donc cette fonction objectif de façon à isoler le $t$-ième arbre, qui pourra ensuite être entraîné seul, une fois que les $t-1$ arbres précédents auront été entraînés. Pour cela, on note $F_t(x) = \hat{y}_i^{(t)}$ la prédiction à l'issue de l'étape $t$: $\hat{y}_i^{(t)} = \sum_{k=1}^t f_k(\mathbf{x}_i)$, et on note $\mathcal{L}^{(t)}$ la fonction-objectif au moment de l'entraînement du $t$-ième arbre:
+##### Principe
 
-$$
-\begin{aligned}
-\mathcal{L}^{(t)} 
-&= \sum_{i=1}^{n} l(y_i, \hat{y}_{i}^{(t)}) + \sum_{k=1}^t\Omega(f_k) \\
-&= \sum_{i=1}^{n} l\left(y_i, \hat{y}_{i}^{(t-1)} + f_{t}(\mathbf{x}_i)\right) + \Omega(f_t) + constant
-\end{aligned}
-$$
+A chaque étape de l'entraînement du modèle, l'algorithme de _gradient boosting_ va construire un arbre en faisant deux choses:
+
+1. Déterminer la **structure** de l'arbre (choisir comment séparer les données de manière optimale, c'est-à-dire choisir les règles de décision) en tenant compte de la régularisation.
+
+2. Pour chaque feuille, **trouver la meilleure valeur $w_j$​** à attribuer, c'est-à-dire la valeur qui **minimise** la fonction de perte, en tenant compte de la régularisation.
+
+La construction de l'arbre se fait selon une approche **gloutonne**, _nœud après nœud_: on divise les données d'entraînement en feuilles de plus en plus petites, tant que cela génère une réduction "suffisante" de la fonction de perte. Cette approche peut être résumée ainsi:
+
+1. On part d'une feuille unique (l'arbre de profondeur 0) qui contient toutes les données d'entraînement.
+
+2. Pour **chaque** feuille de l'arbre, on essaie de trouver un partitionnement optimal:
+    - On teste toutes les règles de décision possibles (en faisant une boucle sur toutes les variables, et sur les différents seuils possibles).
+    - Pour chaque règle de décision candidate, on calcule le **gain** associé (c'est-à-dire la réduction de la perte globale si l'on retient cette règle de décision).
+    - Si la meilleure règle de décision apporte un gain suffisamment élevé, on crée deux nouvelles feuilles.
+
+3. On répète le processus récursivement (en partant des feuilles nouvellement créées) jusqu'à :
+    - soit atteindre les limites de complexité définies _a priori_ (**profondeur maximale** de l'arbre, **nombre maximal de feuilles**, **nombre minimal d'observations par feuille**);
+    - soit ne plus trouver de partitionnement intéressant (c'est-à-dire qui permette de réduire suffisamment la perte).
+
+Les paragraphes qui suivent détaillent ce processus et les équations utilisées.
 
 
-#### Faire apparaître le gradient de la fonction de perte
+##### Étape 1: Faire apparaître le gradient de la fonction de perte
 
-Une fois isolé le $t$-ième arbre, on fait un développement limité d'ordre 2 de $l(y_i, \hat{y}_{i}^{(t-1)} + f_{t}(\mathbf{x}_i))$ au voisinage de $\hat{y}_{i}^{(t-1)}$, en considérant que la prédiction du $t$-ième arbre $f_{t}(\mathbf{x}_i)$ est un incrément de petite taille:
+Pour simplifier la construction du $t$-ième arbre, `XGBoost` utilise une **approximation de second ordre** de la fonction de perte $L^{(t)}$. Plus précisément, on fait un développement limité d'ordre 2 de $l(y_i, \hat{y}_{i}^{(t-1)} + f_{t}(\mathbf{x}_i))$ au voisinage de $\hat{y}_{i}^{(t-1)}$, en considérant que la prédiction du $t$-ième arbre $f_{t}(\mathbf{x}_i)$ est un incrément de petite taille:
 
 $$ \mathcal{L}^{(t)} \approx \sum_{i=1}^{n} [\underbrace{l(y_i, \hat{y}_{i}^{(t-1)})}_{\text{(A)}} + g_i f_t(\mathbf{x}_i)+ \frac{1}{2} h_i f^2_t(\mathbf{x}_i)] + \underbrace{\sum_{j=1}^{t-1}\Omega(f_j)}_{\text{(B)}} + \Omega(f_t) $$
 
@@ -140,68 +156,81 @@ avec
 $$ g_i = \frac{\partial l(y_i, \hat{y}_i^{(t-1)})}{\partial\hat{y}_i^{(t-1)}} \text{et} h_i = \frac{\partial^2 l(y_i, \hat{y}_i^{(t-1)})}{{\partial \hat{y}_i^{(t-1)}}^2} $$
 
 
-Les termes $g_i$ et $h_i$ désignent respectivement la dérivée première (le gradient) et la dérivée seconde (la hessienne) de la fonction de perte par rapport à la variable prédite. Dans cette équation, les termes (A) et (B) sont constants car les $t-1$ arbres précédents ont déjà été entraînés et ne sont pas modifiés par l'entraînement du $t$-ième arbre. <!-- Autrement dit, la seule façon d'améliorer le modèle sera de trouver un $t$-ième arbre $f_t$ qui minimise la fonction-objectif \mathcal{L}^{(t)} ainsi réécrite.  --> On peut donc retirer ces termes pour obtenir la fonction-objectif simplifiée $\tilde{L}^{(t)}$ qui sera utilisée pour l'entraînement du $t$-ième arbre.
+Les termes $g_i$ et $h_i$ désignent respectivement la dérivée première (le gradient) et la dérivée seconde (la hessienne) de la fonction de perte par rapport à la variable prédite pour l'observation $i$. Dans cette équation, les termes (A) et (B) sont constants car les $t-1$ arbres précédents ont déjà été entraînés et ne sont pas modifiés par l'entraînement du $t$-ième arbre. <!-- Autrement dit, la seule façon d'améliorer le modèle sera de trouver un $t$-ième arbre $f_t$ qui minimise la fonction-objectif \mathcal{L}^{(t)} ainsi réécrite.  --> On peut donc retirer ces termes pour obtenir la fonction-objectif simplifiée $\tilde{L}^{(t)}$ qui sera utilisée pour l'entraînement du $t$-ième arbre.
 
-$$ \mathcal{\tilde{L}}^{(t)} = \sum_{i=1}^{n} [g_i f_t(\mathbf{x}_i)+ \frac{1}{2} h_i f^2_t(\mathbf{x}_i)] + \gamma T + \frac{1}{2} \lambda \sum_{j=1}^T w_i^2 
-$$ {#eq-fct-obj-final}
+$\mathcal{\tilde{L}}^{(t)} = \sum_{i=1}^{n} [g_i f_t(\mathbf{x}_i)+ \frac{1}{2} h_i [f_t(\mathbf{x}_i)]^2] + \Omega(f_t)$ {#eq-fct-obj-final}
 
 <!-- Cette expression montre que le problème initial où il fallait entraîner un grand nombre d'arbres simultanément (équation @eq-fct-obj-initial) à un problème beaucoup plus simple dans lequel il n'y a plus qu'un seul arbre à entraîner (équation @eq-fct-obj-final). -->
 
-#### Calculer les poids optimaux
+#### Étape 2: calculer les poids optimaux conditionnellement à la structure de l'arbre
 
-A partir de l'équation @eq-fct-obj-final, il est possible de faire apparaître les poids $w_j$ du $t$-ième arbre. Pour un arbre donné comprenant $T$ feuilles ($q: \mathbb{R}^T \rightarrow \{1, \dots, T\}$), on définit $I_j = \{ i | q(\mathbf{x}_i) = j \}$ l'ensemble des observations situées sur la feuille terminale $j$, et $w_j$ la valeur prédite par l'arbre pour la feuille $j$. Avec cette notation, on réorganise $\mathcal{\tilde{L}}^{(t)}$ en regroupant les observations selon la feuille terminale à laquelle elles appartiennent:
-
+A partir de l'équation @eq-fct-obj-final, il est possible de faire apparaître les poids $w_j$ du $t$-ième arbre. Chaque arbre $f_t$ peut être vu comme une fonction constante par morceaux du type $f_t(x) = w_{\,q(x)}$ où $q(x)$ est une fonction qui assigne un indice de feuille (un entier entre 1 et $T$) à chaque observation $x$, et $w_j$ est le poids (valeur de sortie) de la $j$-ième feuille. On peut regrouper les observations $i$ tombant dans la feuille $j$ dans l'ensemble $I_j = \{i\mid q(x_i)=j\}$. Cela permet de ré-écrire la fonction de perte approchée sous la forme:
 $$
 \begin{align*}
- \mathcal{\tilde{L}}^{(t)} =&   \sum_{j=1}^{T} \sum_{i\in I_{j}} \bigg[g_i f_t(\mathbf{x}_i)\phantom{\frac{1}{2}} &+ \frac{1}{2} h_i f^2_t(\mathbf{x}_i)\bigg]&+ \gamma T + \frac{1}{2} \lambda \sum_{j=1}^T w_i^2 \\
+\tilde{L}^{(t)} =&   \sum_{j=1}^{T} \sum_{i\in I_{j}} \bigg[g_i f_t(\mathbf{x}_i)\phantom{\frac{1}{2}} &+ \frac{1}{2} h_i [f_t(\mathbf{x}_i)]^2\bigg]&+ \gamma T + \frac{1}{2} \lambda \sum_{j=1}^T w_i^2 \\
      &= \sum_{j=1}^{T} \sum_{i\in I_{j}} \bigg[g_i w_j &+ \frac{1}{2} h_i w_j^2\bigg] &+ \gamma T + \frac{1}{2} \lambda \sum_{j=1}^T w_i^2 \\
      &= \sum^T_{j=1} \bigg[w_j\sum_{i\in I_{j}} g_i &+ \frac{1}{2} w_j^2 \left( \sum_{i \in I_{j}} h_i + \lambda \right) \bigg] &+ \gamma T
 \end{align*}
 $$
 
-Dans la dernière expression, la fonction de perte simplifiée se reformule comme une combinaison quadratique des poids $w_j$, dans laquelle les dérivées première et seconde de la fonction de perte interviennent sous forme de pondérations ($\sum_{i \in I_j} g_i$ et $\sum_{i \in I_j} h_i$). Pour un arbre donné, les poids optimaux $w_j$ sont ceux minimisent cette fonction de perte, compte tenu de ces pondérations. Il se trouve que le calcul de ces poids optimaux est très simple: le poids optimal $w_j^{\ast}$ de la feuille $j$ est donné par l'équation:
+Dans la dernière expression, la fonction de perte simplifiée se reformule comme une combinaison quadratique des poids $w_j$, dans laquelle les dérivées première et seconde de la fonction de perte interviennent sous forme de pondérations ($\sum_{i \in I_j} g_i$ et $\sum_{i \in I_j} h_i$). Cette expression peut elle-même s'écrire comme la somme sur l'ensemble des feuilles de la fonction de perte relative à chaque feuille $j$  :
+$$
+\tilde{L}^{(t)} = \sum_{j=1}^T k(w_j)
++ \gamma\,T
+$$
 
-$$ w_j^{\ast} = -\frac{\sum_{i \in I_j} g_i}{\sum_{i \in I_j} h_i + \lambda} $$ {#eq-w-j-optimal}
-
-#### Construire le $t$-ième arbre
-
-En combinant les équations @eq-fct-obj-final et @eq-w-j-optimal, on déduit que la valeur optimale de la fonction objectif pour l'arbre $q$ est égale à 
-
-$$ \mathcal{\tilde{L}}^{(t)}(q) = -\frac{1}{2} \sum_{j=1}^T \frac{\left(\sum_{i\in I_j} g_i\right)^2}{\sum_{i\in I_j} h_i+\lambda} + \gamma T $$ {#eq-fct-obj-optimal}
-
-Cette équation est utile car elle permet de comparer la qualité de deux arbres, et de déterminer lequel est le meilleur. On pourrait penser que l'équation @eq-fct-obj-optimal est à elle seule suffisante pour choisir le $t$-ième arbre: il suffirait d'énumérer les arbres possibles, de calculer la qualité de chacun d'entre eux, et de retenir le meilleur. Bien que cette approche soit possible en théorie, elle est inemployable en pratique car le nombre d'arbres possibles est extrêmement élevé. Par conséquent, cette équation n'est pas utilisée telle quelle, mais sert à comparer les règles de décision possibles à chaque étape d'une optimisation gloutonne.
-
-Imaginons qu'on envisage de décomposer la feuille $I$ en deux nouvelles feuilles $I_L$ et $I_R$ (avec $I = I_L \cup I_R$), selon une condition logique reposant sur une variable et une valeur de cette variable (exemple: $x_6 > 11$). Par application de l'équation @eq-fct-obj-optimal, le gain potentiel induit par cette règle de décision est égal à:
-
-$$ Gain = \frac{1}{2} \left[\frac{G_L^2}{H_L+\lambda}+\frac{G_R^2}{H_R+\lambda}-\frac{(G_L+G_R)^2}{H_L+H_R+\lambda}\right] - \gamma \,\,\text{avec}\,\, G = \sum_i g_i \,\,\text{et}\,\, H = \sum_i H_i$$ {#eq-fct-eval-split}
+avec $k(w_j)$ la perte relative à la feuille $j$ :
+$$
+k(w_j) = \sum_{i \in I_j} \bigl(g_i\,w_j + \tfrac12\,h_i\,w_j^2\bigr) + \tfrac12\,\lambda w_j^2
+$$
 
 
-<!-- $\text{Gain}_{\text{split}} = \frac{1}{2} \left[\frac{\left(\sum_{i\in I_L} g_i\right)^2}{\sum_{i\in I_L} h_i+\lambda}+\frac{\left(\sum_{i\in I_R} g_i\right)^2}{\sum_{i\in I_R} h_i+\lambda}-\frac{\left(\sum_{i\in I} g_i\right)^2}{\sum_{i\in I} h_i+\lambda}\right] - \gamma$ -->
+Pour un arbre de structure donnée, la valeur optimale $w_j^{\ast}$ de la feuille $j$, c'est-à-dire la valeur qui minimise la contribution de la feuille à la fonction de perte globale se calcule facilement (en résolvant pour chaque feuille $j$, $\frac{\partial k}{\partial w_j} = 0$):
+
+$$ 
+w_j^{\ast} = -\frac{\sum_{i \in I_j} g_i}{\sum_{i \in I_j} h_i + \lambda} 
+$$ {#eq-w-j-optimal}
 
 
-L'équation @eq-fct-eval-split est au coeur de la mécanique du *gradient boosting* car elle permet de comparer les règles de décision possibles. 
+On déduit alors, pour une structure d'arbre $q$ donnée, la valeur optimale de la fonction-objectif pour le $t$-ième arbre:
 
-#### Chercher les _splits_ optimaux
+$$
+\tilde{L}^{(t)}(q)
+= -\,\tfrac12 \sum_{j=1}^T
+\frac{\bigl(\sum_{i \in I_j} g_i\bigr)^2}{\sum_{i \in I_j} h_i + \lambda}
++ \gamma\,T.
+$$ {#eq-fct-obj-optimal}
 
-La méthode de construction des arbres dans les algorithmes de _gradient boosting_ est identique à celle décrite dans la partie **REFERENCE A LA PARTIE CART/RF**,:le $t$-ième arbre n'est pas défini en une fois, mais construit de façon gloutonne (_greedy_). Il y a toutefois une différence importante: ces algorithmes utilisent l'équation @eq-fct-obj-optimal pour choisir la règle de décision (_split_) à chaque étape de la construction de l'arbre, et non une mesure d'hétérogénéité. Sur tous les autres points la construction de l'arbre est identique à celle des arbres CART:
+L'équation @eq-fct-obj-optimal est utile en pratique car elle permet de comparer la qualité de deux arbres candidats, et de déterminer immédiatement lequel est le meilleur. On pourrait même penser que cette équation est à elle seule suffisante pour choisir le $t$-ième arbre: il suffirait d'énumérer les arbres possibles, de calculer la qualité de chacun d'entre eux, et de retenir le meilleur. En réalité, cette approche est inemployable en pratique car le nombre d'arbres possibles est extrêmement élevé. Par conséquent, cette équation n'est pas utilisée telle quelle, mais sert à comparer les règles de décision possibles à chaque étape d'une optimisation gloutonne, de façon à trouver la structure $q^\ast$ du $t$-ième arbre.
 
-- On commence par le noeud-racine comprenant l'ensemble des données d'entraînement, et on recherche la règle de décision des données qui maximise le gain mesuré par l'équation @eq-fct-obj-optimal. Puis on recherche la règle de décision optimale pour chacun des deux noeuds-enfants, et ainsi de suite jusqu'à ce qu'un critère d'arrêt soit atteint.
-- Pour chaque noeud, l'algorithme de détermination des règles de décision (*split finding algorithm*) consiste en une double boucle sur les variables et les valeurs prises par ces variables, qui énumère un grand nombre de règles de décision possibles et mesure le gain associé à chacun d'entre elles avec l'équation @eq-fct-eval-split. La règle de décision retenue sera simplement celui dont le gain est le plus élevé.
+##### Étape 3: déterminer la structure de l'arbre
 
+La méthode de construction des arbres dans les algorithmes de _gradient boosting_ est identique à celle décrite dans la partie **REFERENCE A LA PARTIE CART/RF**,:le $t$-ième arbre n'est pas défini en une fois, mais construit de façon gloutonne (_greedy_): on part d'une feuille unique qui contient toutes les données d'entraînement, et à chaque étape on partitionne les feuilles de l'arbre en choisissant la règle de décision qui maximise la réduction de la perte. Le processus est réitéré jusqu'à ce que **l'arbre atteigne un critère d'arrêt**, ou jusqu'à ce que **plus aucune scission ne permette de réduire la fonction de perte**.
+
+La grande différence avec les arbres CART et les forêts aléatoires est que ces algorithmes utilisent l'équation @eq-fct-obj-optimal pour choisir la règle de décision (_split_) à chaque étape de la construction de l'arbre, et non une mesure d'hétérogénéité. Pour chaque noeud, l'algorithme de détermination des règles de décision (*split finding algorithm*) consiste en une double boucle sur les variables et les valeurs prises par ces variables, qui énumère un grand nombre de règles de décision possibles et mesure le gain associé à chacun d'entre elles avec l'équation @eq-fct-eval-split. La règle de décision retenue sera simplement celui dont le gain est le plus élevé. 
+
+Plus spécifiquement, la réduction de perte associée au partitionnement de la feuille $I$ en deux feuilles gauche ($I_L$) et droite ($I_R$) à l'aide d'une certaine règle de décision s'écrit (à partir de l'équation @eq-fct-obj-optimal) :
+$$
+\Delta \tilde{L}^{(t)}
+= \tfrac12 \Bigl[
+\underbrace{\frac{\bigl(\sum_{i \in I_L} g_i\bigr)^2}{\sum_{i \in I_L} h_i + \lambda}}_{\text{Perte de la feuille gauche}}
++ 
+\underbrace{\frac{\bigl(\sum_{i \in I_R} g_i\bigr)^2}{\sum_{i \in I_R} h_i + \lambda}}_{\text{Perte de la feuille droite}}
+- 
+\underbrace{\frac{\bigl(\sum_{i \in I} g_i\bigr)^2}{\sum_{i \in I} h_i + \lambda}}_{\text{Perte de la feuille d'origine}}
+\Bigr]
+- \gamma
+$$ {#eq-fct-eval-split}
+
+La réduction de perte permise par le partitionnement est simplement la différence entre la somme des pertes après partitionnement (feuille gauche + feuille droite) et l'ancienne perte avant partitionnement. Le terme $\gamma$ est le terme de régularisation qui mesure le coût associé à la création d'une feuille supplémentaire. Si $\Delta \tilde{L}^{(t)}$ est **positive** et suffisamment grande, alors la scission fait **baisser** la perte globale et on la retient. Sinon, on renonce à scinder cette feuille. 
+
+::: { .callout-note}
 L'algorithme de détermination des règles de décision est le composant le plus intense en calcul des algorithmes de _gradient boosting_. Les différentes implémentations du _gradient boosting_ proposent donc de multiples améliorations et optimisations visant à le rendre le plus efficace possible. Certaines de ces optimisations sont présentées dans la partie LIEN A LA PARTIE HISTOGRAMME/CATVAR.
+:::
 
+##### Etape 4: Ajouter des arbres jusqu'à atteindre un critère d'arrêt
 
-#### Mettre à jour itérativement le modèle
-
-Une fois qu'un arbre a été entraîné, on met à jour le modèle par la formule suivante: 
-
-$$ F_{t}(x)=F_{t-1}(x)+ \eta f_{t}(x) $$ {#eq-update-model}
-
-Il est alors possible de commencer l'entraînement de l'arbre suivant, selon la même logique que précédemment. La raison d'être du paramètre $\eta$ est expliquée dans le paragraphe suivant.
-
-### Un exemple sur un cas simple: la régression avec une fonction de perte quadratique
-
-EST-CE UTILE?
+Une fois que la structure du $t$-ième arbre a été définie et que les valeurs de chaque feuilles ont été calculées, cet arbre est ajouté au modèle global, et la prédiction est mise à jour par la formule suivante: $F_{t}(x)=F_{t-1}(x)+ \eta f_{t}(x)$. Il est alors possible de commencer l'entraînement de l'arbre suivant, selon la même logique que précédemment. Le processus de construction des arbres se poursuit jusqu'à atteindre soit le nombre maximum d'arbres autorisé dans le modèle ($K$), soit un autre **critère d'arrêt** (par exemple, une réduction de perte minimale par arbre).
 
 ### Le grand ennemi du _gradient boosting_: le surajustement
 
