@@ -83,8 +83,8 @@ On dispose d'un jeu de données ${(x_i, y_i)}_{i=1}^n$ avec $x_i \in \mathbb{R}^
 
 $$ \hat{y}_{i} =F\left(\mathbf{x}_i\right) = \sum_{k=1}^{K} f_k\left(\mathbf{x}_i\right) $$
 
-Procédure de _boosting_:
-1.  Initialiser le modèle avec $F_0\left(\mathbf{x}\right) = f_0\left(\mathbf{x}\right) = y_0$.
+Procédure de construction du mo:
+1.  Initialiser le modèle avec $F_0\left(\mathbf{x}\right) = f_0\left(\mathbf{x}\right) = \frac{1}{n}\sum_{i=1}^n y_i$.
 2.  Pour $m = 1, \dots, M:$
     (a) Calculer le gradient (les pseudo-résidus) à l'issue des $m-1$ étapes précédentes: $ g_{im} = \frac{\partial l(y_i, F_{m-1}\left(\mathbf{x}\right))}{\partial F_{m-1}\left(\mathbf{x}\right)} $
     (b) Entraîner le $m$-ième _weak learner_: on cherche l'arbre $f_m$ défini par les paramètres $\mathbf{a_m}$ qui prédit le mieux l'opposé du gradient de la fonction de perte:
