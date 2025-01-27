@@ -1,0 +1,160 @@
+### 2.1 Une construction itérative
+
+On dispose d’un jeu de données ${(x_i, y_i)}_{i=1}^n$ avec $x_i \in \mathbb{R}^m$ et une cible $y_i$. Le principe du boosting consiste à construire un modèle de plus en plus précis par **ajout successif d’arbres**.
+
+À l’itération $t$, on ajoute un nouvel arbre $f_t$ pour améliorer la prédiction actuelle $\hat{y}_i^{(t-1)}$. Le modèle devient :
+$$
+\hat{y}_i^{(t)} = \hat{y}_i^{(t-1)} + f_t(x_i).
+$$
+Si l'on construit un ensemble de $K$ arbres, le modèle final est donc :
+$$
+\hat{y}_i = \sum_{k=1}^K f_k(x_i),
+$$
+où chaque $f_k$ est un arbre de régression (CART) produisant une valeur réelle (appelée _weight_) pour chaque feuille.
+
+L'optimisation du modèle final en une seule étape étant impossible/trop complexe, l'optimisation se fait de manière itérative, chaque étape consistant à ajouter un nouvel arbre de manière optimale, c'est-à-dire de manière à réduire au maximum la fonction de perte.
+
+A l'itération $t$, l'objectif est donc de minimiser la perte (écart entre valeurs prédites par le modèles et observations) liée à l'ajout du nouvel arbre $f_t(x_i)$ :
+
+$$
+L^{(t)} = \sum_{i=1}^n \ell\bigl(y_i,\;\hat{y}_i^{(t-1)} + f_t(x_i)\bigr) + \Omega\bigl(f_t\bigr).
+$$
+
+Pour éviter le sur-apprentissage, l'algorithme XGBoost introduit une régularisation explicite qui pénalise la complexité de chaque arbre:
+$$
+\Omega(f) = \gamma \, T \;+\; \tfrac{1}{2} \, \lambda \, \|w\|^2.
+$$
+
+- $\ell$ est la fonction de perte (par ex. l’erreur quadratique, logistique, etc.).  
+- $\Omega(f)$ punit la complexité de l’arbre $f$ via deux termes :  
+- $\gamma\,T$, où $T$ est le nombre de feuilles,  
+- $\tfrac{1}{2}\,\lambda\,\|w\|^2$, où $w$ regroupe les poids (valeurs) de chaque feuille.  
+- $\gamma$ et $\lambda$ sont des hyperparamètres qui contrôlent la complexité de l’arbre (paramètres de régularisation).
+
+Cette pénalisation encourage les arbres plus « simples » (moins de feuilles, poids de feuilles plus petits) afin d'éviter le sur-ajustement (*overfitting*).
+
+Encadré:
+	**Un arbre peut être vu comme un ensemble de « feuilles constantes »:**
+	Dans un arbre de régression, on partitionne l’espace des variables (*features*) en régions (chaque région correspond à une feuille), et on attribue à chaque région un **poids** (ou valeur ou encore _score_) unique, noté $w_j$​ pour la feuille $j$. Autrement dit, si une observation $(x_i, y_i)$ aboutit dans la feuille $j$ de l’arbre, alors la prédiction de l’arbre pour cette observation est la valeur $w_j$.
+
+### 2.2 La résolution de ce problème d'optimisation par la méthode du gradient boosting
+
+L’algorithme de gradient boosting va :
+
+1. Déterminer la **structure** de l’arbre (choisir comment séparer les données de manière optimale, c'est-à-dire choisir l'emplacement des noeuds) en tenant compte de la régularisation.
+2. Pour chaque feuille, **trouver la meilleure valeur $w_j$​** à attribuer, c’est-à-dire la valeur qui **minimise** la fonction de perte, en tenant compte de la régularisation.
+
+L'algorithme XGBoost (et plus généralement dans le _Gradient Boosting_ sur arbres), utilise une approche **gloutonne** pour construire l’arbre, _nœud après nœud_. Cette approche peut être résumée ainsi :
+
+1. On part d’une feuille unique (l’arbre de profondeur 0).
+2. Pour **chaque** nœud/feuille candidat :
+    - On teste toutes les scissions possibles (sur toutes les variables, et sur les différents seuils possibles).
+    - Pour chaque scission candidate, on calcule le **gain** en perte qu’elle pourrait apporter.
+    - Si la meilleure scission apporte un gain positif (au-delà d’un certain seuil, tenant compte de la régularisation $\gamma$), on « fige » cette scission et on crée deux nouvelles feuilles.
+3. On répète le processus récursivement (en partant des feuilles nouvellement créées) jusqu’à :
+    - soit atteindre la **profondeur maximale** autorisée,
+    - soit ne plus trouver de scission intéressante (c'est-à-dire qui permette de réduire suffisamment la perte).
+
+**Ce processus permet de fixer la structure optimale de l’arbre** : on « descend » dans l’arbre en scindant chaque feuille tant que cela génère une réduction "suffisante" de la fonction de perte.
+
+Par la suite, nous détaillons ce processus.
+
+#### 2.2.1 Etape 1: fonction de perte approchée
+
+Pour résoudre ce problème, XGBoost applique une **approximation de second ordre** de la fonction de perte $L^{(t)}$. 
+
+Notons :
+$$
+g_i = \left.\frac{\partial\,\ell\bigl(y_i,\;\hat{y}_i\bigr)}{\partial\,\hat{y}_i}\right|_{\hat{y}_i^{(t-1)}}
+\quad\text{et}\quad
+h_i = \left.\frac{\partial^2\,\ell\bigl(y_i,\;\hat{y}_i\bigr)}{\partial\,(\hat{y}_i)^2}\right|_{\hat{y}_i^{(t-1)}}.
+$$
+
+- $g_i$ est le gradient de la perte pour l’exemple $i$.  
+- $h_i$ est le hessien (ou dérivée seconde) de la perte pour l’exemple $i$.
+
+On fait alors un développement de Taylor à l’ordre 2 autour de $\hat{y}_i^{(t-1)}$ :
+$$
+L^{(t)} \approx \sum_{i=1}^n \Bigl[\ell\bigl(y_i,\;\hat{y}_i^{(t-1)}\bigr)
++ g_i\,f_t(x_i)
++ \tfrac12\,h_i\,[f_t(x_i)]^2\Bigr]
++ \Omega\bigl(f_t\bigr).
+$$
+
+En supprimant les termes constants (qui n’affectent pas la minimisation), on obtient une nouvelle fonction de perte approchée à la $t^{ième}$ itération :
+$$
+\tilde{L}^{(t)} = \sum_{i=1}^n \Bigl[g_i\,f_t(x_i) + \tfrac12\,h_i\,[f_t(x_i)]^2\Bigr] + \Omega\bigl(f_t\bigr).
+$$
+
+#### 2.2.2 Etape 2: déterminer les valeurs (poids) optimales des feuilles conditionnellement à la structure de l'arbre
+
+Chaque arbre $f_t$ est vu comme une fonction constante par morceaux de type :
+$$
+f_t(x) = w_{\,q(x)},
+$$
+où $q(x)$ est une fonction qui assigne un indice de feuille (un entier entre 1 et $T$) à chaque observation $x$, et $w_j$ est le poids (valeur de sortie) de la $j$-ième feuille.
+
+On regroupe les observations $i$ tombant dans la feuille $j$ dans l’ensemble $I_j = \{i\mid q(x_i)=j\}$. Cela permet de ré-écrire la fonction de perte approchée sous la forme:
+$$
+\tilde{L}^{(t)} = \sum_{j=1}^T \Bigl[\sum_{i \in I_j} \bigl(g_i\,w_j + \tfrac12\,h_i\,w_j^2\bigr)\Bigr]
++ \gamma\,T
++ \tfrac12\,\lambda \sum_{j=1}^T w_j^2.
+$$
+- Le terme $\gamma\,T$ pénalise le nombre de feuilles $T$.  
+- Le terme $\tfrac12\,\lambda \sum_{j=1}^T w_j^2$ pénalise l’amplitude des poids de feuilles.
+
+Soit:
+$$
+\tilde{L}^{(t)} = \sum_{j=1}^T \Bigl[\sum_{i \in I_j} \bigl(g_i\,w_j + \tfrac12\,h_i\,w_j^2\bigr) + \tfrac12\,\lambda w_j^2 \Bigr]
++ \gamma\,T
+$$
+Ce qui peut s'écrire comme une somme (sur l'ensemble des feuilles) de fonctions de perte relatives à chaque feuille $j$  :
+$$
+\tilde{L}^{(t)} = \sum_{j=1}^T k(w_j)
++ \gamma\,T
+$$
+avec $k(w_j)$ la perte relative à la feuille $j$ :
+$$
+k(w_j) = \sum_{i \in I_j} \bigl(g_i\,w_j + \tfrac12\,h_i\,w_j^2\bigr) + \tfrac12\,\lambda w_j^2
+$$
+
+En supposant connue la structure de l'arbre, la valeur optimale $w_j^*$ de la feuille $j$, c'est-à-dire la valeur qui minimise la contribution de la feuille à la fonction de perte globale, se calcule explicitement (en résolvant pour chaque feuille $j$, $\frac{dk}{dw_j} = 0$):
+
+$$
+w_j^* = -\,\frac{\sum_{i \in I_j} g_i}{\sum_{i \in I_j} h_i + \lambda}.
+$$
+
+On en déduit alors, lorsque la structure $q$ de l'arbre est figée, la fonction de perte approchée associée au t-ième arbre :
+$$
+\tilde{L}^{(t)}(q)
+= -\,\tfrac12 \sum_{j=1}^T
+\frac{\bigl(\sum_{i \in I_j} g_i\bigr)^2}{\sum_{i \in I_j} h_i + \lambda}
++ \gamma\,T.
+$$
+Cette expression va permettre de comparer toutes les scissions envisagées lors de la construction du t-ième arbre, et de choisir celles qui réduisent la perte au maximum. Cela permettra de trouver la structure optimale $q^*$ du nouvel arbre. 
+
+
+#### 2.2.3 Etape 3: déterminer la structure optimale de l'arbre
+
+Pour construire l’arbre, on part généralement d’une feuille unique qui sera scindée progressivement de façon gloutonne (*greedy*)). Pour chaque attribut (variable ou *feature*) et pour chaque valeur candidate de seuil, on calcule la réduction de perte engendrée par la scission envisagée. A chaque étape, on choisit la scission qui maximise la réduction de la perte. 
+
+Le processus est réitéré jusqu'à ce que **l'arbre atteigne la profondeur maximale autorisée**, ou jusqu’à ce que **plus aucune scission ne permette de réduire la fonction de perte**.
+
+Plus spécifiquement, la réduction de perte optimale associée à la scission d’une feuille (pour un ensemble d’observations $I$) en deux feuilles gauche ($I_L$) et droite ($I_R$) s’écrit :
+$$
+\Delta L
+= \tfrac12 \Bigl[
+\underbrace{\frac{\bigl(\sum_{i \in I_L} g_i\bigr)^2}{\sum_{i \in I_L} h_i + \lambda}}_{\text{score de la feuille gauche}}
++ 
+\underbrace{\frac{\bigl(\sum_{i \in I_R} g_i\bigr)^2}{\sum_{i \in I_R} h_i + \lambda}}_{\text{score de la feuille droite}}
+- 
+\underbrace{\frac{\bigl(\sum_{i \in I} g_i\bigr)^2}{\sum_{i \in I} h_i + \lambda}}_{\text{score de la feuille d'origine}}
+\Bigr]
+- \gamma.
+$$
+
+C’est la différence entre la somme des scores (feuille gauche + feuille droite) et l’ancien score (feuille non-partitionnée), moins la pénalité $\gamma$ liée à la création d’une feuille supplémentaire (régularisation). Si $\Delta L$ est **positive** et suffisamment grande, alors la scission fait **baisser** la perte et on la retient. Sinon, on renonce à scinder cette feuille.`
+
+#### 2.2.4 Etape 4: Itération jusqu'à l'atteinte d'un critère d'arrêt
+
+Une fois la structure de l'arbre optimisée, et les valeurs de chaque feuilles calculées (voir section 2.2.2) de manière a réduire la fonction de perte au maximum (avec régularisation), le nouvel arbre est ajouté au modèle de *boosting*, et la prédiction est mise à jour ($\hat{y}_i^{(t)}$). Le processus est alors réitéré jusqu'à atteindre le nombre maximum d'arbres autorisé dans le modèle ($K$), ou bien jusqu'à atteindre un autre **critère d’arrêt** (par exemple, un seuil minimal de perte résiduelle). 
