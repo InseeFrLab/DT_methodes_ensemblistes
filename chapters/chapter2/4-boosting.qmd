@@ -109,8 +109,7 @@ $$
 
 L'objectif de l'itération $t$ est donc de trouver le nouvel arbre $f_t(x_i)$ qui minimise la fonction-objectif. Pour éviter le sur-ajustement, l'algorithme `XGBoost` utilise une fonction-objectif qui comporte à la fois une fonction de perte, et un terme de régularisation:
 
-$$
-L^{(t)} = \underbrace{ \sum_{i=1}^n \mathcal{l}\bigl(y_i,\;\hat{y}_i^{(t-1)} + f_t(x_i)\bigr)}_{\substack{\text{Perte sur les} \\ \text{observations}}} + \underbrace{\Omega\bigl(f_t\bigr)}_{\substack{\text{Terme de} \\ \text{régularisation}}}\,\,\text{avec}\,\,\Omega(f) = \gamma \, T \;+\; \tfrac{1}{2} \, \lambda \, \|w\|^2
+$$ L^{(t)} = \underbrace{\sum_{i=1}^n \ell\left(y_i,\;\hat{y}_i^{(t-1)} + f_t(x_i)\right)}_{\substack{\text{Perte sur les} \\ \text{observations}}} + \underbrace{\sum_k \Omega(f_{k})}_{\substack{\text{Fonction de} \\ \text{régularisation}}}\,\,\text{avec}\,\,\Omega(f) = \gamma T + \frac{1}{2} \lambda \sum_{k=1}^K \sum_{j=1}^{T_k} w_j^2 
 $$ {#eq-fct-obj-initial}
 
 Dans cette expression:
