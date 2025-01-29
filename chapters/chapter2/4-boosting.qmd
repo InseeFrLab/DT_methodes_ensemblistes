@@ -110,12 +110,12 @@ $$
 L'objectif de l'itération $t$ est donc de trouver le nouvel arbre $f_t(x_i)$ qui minimise la fonction-objectif. Pour éviter le sur-ajustement, l'algorithme `XGBoost` utilise une fonction-objectif qui comporte à la fois une fonction de perte, et un terme de régularisation:
 
 $$
-L^{(t)} = \underbrace{ \sum_{i=1}^n \ell\bigl(y_i,\;\hat{y}_i^{(t-1)} + f_t(x_i)\bigr)}_{\substack{\text{Perte sur les} \\ \text{observations}}} + \underbrace{\Omega\bigl(f_t\bigr)}_{\substack{\text{Terme de} \\ \text{régularisation}}}\,\,\text{avec}\,\,\Omega(f) = \gamma \, T \;+\; \tfrac{1}{2} \, \lambda \, \|w\|^2
+L^{(t)} = \underbrace{ \sum_{i=1}^n \mathcal{l}\bigl(y_i,\;\hat{y}_i^{(t-1)} + f_t(x_i)\bigr)}_{\substack{\text{Perte sur les} \\ \text{observations}}} + \underbrace{\Omega\bigl(f_t\bigr)}_{\substack{\text{Terme de} \\ \text{régularisation}}}\,\,\text{avec}\,\,\Omega(f) = \gamma \, T \;+\; \tfrac{1}{2} \, \lambda \, \|w\|^2
 $$ {#eq-fct-obj-initial}
 
 Dans cette expression:
 
-- La fonction de perte $\ell$ mesure la distance entre la prédiction $\hat{y}$ et la vraie valeur $y$ (exemples: erreur quadratique moyenne, erreur absolue moyenne, perte d'entropie croisée binaire, etc.).  
+- La fonction de perte $\mathcal{l}$ mesure la distance entre la prédiction $\hat{y}$ et la vraie valeur $y$ (exemples: erreur quadratique moyenne, erreur absolue moyenne, perte d'entropie croisée binaire, etc.).  
 - Le terme de régularisation $\Omega(f)$ pénalise la complexité de l'arbre $f$ via deux termes: le terme $\gamma\,T$ pénalise les arbres avec un grand nombre de feuilles ($T$ élevé) et le terme $\tfrac{1}{2} \lambda\sum_{j=1}^{T_t} w_j^2$ pénalise les arbres avec des poids élevés ($w_j$ élevés en valeur absolue). Cette pénalisation privilégie les arbres plus « simples » (moins de feuilles, poids de feuilles plus petits) afin d'éviter le sur-ajustement (*overfitting*). $\gamma$ et $\lambda$ sont des hyperparamètres de régularisation qui contrôlent la complexité de l'arbre.
 
 
