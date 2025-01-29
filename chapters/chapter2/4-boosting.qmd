@@ -114,7 +114,7 @@ $$ {#eq-fct-obj-initial}
 
 Dans cette expression:
 
-- La fonction de perte $\mathcal{l}$ mesure la distance entre la prédiction $\hat{y}$ et la vraie valeur $y$ (exemples: erreur quadratique moyenne, erreur absolue moyenne, perte d'entropie croisée binaire, etc.).  
+- La fonction de perte $\ell$ mesure la distance entre la prédiction $\hat{y}$ et la vraie valeur $y$ (exemples: erreur quadratique moyenne, erreur absolue moyenne, perte d'entropie croisée binaire, etc.).  
 - Le terme de régularisation $\Omega(f)$ pénalise la complexité de l'arbre $f$ via deux termes: le terme $\gamma\,T$ pénalise les arbres avec un grand nombre de feuilles ($T$ élevé) et le terme $\tfrac{1}{2} \lambda\sum_{j=1}^{T_t} w_j^2$ pénalise les arbres avec des poids élevés ($w_j$ élevés en valeur absolue). Cette pénalisation privilégie les arbres plus « simples » (moins de feuilles, poids de feuilles plus petits) afin d'éviter le sur-ajustement (*overfitting*). $\gamma$ et $\lambda$ sont des hyperparamètres de régularisation qui contrôlent la complexité de l'arbre.
 
 
@@ -175,8 +175,7 @@ $$
 
 Dans la dernière expression, la fonction de perte simplifiée se reformule comme une combinaison quadratique des poids $w_j$, dans laquelle les dérivées première et seconde de la fonction de perte interviennent sous forme de pondérations ($\sum_{i \in I_j} g_i$ et $\sum_{i \in I_j} h_i$). Cette expression peut elle-même s'écrire comme la somme sur l'ensemble des feuilles de la fonction de perte relative à chaque feuille $j$  :
 $$
-\tilde{L}^{(t)} = \sum_{j=1}^T k(w_j)
-+ \gamma\,T
+\tilde{L}^{(t)} = \sum_{j=1}^T k(w_j) + \gamma\,T
 $$
 
 avec $k(w_j)$ la perte relative à la feuille $j$ :
@@ -187,15 +186,15 @@ $$
 
 Pour un arbre de structure donnée, la valeur optimale $w_j^{\ast}$ de la feuille $j$, c'est-à-dire la valeur qui minimise la contribution de la feuille à la fonction de perte globale se calcule facilement (en résolvant pour chaque feuille $j$, $\frac{\partial k}{\partial w_j} = 0$):
 
-$$ w_j^{\ast} = -\frac{\sum_{i \in I_j} g_i}{\sum_{i \in I_j} h_i + \lambda} $$ {#eq-w-j-optimal}
+$$ 
+w_j^{\ast} = -\frac{\sum_{i \in I_j} g_i}{\sum_{i \in I_j} h_i + \lambda} 
+$$ {#eq-w-j-optimal}
 
 
 On déduit alors, pour une structure d'arbre $q$ donnée, la valeur optimale de la fonction-objectif pour le $t$-ième arbre:
 
-$$ \tilde{L}^{(t)}(q)
-= -\,\tfrac12 \sum_{j=1}^T
-\frac{\bigl(\sum_{i \in I_j} g_i\bigr)^2}{\sum_{i \in I_j} h_i + \lambda}
-+ \gamma\,T 
+$$ 
+\tilde{L}^{(t)}(q) = -\,\tfrac12 \sum_{j=1}^T \frac{\bigl(\sum_{i \in I_j} g_i\bigr)^2}{\sum_{i \in I_j} h_i + \lambda} + \gamma\,T 
 $$ {#eq-fct-obj-optimal}
 
 L'équation @eq-fct-obj-optimal est utile en pratique car elle permet de comparer la qualité de deux arbres candidats, et de déterminer immédiatement lequel est le meilleur. On pourrait même penser que cette équation est à elle seule suffisante pour choisir le $t$-ième arbre: il suffirait d'énumérer les arbres possibles, de calculer la qualité de chacun d'entre eux, et de retenir le meilleur. En réalité, cette approche est inemployable en pratique car le nombre d'arbres possibles est extrêmement élevé. Par conséquent, cette équation n'est pas utilisée telle quelle, mais sert à comparer les règles de décision possibles à chaque étape d'une optimisation gloutonne, de façon à trouver la structure $q^\ast$ du $t$-ième arbre.
@@ -208,13 +207,10 @@ La grande différence avec les arbres CART et les forêts aléatoires est que ce
 
 Plus spécifiquement, la réduction de perte associée au partitionnement de la feuille $I$ en deux feuilles gauche ($I_L$) et droite ($I_R$) à l'aide d'une certaine règle de décision s'écrit (à partir de l'équation @eq-fct-obj-optimal) :
 $$
-\Delta \tilde{L}^{(t)}
-= \tfrac12 \Bigl[
-\underbrace{\frac{\bigl(\sum_{i \in I_L} g_i\bigr)^2}{\sum_{i \in I_L} h_i + \lambda}}_{\text{Perte de la feuille gauche}}
-+ 
-\underbrace{\frac{\bigl(\sum_{i \in I_R} g_i\bigr)^2}{\sum_{i \in I_R} h_i + \lambda}}_{\text{Perte de la feuille droite}}
-- 
-\underbrace{\frac{\bigl(\sum_{i \in I} g_i\bigr)^2}{\sum_{i \in I} h_i + \lambda}}_{\text{Perte de la feuille d'origine}}
+\Delta \tilde{L}^{(t)} = \tfrac12 \Bigl[
+    \underbrace{\frac{\bigl(\sum_{i \in I_L} g_i\bigr)^2}{\sum_{i \in I_L} h_i + \lambda}}_{\text{Perte de la feuille gauche}} + 
+    \underbrace{\frac{\bigl(\sum_{i \in I_R} g_i\bigr)^2}{\sum_{i \in I_R} h_i + \lambda}}_{\text{Perte de la feuille droite}} - 
+    \underbrace{\frac{\bigl(\sum_{i \in I} g_i\bigr)^2}{\sum_{i \in I} h_i + \lambda}}_{\text{Perte de la feuille d'origine}}
 \Bigr]
 - \gamma
 $$ {#eq-fct-eval-split}
