@@ -157,16 +157,17 @@ $$ g_i = \frac{\partial l(y_i, \hat{y}_i^{(t-1)})}{\partial\hat{y}_i^{(t-1)}} \;
 
 Les termes $g_i$ et $h_i$ désignent respectivement la dérivée première (le gradient) et la dérivée seconde (la hessienne) de la fonction de perte par rapport à la variable prédite pour l'observation $i$. Dans cette équation, les termes (A) et (B) sont constants car les $t-1$ arbres précédents ont déjà été entraînés et ne sont pas modifiés par l'entraînement du $t$-ième arbre. <!-- Autrement dit, la seule façon d'améliorer le modèle sera de trouver un $t$-ième arbre $f_t$ qui minimise la fonction-objectif \mathcal{L}^{(t)} ainsi réécrite.  --> On peut donc retirer ces termes pour obtenir la fonction-objectif simplifiée $\tilde{L}^{(t)}$ qui sera utilisée pour l'entraînement du $t$-ième arbre:
 
-$$ \mathcal{\tilde{L}}^{(t)} = \sum_{i=1}^{n} [g_i f_t(\mathbf{x}_i)+ \frac{1}{2} h_i [f_t(\mathbf{x}_i)]^2] + \Omega(f_t) $$ {#eq-fct-obj-final}
+$ \mathcal{\tilde{L}}^{(t)} = \sum_{i=1}^{n} [g_i f_t(\mathbf{x}_i)+ \frac{1}{2} h_i [f_t(\mathbf{x}_i)]^2] + \Omega(f_t) $ {#eq-fct-obj-final}
 
 <!-- Cette expression montre que le problème initial où il fallait entraîner un grand nombre d'arbres simultanément (équation @eq-fct-obj-initial) à un problème beaucoup plus simple dans lequel il n'y a plus qu'un seul arbre à entraîner (équation @eq-fct-obj-final). -->
 
 #### Étape 2: calculer les poids optimaux conditionnellement à la structure de l'arbre
 
 A partir de l'équation @eq-fct-obj-final, il est possible de faire apparaître les poids $w_j$ du $t$-ième arbre. Chaque arbre $f_t$ peut être vu comme une fonction constante par morceaux du type $f_t(x) = w_{\,q(x)}$ où $q(x)$ est une fonction qui assigne un indice de feuille (un entier entre 1 et $T$) à chaque observation $x$, et $w_j$ est le poids (valeur de sortie) de la $j$-ième feuille. En regroupant les observations $i$ tombant dans la feuille $j$ dans l'ensemble $I_j = \{i\mid q(x_i)=j\}$, la fonction de perte approchée peut être réécrite sous la forme:
+
 $$
 \begin{align*}
-\tilde{L}^{(t)} =&   \sum_{j=1}^{T} \sum_{i\in I_{j}} \bigg[g_i f_t(\mathbf{x}_i) &+ \frac{1}{2} h_i [f_t(\mathbf{x}_i)]^2\bigg]&+ \gamma T + \frac{1}{2} \lambda \sum_{j=1}^T w_i^2 \\
+\tilde{L}^{(t)} =&   \sum_{j=1}^{T} \sum_{i\in I_{j}} \bigg[g_i f_t(\mathbf{x}_i)\phantom{\frac{1}{2}} &+ \frac{1}{2} h_i [f_t(\mathbf{x}_i)]^2\bigg]&+ \gamma T + \frac{1}{2} \lambda \sum_{j=1}^T w_i^2 \\
      &= \sum_{j=1}^{T} \sum_{i\in I_{j}} \bigg[g_i w_j &+ \frac{1}{2} h_i w_j^2\bigg] &+ \gamma T + \frac{1}{2} \lambda \sum_{j=1}^T w_i^2 \\
      &= \sum^T_{j=1} \bigg[w_j\sum_{i\in I_{j}} g_i &+ \frac{1}{2} w_j^2 \left( \sum_{i \in I_{j}} h_i + \lambda \right) \bigg] &+ \gamma T
 \end{align*}
