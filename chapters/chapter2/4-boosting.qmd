@@ -207,11 +207,11 @@ La grande différence avec les arbres CART et les forêts aléatoires est que ce
 
 Plus spécifiquement, la réduction de perte associée au partitionnement de la feuille $I$ en deux feuilles gauche ($I_L$) et droite ($I_R$) à l'aide d'une certaine règle de décision s'écrit (à partir de l'équation @eq-fct-obj-optimal) :
 $$
-\Delta \tilde{L}^{(t)} = \tfrac12 \Bigl[
+\Delta \tilde{L}^{(t)} = \tfrac12 \bigl[
     \underbrace{\frac{\bigl(\sum_{i \in I_L} g_i\bigr)^2}{\sum_{i \in I_L} h_i + \lambda}}_{\text{Perte de la feuille gauche}} + 
     \underbrace{\frac{\bigl(\sum_{i \in I_R} g_i\bigr)^2}{\sum_{i \in I_R} h_i + \lambda}}_{\text{Perte de la feuille droite}} - 
     \underbrace{\frac{\bigl(\sum_{i \in I} g_i\bigr)^2}{\sum_{i \in I} h_i + \lambda}}_{\text{Perte de la feuille d'origine}}
-\Bigr]
+\bigr]
 - \gamma
 $$ {#eq-fct-eval-split}
 
