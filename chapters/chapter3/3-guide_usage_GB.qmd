@@ -100,14 +100,16 @@ Si elle est en général plus performante que l'approche par niveau, l'approche 
 
 ![](/figures/leafwise-depthwise.png){#fig-leaf-wise width=60%}
 
-
 :::
-
 
 ## Comment entraîner un algorithme de _gradient boosting_? {#sec-procedure-training-gb}
 
-
 Proposer une procédure pour l'optimisation des hyperparamètres s'avère plus délicat pour les algorithmes de _gradient boosting_ que pour les forêts aléatoires, car ces algorithmes comprennent un nombre beaucoup plus élevé d'hyperparamètres, et la littérature méthodologique sur leur usage pratique reste assez limitée et peu conclusive (en-dehors des nombreux tutoriels introductifs disponibles sur internet). Trois constats sont néanmoins bien établis. Premièrement, __bien optimiser les hyperparamètres est essentiel pour la performance du modèle final__. Deuxièmement, __cette optimisation est complexe et longue__, il faut donc la mener de façon rigoureuse et organisée pour ne pas perdre de temps. Troisièmement, __contrairement aux forêts aléatoires, les valeurs par défaut des hyperparamètres dans les différentes implémentations ne constituent le plus souvent pas un point de départ raisonnable__ (@bentejac2021comparative et @probst2019tunability), en particulier pour les hyperparamètres de régularisation dont la valeur par défaut est souvent nulle.
+
+::: {.callout-tip title="Parfois, une forêt aléatoire suffit..."}
+
+Avant de se lancer dans le _gradient boosting_, il est utile d'entraîner une forêt aléatoire selon la procédure décrite dans la section @sec-procedure-training-rf. Ce modèle servira de point de comparaison pour la suite, et permettra notamment de voir si le _gradient boosting_ offre des gains de performances qui justifient le temps passé à l'optimisation des hyperparamètres.
+:::
 
 ### Préparer l'optimisation des hyperparamètres
 
@@ -130,9 +132,11 @@ Proposer une procédure pour l'optimisation des hyperparamètres s'avère plus d
 
 ### Optimiser les hyperparamètres
 
-#### Une procédure itérative par validation croisée
+Cette section propose trois approches pour optimiser les hyperparamètres d'un algorithme de _gradient boosting_. Les deux premières reposent sur une validation croisée et une validation simple, associée à un _grid search_. La troisième est plus avancée et mobilise `optuna`, un _framework_ d'optimisation d'hyperparamètres. Aucune de ces approches ne garantit pas l'obtention d'un modèle optimal, mais elle sont relativement lisibles et permettent d'obtenir rapidement un modèle raisonnablement performant.
 
-Voici une procédure simple pour optimiser les hyperparamètres d'un algorithme de _gradient boosting_. Elle ne garantit pas l'obtention d'un modèle optimal, mais elle est lisible et permet d'obtenir rapidement un modèle raisonnablement performant. Elle est coûteuse sur le plan computationnel et donc adaptée à des données peu volumineuses.
+#### Approche 1: procédure itérative par validation croisée
+
+Voici une procédure simple reposant sur une validation croisée. Elle est assez coûteuse sur le plan computationnel et donc adaptée à des données peu volumineuses.
 
 - __Optimiser conjointement le nombre d'arbres et le taux d'apprentissage__. Par exemple, on évalue les performances du modèle en testant les valeurs `[100, 200, 500, 1000]` pour le nombre d'arbres, et `[0.05, 0.1, 0.15, 0.2]` pour le taux d'apprentissage, avec des valeurs raisonnables pour les autres hyperparamètres. On retient finalement le taux d'apprentissage et le nombre d'arbres du modèle le plus performant. Si l'un de ces hyperparamètres est la valeur minimale ou maximale testée (par exemple 1000 arbres, ou 0.05 pour le taux d'apprentissage), alors il est préférable de recommencer l'exercice en ajustant la liste des valeurs possibles.
 
@@ -140,14 +144,15 @@ Voici une procédure simple pour optimiser les hyperparamètres d'un algorithme 
 
 - __Optimiser conjointement les hyperparamètres de régularisation__. On utilise les valeurs des hyperparamètre issues des étapes précédentes, puis on évalue les performances de différents couples de valeurs (`lambda`, `min_split_gain`), et on retient les valeurs des hyperparamètres du modèle le plus performant.
 
-Cette procédure est présentée en détail dans la partie 1 du notebook XXXXXXXXXXXXXXXXXXXXXXXXXXXX.
+Utiliser l'option `return_train_score = True` de `GridsearchCV` pour mesurer le surajustement, et durcir les hyperparamètres de régularisation quand il est important.
+
+Cette procédure est présentée en détail dans la partie 1 du _notebook_ XXXXXXXXXXXXXXXXXXXXXXXXXXXX.
     
 <!-- ::: {.callout-warning title="_Early stopping_ et validation croisée"}
 
 ::: -->
 
-
-#### Une procédure itérative par validation simple
+#### Approche 2: procédure itérative par validation simple
 
 - __Optimiser conjointement le nombre d'arbres et le taux d'apprentissage__. Le principe est le suivant: on évalue les performances de différents couples de valeurs (nombre d'arbres, taux d'apprentissage) avec des valeurs raisonnables pour les autres hyperparamètres. Il y a deux approches, selon qu'on retient une approche de validation croisée, 
 
@@ -175,13 +180,8 @@ Regarder cette vidéo: https://www.bilibili.com/video/BV1DE41167cu/
 
 
 
-::: {.callout-tip title="Parfois, une forêt aléatoire suffit..."}
 
-Avant de se lancer dans le _gradient boosting_, il est utile d'entraîner une forêt aléatoire selon la procédure décrite dans la section @sec-procedure-training-rf. Ce modèle servira de point de comparaison pour la suite, et permettra notamment de voir si le _gradient boosting_ offre des gains de performances qui justifient le temps passé à l'optimisation des hyperparamètres.
-:::
-
-
-#### Une approche avancée: utiliser `optuna`
+#### Approche 3: utiliser `optuna`
 
 
 Cette procédure est présentée en détail dans la partie 3 du notebook XXXXXXXXXXXXXXXXXXXXXXXXXXXX.
