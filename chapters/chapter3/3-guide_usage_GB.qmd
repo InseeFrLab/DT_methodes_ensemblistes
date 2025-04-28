@@ -69,14 +69,14 @@ Voici une présentation des principaux hyperparamètres et de leurs effets sur l
 
     - le __taux d'apprentissage__ (_learning rate_) contrôle l'influence de chaque arbre sur le modèle global; il s'agit de $\eta$ dans l'équation REFERENCE PARTIE OVERFITTING. Cet hyperparamètre a un effet important sur la performance du modèle global (@probst2019tunability). Un taux d'apprentissage faible réduit la contribution de chaque arbre, rendant l'apprentissage plus progressif; cela évite qu'un arbre donné ait une influence trop importante sur le modèle global et contribue donc à réduire le surajustement, mais nécessite un plus grand nombre d'arbres pour converger vers une solution optimale. Inversement, un taux d'apprentissage élevé accélère l'entraînement mais peut rendre le modèle instable (car trop sensible à un arbre donné), entraîner un surajustement et/ou aboutir à un modèle sous-optimal. La règle générale est de privilégier un taux d'apprentissage faible (entre 0.01 ou 0.3). Le choix du taux d'apprentissage est très lié à celui du nombre d'arbres: plus le taux d'apprentissage sera faible, plus le nombre d'arbres nécessaires pour converger vers une solution optimale sera élevé. Ces deux hyperparamètres doivent donc être optimisés conjointement.
 
-- La __complexité des arbres__: la profondeur maximale des arbres et le nombre de feuilles terminales contrôlent la complexité des _weak learners_: une profondeur élevée et un grand nombre de feuilles aboutissent à des arbres complexes au pouvoir prédictif plus élevé, mais induisent un risque de surajustement. Par ailleurs, de tels arbres sont plus longs à entraîner que des arbres peu profonds avec un nombre limité de feuilles. Ces hyperparamètres ont un effet sur le nombre optimal d'arbres: celui-ci est plus faible quand les arbres sont complexes. Il est à noter que le nombre de feuilles terminales a un effet linéaire sur la complexité des arbres, tandis que la profondeur maximale a un effet exponentiel: un arbre pleinement développé de profondeur $k$ comprend $2^k$ feuilles terminales et $2^k - 1$ _splits_. Augmenter la profondeur d'une unité a donc pour effet de doubler le temps d'entraînement de chaque arbre.
+- La __complexité des arbres__: la profondeur maximale des arbres et le nombre de feuilles terminales contrôlent la complexité des _weak learners_: une profondeur élevée et un grand nombre de feuilles aboutissent à des arbres complexes au pouvoir prédictif plus élevé, mais induisent un risque de surajustement. Par ailleurs, de tels arbres sont plus longs à entraîner que des arbres peu profonds avec un nombre limité de feuilles. Le nombre optimal d'arbres est très corrélé au nombre de feuilles terminales: il est logiquement plus faible quand les arbres sont complexes. Il est à noter que le nombre de feuilles terminales a un effet linéaire sur la complexité des arbres, tandis que la profondeur maximale a un effet exponentiel: un arbre pleinement développé de profondeur $k$ comprend $2^k$ feuilles terminales et $2^k - 1$ _splits_. Augmenter la profondeur d'une unité a donc pour effet de doubler le temps d'entraînement de chaque arbre. Ces deux hyperparamètres peuvent interagir entre eux de manière complexe (voir encadré).
 
 - La __lutte contre le surajustement__: ces hyperparamètres de régularisation jouent un rôle important dans le contrôle de la complexité des _weak learners_ et contribuent à éviter le surajustement: 
     - Les pénalisations tendent à réduire le poids $w_j$ des feuilles terminales: la pénalisation quadratique réduit la valeur absolue des poids sans les annuler (il s'agit de $\lambda$ dans l'[équation donnant le poids optimal](4-boosting.qmd#eq-w-j-optimal) d'une feuille terminale), tandis que la pénalisation absolue élevée pousse certains poids à être nuls. La pénalisation quadratique est la plus utilisée, notamment parce qu'elle permet d'amoindrir l'influence des points aberrants.
     - Le nombre minimal d'observations par feuille terminale contrôle la taille des feuilles terminales. Une valeur faible autorise le modèle à isoler de petits groupes d'observations mais induit un risque de surajustement; inversement une valeur plus élevée limite le surajustement mais peut réduire le pouvoir prédictif.
     - Le gain minimal définit la réduction minimale de la perte requise pour qu'un nœud soit divisé (il s'agit du paramètre $\gamma$ dans l'[équation donnant le gain potentiel d'un _split_](4-boosting.qmd#eq-fct-eval-split)); une valeur plus élevée contribue à réduire la complexité des arbres et à limiter le surajustement en empêchant l'algorithme de créer des _splits_ dont l'apport est très faible et potentiellement dû à des variations non significatives des données d'entraînement.
 
-- Les __hyperparamètres d'échantillonnage__: 
+- Les __hyperparamètres d'échantillonnage__: ces hyperparamètres ont un effet notable sur les performances du modèle, mais n'ont pas vraiment besoin d'être optimisés une fois qu'on a choisi une valeur par défaut raisonnable (voir @probst2019tunability):
     - le taux d'échantillonnage des données d'entraînement et le taux d'échantillonnage des colonnes par noeud jouent exactement le même rôle que `sample.fraction` ou `max_samples`, et `mtry` dans une forêt aléatoire: échantillonner les données d'entraînement accélère l'entraînement, et échantillonner les colonnes au niveau de chaque noeud aboutit à des arbres plus variés. Il est à noter que l'échantillonnage des données se fait systématiquement sans remise dans les algorithmes de _gradient boosting_. Comme pour la forêt aléatoire, la valeur optimale du taux d'échantillonnage des colonnes par noeud dépend du nombre de variables réellement pertinentes dans les données, et une valeur plus élevée est préférable si les données comprennent un grand nombre de variables binaires issues du _one-hot-encoding_ des variables catégorielles.
     - L'échantillonnage des colonnes par arbre sert essentiellement à accélérer l'entraînement. Si les colonnes sont échantillonnées à la fois par arbre et par noeud, alors le taux d'échantillonnage final est le produit des deux taux.
     
@@ -116,8 +116,9 @@ Avant de se lancer dans le _gradient boosting_, il est utile d'entraîner une fo
 
 - __Définir des valeurs de départ raisonnables__. Définir les valeurs de départ des hyperpararamètres est une étape importante car elle permet de gagner du temps lors de l'optimisation des hyperparamètres. __Ce choix prend du temps__ et doit reposer sur une bonne compréhension du fonctionnement de l'algorithme et sur une connaissance approfondie des données utilisées. Voici quelques suggestions de valeurs de départ issues de la littérature (voir notamment @bentejac2021comparative et @probst2019tunability); il est tout à fait possible de s'en écarter lorsqu'on pense que le problème modélisé le justifie:
 
+    - `num_leaves`: entre 31 et 255;
     - `max_depth`: entre 8 et 12; 
-    - `num_leaves`: entre 30 et 255;
+    - `min_child_samples`: entre 5 et 50;
     <!-- On ne met pas learning_rate car c'est le premier HP à optimiser -->
     <!-- - `learning_rate`: entre 0.03 et 0.2; -->
     - `min_split_gain`: valeur strictement positive, commencer entre 0.1 et 1;
@@ -137,13 +138,15 @@ Cette section propose trois approches pour optimiser les hyperparamètres d'un a
 
 #### Approche 1: procédure itérative par validation croisée
 
-Voici une procédure simple reposant sur une validation croisée. Elle est assez coûteuse sur le plan computationnel et donc adaptée à des données peu volumineuses.
+La première approche repose sur une validation croisée. Elle peut être coûteuse sur le plan computationnel en raison du nombre de modèles à entraîner et est donc adaptée à des données peu volumineuses. Cette approche comprend quatre étapes:
 
 - __Optimiser conjointement le nombre d'arbres et le taux d'apprentissage__. Par exemple, on évalue les performances du modèle en testant les valeurs `[100, 200, 500, 1000]` pour le nombre d'arbres, et `[0.05, 0.1, 0.15, 0.2]` pour le taux d'apprentissage, avec des valeurs raisonnables pour les autres hyperparamètres. On retient finalement le taux d'apprentissage et le nombre d'arbres du modèle le plus performant. Si l'un de ces hyperparamètres est la valeur minimale ou maximale testée (par exemple 1000 arbres, ou 0.05 pour le taux d'apprentissage), alors il est préférable de recommencer l'exercice en ajustant la liste des valeurs possibles.
 
 - __Optimiser conjointement les hyperparamètres contrôlant la structure des arbres__. On utilise le taux d'apprentissage et le nombre d'arbres issus de l'étape précédente, puis on évalue les performances de différents couples de valeurs (`max_depth`, `min_child_samples`), et on retient enfin les valeurs des hyperparamètres du modèle le plus performant.
 
 - __Optimiser conjointement les hyperparamètres de régularisation__. On utilise les valeurs des hyperparamètres issues des étapes précédentes, puis on évalue les performances de différents couples de valeurs (`lambda`, `min_split_gain`), et on retient les valeurs des hyperparamètres du modèle le plus performant.
+
+- __Entraîner le modèle final__ avec les hyperparamètres finaux.
 
 Utiliser l'option `return_train_score = True` de `GridsearchCV` pour mesurer le surajustement, et durcir les hyperparamètres de régularisation quand il est important.
 
@@ -153,33 +156,24 @@ Cette procédure est présentée en détail dans la partie 1 du _notebook_ XXXXX
 
 ::: -->
 
-#### Approche 2: procédure itérative par validation simple
+#### Approche 2: approche itérative par validation simple
 
-- __Optimiser conjointement le nombre d'arbres et le taux d'apprentissage__. Le principe est le suivant: on évalue les performances de différents couples de valeurs (nombre d'arbres, taux d'apprentissage) avec des valeurs raisonnables pour les autres hyperparamètres. Il y a deux approches, selon qu'on retient une approche de validation croisée, 
+La seconde approche est moins exigeante sur le plan computationnel, et est donc plus adaptée à des données volumineuses. Elle est très similaire à la première, et s'en distingue sur deux points. D'une part, elle repose sur une validation simple, ce qui réduit le nombre de modèles à entraîner. D'autre part, le nombre optimal d'arbres n'est pas fixé à l'avance, mais est défini à chaque étape de l'optimisation des hyperparamètres par un mécanisme d'_early stopping_. Celui-ci fonctionne de la façon suivante: on définit un nombre d'arbres très élevé (par exemple 50 000) et pour chaque jeu d'hyperparamètres, on laisse l'entraînement se prolonger jusqu'à ce que les performances mesurées sur l'ensemble de validation cessent de s'améliorer. Le nombre d'arbres retenu est celui pour lequel la performance sur l'ensemble de validation est maximale. 
 
-    - Évaluer conjointement les couples de valeurs (nombre d'arbres, taux d'apprentissage). Par exemple, on évalue les performances du modèle en testant les valeurs `[100, 200, 500, 1000]` pour le nombre d'arbres, et `[0.05, 0.1, 0.15, 0.2]` pour le taux d'apprentissage. On retient finalement le taux d'apprentissage et le nombre d'arbres du modèle le plus performant. Si l'un de ces hyperparamètres est la valeur minimale ou maximale testée (par exemple 1000 arbres, ou 0.05 pour le taux d'apprentissage), alors il est préférable de recommencer l'exercice en ajustant la liste des valeurs possibles.
-    - Mettre un nombre d'arbres très élevé et tester uniquement des valeurs du taux d'apprentissage. Par exemple, on fixe à 50000 le nombre d'arbres, et on teste les valeurs `[0.05, 0.1, 0.15, 0.2]` pour le taux d'apprentissage. Il est __indispensable__ d'utiliser l'_early stopping_ dans cette approche. L'intuition est la suivante: pour chaque valeur possible du taux d'apprentissage, on laisse l'entraînement se prolonger jusqu'à ce que les performances cessent de s'améliorer sur l'ensemble de validation. Chaque modèle entraîné se résume par trois informations: le taux d'apprentissage testé, le nombre d'arbres auquel l'entraînement s'est arrêté, et la performance sur l'ensemble de validation. On retient finalement le taux d'apprentissage et le nombre d'arbres du modèle le plus performant.
+Cette procédure comprend quatre étapes:
 
-Gridsearch avec ou sans CV, avec _early stopping_, avec des valeurs raisonnables pour les principaux hyperparamètres. Nombre d'arbres: `[100, 200, 500, 1000]`, _learning rate_: `[0.05, 0.1, 0.15, 0.2]`. Si l'un des hyperparamètres considérés comme optimal est la valeur minimale ou maximale (1000 arbres dans l'exemple précédent, ou 0.05 pour ), alors il est préférable de recommencer l'exercice en ajustant la liste des valeurs possibles.
+- __Optimiser le taux d'apprentissage__. On recherche un taux d'apprentissage optimal parmi une liste de valeurs (exemple: `[0.05, 0.1, 0.15, 0.2]`), avec des valeurs raisonnables pour les autres hyperparamètres, en entraînant le modèle sur les données d'entraînement avec un mécanisme d'_early stopping_ utilisant l'ensemble de validation. On retient finalement le taux d'apprentissage du modèle le plus performant sur l'ensemble de validation. Si le taux d'apprentissage optimal est la valeur minimale ou maximale testée, il est préférable de recommencer l'exercice en ajustant la liste des valeurs possibles.
 
-Attention, il est essentiel d'utiliser l'_early stopping_
+- __Optimiser conjointement les hyperparamètres contrôlant la structure des arbres__. On utilise le taux d'apprentissage issu de l'étape précédente, puis on évalue les performances de différents couples de valeurs (`max_depth`, `min_child_samples`), et on retient enfin les valeurs des hyperparamètres du modèle le plus performant sur l'ensemble de validation.
 
-Cette procédure est présentée en détail dans la partie 2 du notebook XXXXXXXXXXXXXXXXXXXXXXXXXXXX.
+- __Optimiser conjointement les hyperparamètres de régularisation__. On utilise les valeurs des hyperparamètres issues des étapes précédentes, puis on évalue les performances de différents couples de valeurs (`lambda`, `min_split_gain`), et on retient les valeurs des hyperparamètres du modèle le plus performant sur l'ensemble de validation.
 
+- __Entraîner le modèle final__ avec les hyperparamètres finaux.
 
+Cette approche est présentée en détail dans la partie 2 du notebook XXXXXXXXXXXXXXXXXXXXXXXXXXXX.
 
-si le nombre d'arbres n'était pas suffisant. Une fois défini le bon nombre d'arbres, mettre 20% de plus.
+#### Approche 3: utiliser Optuna 
 
-Pour les étapes suivantes: reprendre les étapes présentées [ici](https://medium.com/optuna/lightgbm-tuner-new-optuna-integration-for-hyperparameter-optimization-8b7095e99258).
-
-Regarder cette vidéo: https://www.bilibili.com/video/BV1DE41167cu/
-
-- __Ajuster la complexité des arbres__.
-- __Ajuster les hyperparamètres de lutte contre le surajustement__.
-- __Entraîner du modèle final__: entraîner une forêt aléatoire avec les hyperparamètres optimisés déduits des étapes précédentes.
-- __Évaluer du modèle final__: mesurer la performance du modèle final sur un ensemble de test.
-
-#### Approche 3: utiliser `optuna`
-
+La troisième approche est plus complexe et mobilise Optuna, une librairie d'optimisation automatique des hyperparamètres des modèles de _machine learning_ qui permet d'optimiser conjointement tous les hyperparamètres. L'usage d'Optuna s'avère très simple: l'utilisateur définit le modèle, la mesure de performance qu'il souhaite optimiser ainsi que l'espace des valeurs que les hyperparamètres peuvent prendre (exemple: `learning_rate` entre 0.01 et 0.3, `num_leaves` entre 30 et 1000...). Optuna tire aléatoirement un jeu d'hyperparamètres, entraîne le modèle avec ces hyperparamètres, mesure la performance obtenue et utilise cette information pour guider les essais suivants. Optuna est conçu pour converger rapidement vers les sous-espaces les plus prometteurs, et pour interrompre automatiquement les essais insuffisamment performants. Optuna garde la trace des différents essais réalisés et propose des visualisations commodes s
 
 Cette procédure est présentée en détail dans la partie 3 du notebook XXXXXXXXXXXXXXXXXXXXXXXXXXXX.
