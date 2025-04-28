@@ -20,27 +20,28 @@ Par ailleurs, chacune de ces implémentations propose une interface de haut nive
 Cette section décrit en détail les principaux hyperparamètres des algorithmes de _gradient boosting_ listés dans le tableau @tbl-hyp-lightgbm. Les noms des hyperparamètres sont ceux utilisés dans `LightGBM`. Les hyperparamètres portent généralement le même nom dans les autres implémentations; si ce n'est pas le cas, il est facile de s'y retrouver en lisant attentivement la documentation.
 
 
-| Hyperparamètre                         | Description                                                                                | Valeur par défaut |
-|:---------------------------------------|:-------------------------------------------------------------------------------------------|:-----------------:|
-| `objective`                            | Fonction de perte utilisée                                                                 | Variable          |
-| `n_estimators` ou `num_trees`          | Nombre d'arbres                                                                            | 100               |
-| `learning_rate` ou `eta`               | Taux d'apprentissage                                                                       | 0.1               |
-| `max_depth`                            | Profondeur maximale des arbres                                                             | -1 (pas de limite)|
-| `num_leaves`                           | Nombre de feuilles terminales des arbres                                                   | 31                |
-| `min_child_samples`                    | Nombre minimal d'observations qu'une feuille terminale doit contenir                       | 20                |
-| `min_child_weight`                     | Poids minimal qu'une feuille terminale doit contenir                                       | 0.001             |
-| `lambda` ou `lambda_l2`                | Pénalisation quadratique sur la valeur des feuilles terminales                             | 0                 |
-| `reg_alpha` ou `lambda_l1`             | Pénalisation absolue (L1) sur la valeur des feuilles terminales                            | 0                 |
-| `min_split_gain`                       | Gain minimal nécessaire pour diviser un noeud                                              | 0                 |
-| `bagging_fraction`                     | Taux d'échantillonnage des données d'entraînement                                          | 1                 |
-| `feature_fraction`                     | Taux d'échantillonnage des colonnes par arbre                                              | 1                 |
-| `feature_fraction_bynode`              | Taux d'échantillonnage des colonnes par noeud                                              | 1                 |
-| `max_bin`                              | Nombre de _bins_ utilisés pour discrétiser les variables continues                         | 255               |
-| `max_cat_to_onehot`                    | Nombre de modalités en-deça duquel `LightGBM` utilise le _one-hot-encoding_                | 4                 |
-| `max_cat_threshold`                    | Nombre maximal de _splits_ considérés <br> dans le traitement des variables catégorielles  | 32                | 
-| `sample_weight`                        | Pondération des observations dans les données d'entraînement                               | 1                 |
-| `scale_pos_weight`                     | Poids des observations de la classe positive (classification binaire uniquement)           | Aucun             |
-| `class_weight`                         | Poids des observations de chaque classe (classification multiclasse uniquement)            | Aucun             |
+| Hyperparamètre                         | Description                                                                                    | Valeur par défaut |
+|:---------------------------------------|:-----------------------------------------------------------------------------------------------|:-----------------:|
+| `objective`                            | Fonction de perte utilisée                                                                     | Variable          |
+| `n_estimators` ou `num_trees`          | Nombre d'arbres                                                                                | 100               |
+| `learning_rate` ou `eta`               | Taux d'apprentissage                                                                           | 0.1               |
+| `max_depth`                            | Profondeur maximale des arbres                                                                 | -1 (pas de limite)|
+| `num_leaves`                           | Nombre de feuilles terminales des arbres                                                       | 31                |
+| `min_child_samples`                    | Nombre minimal d'observations qu'une feuille terminale doit contenir                           | 20                |
+| `min_child_weight`                     | Poids minimal qu'une feuille terminale doit contenir                                           | 0.001             |
+| `lambda` ou `lambda_l2`                | Pénalisation quadratique sur la valeur des feuilles terminales                                 | 0                 |
+| `reg_alpha` ou `lambda_l1`             | Pénalisation absolue (L1) sur la valeur des feuilles terminales                                | 0                 |
+| `min_split_gain`                       | Gain minimal nécessaire pour diviser un noeud                                                  | 0                 |
+| `bagging_fraction`                     | Taux d'échantillonnage des données d'entraînement (utilisé uniquement si `bagging_freq` )  > 0 | 1                 |
+| `bagging_freq`                         | Fréquence de rééchantillonnage des données d'entraînement (utilisé uniquement si `bagging_fraction` ) < 1 | 1                 |
+| `feature_fraction`                     | Taux d'échantillonnage des colonnes par arbre                                                  | 1                 |
+| `feature_fraction_bynode`              | Taux d'échantillonnage des colonnes par noeud                                                  | 1                 |
+| `max_bin`                              | Nombre de _bins_ utilisés pour discrétiser les variables continues                             | 255               |
+| `max_cat_to_onehot`                    | Nombre de modalités en-deça duquel `LightGBM` utilise le _one-hot-encoding_                    | 4                 |
+| `max_cat_threshold`                    | Nombre maximal de _splits_ considérés <br> dans le traitement des variables catégorielles      | 32                | 
+| `sample_weight`                        | Pondération des observations dans les données d'entraînement                                   | 1                 |
+| `scale_pos_weight`                     | Poids des observations de la classe positive (classification binaire uniquement)               | Aucun             |
+| `class_weight`                         | Poids des observations de chaque classe (classification multiclasse uniquement)                | Aucun             |
 
 : Les principaux hyperparamètres de `LightGBM` {#tbl-hyp-lightgbm tbl-colwidths="[25,60,15]"}
 
@@ -64,11 +65,11 @@ Voici une présentation des principaux hyperparamètres et de leurs effets sur l
 
     - L'hyperparamètre `objective` définit à la fois la __nature du problème__ modélisé (régression, classification...) et la __fonction de perte__ utilisée lors de l'entraînement du modèle. Valeur par défaut différente selon les cas, regression_l2 en cas de régression, binary_log_loss pour la classification binaire, LIEN PARTIE USAGE AVANCE. A COMPLETER.
 
-    - le __nombre d'arbres__ contrôle la complexité générale de l'algorithme. Le point essentiel est que, contrairement aux forêts aléatoires, la performance du _gradient boosting_ sur les données d'entraînement croît continûment avec le nombre d'arbres sans jamais se stabiliser. Le choix du nombre d'arbres est essentiel, et doit viser un équilibre entre augmentation du pouvoir prédictif du modèle (si les arbres supplémentaires permettent au modèle de corriger les erreurs résiduelles), et lutte contre le surajustement (si les arbres supplémentaires captent uniquement les bruits statistiques et les fluctuations spécifiques des données d'entraînement). Par ailleurs, Le choix du nombre d'arbres est très lié à celui du taux d'apprentissage, et il est nécessaire de les optimiser conjointement (@probst2019tunability).
+    - le __nombre d'arbres__ contrôle la complexité générale de l'algorithme. Le point essentiel est que, contrairement aux forêts aléatoires, la performance du _gradient boosting_ sur les données d'entraînement croît continûment avec le nombre d'arbres sans jamais se stabiliser. Le choix du nombre d'arbres est essentiel, et doit viser un équilibre entre amélioration du pouvoir prédictif du modèle (si les arbres supplémentaires permettent au modèle de corriger les erreurs résiduelles), et lutte contre le surajustement (si les arbres supplémentaires captent uniquement les bruits statistiques et les fluctuations spécifiques des données d'entraînement). Par ailleurs, le choix du nombre d'arbres est très lié à celui du taux d'apprentissage, et il est nécessaire de les optimiser conjointement (@probst2019tunability).
 
-    - le __taux d'apprentissage__ (_learning rate_) contrôle l'influence de chaque arbre sur le modèle global; il s'agit de $\eta$ dans l'équation REFERENCE PARTIE OVERFITTING. Un taux d'apprentissage faible réduit la contribution de chaque arbre, rendant l'apprentissage plus progressif; cela évite qu'un arbre donné ait une influence trop importante sur le modèle global et contribue donc à réduire le surajustement, mais nécessite un plus grand nombre d'arbres pour converger vers une solution optimale. Inversement, un taux d'apprentissage élevé accélère l'entraînement mais peut rendre le modèle instable (car trop sensible à un arbre donné), entraîner un surajustement et/ou aboutir à un modèle sous-optimal. La règle générale est de privilégier un taux d'apprentissage faible (entre 0.01 ou 0.3). Le choix du taux d'apprentissage est très lié à celui du nombre d'arbres: plus le taux d'apprentissage sera faible, plus le nombre d'arbres nécessaires pour converger vers une solution optimale sera élevé. Ces deux hyperparamètres doivent donc être optimisés conjointement.
+    - le __taux d'apprentissage__ (_learning rate_) contrôle l'influence de chaque arbre sur le modèle global; il s'agit de $\eta$ dans l'équation REFERENCE PARTIE OVERFITTING. Cet hyperparamètre a un effet important sur la performance du modèle global (@probst2019tunability). Un taux d'apprentissage faible réduit la contribution de chaque arbre, rendant l'apprentissage plus progressif; cela évite qu'un arbre donné ait une influence trop importante sur le modèle global et contribue donc à réduire le surajustement, mais nécessite un plus grand nombre d'arbres pour converger vers une solution optimale. Inversement, un taux d'apprentissage élevé accélère l'entraînement mais peut rendre le modèle instable (car trop sensible à un arbre donné), entraîner un surajustement et/ou aboutir à un modèle sous-optimal. La règle générale est de privilégier un taux d'apprentissage faible (entre 0.01 ou 0.3). Le choix du taux d'apprentissage est très lié à celui du nombre d'arbres: plus le taux d'apprentissage sera faible, plus le nombre d'arbres nécessaires pour converger vers une solution optimale sera élevé. Ces deux hyperparamètres doivent donc être optimisés conjointement.
 
-- La __complexité des arbres__: la profondeur maximale des arbres, le nombre de feuilles terminales et le nombre minimal d'observations par feuille terminale contrôlent la complexité des _weak learners_: une profondeur élevée, un grand nombre de feuilles et un faible nombre d'observations par feuille terminale aboutissent à des arbres complexes au pouvoir prédictif plus élevé, mais induisent un risque de surajustement. Par ailleurs, de tels arbres sont plus longs à entraîner que des arbres peu profonds avec un nombre limité de feuilles. Il est à noter que le nombre de feuilles terminales a un effet linéaire sur la complexité des arbres, tandis que la profondeur maximale a un effet exponentiel: un arbre pleinement développé de profondeur $k$ comprend $2^k$ feuilles terminales et $2^k - 1$ _splits_. Augmenter la profondeur d'une unité a donc pour effet de doubler le temps d'entraînement de chaque arbre.
+- La __complexité des arbres__: la profondeur maximale des arbres, le nombre de feuilles terminales et le nombre minimal d'observations par feuille terminale contrôlent la complexité des _weak learners_: une profondeur élevée, un grand nombre de feuilles et un faible nombre d'observations par feuille terminale aboutissent à des arbres complexes au pouvoir prédictif plus élevé, mais induisent un risque de surajustement. Par ailleurs, de tels arbres sont plus longs à entraîner que des arbres peu profonds avec un nombre limité de feuilles. Les valeurs de  hyperparamètres ont un effet sur le nombre optimal d'arbres: celui-ci est plus faible quand les arbres sont complexes. Il est à noter que le nombre de feuilles terminales a un effet linéaire sur la complexité des arbres, tandis que la profondeur maximale a un effet exponentiel: un arbre pleinement développé de profondeur $k$ comprend $2^k$ feuilles terminales et $2^k - 1$ _splits_. Augmenter la profondeur d'une unité a donc pour effet de doubler le temps d'entraînement de chaque arbre.
 
 - La __lutte contre le surajustement__: ces hyperparamètres de régularisation jouent un rôle important dans le contrôle de la complexité des _weak learners_ et contribuent à éviter le surajustement: 
     - Les pénalisations tendent à réduire le poids $w_j$ des feuilles terminales: la pénalisation quadratique réduit la valeur absolue des poids sans les annuler (il s'agit de $\lambda$ dans l'[équation donnant le poids optimal](4-boosting.qmd#eq-w-j-optimal) d'une feuille terminale), tandis que la pénalisation absolue élevée pousse certains poids à être nuls. La pénalisation quadratique est la plus utilisée, notamment parce qu'elle permet d'amoindrir l'influence des points aberrants. 
@@ -114,10 +115,12 @@ Proposer une procédure pour l'optimisation des hyperparamètres s'avère plus d
 
     - `max_depth`: entre 8 et 12; 
     - `num_leaves`: entre 30 et 255;
-    - `learning_rate`: entre 0.03 et 0.2;
+    <!-- On ne met pas learning_rate car c'est le premier HP à optimiser -->
+    <!-- - `learning_rate`: entre 0.03 et 0.2; -->
     - `min_split_gain`: valeur strictement positive, commencer entre 0.1 et 1;
     - `lambda`: valeur strictement positive; commencer avec une valeur entre 0.5 et 2; choisir une valeur plus élevée s'il y a des valeurs aberrantes sur $y$ ou de clairs signes de surajustement; 
     - `bagging_fraction`         : valeur strictement inférieure à 1, commencer entre 0.6 et 0.8; 
+    - `bagging_freq`             : valeur entière strictement positive, commencer avec 1 ; 
     - `feature_fraction_bynode`  : valeur strictement inférieure à 1, commencer entre 0.5 et 0.7; choisir une valeur plus élevée si les données comprennent un grand nombre de variables binaires issues d'un _one-hot-encoding_;
     - `max_bin`                  : garder la valeur par défaut; choisir éventuellement une valeur plus élevée si la la valeur par défaut ne suffit pas à refléter la distribution des variables continues;
     - `max_cat_to_onehot`        : garder la valeur par défaut;
@@ -125,24 +128,38 @@ Proposer une procédure pour l'optimisation des hyperparamètres s'avère plus d
 
 - __Définir la méthode d'évaluation des hyperparamètres__: indépendamment de la méthode d'optimisation des hyperparamètres (_grid search_, _random search_...), deux approches sont envisageables pour évaluer les valeurs possibles des hyperparamètres: soit une __validation croisée__ (par exemple avec la fonction `GridSearchCV` de `scikit-learn`), soit une __validation simple__ reposant sur un unique ensemble de validation. La validation simple peut être préférable si les données utilisées sont volumineuses (au-delà de plusieurs centaines de milliers d'observations) car elle offre un gain de temps appréciable, sans nécessairement dégrader les résultats. La validation croisée est censée être plus robuste que l'utilisation d'un ensemble de validation, mais elle est coûteuse sur le plan computationnel (car il faut entraîner plusieurs fois un modèle pour chaque jeu d'hyperparamètres).
 
-- __Utiliser l'_early stopping_ avec l'ensemble de validation__. Dans le cas de l'approche _holdout_, il est possible d
-
 ### Optimiser les hyperparamètres
 
-#### Une première procédure simple: validation croisée
+#### Une procédure itérative par validation croisée
 
-Voici une procédure simple pour optimiser les hyperparamètres d'un algorithme de _gradient boosting_. Elle ne garantit pas l'obtention d'un modèle optimal, mais elle est lisible et permet d'obtenir rapidement un modèle raisonnablement performant. 
+Voici une procédure simple pour optimiser les hyperparamètres d'un algorithme de _gradient boosting_. Elle ne garantit pas l'obtention d'un modèle optimal, mais elle est lisible et permet d'obtenir rapidement un modèle raisonnablement performant. Elle est coûteuse sur le plan computationnel et donc adaptée à des données peu volumineuses.
+
+- __Optimiser conjointement le nombre d'arbres et le taux d'apprentissage__. Par exemple, on évalue les performances du modèle en testant les valeurs `[100, 200, 500, 1000]` pour le nombre d'arbres, et `[0.05, 0.1, 0.15, 0.2]` pour le taux d'apprentissage, avec des valeurs raisonnables pour les autres hyperparamètres. On retient finalement le taux d'apprentissage et le nombre d'arbres du modèle le plus performant. Si l'un de ces hyperparamètres est la valeur minimale ou maximale testée (par exemple 1000 arbres, ou 0.05 pour le taux d'apprentissage), alors il est préférable de recommencer l'exercice en ajustant la liste des valeurs possibles.
+
+- __Optimiser conjointement l'échantillonnage des observations et des variables__. On utilise le taux d'apprentissage et le nombre d'arbres issus de l'étape précédente, puis on évalue les performances de différents couples de valeurs (`bagging_fraction`, `bagging_fraction`), et on retient enfin les valeurs des hyperparamètres du modèle le plus performant.
+
+- __Optimiser conjointement les hyperparamètres de régularisation__. On utilise les valeurs des hyperparamètre issues des étapes précédentes, puis on évalue les performances de différents couples de valeurs (`lambda`, `min_split_gain`), et on retient les valeurs des hyperparamètres du modèle le plus performant.
+
+Cette procédure est présentée en détail dans la partie 1 du notebook XXXXXXXXXXXXXXXXXXXXXXXXXXXX.
+    
+<!-- ::: {.callout-warning title="_Early stopping_ et validation croisée"}
+
+::: -->
+
+
+#### Une procédure itérative par validation simple
 
 - __Optimiser conjointement le nombre d'arbres et le taux d'apprentissage__. Le principe est le suivant: on évalue les performances de différents couples de valeurs (nombre d'arbres, taux d'apprentissage) avec des valeurs raisonnables pour les autres hyperparamètres. Il y a deux approches, selon qu'on retient une approche de validation croisée, 
 
     - Évaluer conjointement les couples de valeurs (nombre d'arbres, taux d'apprentissage). Par exemple, on évalue les performances du modèle en testant les valeurs `[100, 200, 500, 1000]` pour le nombre d'arbres, et `[0.05, 0.1, 0.15, 0.2]` pour le taux d'apprentissage. On retient finalement le taux d'apprentissage et le nombre d'arbres du modèle le plus performant. Si l'un de ces hyperparamètres est la valeur minimale ou maximale testée (par exemple 1000 arbres, ou 0.05 pour le taux d'apprentissage), alors il est préférable de recommencer l'exercice en ajustant la liste des valeurs possibles.
     - Mettre un nombre d'arbres très élevé et tester uniquement des valeurs du taux d'apprentissage. Par exemple, on fixe à 50000 le nombre d'arbres, et on teste les valeurs `[0.05, 0.1, 0.15, 0.2]` pour le taux d'apprentissage. Il est __indispensable__ d'utiliser l'_early stopping_ dans cette approche. L'intuition est la suivante: pour chaque valeur possible du taux d'apprentissage, on laisse l'entraînement se prolonger jusqu'à ce que les performances cessent de s'améliorer sur l'ensemble de validation. Chaque modèle entraîné se résume par trois informations: le taux d'apprentissage testé, le nombre d'arbres auquel l'entraînement s'est arrêté, et la performance sur l'ensemble de validation. On retient finalement le taux d'apprentissage et le nombre d'arbres du modèle le plus performant.
-    
-#### Une seconde procédure simple: validation simple
 
 Gridsearch avec ou sans CV, avec _early stopping_, avec des valeurs raisonnables pour les principaux hyperparamètres. Nombre d'arbres: `[100, 200, 500, 1000]`, _learning rate_: `[0.05, 0.1, 0.15, 0.2]`. Si l'un des hyperparamètres considérés comme optimal est la valeur minimale ou maximale (1000 arbres dans l'exemple précédent, ou 0.05 pour ), alors il est préférable de recommencer l'exercice en ajustant la liste des valeurs possibles.
 
 Attention, il est essentiel d'utiliser l'_early stopping_
+
+Cette procédure est présentée en détail dans la partie 2 du notebook XXXXXXXXXXXXXXXXXXXXXXXXXXXX.
+
 
 
 si le nombre d'arbres n'était pas suffisant. Une fois défini le bon nombre d'arbres, mettre 20% de plus.
@@ -167,3 +184,4 @@ Avant de se lancer dans le _gradient boosting_, il est utile d'entraîner une fo
 #### Une approche avancée: utiliser `optuna`
 
 
+Cette procédure est présentée en détail dans la partie 3 du notebook XXXXXXXXXXXXXXXXXXXXXXXXXXXX.
