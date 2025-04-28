@@ -394,45 +394,50 @@ Table&nbsp;1: Les principaux hyperparamètres de <code>LightGBM</code>
 </tr>
 <tr class="odd">
 <td style="text-align: left;"><code>bagging_fraction</code></td>
-<td style="text-align: left;">Taux d’échantillonnage des données d’entraînement</td>
+<td style="text-align: left;">Taux d’échantillonnage des données d’entraînement (utilisé uniquement si <code>bagging_freq</code> ) &gt; 0</td>
 <td style="text-align: center;">1</td>
 </tr>
 <tr class="even">
+<td style="text-align: left;"><code>bagging_freq</code></td>
+<td style="text-align: left;">Fréquence de rééchantillonnage des données d’entraînement (utilisé uniquement si <code>bagging_fraction</code> ) &lt; 1</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="odd">
 <td style="text-align: left;"><code>feature_fraction</code></td>
 <td style="text-align: left;">Taux d’échantillonnage des colonnes par arbre</td>
 <td style="text-align: center;">1</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;"><code>feature_fraction_bynode</code></td>
 <td style="text-align: left;">Taux d’échantillonnage des colonnes par noeud</td>
 <td style="text-align: center;">1</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;"><code>max_bin</code></td>
 <td style="text-align: left;">Nombre de <em>bins</em> utilisés pour discrétiser les variables continues</td>
 <td style="text-align: center;">255</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;"><code>max_cat_to_onehot</code></td>
 <td style="text-align: left;">Nombre de modalités en-deça duquel <code>LightGBM</code> utilise le <em>one-hot-encoding</em></td>
 <td style="text-align: center;">4</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;"><code>max_cat_threshold</code></td>
 <td style="text-align: left;">Nombre maximal de <em>splits</em> considérés <br> dans le traitement des variables catégorielles</td>
 <td style="text-align: center;">32</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;"><code>sample_weight</code></td>
 <td style="text-align: left;">Pondération des observations dans les données d’entraînement</td>
 <td style="text-align: center;">1</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;"><code>scale_pos_weight</code></td>
 <td style="text-align: left;">Poids des observations de la classe positive (classification binaire uniquement)</td>
 <td style="text-align: center;">Aucun</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;"><code>class_weight</code></td>
 <td style="text-align: left;">Poids des observations de chaque classe (classification multiclasse uniquement)</td>
 <td style="text-align: center;">Aucun</td>
@@ -466,10 +471,10 @@ Attention aux alias!
 <li><p>La <strong>mécanique du <em>gradient boosting</em></strong> est contrôlée par seulement trois hyperparamètres (tous les autres hyperparamètres portant sur la construction des arbres pris isolément):</p>
 <ul>
 <li><p>L’hyperparamètre <code>objective</code> définit à la fois la <strong>nature du problème</strong> modélisé (régression, classification…) et la <strong>fonction de perte</strong> utilisée lors de l’entraînement du modèle. Valeur par défaut différente selon les cas, regression_l2 en cas de régression, binary_log_loss pour la classification binaire, LIEN PARTIE USAGE AVANCE. A COMPLETER.</p></li>
-<li><p>le <strong>nombre d’arbres</strong> contrôle la complexité générale de l’algorithme. Le point essentiel est que, contrairement aux forêts aléatoires, la performance du <em>gradient boosting</em> sur les données d’entraînement croît continûment avec le nombre d’arbres sans jamais se stabiliser. Le choix du nombre d’arbres est essentiel, et doit viser un équilibre entre augmentation du pouvoir prédictif du modèle (si les arbres supplémentaires permettent au modèle de corriger les erreurs résiduelles), et lutte contre le surajustement (si les arbres supplémentaires captent uniquement les bruits statistiques et les fluctuations spécifiques des données d’entraînement). Par ailleurs, Le choix du nombre d’arbres est très lié à celui du taux d’apprentissage, et il est nécessaire de les optimiser conjointement (<span class="citation" data-cites="probst2019tunability">Probst, Boulesteix, and Bischl (<a href="#ref-probst2019tunability" role="doc-biblioref">2019</a>)</span>).</p></li>
-<li><p>le <strong>taux d’apprentissage</strong> (<em>learning rate</em>) contrôle l’influence de chaque arbre sur le modèle global; il s’agit de <span class="math inline">\(\eta\)</span> dans l’équation REFERENCE PARTIE OVERFITTING. Un taux d’apprentissage faible réduit la contribution de chaque arbre, rendant l’apprentissage plus progressif; cela évite qu’un arbre donné ait une influence trop importante sur le modèle global et contribue donc à réduire le surajustement, mais nécessite un plus grand nombre d’arbres pour converger vers une solution optimale. Inversement, un taux d’apprentissage élevé accélère l’entraînement mais peut rendre le modèle instable (car trop sensible à un arbre donné), entraîner un surajustement et/ou aboutir à un modèle sous-optimal. La règle générale est de privilégier un taux d’apprentissage faible (entre 0.01 ou 0.3). Le choix du taux d’apprentissage est très lié à celui du nombre d’arbres: plus le taux d’apprentissage sera faible, plus le nombre d’arbres nécessaires pour converger vers une solution optimale sera élevé. Ces deux hyperparamètres doivent donc être optimisés conjointement.</p></li>
+<li><p>le <strong>nombre d’arbres</strong> contrôle la complexité générale de l’algorithme. Le point essentiel est que, contrairement aux forêts aléatoires, la performance du <em>gradient boosting</em> sur les données d’entraînement croît continûment avec le nombre d’arbres sans jamais se stabiliser. Le choix du nombre d’arbres est essentiel, et doit viser un équilibre entre amélioration du pouvoir prédictif du modèle (si les arbres supplémentaires permettent au modèle de corriger les erreurs résiduelles), et lutte contre le surajustement (si les arbres supplémentaires captent uniquement les bruits statistiques et les fluctuations spécifiques des données d’entraînement). Par ailleurs, le choix du nombre d’arbres est très lié à celui du taux d’apprentissage, et il est nécessaire de les optimiser conjointement (<span class="citation" data-cites="probst2019tunability">Probst, Boulesteix, and Bischl (<a href="#ref-probst2019tunability" role="doc-biblioref">2019</a>)</span>).</p></li>
+<li><p>le <strong>taux d’apprentissage</strong> (<em>learning rate</em>) contrôle l’influence de chaque arbre sur le modèle global; il s’agit de <span class="math inline">\(\eta\)</span> dans l’équation REFERENCE PARTIE OVERFITTING. Cet hyperparamètre a un effet important sur la performance du modèle global (<span class="citation" data-cites="probst2019tunability">Probst, Boulesteix, and Bischl (<a href="#ref-probst2019tunability" role="doc-biblioref">2019</a>)</span>). Un taux d’apprentissage faible réduit la contribution de chaque arbre, rendant l’apprentissage plus progressif; cela évite qu’un arbre donné ait une influence trop importante sur le modèle global et contribue donc à réduire le surajustement, mais nécessite un plus grand nombre d’arbres pour converger vers une solution optimale. Inversement, un taux d’apprentissage élevé accélère l’entraînement mais peut rendre le modèle instable (car trop sensible à un arbre donné), entraîner un surajustement et/ou aboutir à un modèle sous-optimal. La règle générale est de privilégier un taux d’apprentissage faible (entre 0.01 ou 0.3). Le choix du taux d’apprentissage est très lié à celui du nombre d’arbres: plus le taux d’apprentissage sera faible, plus le nombre d’arbres nécessaires pour converger vers une solution optimale sera élevé. Ces deux hyperparamètres doivent donc être optimisés conjointement.</p></li>
 </ul></li>
-<li><p>La <strong>complexité des arbres</strong>: la profondeur maximale des arbres, le nombre de feuilles terminales et le nombre minimal d’observations par feuille terminale contrôlent la complexité des <em>weak learners</em>: une profondeur élevée, un grand nombre de feuilles et un faible nombre d’observations par feuille terminale aboutissent à des arbres complexes au pouvoir prédictif plus élevé, mais induisent un risque de surajustement. Par ailleurs, de tels arbres sont plus longs à entraîner que des arbres peu profonds avec un nombre limité de feuilles. Il est à noter que le nombre de feuilles terminales a un effet linéaire sur la complexité des arbres, tandis que la profondeur maximale a un effet exponentiel: un arbre pleinement développé de profondeur <span class="math inline">\(k\)</span> comprend <span class="math inline">\(2^k\)</span> feuilles terminales et <span class="math inline">\(2^k - 1\)</span> <em>splits</em>. Augmenter la profondeur d’une unité a donc pour effet de doubler le temps d’entraînement de chaque arbre.</p></li>
+<li><p>La <strong>complexité des arbres</strong>: la profondeur maximale des arbres, le nombre de feuilles terminales et le nombre minimal d’observations par feuille terminale contrôlent la complexité des <em>weak learners</em>: une profondeur élevée, un grand nombre de feuilles et un faible nombre d’observations par feuille terminale aboutissent à des arbres complexes au pouvoir prédictif plus élevé, mais induisent un risque de surajustement. Par ailleurs, de tels arbres sont plus longs à entraîner que des arbres peu profonds avec un nombre limité de feuilles. Les valeurs de hyperparamètres ont un effet sur le nombre optimal d’arbres: celui-ci est plus faible quand les arbres sont complexes. Il est à noter que le nombre de feuilles terminales a un effet linéaire sur la complexité des arbres, tandis que la profondeur maximale a un effet exponentiel: un arbre pleinement développé de profondeur <span class="math inline">\(k\)</span> comprend <span class="math inline">\(2^k\)</span> feuilles terminales et <span class="math inline">\(2^k - 1\)</span> <em>splits</em>. Augmenter la profondeur d’une unité a donc pour effet de doubler le temps d’entraînement de chaque arbre.</p></li>
 <li><p>La <strong>lutte contre le surajustement</strong>: ces hyperparamètres de régularisation jouent un rôle important dans le contrôle de la complexité des <em>weak learners</em> et contribuent à éviter le surajustement:</p>
 <ul>
 <li>Les pénalisations tendent à réduire le poids <span class="math inline">\(w_j\)</span> des feuilles terminales: la pénalisation quadratique réduit la valeur absolue des poids sans les annuler (il s’agit de <span class="math inline">\(\lambda\)</span> dans l’<a href="4-boosting.qmd#eq-w-j-optimal">équation donnant le poids optimal</a> d’une feuille terminale), tandis que la pénalisation absolue élevée pousse certains poids à être nuls. La pénalisation quadratique est la plus utilisée, notamment parce qu’elle permet d’amoindrir l’influence des points aberrants.</li>
@@ -530,25 +535,36 @@ Figure&nbsp;1
 <li><p><strong>Définir des valeurs de départ raisonnables</strong>. Définir les valeurs de départ des hyperpararamètres est une étape importante car elle permet de gagner du temps lors de l’optimisation des hyperparamètres. <strong>Ce choix prend du temps</strong> et doit reposer sur une bonne compréhension du fonctionnement de l’algorithme et sur une connaissance approfondie des données utilisées. Voici quelques suggestions de valeurs de départ issues de la littérature (voir notamment <span class="citation" data-cites="bentejac2021comparative">Bentéjac, Csörgő, and Martínez-Muñoz (<a href="#ref-bentejac2021comparative" role="doc-biblioref">2021</a>)</span> et <span class="citation" data-cites="probst2019tunability">Probst, Boulesteix, and Bischl (<a href="#ref-probst2019tunability" role="doc-biblioref">2019</a>)</span>); il est tout à fait possible de s’en écarter lorsqu’on pense que le problème modélisé le justifie:</p>
 <ul>
 <li><code>max_depth</code>: entre 8 et 12;</li>
-<li><code>num_leaves</code>: entre 30 et 255;</li>
-<li><code>learning_rate</code>: entre 0.03 et 0.2;</li>
+<li><code>num_leaves</code>: entre 30 et 255; <!-- On ne met pas learning_rate car c'est le premier HP à optimiser --> <!-- - `learning_rate`: entre 0.03 et 0.2; --></li>
 <li><code>min_split_gain</code>: valeur strictement positive, commencer entre 0.1 et 1;</li>
 <li><code>lambda</code>: valeur strictement positive; commencer avec une valeur entre 0.5 et 2; choisir une valeur plus élevée s’il y a des valeurs aberrantes sur <span class="math inline">\(y\)</span> ou de clairs signes de surajustement;</li>
 <li><code>bagging_fraction</code> : valeur strictement inférieure à 1, commencer entre 0.6 et 0.8;</li>
+<li><code>bagging_freq</code> : valeur entière strictement positive, commencer avec 1 ;</li>
 <li><code>feature_fraction_bynode</code> : valeur strictement inférieure à 1, commencer entre 0.5 et 0.7; choisir une valeur plus élevée si les données comprennent un grand nombre de variables binaires issues d’un <em>one-hot-encoding</em>;</li>
 <li><code>max_bin</code> : garder la valeur par défaut; choisir éventuellement une valeur plus élevée si la la valeur par défaut ne suffit pas à refléter la distribution des variables continues;</li>
 <li><code>max_cat_to_onehot</code> : garder la valeur par défaut;</li>
 <li><code>max_cat_threshold</code> : garder la valeur par défaut.</li>
 </ul></li>
 <li><p><strong>Définir la méthode d’évaluation des hyperparamètres</strong>: indépendamment de la méthode d’optimisation des hyperparamètres (<em>grid search</em>, <em>random search</em>…), deux approches sont envisageables pour évaluer les valeurs possibles des hyperparamètres: soit une <strong>validation croisée</strong> (par exemple avec la fonction <code>GridSearchCV</code> de <code>scikit-learn</code>), soit une <strong>validation simple</strong> reposant sur un unique ensemble de validation. La validation simple peut être préférable si les données utilisées sont volumineuses (au-delà de plusieurs centaines de milliers d’observations) car elle offre un gain de temps appréciable, sans nécessairement dégrader les résultats. La validation croisée est censée être plus robuste que l’utilisation d’un ensemble de validation, mais elle est coûteuse sur le plan computationnel (car il faut entraîner plusieurs fois un modèle pour chaque jeu d’hyperparamètres).</p></li>
-<li><p><strong>Utiliser l’<em>early stopping</em> avec l’ensemble de validation</strong>. Dans le cas de l’approche <em>holdout</em>, il est possible d</p></li>
 </ul>
 </section>
 <section id="optimiser-les-hyperparamètres" class="level3" data-number="1.3.2">
 <h3 data-number="1.3.2" class="anchored" data-anchor-id="optimiser-les-hyperparamètres"><span class="header-section-number">1.3.2</span> Optimiser les hyperparamètres</h3>
-<section id="une-première-procédure-simple-validation-croisée" class="level4" data-number="1.3.2.1">
-<h4 data-number="1.3.2.1" class="anchored" data-anchor-id="une-première-procédure-simple-validation-croisée"><span class="header-section-number">1.3.2.1</span> Une première procédure simple: validation croisée</h4>
-<p>Voici une procédure simple pour optimiser les hyperparamètres d’un algorithme de <em>gradient boosting</em>. Elle ne garantit pas l’obtention d’un modèle optimal, mais elle est lisible et permet d’obtenir rapidement un modèle raisonnablement performant.</p>
+<section id="une-procédure-itérative-par-validation-croisée" class="level4" data-number="1.3.2.1">
+<h4 data-number="1.3.2.1" class="anchored" data-anchor-id="une-procédure-itérative-par-validation-croisée"><span class="header-section-number">1.3.2.1</span> Une procédure itérative par validation croisée</h4>
+<p>Voici une procédure simple pour optimiser les hyperparamètres d’un algorithme de <em>gradient boosting</em>. Elle ne garantit pas l’obtention d’un modèle optimal, mais elle est lisible et permet d’obtenir rapidement un modèle raisonnablement performant. Elle est coûteuse sur le plan computationnel et donc adaptée à des données peu volumineuses.</p>
+<ul>
+<li><p><strong>Optimiser conjointement le nombre d’arbres et le taux d’apprentissage</strong>. Par exemple, on évalue les performances du modèle en testant les valeurs <code>[100, 200, 500, 1000]</code> pour le nombre d’arbres, et <code>[0.05, 0.1, 0.15, 0.2]</code> pour le taux d’apprentissage, avec des valeurs raisonnables pour les autres hyperparamètres. On retient finalement le taux d’apprentissage et le nombre d’arbres du modèle le plus performant. Si l’un de ces hyperparamètres est la valeur minimale ou maximale testée (par exemple 1000 arbres, ou 0.05 pour le taux d’apprentissage), alors il est préférable de recommencer l’exercice en ajustant la liste des valeurs possibles.</p></li>
+<li><p><strong>Optimiser conjointement l’échantillonnage des observations et des variables</strong>. On utilise le taux d’apprentissage et le nombre d’arbres issus de l’étape précédente, puis on évalue les performances de différents couples de valeurs (<code>bagging_fraction</code>, <code>bagging_fraction</code>), et on retient enfin les valeurs des hyperparamètres du modèle le plus performant.</p></li>
+<li><p><strong>Optimiser conjointement les hyperparamètres de régularisation</strong>. On utilise les valeurs des hyperparamètre issues des étapes précédentes, puis on évalue les performances de différents couples de valeurs (<code>lambda</code>, <code>min_split_gain</code>), et on retient les valeurs des hyperparamètres du modèle le plus performant.</p></li>
+</ul>
+<p>Cette procédure est présentée en détail dans la partie 1 du notebook XXXXXXXXXXXXXXXXXXXXXXXXXXXX.</p>
+<!-- ::: {.callout-warning title="_Early stopping_ et validation croisée"}
+
+::: -->
+</section>
+<section id="une-procédure-itérative-par-validation-simple" class="level4" data-number="1.3.2.2">
+<h4 data-number="1.3.2.2" class="anchored" data-anchor-id="une-procédure-itérative-par-validation-simple"><span class="header-section-number">1.3.2.2</span> Une procédure itérative par validation simple</h4>
 <ul>
 <li><p><strong>Optimiser conjointement le nombre d’arbres et le taux d’apprentissage</strong>. Le principe est le suivant: on évalue les performances de différents couples de valeurs (nombre d’arbres, taux d’apprentissage) avec des valeurs raisonnables pour les autres hyperparamètres. Il y a deux approches, selon qu’on retient une approche de validation croisée,</p>
 <ul>
@@ -556,11 +572,9 @@ Figure&nbsp;1
 <li>Mettre un nombre d’arbres très élevé et tester uniquement des valeurs du taux d’apprentissage. Par exemple, on fixe à 50000 le nombre d’arbres, et on teste les valeurs <code>[0.05, 0.1, 0.15, 0.2]</code> pour le taux d’apprentissage. Il est <strong>indispensable</strong> d’utiliser l’<em>early stopping</em> dans cette approche. L’intuition est la suivante: pour chaque valeur possible du taux d’apprentissage, on laisse l’entraînement se prolonger jusqu’à ce que les performances cessent de s’améliorer sur l’ensemble de validation. Chaque modèle entraîné se résume par trois informations: le taux d’apprentissage testé, le nombre d’arbres auquel l’entraînement s’est arrêté, et la performance sur l’ensemble de validation. On retient finalement le taux d’apprentissage et le nombre d’arbres du modèle le plus performant.</li>
 </ul></li>
 </ul>
-</section>
-<section id="une-seconde-procédure-simple-validation-simple" class="level4" data-number="1.3.2.2">
-<h4 data-number="1.3.2.2" class="anchored" data-anchor-id="une-seconde-procédure-simple-validation-simple"><span class="header-section-number">1.3.2.2</span> Une seconde procédure simple: validation simple</h4>
 <p>Gridsearch avec ou sans CV, avec <em>early stopping</em>, avec des valeurs raisonnables pour les principaux hyperparamètres. Nombre d’arbres: <code>[100, 200, 500, 1000]</code>, <em>learning rate</em>: <code>[0.05, 0.1, 0.15, 0.2]</code>. Si l’un des hyperparamètres considérés comme optimal est la valeur minimale ou maximale (1000 arbres dans l’exemple précédent, ou 0.05 pour ), alors il est préférable de recommencer l’exercice en ajustant la liste des valeurs possibles.</p>
 <p>Attention, il est essentiel d’utiliser l’<em>early stopping</em></p>
+<p>Cette procédure est présentée en détail dans la partie 2 du notebook XXXXXXXXXXXXXXXXXXXXXXXXXXXX.</p>
 <p>si le nombre d’arbres n’était pas suffisant. Une fois défini le bon nombre d’arbres, mettre 20% de plus.</p>
 <p>Pour les étapes suivantes: reprendre les étapes présentées <a href="https://medium.com/optuna/lightgbm-tuner-new-optuna-integration-for-hyperparameter-optimization-8b7095e99258">ici</a>.</p>
 <p>Regarder cette vidéo: https://www.bilibili.com/video/BV1DE41167cu/</p>
@@ -585,7 +599,8 @@ Parfois, une forêt aléatoire suffit…
 </div>
 </section>
 <section id="une-approche-avancée-utiliser-optuna" class="level4" data-number="1.3.2.3">
-
+<h4 data-number="1.3.2.3" class="anchored" data-anchor-id="une-approche-avancée-utiliser-optuna"><span class="header-section-number">1.3.2.3</span> Une approche avancée: utiliser <code>optuna</code></h4>
+<p>Cette procédure est présentée en détail dans la partie 3 du notebook XXXXXXXXXXXXXXXXXXXXXXXXXXXX.</p>
 
 
 
@@ -595,7 +610,7 @@ Parfois, une forêt aléatoire suffit…
 </section>
 
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">1.3.2.3 Une approche avancée: utiliser optuna</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-alshari2021comparison" class="csl-entry" role="listitem">
 Alshari, Haithm, Abdulrazak Yahya Saleh, and Alper Odabaş. 2021. <span>“Comparison of Gradient Boosting Decision Tree Algorithms for CPU Performance.”</span> <em>Journal of Institue Of Science and Technology</em> 37 (1): 157–68.
 </div>
