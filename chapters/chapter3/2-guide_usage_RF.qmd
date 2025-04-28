@@ -81,7 +81,7 @@ Voici une présentation des principaux hyperparamètres et de leurs effets sur l
 
 ## Comment entraîner une forêt aléatoire? {#sec-procedure-training-rf}
 
-Les forêts aléatoires nécessitent généralement moins d'optimisation que d’autres modèles de _machine learning_, car leurs performances varient relativement peu en fonction des hyperparamètres. Les valeurs par défaut fournissent souvent des résultats satisfaisants, ce qui réduit le besoin d'optimisation intensive. Cependant, un ajustement précis des hyperparamètres peut apporter des gains de performance, notamment sur des jeux de données complexes.
+Les forêts aléatoires nécessitent généralement moins d'optimisation que d’autres modèles de _machine learning_, car leurs performances varient relativement peu en fonction des hyperparamètres. Les valeurs par défaut fournissent souvent des résultats satisfaisants, ce qui réduit le besoin d'optimisation intensive (@probst2018tune, @probst2019tunability). Cependant, un ajustement précis des hyperparamètres peut apporter des gains de performance, notamment sur des jeux de données complexes.
 
 Comme indiqué dans la partie @sec-facteur-perf-rf, la performance prédictive d'une forêt aléatoire varie en fonction de deux critères essentiels: elle croît avec le pouvoir prédictif des arbres, et décroît avec la corrélation des arbres entre eux. L'optimisation des hyperparamètres d'une forêt aléatoire vise donc à trouver un équilibre optimal où les arbres sont suffisamment puissants pour être prédictifs, tout en étant suffisamment diversifiés pour que leurs erreurs ne soient pas trop corrélées. 
 
