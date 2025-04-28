@@ -391,7 +391,7 @@ Table&nbsp;1: Les principaux hyperparamètres des forêts aléatoires
 </section>
 <section id="sec-procedure-training-rf" class="level2" data-number="1.3">
 <h2 data-number="1.3" class="anchored" data-anchor-id="sec-procedure-training-rf"><span class="header-section-number">1.3</span> Comment entraîner une forêt aléatoire?</h2>
-<p>Les forêts aléatoires nécessitent généralement moins d’optimisation que d’autres modèles de <em>machine learning</em>, car leurs performances varient relativement peu en fonction des hyperparamètres. Les valeurs par défaut fournissent souvent des résultats satisfaisants, ce qui réduit le besoin d’optimisation intensive. Cependant, un ajustement précis des hyperparamètres peut apporter des gains de performance, notamment sur des jeux de données complexes.</p>
+<p>Les forêts aléatoires nécessitent généralement moins d’optimisation que d’autres modèles de <em>machine learning</em>, car leurs performances varient relativement peu en fonction des hyperparamètres. Les valeurs par défaut fournissent souvent des résultats satisfaisants, ce qui réduit le besoin d’optimisation intensive (<span class="citation" data-cites="probst2018tune">Probst and Boulesteix (<a href="#ref-probst2018tune" role="doc-biblioref">2018</a>)</span>, <span class="citation" data-cites="probst2019tunability">Probst, Boulesteix, and Bischl (<a href="#ref-probst2019tunability" role="doc-biblioref">2019</a>)</span>). Cependant, un ajustement précis des hyperparamètres peut apporter des gains de performance, notamment sur des jeux de données complexes.</p>
 <p>Comme indiqué dans la partie <strong>?@sec-facteur-perf-rf</strong>, la performance prédictive d’une forêt aléatoire varie en fonction de deux critères essentiels: elle croît avec le pouvoir prédictif des arbres, et décroît avec la corrélation des arbres entre eux. L’optimisation des hyperparamètres d’une forêt aléatoire vise donc à trouver un équilibre optimal où les arbres sont suffisamment puissants pour être prédictifs, tout en étant suffisamment diversifiés pour que leurs erreurs ne soient pas trop corrélées.</p>
 <p>La littérature propose de multiples approches pour optimiser simultanément plusieurs hyperparamètres: la recherche par grille (<em>grid search</em>), la recherche aléatoire (<em>random search</em>) et l’optimisation basée sur modèle séquentiel (SMBO), et il peut être difficile de savoir quelle approche adopter. Ce guide propose donc une première approche délibérément simple, avant de présenter les approches plus avancées.</p>
 <section id="approche-simple" class="level3" data-number="1.3.1">
@@ -446,6 +446,9 @@ Biau, Gérard, and Erwan Scornet. 2016. <span>“A Random Forest Guided Tour.”
 </div>
 <div id="ref-probst2018tune" class="csl-entry" role="listitem">
 Probst, Philipp, and Anne-Laure Boulesteix. 2018. <span>“To Tune or Not to Tune the Number of Trees in Random Forest.”</span> <em>Journal of Machine Learning Research</em> 18 (181): 1–18.
+</div>
+<div id="ref-probst2019tunability" class="csl-entry" role="listitem">
+Probst, Philipp, Anne-Laure Boulesteix, and Bernd Bischl. 2019. <span>“Tunability: Importance of Hyperparameters of Machine Learning Algorithms.”</span> <em>Journal of Machine Learning Research</em> 20 (53): 1–32.
 </div>
 <div id="ref-probst2019hyperparameters" class="csl-entry" role="listitem">
 Probst, Philipp, Marvin N Wright, and Anne-Laure Boulesteix. 2019. <span>“Hyperparameters and Tuning Strategies for Random Forest.”</span> <em>Wiley Interdisciplinary Reviews: Data Mining and Knowledge Discovery</em> 9 (3): e1301.
