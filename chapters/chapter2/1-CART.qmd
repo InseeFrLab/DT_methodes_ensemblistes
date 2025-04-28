@@ -4,9 +4,7 @@ Les arbres de décision sont des outils puissants en apprentissage automatique, 
 
 ## Le principe fondamental : partitionner pour prédire
 
-Imaginez que vous souhaitiez prédire le prix d'une maison en fonction de sa superficie et de son nombre de pièces. L'espace des caractéristiques (superficie et nombre de pièces) est vaste, et les prix des maisons (la _réponse_ à prédire) sont très variables. Pour prédire le prix des maisons, l'idée est de diviser cet espace en zones plus petites, où les maisons ont des prix similaires, et d'attribuer une prédiction identique à toutes les maisons situées dans la même zone.
-
-
+Imaginez que vous souhaitiez prédire le prix d'une maison en fonction de sa superficie et de son nombre de pièces, à partir d'un ensemble de transactions pour lesquelles le prix est connu. L'espace des caractéristiques (superficie et nombre de pièces) est vaste, et les prix des maisons (la _réponse_ à prédire) sont très variables. L'idée centrale des arbres de décision est de diviser cet espace en zones plus petites, au sein desquelles les maisons ont des prix proches, et d'attribuer une prédiction identique à toutes les maisons situées dans la même zone.
 
 ### Les défis du partitionnement optimal
 
@@ -19,33 +17,21 @@ L'objectif principal est de trouver la partition de l'espace des caractéristiqu
 
 ### Les solutions apportées par les arbres de décision
 
-Pour surmonter ces difficultés, les méthodes d'arbres de décision, et notamment la plus célèbre, l'algorithme CART (Classication And Regression Tree, @breiman1984cart), adoptent deux approches clés :
+Pour surmonter ces difficultés, les méthodes d'arbres de décision, et notamment la plus célèbre, l'algorithme CART (Classication And Regression Tree, @breiman1984cart), procèdent à trois simplifications cruciales :
 
+   1. **Optimisation gloutonne (__greedy optimization__)**: plutôt que de rechercher d'emblée un partitionnement optimal, les arbres de décision partitionnent l'espace des caractéristiques en régions disjointes (non chevauchantes) selon une approche simplifiée, récursive et séquentielle : à chaque étape, l'arbre choisit la meilleure division possible d'une région en deux sous-régions sur la base d'un critère de réduction de l'hétérogénéité intra-région. Le point essentiel est que cette décision ne prend pas en compte les étapes d'optimisation futures, et est guidée uniquement par la réduction immédiate de l'impureté ou de l'erreur de prédiction (par exemple, la réduction de la variance pour la régression). Ce processus est répété pour chaque sous-région, ce qui permet d'affiner progressivement le partitionnement de l'espace en fonction des caractéristiques qui s'avèrent les plus discriminantes à chaque étape. Cette méthode dite "gloutonne" (_greedy_) s'avère efficace pour construire un partitionnement de l'espace des caractéristiques, car elle décompose un problème d'optimisation complexe en une succession de problèmes plus simples et plus rapides à résoudre. Le résultat obtenu n'est pas nécessairement un optimum global, mais il s'en approche raisonnablement et surtout rapidement.
 
-  1. **Simplification du partitionnement de l'espace**
+   2. **Simplification des règles de partitionnement**: au lieu d'explorer tous les règles de décision possibles, les arbres de décision se restreignent à des règles de décision très simples, appelés **découpages binaires** (_binary splits_): à chaque étape, l'algorithme divise chaque région de l'espace en deux sous-régions en se basant __sur une seule caractéristique__ (ou _variable_) et en définissant __un seul seuil__ (ou _critère_) pour cette segmentation. Cela revient à poser une question simple telle que : "La valeur de la caractéristique $X$ dépasse-t-elle le seuil $x$ ?" Par exemple : "La superficie de la maison est-elle supérieure à 100 m² ?". Les deux réponses possibles ("Oui" ou "Non") définissent deux nouvelles sous-régions distinctes de l'espace, chacune correspondant à un sous-ensemble de données plus homogènes. 
 
-Au lieu d'explorer tous les découpages possibles, les arbres de décision partitionnent l'espace des caractéristiques en plusieurs régions distinctes (non chevauchantes) en appliquant des règles de décision simples. Les règles suivantes sont communément adoptées:
+   3. **Simplicité des prédictions locales**: une fois le partitionnement réalisé, une prédiction simple est faite dans chaque région. Il s'agit souvent de la moyenne des valeurs cibles dans cette région (régression) ou de la classe majoritaire (classification).
 
-- **Découpages binaires simples** : À chaque étape, l'algorithme divise une région de l'espace en deux sous-régions en se basant sur une seule caractéristique (ou _variable_) et en définissant un seul seuil (ou _critère_) pour cette segmentation. Concrètement, cela revient à poser une question du type : "La valeur de la caractéristique X dépasse-t-elle un certain seuil ?" Par exemple : "La superficie de la maison est-elle supérieure à 100 m² ?". Les deux réponses possibles ("Oui" ou "Non") génèrent deux nouvelles sous-régions distinctes de l'espace, chacune correspondant à un sous-ensemble de données plus homogène. 
-
-- **Prédictions locales** : Lorsque l'algorithme s'arrête, une prédiction simple est faite dans chaque région. Il s'agit souvent de la moyenne des valeurs cibles dans cette région (régression) ou de la classe majoritaire (classification).
-
-Ces règles de découpage rendent le problème d'optimisation plus simple mais également plus interprétable.
-
-
-  2. **Optimisation gloutonne (__greedy__)**
-
-Plutôt que d'optimiser toutes les divisions simultanément, les arbres de décision utilisent une approche simplifiée, récursive et séquentielle :
-
-- **Division étape par étape** : À chaque étape, l'arbre choisit la meilleure division possible sur la  base d'un critère de réduction de l'hétérogénéité intra-région. En revanche, il ne prend pas en compte les étapes d'optimisation futures.
-- **Critère local** : La décision est basée sur la réduction immédiate de l'impureté ou de l'erreur de prédiction (par exemple, la réduction de la variance pour la régression). Ce processus est répété pour chaque sous-région, ce qui permet d'affiner progressivement la partition de l'espace en fonction des caractéristiques les plus discriminantes.
-
-Cette méthode dite "gloutonne" (_greedy_) s'avère efficace pour construire un partitionnement de l'espace des caractéristiques, car elle décompose un problème d'optimisation complexe en une succession de problèmes plus simples et plus rapides à résoudre. Le résultat obtenu n'est pas nécessairement un optimum global, mais il s'en approche raisonnablement et surtout rapidement.
 
 Le terme "arbre de décision" provient de la structure descendante en forme d'arbre inversé qui émerge lorsqu'on utilise un algorithme glouton pour découper l'espace des caractéristiques en sous-ensemble de réponses homogènes de manière récursive. A chaque étape, deux nouvelles branches sont créées et forment une nouvelle partition de l'espace des caractéristiques.
 
-Une fois entraîné, un arbre de décision est une fonction **constante par morceaux** défini sur l'espace des caractéristiques. En raison de leur nature **non-continue** et **non-différentiable**, il est impossible d'utiliser des méthodes d'optimisation classiques reposant sur le calcul de gradients.
 
+Une fois entraîné, un arbre de décision est une fonction **constante par morceaux** défini sur l'espace des caractéristiques. Le terme "arbre de décision" provient de la structure descendante en forme d'arbre inversé qui émerge lorsqu'on utilise un algorithme glouton pour découper l'espace des caractéristiques en sous-ensemble de réponses homogènes de manière récursive. A chaque étape, deux nouvelles branches sont créées et forment une nouvelle partition de l'espace des caractéristiques.
+
+<!-- En raison de leur nature **non-continue** et **non-différentiable**, il est impossible d'utiliser des méthodes d'optimisation classiques reposant sur le calcul de gradients. -->
 
 
 ### Terminologie et structure d'un arbre de décision
