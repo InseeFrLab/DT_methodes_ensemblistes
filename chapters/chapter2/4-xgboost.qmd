@@ -10,9 +10,9 @@ Si l'on construit un ensemble de $K$ arbres, le modèle final est donc :
 $$
 \hat{y}_i = \sum_{k=1}^K f_k(x_i),
 $$
-où chaque $f_k$ est un arbre de régression (CART) produisant une valeur réelle (appelée _weight_) pour chaque feuille.
+où chaque $f_k$ est un arbre de régression (CART) prédisant une valeur réelle (appelée _weight_) pour chaque feuille.
 
-L'optimisation du modèle final en une seule étape étant impossible/trop complexe, l'optimisation se fait de manière itérative, chaque étape consistant à ajouter un nouvel arbre de manière optimale, c'est-à-dire de manière à réduire au maximum la fonction de perte.
+L'optimisation du modèle final en une seule étape étant impossible (car trop complexe), l'optimisation se fait de manière itérative, chaque étape consistant à ajouter un nouvel arbre de manière optimale, c'est-à-dire de manière à réduire au maximum la fonction de perte.
 
 A l'itération $t$, l'objectif est donc de minimiser la perte (écart entre valeurs prédites par le modèles et observations) liée à l'ajout du nouvel arbre $f_t(x_i)$ :
 
@@ -39,9 +39,9 @@ Encadré:
 
 ### 2.2 La résolution de ce problème d'optimisation par la méthode du gradient boosting
 
-L’algorithme de gradient boosting va :
+L’algorithme de _gradient boosting_ va:
 
-1. Déterminer la **structure** de l’arbre (choisir comment séparer les données de manière optimale, c'est-à-dire choisir l'emplacement des noeuds) en tenant compte de la régularisation.
+1. Déterminer la **structure** de l'arbre (choisir comment séparer les données de manière optimale, c'est-à-dire choisir l'emplacement des noeuds) en tenant compte de la régularisation.
 2. Pour chaque feuille, **trouver la meilleure valeur $w_j$​** à attribuer, c’est-à-dire la valeur qui **minimise** la fonction de perte, en tenant compte de la régularisation.
 
 L'algorithme XGBoost (et plus généralement dans le _Gradient Boosting_ sur arbres), utilise une approche **gloutonne** pour construire l’arbre, _nœud après nœud_. Cette approche peut être résumée ainsi :
@@ -108,11 +108,13 @@ $$
 \tilde{L}^{(t)} = \sum_{j=1}^T \Bigl[\sum_{i \in I_j} \bigl(g_i\,w_j + \tfrac12\,h_i\,w_j^2\bigr) + \tfrac12\,\lambda w_j^2 \Bigr]
 + \gamma\,T
 $$
+
 Ce qui peut s'écrire comme une somme (sur l'ensemble des feuilles) de fonctions de perte relatives à chaque feuille $j$  :
 $$
 \tilde{L}^{(t)} = \sum_{j=1}^T k(w_j)
 + \gamma\,T
 $$
+
 avec $k(w_j)$ la perte relative à la feuille $j$ :
 $$
 k(w_j) = \sum_{i \in I_j} \bigl(g_i\,w_j + \tfrac12\,h_i\,w_j^2\bigr) + \tfrac12\,\lambda w_j^2
