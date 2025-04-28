@@ -529,6 +529,19 @@ Figure&nbsp;1
 <section id="sec-procedure-training-gb" class="level2" data-number="1.3">
 <h2 data-number="1.3" class="anchored" data-anchor-id="sec-procedure-training-gb"><span class="header-section-number">1.3</span> Comment entraîner un algorithme de <em>gradient boosting</em>?</h2>
 <p>Proposer une procédure pour l’optimisation des hyperparamètres s’avère plus délicat pour les algorithmes de <em>gradient boosting</em> que pour les forêts aléatoires, car ces algorithmes comprennent un nombre beaucoup plus élevé d’hyperparamètres, et la littérature méthodologique sur leur usage pratique reste assez limitée et peu conclusive (en-dehors des nombreux tutoriels introductifs disponibles sur internet). Trois constats sont néanmoins bien établis. Premièrement, <strong>bien optimiser les hyperparamètres est essentiel pour la performance du modèle final</strong>. Deuxièmement, <strong>cette optimisation est complexe et longue</strong>, il faut donc la mener de façon rigoureuse et organisée pour ne pas perdre de temps. Troisièmement, <strong>contrairement aux forêts aléatoires, les valeurs par défaut des hyperparamètres dans les différentes implémentations ne constituent le plus souvent pas un point de départ raisonnable</strong> (<span class="citation" data-cites="bentejac2021comparative">Bentéjac, Csörgő, and Martínez-Muñoz (<a href="#ref-bentejac2021comparative" role="doc-biblioref">2021</a>)</span> et <span class="citation" data-cites="probst2019tunability">Probst, Boulesteix, and Bischl (<a href="#ref-probst2019tunability" role="doc-biblioref">2019</a>)</span>), en particulier pour les hyperparamètres de régularisation dont la valeur par défaut est souvent nulle.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Parfois, une forêt aléatoire suffit...">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Parfois, une forêt aléatoire suffit…
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Avant de se lancer dans le <em>gradient boosting</em>, il est utile d’entraîner une forêt aléatoire selon la procédure décrite dans la section <strong>?@sec-procedure-training-rf</strong>. Ce modèle servira de point de comparaison pour la suite, et permettra notamment de voir si le <em>gradient boosting</em> offre des gains de performances qui justifient le temps passé à l’optimisation des hyperparamètres.</p>
+</div>
+</div>
 <section id="préparer-loptimisation-des-hyperparamètres" class="level3" data-number="1.3.1">
 <h3 data-number="1.3.1" class="anchored" data-anchor-id="préparer-loptimisation-des-hyperparamètres"><span class="header-section-number">1.3.1</span> Préparer l’optimisation des hyperparamètres</h3>
 <ul>
@@ -550,21 +563,23 @@ Figure&nbsp;1
 </section>
 <section id="optimiser-les-hyperparamètres" class="level3" data-number="1.3.2">
 <h3 data-number="1.3.2" class="anchored" data-anchor-id="optimiser-les-hyperparamètres"><span class="header-section-number">1.3.2</span> Optimiser les hyperparamètres</h3>
-<section id="une-procédure-itérative-par-validation-croisée" class="level4" data-number="1.3.2.1">
-<h4 data-number="1.3.2.1" class="anchored" data-anchor-id="une-procédure-itérative-par-validation-croisée"><span class="header-section-number">1.3.2.1</span> Une procédure itérative par validation croisée</h4>
-<p>Voici une procédure simple pour optimiser les hyperparamètres d’un algorithme de <em>gradient boosting</em>. Elle ne garantit pas l’obtention d’un modèle optimal, mais elle est lisible et permet d’obtenir rapidement un modèle raisonnablement performant. Elle est coûteuse sur le plan computationnel et donc adaptée à des données peu volumineuses.</p>
+<p>Cette section propose trois approches pour optimiser les hyperparamètres d’un algorithme de <em>gradient boosting</em>. Les deux premières reposent sur une validation croisée et une validation simple, associée à un <em>grid search</em>. La troisième est plus avancée et mobilise <code>optuna</code>, un <em>framework</em> d’optimisation d’hyperparamètres. Aucune de ces approches ne garantit pas l’obtention d’un modèle optimal, mais elle sont relativement lisibles et permettent d’obtenir rapidement un modèle raisonnablement performant.</p>
+<section id="approche-1-procédure-itérative-par-validation-croisée" class="level4" data-number="1.3.2.1">
+<h4 data-number="1.3.2.1" class="anchored" data-anchor-id="approche-1-procédure-itérative-par-validation-croisée"><span class="header-section-number">1.3.2.1</span> Approche 1: procédure itérative par validation croisée</h4>
+<p>Voici une procédure simple reposant sur une validation croisée. Elle est assez coûteuse sur le plan computationnel et donc adaptée à des données peu volumineuses.</p>
 <ul>
 <li><p><strong>Optimiser conjointement le nombre d’arbres et le taux d’apprentissage</strong>. Par exemple, on évalue les performances du modèle en testant les valeurs <code>[100, 200, 500, 1000]</code> pour le nombre d’arbres, et <code>[0.05, 0.1, 0.15, 0.2]</code> pour le taux d’apprentissage, avec des valeurs raisonnables pour les autres hyperparamètres. On retient finalement le taux d’apprentissage et le nombre d’arbres du modèle le plus performant. Si l’un de ces hyperparamètres est la valeur minimale ou maximale testée (par exemple 1000 arbres, ou 0.05 pour le taux d’apprentissage), alors il est préférable de recommencer l’exercice en ajustant la liste des valeurs possibles.</p></li>
 <li><p><strong>Optimiser conjointement l’échantillonnage des observations et des variables</strong>. On utilise le taux d’apprentissage et le nombre d’arbres issus de l’étape précédente, puis on évalue les performances de différents couples de valeurs (<code>bagging_fraction</code>, <code>bagging_fraction</code>), et on retient enfin les valeurs des hyperparamètres du modèle le plus performant.</p></li>
 <li><p><strong>Optimiser conjointement les hyperparamètres de régularisation</strong>. On utilise les valeurs des hyperparamètre issues des étapes précédentes, puis on évalue les performances de différents couples de valeurs (<code>lambda</code>, <code>min_split_gain</code>), et on retient les valeurs des hyperparamètres du modèle le plus performant.</p></li>
 </ul>
-<p>Cette procédure est présentée en détail dans la partie 1 du notebook XXXXXXXXXXXXXXXXXXXXXXXXXXXX.</p>
+<p>Utiliser l’option <code>return_train_score = True</code> de <code>GridsearchCV</code> pour mesurer le surajustement, et durcir les hyperparamètres de régularisation quand il est important.</p>
+<p>Cette procédure est présentée en détail dans la partie 1 du <em>notebook</em> XXXXXXXXXXXXXXXXXXXXXXXXXXXX.</p>
 <!-- ::: {.callout-warning title="_Early stopping_ et validation croisée"}
 
 ::: -->
 </section>
-<section id="une-procédure-itérative-par-validation-simple" class="level4" data-number="1.3.2.2">
-<h4 data-number="1.3.2.2" class="anchored" data-anchor-id="une-procédure-itérative-par-validation-simple"><span class="header-section-number">1.3.2.2</span> Une procédure itérative par validation simple</h4>
+<section id="approche-2-procédure-itérative-par-validation-simple" class="level4" data-number="1.3.2.2">
+<h4 data-number="1.3.2.2" class="anchored" data-anchor-id="approche-2-procédure-itérative-par-validation-simple"><span class="header-section-number">1.3.2.2</span> Approche 2: procédure itérative par validation simple</h4>
 <ul>
 <li><p><strong>Optimiser conjointement le nombre d’arbres et le taux d’apprentissage</strong>. Le principe est le suivant: on évalue les performances de différents couples de valeurs (nombre d’arbres, taux d’apprentissage) avec des valeurs raisonnables pour les autres hyperparamètres. Il y a deux approches, selon qu’on retient une approche de validation croisée,</p>
 <ul>
@@ -584,22 +599,9 @@ Figure&nbsp;1
 <li><strong>Entraîner du modèle final</strong>: entraîner une forêt aléatoire avec les hyperparamètres optimisés déduits des étapes précédentes.</li>
 <li><strong>Évaluer du modèle final</strong>: mesurer la performance du modèle final sur un ensemble de test.</li>
 </ul>
-<div class="callout callout-style-default callout-tip callout-titled" title="Parfois, une forêt aléatoire suffit...">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Parfois, une forêt aléatoire suffit…
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Avant de se lancer dans le <em>gradient boosting</em>, il est utile d’entraîner une forêt aléatoire selon la procédure décrite dans la section <strong>?@sec-procedure-training-rf</strong>. Ce modèle servira de point de comparaison pour la suite, et permettra notamment de voir si le <em>gradient boosting</em> offre des gains de performances qui justifient le temps passé à l’optimisation des hyperparamètres.</p>
-</div>
-</div>
 </section>
-<section id="une-approche-avancée-utiliser-optuna" class="level4" data-number="1.3.2.3">
-<h4 data-number="1.3.2.3" class="anchored" data-anchor-id="une-approche-avancée-utiliser-optuna"><span class="header-section-number">1.3.2.3</span> Une approche avancée: utiliser <code>optuna</code></h4>
+<section id="approche-3-utiliser-optuna" class="level4" data-number="1.3.2.3">
+<h4 data-number="1.3.2.3" class="anchored" data-anchor-id="approche-3-utiliser-optuna"><span class="header-section-number">1.3.2.3</span> Approche 3: utiliser <code>optuna</code></h4>
 <p>Cette procédure est présentée en détail dans la partie 3 du notebook XXXXXXXXXXXXXXXXXXXXXXXXXXXX.</p>
 
 
