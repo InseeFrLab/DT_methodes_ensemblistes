@@ -1,6 +1,6 @@
 title: ctk-article
 author: Christopher Kenny
-version: 1.0.2
+version: 1.0.3
 quarto-required: ">=1.5.0"
 contributes:
   formats:
@@ -12,8 +12,6 @@ contributes:
       filters:
         - insert-show-appendix.lua
         - typst-function
-      format-resources:
-        - ORCIDiD.svg
       mainfont:
         - "Spectral"
         - "Crimson"
@@ -28,8 +26,6 @@ contributes:
       title-page: false
       blind: false
       section-numbering: "1.1."
-      chaptersintoc: true
-      resetsecnumbering: false
       execute:
         echo: false
         warning: false
