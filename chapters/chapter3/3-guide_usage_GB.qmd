@@ -136,7 +136,7 @@ Avant de se lancer dans le _gradient boosting_, il est utile d'entraîner une fo
 
 ### Optimiser les hyperparamètres
 
-Cette section propose trois approches pour optimiser les hyperparamètres d'un algorithme de _gradient boosting_. Les deux premières reposent sur une validation croisée et une validation simple, associée à un _grid search_. La troisième est plus avancée et mobilise `optuna`, un _framework_ d'optimisation d'hyperparamètres. Aucune de ces approches ne garantit pas l'obtention d'un modèle optimal, mais elle sont relativement lisibles et permettent d'obtenir rapidement un modèle raisonnablement performant.
+Cette section propose trois approches pour optimiser les hyperparamètres d'un algorithme de _gradient boosting_. Les deux premières reposent sur une validation croisée et une validation simple, associée à un _grid search_. La troisième est plus avancée et mobilise Optuna, un _framework_ d'optimisation d'hyperparamètres. Aucune de ces approches ne garantit pas l'obtention d'un modèle optimal, mais elle sont relativement lisibles et permettent d'obtenir rapidement un modèle raisonnablement performant.
 
 #### Approche 1: procédure itérative par validation croisée
 
