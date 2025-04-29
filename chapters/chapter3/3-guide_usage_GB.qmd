@@ -180,7 +180,7 @@ La troisième approche est plus avancée et mobilise Optuna, une librairie d'opt
 
 Cette procédure est présentée en détail dans la partie 3 du notebook XXXXXXXXXXXXXXXXXXXXXXXXXXXX.
 
-## Utiliser un modèle de _gradient boosting_ en prédiction
+## Utiliser un modèle de _gradient boosting_ en prédiction {#sec-inference-gb}
 
 La dernière étape de l'usage d'un modèle de _gradient boosting_ consiste à l'utiliser en prédiction. Cette étape peut sembler simple au premier abord: ne suffit-il pas d'utiliser les fonctions de prédiction de l'implémentation retenue? C'est effectivement le cas, mais l'usage de ces modèles en prédiction peut buter sur un problème de performance car si les implémentations du _gradient boosting_ sont optimisées pour être très performantes au cours de l'entraînement des modèles, elles ne le sont pas nécessairement lorsqu'on les utilise en prédiction. Cela ne pose généralement pas de problème lorsque la prédiction porte sur des données de taille restreinte, et que les modèles restent légers (arbres peu nombreux et peu complexes). En revanche, la prédiction peut devenir très lente voire impraticable lorsqu'on entend utiliser des modèles complexes (plusieurs milliers d'arbres) avec des données volumineuses (plusieurs millions d'observations).
 
