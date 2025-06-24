@@ -278,17 +278,20 @@ window.Quarto = {
   <li><a href="#les-solutions-apportées-par-les-arbres-de-décision" id="toc-les-solutions-apportées-par-les-arbres-de-décision" class="nav-link" data-scroll-target="#les-solutions-apportées-par-les-arbres-de-décision"><span class="header-section-number">1.1.2</span> Les solutions apportées par les arbres de décision</a></li>
   <li><a href="#terminologie-et-structure-dun-arbre-de-décision" id="toc-terminologie-et-structure-dun-arbre-de-décision" class="nav-link" data-scroll-target="#terminologie-et-structure-dun-arbre-de-décision"><span class="header-section-number">1.1.3</span> Terminologie et structure d’un arbre de décision</a></li>
   <li><a href="#illustration" id="toc-illustration" class="nav-link" data-scroll-target="#illustration"><span class="header-section-number">1.1.4</span> Illustration</a></li>
-  <li><a href="#définir-une-fonction-dimpureté-adaptée-au-problème" id="toc-définir-une-fonction-dimpureté-adaptée-au-problème" class="nav-link" data-scroll-target="#définir-une-fonction-dimpureté-adaptée-au-problème"><span class="header-section-number">1.1.5</span> Définir une fonction d’impureté adaptée au problème</a></li>
-  <li><a href="#identifier-la-partition-binaire-maximisant-la-réduction-de-limpureté" id="toc-identifier-la-partition-binaire-maximisant-la-réduction-de-limpureté" class="nav-link" data-scroll-target="#identifier-la-partition-binaire-maximisant-la-réduction-de-limpureté"><span class="header-section-number">1.1.6</span> Identifier la partition binaire maximisant la réduction de l’impureté</a></li>
-  <li><a href="#réitérer-le-processus-jusquà-atteindre-un-critère-darrêt" id="toc-réitérer-le-processus-jusquà-atteindre-un-critère-darrêt" class="nav-link" data-scroll-target="#réitérer-le-processus-jusquà-atteindre-un-critère-darrêt"><span class="header-section-number">1.1.7</span> Réitérer le processus jusqu’à atteindre un critère d’arrêt</a></li>
-  <li><a href="#elagage-pruning" id="toc-elagage-pruning" class="nav-link" data-scroll-target="#elagage-pruning"><span class="header-section-number">1.1.8</span> Elagage (<em>pruning</em>)</a></li>
-  <li><a href="#prédire" id="toc-prédire" class="nav-link" data-scroll-target="#prédire"><span class="header-section-number">1.1.9</span> Prédire</a></li>
-  <li><a href="#critères-de-qualité-et-ajustements" id="toc-critères-de-qualité-et-ajustements" class="nav-link" data-scroll-target="#critères-de-qualité-et-ajustements"><span class="header-section-number">1.1.10</span> Critères de qualité et ajustements</a></li>
   </ul></li>
-  <li><a href="#avantages-et-limites-de-cette-approche" id="toc-avantages-et-limites-de-cette-approche" class="nav-link" data-scroll-target="#avantages-et-limites-de-cette-approche"><span class="header-section-number">1.2</span> Avantages et limites de cette approche</a>
+  <li><a href="#la-construction-dun-arbre-de-décision-par-lalgorithme-cart" id="toc-la-construction-dun-arbre-de-décision-par-lalgorithme-cart" class="nav-link" data-scroll-target="#la-construction-dun-arbre-de-décision-par-lalgorithme-cart"><span class="header-section-number">1.2</span> La construction d’un arbre de décision par l’algorithme CART</a>
   <ul class="collapse">
-  <li><a href="#avantages" id="toc-avantages" class="nav-link" data-scroll-target="#avantages"><span class="header-section-number">1.2.1</span> Avantages</a></li>
-  <li><a href="#limites" id="toc-limites" class="nav-link" data-scroll-target="#limites"><span class="header-section-number">1.2.2</span> Limites</a></li>
+  <li><a href="#définir-une-fonction-dimpureté-adaptée-au-problème" id="toc-définir-une-fonction-dimpureté-adaptée-au-problème" class="nav-link" data-scroll-target="#définir-une-fonction-dimpureté-adaptée-au-problème"><span class="header-section-number">1.2.1</span> Définir une fonction d’impureté adaptée au problème</a></li>
+  <li><a href="#identifier-la-partition-maximisant-la-réduction-de-limpureté" id="toc-identifier-la-partition-maximisant-la-réduction-de-limpureté" class="nav-link" data-scroll-target="#identifier-la-partition-maximisant-la-réduction-de-limpureté"><span class="header-section-number">1.2.2</span> Identifier la partition maximisant la réduction de l’impureté</a></li>
+  <li><a href="#réitérer-le-processus-jusquà-atteindre-un-critère-darrêt" id="toc-réitérer-le-processus-jusquà-atteindre-un-critère-darrêt" class="nav-link" data-scroll-target="#réitérer-le-processus-jusquà-atteindre-un-critère-darrêt"><span class="header-section-number">1.2.3</span> Réitérer le processus jusqu’à atteindre un critère d’arrêt</a></li>
+  <li><a href="#elagage-pruning" id="toc-elagage-pruning" class="nav-link" data-scroll-target="#elagage-pruning"><span class="header-section-number">1.2.4</span> Elagage (<em>pruning</em>)</a></li>
+  <li><a href="#prédire" id="toc-prédire" class="nav-link" data-scroll-target="#prédire"><span class="header-section-number">1.2.5</span> Prédire</a></li>
+  <li><a href="#critères-de-qualité-et-ajustements" id="toc-critères-de-qualité-et-ajustements" class="nav-link" data-scroll-target="#critères-de-qualité-et-ajustements"><span class="header-section-number">1.2.6</span> Critères de qualité et ajustements</a></li>
+  </ul></li>
+  <li><a href="#avantages-et-limites-de-cette-approche" id="toc-avantages-et-limites-de-cette-approche" class="nav-link" data-scroll-target="#avantages-et-limites-de-cette-approche"><span class="header-section-number">1.3</span> Avantages et limites de cette approche</a>
+  <ul class="collapse">
+  <li><a href="#avantages" id="toc-avantages" class="nav-link" data-scroll-target="#avantages"><span class="header-section-number">1.3.1</span> Avantages</a></li>
+  <li><a href="#limites" id="toc-limites" class="nav-link" data-scroll-target="#limites"><span class="header-section-number">1.3.2</span> Limites</a></li>
   </ul></li>
   </ul></li>
   </ul>
@@ -324,7 +327,7 @@ window.Quarto = {
 
 <section id="la-brique-élémentaire-larbre-de-décision" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> La brique élémentaire: l’arbre de décision</h1>
-<p>Les arbres de décision sont des outils puissants en apprentissage automatique, utilisés notamment pour des tâches de classification et de régression. Le principe de cet algorithme consiste à diviser l’espace des caractéristiques en sous-ensembles homogènes à l’aide de règles simples, puis de former pour chaque sous-ensemble une prédiction à partir des observations présentes dans ce sous-ensemble. Malgré leur simplicité apparente, les arbres de décision sont capable de saisir des relations complexes et non linéaires entre les variables (ou <em>caractéristiques</em>) d’un jeu de données.</p>
+<p>Les arbres de décision sont des outils puissants en apprentissage automatique, utilisés notamment pour des tâches de classification et de régression. Le principe de cet algorithme consiste à diviser l’espace des caractéristiques en sous-régions homogènes à l’aide de règles simples, puis de former pour chaque sous-ensemble une prédiction à partir des observations présentes dans cette sous-région. Malgré leur simplicité apparente, les arbres de décision sont capable de saisir des relations complexes et non linéaires entre les variables (ou <em>caractéristiques</em>) d’un jeu de données.</p>
 <section id="le-principe-fondamental-partitionner-pour-prédire" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="le-principe-fondamental-partitionner-pour-prédire"><span class="header-section-number">1.1</span> Le principe fondamental: partitionner pour prédire</h2>
 <p>Imaginez que vous souhaitiez prédire le prix d’une maison en fonction de sa superficie et de son nombre de pièces, à partir d’un ensemble de transactions pour lesquelles le prix est connu. L’espace des caractéristiques (superficie et nombre de pièces) est vaste, et les prix des maisons (la <em>réponse</em> à prédire) sont très variables. L’idée centrale des arbres de décision est de diviser cet espace en zones plus petites, au sein desquelles les maisons ayant des surfaces et un nombre de pièces similaire ont des prix proches, et d’attribuer une prédiction identique à toutes les maisons situées dans la même zone.</p>
@@ -341,7 +344,7 @@ window.Quarto = {
 <h3 data-number="1.1.2" class="anchored" data-anchor-id="les-solutions-apportées-par-les-arbres-de-décision"><span class="header-section-number">1.1.2</span> Les solutions apportées par les arbres de décision</h3>
 <p>Pour surmonter ces difficultés, les algorithmes d’arbres de décision, et notamment la plus célèbre, l’algorithme CART (Classification And Regression Tree, <span class="citation" data-cites="breiman1984cart">Breiman et al. (<a href="#ref-breiman1984cart" role="doc-biblioref">1984</a>)</span>), procèdent à trois simplifications cruciales:</p>
 <ol type="1">
-<li><p><strong>Optimisation gloutonne (<strong>greedy optimization</strong>)</strong>: plutôt que de rechercher d’emblée un partitionnement optimal, les arbres de décision partitionnent l’espace des caractéristiques en régions disjointes selon une approche récursive et séquentielle: à chaque étape, l’arbre choisit la meilleure division possible d’une région en deux sous-régions sur la base d’un critère de réduction de l’hétérogénéité intra-région. Le point essentiel est que cette décision ne prend pas en compte les étapes d’optimisation futures, et est guidée uniquement par la réduction immédiate de l’impureté ou de l’erreur de prédiction (par exemple, la réduction de la variance pour la régression). Ce processus est répété pour chaque sous-région, ce qui permet d’affiner progressivement le partitionnement de l’espace en fonction des caractéristiques qui s’avèrent les plus discriminantes à chaque étape. Cette méthode dite “gloutonne” (<em>greedy</em>) s’avère efficace pour construire un partitionnement de l’espace des caractéristiques, car elle décompose un problème d’optimisation complexe en une succession de problèmes plus simples et plus rapides à résoudre. Le résultat obtenu n’est pas nécessairement un optimum global, mais il s’en approche raisonnablement et surtout rapidement.</p></li>
+<li><p><strong>Optimisation gloutonne (<strong>greedy optimization</strong>)</strong>: plutôt que de rechercher d’emblée un partitionnement optimal, les arbres de décision partitionnent l’espace selon une approche séquentielle. A chaque étape, l’arbre choisit la meilleure division possible d’une région en deux sous-régions, <em>indépendamment des étapes précédentes ou suivantes</em>. Ce processus est répété pour chaque sous-région, ce qui permet d’affiner progressivement le partitionnement de l’espace, jusqu’à ce qu’un critère d’arrêt soit atteint. Cette méthode dite “gloutonne” (<em>greedy</em>) s’avère très efficace, car elle décompose un problème d’optimisation complexe en une succession de problèmes plus simples et plus rapides à résoudre. Le résultat obtenu n’est pas nécessairement un optimum global, mais il s’en approche raisonnablement et surtout rapidement.</p></li>
 <li><p><strong>Simplification des règles de partitionnement</strong>: au lieu d’explorer tous les règles de décision possibles, les arbres de décision se restreignent à des règles de décision très simples, appelés <strong>découpages binaires</strong> (<em>binary splits</em>): à chaque étape, l’algorithme divise chaque région de l’espace en deux sous-régions à l’aide d’une règle de décision (<em>decision rule</em>) qui ne fait appel qu’à <strong>une seule caractéristique</strong> (ou <em>variable</em>) et à <strong>un seul seuil</strong> (ou <em>critère</em>) pour cette segmentation. Cela revient à poser une question simple telle que: “La valeur de la caractéristique <span class="math inline">\(X\)</span> dépasse-t-elle le seuil <span class="math inline">\(x\)</span> ?” Par exemple: “La superficie de la maison est-elle supérieure à 100 m² ?”. Les deux réponses possibles (“Oui” ou “Non”) définissent deux nouvelles sous-régions distinctes de l’espace, chacune correspondant à un sous-ensemble de données plus homogènes.</p></li>
 <li><p><strong>Simplicité des prédictions locales</strong>: une fois le partitionnement réalisé, une prédiction est calculée pour chaque région à partir des observations des données d’entraînement présentes dans cette région. Il s’agit souvent de la moyenne des valeurs cibles dans cette région (régression) ou de la classe majoritaire (classification). Un point essentiel est que la prédiction est constante au sein de chaque région.</p></li>
 </ol>
@@ -353,12 +356,8 @@ window.Quarto = {
 <ul>
 <li><p><strong>Nœud Racine (<em>Root Node</em>)</strong>: Le nœud-racine est le point de départ de l’arbre de décision, il est situé au sommet de l’arbre. Il contient l’ensemble des données d’entraînement avant tout partitionnement. À ce niveau, l’algorithme cherche la caractéristique la plus discriminante, c’est-à-dire celle qui permet de diviser les données en deux régions de manière à minimiser un certain critère d’hétérogénéité (comme l’indice de Gini pour la classification ou la variance pour la régression).</p></li>
 <li><p><strong>Nœuds Internes (<em>Internal Nodes</em>)</strong>: Les nœuds internes sont les points intermédiaires où l’algorithme CART applique des règles de décision pour diviser les données en sous-régions plus petites. Chaque nœud interne se définit par une règle de décision basée sur une variable et un seuil (par exemple, “La superficie de la maison est-elle supérieure à 100 m² ?”). À chaque étape, une seule caractéristique (la superficie) et un seul seuil (supérieur à 100) sont utilisés pour opérer au partitionnement des données.</p></li>
-<li><p><strong>Branches (<em>Branches</em>)</strong>: Les branches sont les connexions entre les nœuds, elles illustrent le chemin que les données suivent en fonction des réponses aux questions posées dans les nœuds internes. Chaque branche correspond à une décision binaire, “Oui” ou “Non”, qui oriente les observations vers une nouvelle subdivision de l’espace des caractéristiques.</p></li>
-<li><p><strong>Nœuds Terminaux ou Feuilles (<em>Leaf Nodes</em>, <em>Terminal Nodes</em> ou <em>Leaves</em>)</strong>: Les nœuds terminaux, situés à l’extrémité des branches, sont les points où le processus de division s’arrête. Ils fournissent la prédiction finale.</p>
-<ul>
-<li>En <strong>classification</strong>, chaque feuille correspond à une classe prédite (par exemple, “Oui” ou “Non”) ou à une probabilité d’appartenir à la classe positive.</li>
-<li>En <strong>régression</strong>, chaque feuille fournit une valeur numérique prédite (comme le prix estimé d’une maison).</li>
-</ul></li>
+<li><p><strong>Branches (<em>Branches</em>)</strong>: Les branches sont les connexions entre les nœuds et représentent le chemin suivies par les données. Chaque branche correspond à une décision binaire, “Oui” ou “Non”, qui oriente les observations vers une nouvelle subdivision de l’espace des caractéristiques.</p></li>
+<li><p><strong>Nœuds Terminaux ou Feuilles (<em>Leaf Nodes</em>, <em>Terminal Nodes</em> ou <em>Leaves</em>)</strong>: Les nœuds terminaux, situés à l’extrémité des branches, sont les points où le processus de division s’arrête. Ils fournissent la prédiction finale. Dans un problème de classification, la prédiction d’une feuille est soit la classe majoritaire parmi les observations de la feuille (par exemple, “Oui” ou “Non”), soit une probabilité d’appartenir à chaque classe. Dans un problème de régression, la prédiction d’une feuille est une valeur numérique, souvent la moyenne des observations de la feuille.</p></li>
 </ul>
 <p><em>Figure illustrative</em>: Une représentation visuelle de la structure de l’arbre peut être utile ici pour illustrer les concepts de nœuds, branches et feuilles.</p>
 </section>
@@ -385,35 +384,29 @@ window.Quarto = {
 <p>Cet arbre utilise des règles simples pour diviser l’espace des caractéristiques (superficie et nombre de pièces) en sous-groupes homogènes et fournir une prédiction (estimer le prix d’une maison).</p>
 <p><em>Figure illustrative</em></p>
 </section>
-<section id="définir-une-fonction-dimpureté-adaptée-au-problème" class="level3" data-number="1.1.5">
-<h3 data-number="1.1.5" class="anchored" data-anchor-id="définir-une-fonction-dimpureté-adaptée-au-problème"><span class="header-section-number">1.1.5</span> Définir une fonction d’impureté adaptée au problème</h3>
-<p>La <strong>fonction d’impureté</strong> quantifie l’hétérogénéité des observations au sein d’un nœud par rapport à la variable cible (classe pour la classification, ou valeur continue pour la régression). Plus précisément, une mesure d’impureté est conçue pour croître avec la dispersion dans un nœud: plus un noeud est homogène, plus son impureté est faible. Un nœud est dit <strong>pur</strong> lorsque toutes les observations qu’il contient appartiennent à la même classe (classification) ou présentent des valeurs similaires voire identiques (régression). Le choix de la fonction d’impureté dépend du type de problème (voir ci-dessous).</p>
+</section>
+<section id="la-construction-dun-arbre-de-décision-par-lalgorithme-cart" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="la-construction-dun-arbre-de-décision-par-lalgorithme-cart"><span class="header-section-number">1.2</span> La construction d’un arbre de décision par l’algorithme CART</h2>
+<section id="définir-une-fonction-dimpureté-adaptée-au-problème" class="level3" data-number="1.2.1">
+<h3 data-number="1.2.1" class="anchored" data-anchor-id="définir-une-fonction-dimpureté-adaptée-au-problème"><span class="header-section-number">1.2.1</span> Définir une fonction d’impureté adaptée au problème</h3>
+<p>La <strong>fonction d’impureté</strong> quantifie l’hétérogénéité des observations au sein d’un nœud par rapport à la variable cible (classe pour la classification, ou valeur continue pour la régression). Plus précisément, une mesure d’impureté est conçue pour croître avec la dispersion dans un nœud: plus un nœud est homogène, plus son impureté est faible. Un nœud est dit <strong>pur</strong> lorsque toutes les observations qu’il contient appartiennent à la même classe (classification) ou présentent des valeurs similaires voire identiques (régression). Le choix de la fonction d’impureté dépend du type de problème (voir ci-dessous).</p>
 <!-- - **Classification**: L'**indice de Gini** ou l'**entropie** sont très souvent utilisées pour évaluer la dispersion des classes dans chaque nœud. 
 
 - **Régression**: La **somme des erreurs quadratiques** (SSE) est souvent utilisée pour mesurer la variance des valeurs cibles dans chaque nœud.  -->
-<p><strong>La fonction d’impureté est un élément essentiel de la construction des arbres de décision.</strong> En effet, c’est elle qui est utilisée pour comparer entre elles les règles de décision possibles. À chaque étape de la croissance de l’arbre (<em>tree growing</em>), l’algorithme sélectionne la règle de décision qui réduit le plus l’impureté, afin de définir des nœuds les plus homogènes possibles. Il est à noter que l’arbre final dépend de la fonction d’impureté utilisée: si pour un problème donné on recommence l’entraînement avec une autre fonction d’impureté, on obtient généralement un arbre différent (car les règles de décision retenues à chaque noeud ne sont plus les mêmes).</p>
-<section id="mesures-dimpureté-classiques-pour-les-problèmes-de-classification" class="level4" data-number="1.1.5.1">
-<h4 data-number="1.1.5.1" class="anchored" data-anchor-id="mesures-dimpureté-classiques-pour-les-problèmes-de-classification"><span class="header-section-number">1.1.5.1</span> Mesures d’impureté classiques pour les problèmes de classification</h4>
-<p>Dans le cadre de la classification, l’objectif est de partitionner les données de manière à ce que chaque sous-ensemble (ou région) soit le plus homogène possible en termes de classe prédite. Plusieurs mesures d’impureté sont couramment utilisées pour évaluer la qualité des divisions.</p>
-<p><strong>Propriété-définition d’une mesure d’impureté</strong></p>
-<p>Pour un nœud <span class="math inline">\(t\)</span> contenant <span class="math inline">\(K\)</span> classes, une <strong>mesure d’impureté</strong> <span class="math inline">\(I(t)\)</span> est une fonction qui quantifie l’hétérogénéité des classes dans ce nœud. Elle doit satisfaire les propriétés suivantes:</p>
+<p><strong>La fonction d’impureté est un élément essentiel de la construction des arbres de décision.</strong> En effet, c’est elle qui est utilisée pour comparer entre elles les règles de décision possibles. À chaque étape de la croissance de l’arbre (<em>tree growing</em>), l’algorithme sélectionne la règle de décision qui réduit le plus l’impureté, afin de définir des nœuds les plus homogènes possibles. Il est à noter que l’arbre final dépend de la fonction d’impureté utilisée: si pour un problème donné on recommence l’entraînement avec une autre fonction d’impureté, on obtient généralement un arbre différent (car les règles de décision retenues à chaque nœud ne sont plus les mêmes).</p>
+<section id="mesures-dimpureté-pour-les-problèmes-de-classification" class="level4" data-number="1.2.1.1">
+<h4 data-number="1.2.1.1" class="anchored" data-anchor-id="mesures-dimpureté-pour-les-problèmes-de-classification"><span class="header-section-number">1.2.1.1</span> Mesures d’impureté pour les problèmes de classification</h4>
+<p>Dans un problème de classification où l’on souhaite classifier des observations parmi <span class="math inline">\(K\)</span> classes, une <strong>mesure d’impureté</strong> <span class="math inline">\(I(t)\)</span> est une fonction qui quantifie l’hétérogénéité des classes dans un nœud donnée. Les mesures d’impureté usuelles détaillées ci-dessous partagent les deux propriétés suivantes:</p>
 <ul>
-<li><p><strong>Pureté maximale</strong>: Lorsque toutes les observations du nœud appartiennent à une seule classe, c’est-à-dire que la proportion <span class="math inline">\(p_k = 1\)</span> pour une classe <span class="math inline">\(k\)</span> et <span class="math inline">\(p_j = 0\)</span> pour toutes les autres classes <span class="math inline">\(j \neq k\)</span>, l’impureté est minimale et <span class="math inline">\(I(t) = 0\)</span>. Cela indique que le nœud est <strong>entièrement pur</strong>, ou homogène.</p></li>
-<li><p><strong>Impureté maximale</strong>: Lorsque les observations sont réparties de manière uniforme entre toutes les classes, c’est-à-dire que <span class="math inline">\(p_k = \frac{1}{K}\)</span> pour chaque classe <span class="math inline">\(k\)</span>, l’impureté atteint son maximum. Cette situation reflète une <strong>impureté élevée</strong>, car le nœud est très hétérogène et contient une forte incertitude sur la classe des observations.</p></li>
+<li><p><strong>Pureté maximale</strong>: lorsque toutes les observations du nœud appartiennent à une seule classe, c’est-à-dire que la proportion <span class="math inline">\(p_k = 1\)</span> pour une classe <span class="math inline">\(k\)</span> et <span class="math inline">\(p_j = 0\)</span> pour toutes les autres classes <span class="math inline">\(j \neq k\)</span>, l’impureté est minimale et <span class="math inline">\(I(t) = 0\)</span>. Cela indique que le nœud est <strong>entièrement pur</strong>, ou homogène.</p></li>
+<li><p><strong>Impureté maximale</strong>: lorsque les observations sont réparties de manière uniforme entre toutes les classes, c’est-à-dire que la proportion <span class="math inline">\(p_k = \frac{1}{K}\)</span> pour chaque classe <span class="math inline">\(k\)</span>, l’impureté atteint son maximum. Cette situation reflète une <strong>impureté élevée</strong>, car le nœud est très hétérogène et contient une forte incertitude sur la classe des observations.</p></li>
 </ul>
+<p>Il existe trois mesures d’impureté couramment utilisées en classification:</p>
 <p><strong>1. L’indice de Gini</strong></p>
-<p>L’<strong>indice de Gini</strong> est l’une des fonctions de perte les plus couramment utilisées pour la classification. Il mesure la probabilité qu’un individu sélectionné au hasard dans un nœud soit mal classé si on lui attribue une classe au hasard, en fonction de la distribution des classes dans ce nœud.</p>
-<p>Pour un nœud <span class="math inline">\(t\)</span> contenant <span class="math inline">\(K\)</span> classes, l’indice de Gini <span class="math inline">\(G(t)\)</span> est donné par:</p>
-<p><span class="math display">\[
-G(t) = 1 - \sum_{k=1}^{K} p_k^2
-\]</span></p>
+<p>L’<strong>indice de Gini</strong> mesure la probabilité qu’un individu sélectionné au hasard dans un nœud soit mal classé si on lui attribue une classe au hasard, en fonction de la distribution des classes dans ce nœud. Pour un nœud <span class="math inline">\(t\)</span> contenant <span class="math inline">\(K\)</span> classes, l’indice de Gini <span class="math inline">\(G(t)\)</span> est donné par</p>
+<p><span class="math display">\[ G(t) = 1 - \sum_{k=1}^{K} p_k^2 \]</span></p>
 <p>où <span class="math inline">\(p_k\)</span> est la proportion d’observations appartenant à la classe <span class="math inline">\(k\)</span> dans le nœud <span class="math inline">\(t\)</span>.</p>
-<!-- **Propriété**:
-
-- Lorsque toutes les observations appartiennent à une même classe, $p_k = 1$ pour cette classe et $G(t) = 0$, ce qui signifie que le nœud est **pur**.
-
-- À l'inverse, lorsque les observations sont également réparties entre les classes, $p_k$ tend vers des valeurs égales pour chaque classe, et $G(t)$ atteint son maximum, indiquant une **impureté élevée**.-->
-<p><strong>Critère de choix</strong>: L’indice de Gini est souvent utilisé parce qu’il est simple à calculer et capture bien l’homogénéité des classes au sein d’un nœud. Il privilégie les partitions où une classe domine fortement dans chaque sous-ensemble.</p>
+<p><strong>Critère de choix</strong>: L’indice de Gini est très souvent utilisé parce qu’il est simple à calculer et capture bien l’homogénéité des classes au sein d’un nœud. Il privilégie les partitions où une classe domine fortement dans chaque sous-ensemble.</p>
 <p><strong>2. L’entropie (ou entropie de Shannon)</strong></p>
 <p>L’<strong>entropie</strong> est une autre mesure de l’impureté utilisée dans les arbres de décision. Elle mesure la quantité d’incertitude ou de désordre dans un nœud, en s’appuyant sur la théorie de l’information.</p>
 <p>Pour un nœud <span class="math inline">\(t\)</span> contenant <span class="math inline">\(K\)</span> classes, l’entropie <span class="math inline">\(E(t)\)</span> est définie par:</p>
@@ -426,7 +419,7 @@ E(t) = - \sum_{k=1}^{K} p_k \log(p_k)
 - Comme pour l'indice de Gini, si toutes les observations d'un nœud appartiennent à la même classe, l'entropie est nulle ($E(t) = 0$), indiquant un nœud pur.
 
 - L'entropie atteint son maximum lorsque les observations sont uniformément réparties entre les classes, reflétant une grande incertitude dans la classification.-->
-<p><strong>Critère de choix</strong>: L’entropie a tendance à être plus sensible aux changements dans les distributions des classes que l’indice de Gini, car elle attribut un poids plus élevé aux événements rares (valeurs de <span class="math inline">\(p_k\)</span> très faibles). Elle est souvent utilisée lorsque l’erreur de classification des classes minoritaires est particulièrement importante.</p>
+<p><strong>Critère de choix</strong>: L’entropie a tendance à être plus sensible aux changements dans les distributions des classes que l’indice de Gini, car elle attribue un poids plus élevé aux événements rares (valeurs de <span class="math inline">\(p_k\)</span> très faibles). Elle est souvent utilisée lorsque l’erreur de classification des classes minoritaires est particulièrement importante.</p>
 <p><strong>3. Taux d’erreur</strong></p>
 <p>Le <strong>taux d’erreur</strong> est une autre mesure de l’impureté parfois utilisée dans les arbres de décision. Il représente la proportion d’observations mal classées dans un nœud.</p>
 <p>Pour un nœud <span class="math inline">\(t\)</span>, le taux d’erreur <span class="math inline">\(\text{TE}(t)\)</span> est donné par:</p>
@@ -441,35 +434,28 @@ E(t) = - \sum_{k=1}^{K} p_k \log(p_k)
 - Le taux d'erreur atteint son maximum lorsque les observations sont uniformément réparties entre les classes, reflétant une grande incertitude dans la classification.-->
 <p><strong>Critère de choix</strong>: Bien que le taux d’erreur soit simple à comprendre, il est moins souvent utilisé dans la construction des arbres de décision parce qu’il est moins sensible que l’indice de Gini ou l’entropie aux petits changements dans la distribution des classes.</p>
 </section>
-<section id="mesures-dimpureté-classiques-pour-les-problèmes-de-régression" class="level4" data-number="1.1.5.2">
-<h4 data-number="1.1.5.2" class="anchored" data-anchor-id="mesures-dimpureté-classiques-pour-les-problèmes-de-régression"><span class="header-section-number">1.1.5.2</span> Mesures d’impureté classiques pour les problèmes de régression</h4>
-<p>Dans les problèmes de régression, l’objectif est de partitionner les données de manière à réduire au maximum la variabilité des valeurs au sein de chaque sous-ensemble. Pour mesurer cette variabilité, la somme des erreurs quadratiques (SSE) est la fonction d’impureté la plus couramment employée. Elle évalue l’impureté d’une région en quantifiant à quel point les valeurs de cette région s’écartent de la moyenne locale.</p>
-<p><strong>1.Somme des erreurs quadratiques (SSE) ou variance</strong></p>
-<p>La <strong>somme des erreurs quadratiques</strong> (ou <strong>SSE</strong>, pour <em>Sum of Squared Errors</em>) est une mesure qui quantifie la dispersion des valeurs dans un nœud par rapport à la moyenne des valeurs dans ce nœud.</p>
-<p><strong>Formule</strong>: Pour un nœud <span class="math inline">\(t\)</span>, contenant <span class="math inline">\(N\)</span> observations avec des valeurs <span class="math inline">\(y_i\)</span>, la SSE est donnée par:</p>
+<section id="mesures-dimpureté-pour-les-problèmes-de-régression" class="level4" data-number="1.2.1.2">
+<h4 data-number="1.2.1.2" class="anchored" data-anchor-id="mesures-dimpureté-pour-les-problèmes-de-régression"><span class="header-section-number">1.2.1.2</span> Mesures d’impureté pour les problèmes de régression</h4>
+<!-- Dans un problème de classification où l'on souhaite classifier des observations parmi $K$ classes, une **mesure d'impureté** $I(t)$ est une fonction qui quantifie l'hétérogénéité des classes dans un nœud donnée. Les mesures d'impureté usuelles détaillées ci-dessous partagent les deux propriétés suivantes: -->
+<p>Dans les problèmes de régression, l’objectif est de partitionner les données de manière à réduire au maximum la variabilité des valeurs au sein de chaque sous-région. Pour mesurer cette variabilité, la fonction d’impureté la plus couramment employée est la somme des erreurs quadratiques (SSE). Elle évalue l’impureté d’une région en quantifiant à quel point les valeurs de cette région s’écartent de la moyenne locale. Pour un nœud <span class="math inline">\(t\)</span>, contenant <span class="math inline">\(N\)</span> observations avec des valeurs <span class="math inline">\(y_i\)</span>, la SSE est donnée par:</p>
 <p><span class="math display">\[
 \text{SSE}(t) = \sum_{i=1}^{N} (y_i - \hat{y})^2
 \]</span></p>
-<p>où <span class="math inline">\(\hat{y}\)</span> est la moyenne des valeurs <span class="math inline">\(y_i\)</span> dans le nœud <span class="math inline">\(t\)</span>.</p>
-<p><strong>Propriété</strong>:</p>
-<ul>
-<li><p>Si toutes les valeurs de <span class="math inline">\(y_i\)</span> dans un nœud sont proches de la moyenne <span class="math inline">\(\hat{y}\)</span>, la SSE sera faible, indiquant une homogénéité élevée dans le nœud.</p></li>
-<li><p>En revanche, une SSE élevée indique une grande variabilité dans les valeurs, donc un nœud impur.</p></li>
-</ul>
-<p><strong>Critère de choix</strong>: La somme des erreurs quadratiques (SSE) est particulièrement sensible aux écarts élevés entre les valeurs observées et la moyenne prédite. En cherchant à minimiser la SSE, les modèles visent à former des nœuds dans lesquels les valeurs des observations sont aussi proches que possible de la moyenne locale.</p>
+<p>où <span class="math inline">\(\hat{y}\)</span> est la moyenne des valeurs <span class="math inline">\(y_i\)</span> dans le nœud.</p>
+<p>Cette fonction d’impureté a des propriétés similaires à celles présentées pour la classification: si toutes les valeurs de <span class="math inline">\(y_i\)</span> dans un nœud sont proches de la moyenne <span class="math inline">\(\hat{y}\)</span>, la SSE sera faible, indiquant une homogénéité élevée dans le nœud. Inversement, une SSE élevée indique une grande variabilité dans les valeurs, donc un nœud impur. Une limite de cette mesure d’impureté est qu’elle est particulièrement sensible aux écarts élevés entre les valeurs observées et la moyenne prédite, et donc aux valeurs extrêmes. En cherchant à minimiser la SSE, les modèles visent à former des nœuds dans lesquels les valeurs des observations sont aussi proches que possible de la moyenne locale.</p>
 </section>
 </section>
-<section id="identifier-la-partition-binaire-maximisant-la-réduction-de-limpureté" class="level3" data-number="1.1.6">
-<h3 data-number="1.1.6" class="anchored" data-anchor-id="identifier-la-partition-binaire-maximisant-la-réduction-de-limpureté"><span class="header-section-number">1.1.6</span> Identifier la partition binaire maximisant la réduction de l’impureté</h3>
-<p>Une fois la mesure d’impureté définie, l’algorithme CART examine toutes les divisions binaires possibles de l’espace des caractéristiques. À chaque nœud, et pour chaque caractéristique, il cherche à identifier le <strong>seuil optimal</strong>, c’est-à-dire le seuil qui minimise le plus efficacement l’impureté des deux sous-ensembles générés. L’algorithme compare ensuite toutes les divisions potentielles (caractéristiques et seuils optimaux associés à chaque nœud) et sélectionne celle qui entraîne la réduction maximale de l’impureté.</p>
+<section id="identifier-la-partition-maximisant-la-réduction-de-limpureté" class="level3" data-number="1.2.2">
+<h3 data-number="1.2.2" class="anchored" data-anchor-id="identifier-la-partition-maximisant-la-réduction-de-limpureté"><span class="header-section-number">1.2.2</span> Identifier la partition maximisant la réduction de l’impureté</h3>
+<p>Une fois la mesure d’impureté définie, l’algorithme CART construit séquentiellement le partitionnement de l’espace des caractéristiques en examinant les règles de décision possibles. À chaque nœud, et pour chaque caractéristique, il cherche à identifier le <strong>seuil optimal</strong>, c’est-à-dire le seuil qui minimise le plus efficacement l’impureté des deux sous-ensembles générés. L’algorithme compare ensuite toutes les divisions potentielles (caractéristiques et seuils optimaux associés à chaque nœud) et sélectionne celle qui entraîne la réduction maximale de l’impureté.</p>
 <p>Prenons l’exemple d’une caractéristique continue, telle que la superficie d’une maison:</p>
 <ul>
 <li><p>Si l’algorithme teste la règle “Superficie &gt; 100 m²”, il calcule la fonction de perte pour les deux sous-ensembles générés par cette règle (“Oui” et “Non”).</p></li>
 <li><p>Ce processus est répété pour différentes valeurs seuils afin de trouver la partition qui minimise le plus efficacement l’impureté au sein des sous-ensembles.</p></li>
 </ul>
 </section>
-<section id="réitérer-le-processus-jusquà-atteindre-un-critère-darrêt" class="level3" data-number="1.1.7">
-<h3 data-number="1.1.7" class="anchored" data-anchor-id="réitérer-le-processus-jusquà-atteindre-un-critère-darrêt"><span class="header-section-number">1.1.7</span> Réitérer le processus jusqu’à atteindre un critère d’arrêt</h3>
+<section id="réitérer-le-processus-jusquà-atteindre-un-critère-darrêt" class="level3" data-number="1.2.3">
+<h3 data-number="1.2.3" class="anchored" data-anchor-id="réitérer-le-processus-jusquà-atteindre-un-critère-darrêt"><span class="header-section-number">1.2.3</span> Réitérer le processus jusqu’à atteindre un critère d’arrêt</h3>
 <p>L’algorithme CART poursuit le partitionnement de l’espace des caractéristiques en appliquant de manière récursive les mêmes étapes: identification de la caractéristique et du seuil optimal pour chaque nœud, puis sélection du partitionnement binaire qui maximise la réduction de l’impureté. Ce processus est répété jusqu’à ce qu’un <strong>critère d’arrêt</strong> soit atteint, par exemple:</p>
 <ul>
 <li><strong>Profondeur maximale de l’arbre</strong>: Limiter le nombre de divisions successives pour éviter un arbre trop complexe.</li>
@@ -477,26 +463,26 @@ E(t) = - \sum_{k=1}^{K} p_k \log(p_k)
 <li><strong>Réduction minimale de l’impureté à chaque étape</strong></li>
 </ul>
 </section>
-<section id="elagage-pruning" class="level3" data-number="1.1.8">
-<h3 data-number="1.1.8" class="anchored" data-anchor-id="elagage-pruning"><span class="header-section-number">1.1.8</span> Elagage (<em>pruning</em>)</h3>
+<section id="elagage-pruning" class="level3" data-number="1.2.4">
+<h3 data-number="1.2.4" class="anchored" data-anchor-id="elagage-pruning"><span class="header-section-number">1.2.4</span> Elagage (<em>pruning</em>)</h3>
 </section>
-<section id="prédire" class="level3" data-number="1.1.9">
-<h3 data-number="1.1.9" class="anchored" data-anchor-id="prédire"><span class="header-section-number">1.1.9</span> Prédire</h3>
+<section id="prédire" class="level3" data-number="1.2.5">
+<h3 data-number="1.2.5" class="anchored" data-anchor-id="prédire"><span class="header-section-number">1.2.5</span> Prédire</h3>
 <p>Une fois l’arbre construit, la prédiction pour une nouvelle observation s’effectue en suivant les branches de l’arbre, en partant du nœud racine jusqu’à un nœud terminal (ou feuille). À chaque nœud interne, une décision est prise en fonction des valeurs des caractéristiques de l’observation, ce qui détermine la direction à suivre vers l’un des sous-ensembles. Ce cheminement se poursuit jusqu’à ce que l’observation atteigne une feuille, où la prédiction finale est effectuée.</p>
 <ul>
 <li>En <strong>classification</strong>, la classe attribuée est celle majoritaire dans la feuille atteinte.</li>
 <li>En <strong>régression</strong>, la valeur prédite est généralement la moyenne des valeurs cibles des observations dans la feuille.</li>
 </ul>
 </section>
-<section id="critères-de-qualité-et-ajustements" class="level3" data-number="1.1.10">
-<h3 data-number="1.1.10" class="anchored" data-anchor-id="critères-de-qualité-et-ajustements"><span class="header-section-number">1.1.10</span> Critères de qualité et ajustements</h3>
+<section id="critères-de-qualité-et-ajustements" class="level3" data-number="1.2.6">
+<h3 data-number="1.2.6" class="anchored" data-anchor-id="critères-de-qualité-et-ajustements"><span class="header-section-number">1.2.6</span> Critères de qualité et ajustements</h3>
 <p>Pour améliorer la performance de l’arbre, on peut ajuster les hyperparamètres tels que la profondeur maximale ou le nombre minimum d’observations dans une feuille. De plus, des techniques comme la <strong>prédiction avec arbres multiples</strong> (bagging, forêts aléatoires) permettent de surmonter les limites des arbres individuels, souvent sujets au surapprentissage.</p>
 </section>
 </section>
-<section id="avantages-et-limites-de-cette-approche" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="avantages-et-limites-de-cette-approche"><span class="header-section-number">1.2</span> Avantages et limites de cette approche</h2>
-<section id="avantages" class="level3" data-number="1.2.1">
-<h3 data-number="1.2.1" class="anchored" data-anchor-id="avantages"><span class="header-section-number">1.2.1</span> Avantages</h3>
+<section id="avantages-et-limites-de-cette-approche" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="avantages-et-limites-de-cette-approche"><span class="header-section-number">1.3</span> Avantages et limites de cette approche</h2>
+<section id="avantages" class="level3" data-number="1.3.1">
+<h3 data-number="1.3.1" class="anchored" data-anchor-id="avantages"><span class="header-section-number">1.3.1</span> Avantages</h3>
 <ul>
 <li><strong>Interprétabilité</strong>: Les arbres de décision sont faciles à comprendre et à visualiser.</li>
 <li><strong>Simplicité</strong>: Pas besoin de transformations complexes des données.</li>
@@ -504,8 +490,8 @@ E(t) = - \sum_{k=1}^{K} p_k \log(p_k)
 <li><strong>Gestion des interactions</strong>: Modèles non paramétriques, pas d’hypothèses sur les lois par les variables. Ils capturent naturellement les interactions entre les caractéristiques.</li>
 </ul>
 </section>
-<section id="limites" class="level3" data-number="1.2.2">
-<h3 data-number="1.2.2" class="anchored" data-anchor-id="limites"><span class="header-section-number">1.2.2</span> Limites</h3>
+<section id="limites" class="level3" data-number="1.3.2">
+<h3 data-number="1.3.2" class="anchored" data-anchor-id="limites"><span class="header-section-number">1.3.2</span> Limites</h3>
 <ul>
 <li><strong>Surapprentissage</strong>: Les arbres trop profonds peuvent surapprendre les données d’entraînement.</li>
 <li><strong>Optimisation locale</strong>: L’approche gloutonne peut conduire à des solutions sous-optimales globalement (optimum local).</li>
