@@ -39,10 +39,7 @@ Cet algorithme est appelé __arbre de décision__ (_decision tree_) en raison pr
 
 - **Branches (_Branches_)**:  Les branches sont les connexions entre les nœuds, elles illustrent le chemin que les données suivent en fonction des réponses aux questions posées dans les nœuds internes. Chaque branche correspond à une décision binaire, "Oui" ou "Non", qui oriente les observations vers une nouvelle subdivision de l'espace des caractéristiques.
   
-- **Nœuds Terminaux ou Feuilles (_Leaf Nodes_,  _Terminal Nodes_ ou _Leaves_)**: Les nœuds terminaux, situés à l'extrémité des branches, sont les points où le processus de division s'arrête. Ils fournissent la prédiction finale. 
-    - En **classification**, chaque feuille correspond à une classe prédite (par exemple, "Oui" ou "Non") ou à une probabilité d'appartenir à la classe positive.
-    - En **régression**, chaque feuille fournit une valeur numérique prédite (comme le prix estimé d'une maison).
-    
+- **Nœuds Terminaux ou Feuilles (_Leaf Nodes_,  _Terminal Nodes_ ou _Leaves_)**: Les nœuds terminaux, situés à l'extrémité des branches, sont les points où le processus de division s'arrête. Ils fournissent la prédiction finale. Dans un problème de classification, la prédiction d'une feuille est soit la classe majoritaire parmi les observations de la feuille (par exemple, "Oui" ou "Non"), soit une probabilité d'appartenir à chaque classe. Dans un problème de régression, la prédiction d'une feuille est une valeur numérique, souvent la moyenne des observations de la feuille.
     
 _Figure illustrative_: Une représentation visuelle de la structure de l'arbre peut être utile ici pour illustrer les concepts de nœuds, branches et feuilles.
 
