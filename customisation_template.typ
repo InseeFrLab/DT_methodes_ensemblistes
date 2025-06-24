@@ -125,7 +125,7 @@ supplement: none
 #set par(leading: 0.5em, first-line-indent: 1.8em, justify: true, hanging-indent: 0em)
 
 // Define paragraph settings: https://typst.app/blog/2024/typst-0.12/
-#show par: set block(spacing: 0.5em)
+#set par(spacing: 0.5em)
 
 // Define bibliography spacing
 #show bibliography: set par(leading: 0.25em, first-line-indent: 0em, justify: true)
