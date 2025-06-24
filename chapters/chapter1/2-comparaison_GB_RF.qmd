@@ -8,9 +8,9 @@ Les forêts aléatoires et le *gradient boosting* paraissent très similaires au
 
 -   Les __points d'attention lors de l'entraînement__ des algorithmes sont différents: l'enjeu principal de l'entraînement d'une forêt aléatoire est trouver le bon arbitrage entre puissance prédictive des arbres et corrélation entre arbres, tandis que l'entraînement d'un algorithme de _gradient boosting_ porte davantage sur la lutte contre le surapprentissage.
 
--   __Complexité d'usage__: les forêts aléatoires s'avèrent plus faciles à prendre en main que le _gradient boosting_, car elles comprennent moins d'hyperparamètres dont l'optimisation est moins complexe.
+-   __Complexité d'usage__: les forêts aléatoires s'avèrent plus faciles à prendre en main que le _gradient boosting_, car elles comprennent moins d'hyperparamètres et leur optimisation est moins complexe.
 
--   __Conditions d'utilisation__: il est possible d'évaluer la qualité d'une forêt aléatoire en utilisant les données sur lesquelles elle a été entraînée grâce à l'approche _out-of-bag_, alors que c'est impossible avec le _gradient boosting_, pour lequel il faut impérativement conserver un ensemble de test. Cette différence peut sembler purement technique en apparence, mais elle s'avère importante en pratique dans de nombreuses situations, par exemple lorsque les données disponibles sont de taille restreinte ou lorsque les ressources informatiques disponibles ne sont pas suffisantes pour mener un exercice de validation croisée.
+-   __Conditions d'utilisation__: il est possible d'évaluer la qualité d'une forêt aléatoire en utilisant les données sur lesquelles elle a été entraînée grâce à l'approche _out-of-bag_, alors que c'est impossible avec le _gradient boosting_, pour lequel il faut impérativement conserver un ensemble de test. Cette différence peut sembler purement technique en apparence, mais elle s'avère importante en pratique dans de nombreuses situations, par exemple lorsque les données disponibles sont de taille restreinte, lorsque le modèle doit être utilisé sur les données sur lesquelles il est entraîné (pour repondérer une enquête par exemple) ou lorsque les ressources informatiques disponibles ne sont pas suffisantes pour mener un exercice de validation croisée.
 
 ### Quelle approche choisir?
 
