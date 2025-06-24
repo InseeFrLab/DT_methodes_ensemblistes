@@ -47,17 +47,19 @@ Elle introduit ensuite les **deux grandes familles de méthodes ensemblistes** d
 
 Le modèle de base des méthodes ensemblistes est souvent un arbre de classification et de régression (CART, @breiman1984cart). Un arbre CART est un algorithme prédictif qui traite un problème de prédiction complexe en le décomposant en une série de décisions simples, organisées de manière hiérarchique. Ces décisions permettent de segmenter progressivement les données en régions homogènes au sein desquelles il est plus simple de faire des prédictions. Il s'agit d'un outil puissant pour explorer les relations entre les variables explicatives et la variable cible, sans recourir à des hypothèses _a priori_ sur la forme de cette relation.
 
-
-Trois caractéristiques essentielles définissent un arbre CART :
+Trois caractéristiques essentielles définissent un arbre CART:
 
 - L'arbre partitionne l'espace des variables explicatives $X$ en régions (appelées feuilles ou _leaves_) les plus homogènes possible, au sens d'une mesure de l'hétérogénéité (par exemple, l'entropie ou l'erreur quadratique moyenne). Ces divisions vont permettre de regrouper des observations similaires pour faciliter la prédiction;
-- Chaque région est définie par un ensemble de conditions, appelées régles de décision (_splitting rules_), appliquées successivement sur les variables explicatives. Par exemple, une première règle pourrait poser la question : "L'individu est-il en emploi ?", et subdiviser les données en deux groupes (oui/non). Une deuxième règle pourrait alors affiner la segmentation en posant la question : "L'individu est-il diplômé du supérieur ?". Une région spécifique serait ainsi définie par la condition combinée : "l'individu est en emploi et est diplômé du supérieur".
-- Une fois l’arbre construit, chaque feuille produit une prédiction en se basant sur les données de la région correspondante. En classification, la prédiction est généralement la classe la plus fréquente parmi les observations de la région. En régression, la prédiction est souvent la moyenne des valeurs observées dans la région.
+
+- Chaque région est définie par un ensemble de conditions, appelées règles de décision (_splitting rules_), appliquées successivement sur les variables explicatives. Par exemple, une première règle pourrait poser la question : "L'individu est-il en emploi ?", et subdiviser les données en deux groupes (oui/non). Une deuxième règle pourrait alors affiner la segmentation en posant la question : "L'individu est-il diplômé du supérieur ?". Une région spécifique serait ainsi définie par la condition combinée : "l'individu est en emploi et est diplômé du supérieur".
+
+- Une fois l'arbre construit, chaque feuille produit une prédiction en se basant sur les données de la région correspondante. En classification, la prédiction est généralement la classe la plus fréquente parmi les observations de la région. En régression, la prédiction est souvent la moyenne des valeurs observées dans la région.
 
 
 Deux conséquences importantes découlent de cette construction:
 
 - L'algorithme CART ne fait **aucune hypothèse _a priori_** sur la relation entre les variables explicatives $\mathbf{X}$ et la variable cible $y$. C'est une différence majeure avec les modèles économétriques standards, tels que la régression linéaire qui suppose une relation linéaire de la forme $E(y) = \mathbf{X \beta}$.
+
 -  **L'arbre final est une fonction constante par morceaux**: la prédiction est **identique** pour toutes les observations situées dans la même région; elle ne peut varier qu'entre régions. 
 
 
@@ -80,7 +82,7 @@ Les arbres CART présentent plusieurs avantages: leur principe est simple, ils s
 
 Ils souffrent néanmoins de deux limites. D'une part, les arbres CART ont souvent un __pouvoir prédictif faible__ qui en limite l'usage. D'autre part, ils sont __peu robustes et instables__: on dit qu'ils présentent une __variance élevée__. Ainsi, un léger changement dans les données (par exemple l'ajout ou la suppression de quelques observations) peut entraîner des modifications significatives dans la structure de l'arbre et dans la définition des régions utilisées pour la prédiction (feuilles). Les arbres CART sont notamment sensibles aux valeurs extrêmes, aux points aberrants et au bruit statistique. De plus, les prédictions des arbres CART sont sensibles à de petites fluctuations des données d'échantillonnage: celles-ci peuvent aboutir à ce qu'une partie des observations change brutalement de feuille et donc de valeur prédite.
 
-Ces limites motivent l'utilisation des deux familles de méthodes ensemblistes présentées dans la suite (le _bagging_, dont la _random forests_, et le _gradient boosting_), qui s’appuient sur un grand nombre d’arbres pour accroître à la fois la précision et la stabilité des prédictions. La différence essentielle entre ces deux familles portent sur la façon dont les arbres sont entraînés.
+Ces limites motivent l'utilisation des deux familles de méthodes ensemblistes présentées dans la suite (le _bagging_, dont la _random forests_, et le _gradient boosting_), qui s'appuient sur un grand nombre d'arbres pour accroître à la fois la précision et la stabilité des prédictions. La différence essentielle entre ces deux familles portent sur la façon dont les arbres sont entraînés.
 
 
 ::: {.callout-note title="Les familles de méthodes ensemblistes"}
@@ -92,24 +94,26 @@ Les méthodes ensemblistes basées sur des arbres de décision se répartissent 
 
 #### Le _bagging_
 
-Le _bagging_ (Bootstrap Aggregating) est une méthode ensembliste qui repose sur l’agrégation des prédictions de plusieurs modèles individuels, entraînés indépendamment les uns des autres, pour construire un modèle global plus performant (@breiman1996bagging). Cette approche constitue également le socle des forêts aléatoires, qui en sont une version améliorée. 
+Le _bagging_ (Bootstrap Aggregating) est une méthode ensembliste qui repose sur l'agrégation des prédictions de plusieurs modèles individuels, entraînés indépendamment les uns des autres, pour construire un modèle global plus performant (@breiman1996bagging). Cette approche constitue également le socle des forêts aléatoires, qui en sont une version améliorée. 
 
-Le bagging offre deux avantages majeurs par rapport aux arbres de décision CART : une meilleure capacité prédictive et une plus grande stabilité des prédictions. Cette amélioration découle de la stratégie d'entraînement. Au lieu d'entraîner un seul modèle sur l'ensemble des données, le bagging procède en trois étapes principales:
+Le _bagging_ offre deux avantages majeurs par rapport aux arbres de décision CART : une meilleure capacité prédictive et une plus grande stabilité des prédictions. Cette amélioration découle de la stratégie d'entraînement. Au lieu d'entraîner un seul modèle sur l'ensemble des données, le bagging procède en trois étapes principales:
 
 - __Tirage de sous-échantillons aléatoires__: À partir du jeu de données initial, plusieurs sous-échantillons sont générés par échantillonnage aléatoire avec remise (_bootstrapping_). Chaque sous-échantillon a la même taille que le jeu de données original, mais peut contenir des observations répétées, tandis que d'autres peuvent être omises.
+
 - __Entraînement parallèle__: Un arbre est entraîné sur chaque sous-échantillon de manière indépendante. Ces arbres sont habituellement assez complexes et profonds.
+
 - __Agrégation des prédictions__: Les prédictions des modèles sont combinées pour produire le résultat final. En classification, la prédiction finale est souvent déterminée par un vote majoritaire, tandis qu'en régression, elle correspond généralement à la moyenne des prédictions.
 
 ![Représentation schématique d'un algorithme de _bagging_](/figures/bagging.svg){#fig-bagging}
 
 La @fig-bagging propose une représentation schématique du _bagging_: d'abord, des sous-échantillons sont générés aléatoires avec remise à partir du jeu de données d'entraînement. Ensuite, des arbres de décision sont entraînés indépendamment sur ces sous-échantillons. Enfin, leurs prédictions sont agrégées pour obtenir les prédictions finales. On procède généralement au vote majoritaire (la classe prédite majoritairement par les arbres) dans un problème de classification, et à la moyenne dans un problème de régression. 
 
-L'efficacité du _bagging_ provient de la réduction de la variance qui est permise par l'agrégation des prédictions. Chaque arbre est entraîné sur un sous-échantillon légèrement différent, sujet à des fluctuations aléatoires. L'agrégation des prédictions (par moyenne ou vote majoritaire) de tous les arbres réduit la sensibilité du modèle final aux fluctuations des données d’entraînement. Le modèle final est ainsi plus robuste et plus précis que chacun des arbres pris individuellement.
+L'efficacité du _bagging_ provient de la réduction de la variance qui est permise par l'agrégation des prédictions. Chaque arbre est entraîné sur un sous-échantillon légèrement différent, sujet à des fluctuations aléatoires. L'agrégation des prédictions (par moyenne ou vote majoritaire) de tous les arbres réduit la sensibilité du modèle final aux fluctuations des données d'entraînement. Le modèle final est ainsi plus robuste et plus précis que chacun des arbres pris individuellement.
 
 
 - Illustration avec un cas d'usage de classification en deux dimensions.
 
-Malgré ses avantages, le _bagging_ souffre d'une limite importante qui provient de la **corrélation entre les arbres**. En effet, malgré le tirage aléatoire des sous-échantillons, les arbres présentent souvent des structures similaires, car les règles de décision sous-jacentes restent généralement assez proches. Cette corrélation réduit l’efficacité de l’agrégation et limite les gains en performance.
+Malgré ses avantages, le _bagging_ souffre d'une limite importante qui provient de la **corrélation entre les arbres**. En effet, malgré le tirage aléatoire des sous-échantillons, les arbres présentent souvent des structures similaires, car les règles de décision sous-jacentes restent généralement assez proches. Cette corrélation réduit l'efficacité de l'agrégation et limite les gains en performance.
 
 Pour réduire cette corrélation entre arbres, les forêts aléatoires introduisent une étape supplémentaire de randomisation. Leur supériorité prédictive explique pourquoi le _bagging_ seul est rarement utilisé en pratique. Néanmoins, les forêts aléatoires tirent leur efficacité des principes fondamentaux du _bagging_.
 
@@ -120,7 +124,7 @@ Pour réduire cette corrélation entre arbres, les forêts aléatoires introduis
 
 Les forêts aléatoires (_random forests_, @breiman2001random) sont une variante du _bagging_ qui vise à produire des modèles très performants en conciliant deux objectifs: maximiser le pouvoir prédictif des arbres pris isolément, et minimiser la corrélation entre ces arbres (le problème inhérent au _bagging_). 
 
-Pour atteindre ce second objectif, la forêt aléatoire introduit une nouvelle source de randomisation: la **sélection aléatoire de variables**. Lors de la construction de chaque arbre, au lieu d'utiliser toutes les variables disponibles pour déterminer la meilleure séparation à chaque nœud, un sous-ensemble aléatoire de variables est sélectionné. En limitant la quantité d’information à laquelle chaque arbre a accès au moment de chaque nouvelle division, cette étape supplémentaire contraint mécaniquement les arbres à être plus diversifiés (car deux arbres ne pourront plus nécessairement choisir les mêmes variables pour les mêmes séparations). Cela réduit significativement la corrélation entre les arbres, améliorant ainsi l'efficacité de l'agrégation. L'ensemble des prédictions devient ainsi plus précis et moins sujet aux fluctuations aléatoires.
+Pour atteindre ce second objectif, la forêt aléatoire introduit une nouvelle source de randomisation: la **sélection aléatoire de variables**. Lors de la construction de chaque arbre, au lieu d'utiliser toutes les variables disponibles pour déterminer la meilleure séparation à chaque nœud, un sous-ensemble aléatoire de variables est sélectionné. En limitant la quantité d'information à laquelle chaque arbre a accès au moment de chaque nouvelle division, cette étape supplémentaire contraint mécaniquement les arbres à être plus diversifiés (car deux arbres ne pourront plus nécessairement choisir les mêmes variables pour les mêmes séparations). Cela réduit significativement la corrélation entre les arbres, améliorant ainsi l'efficacité de l'agrégation. L'ensemble des prédictions devient ainsi plus précis et moins sujet aux fluctuations aléatoires.
 
 
 ![Représentation schématique d'un algorithme de forêt aléatoire](/figures/rf.svg){#fig-rf}
@@ -169,27 +173,27 @@ Le _gradient boosting_ offre des performances élevées mais exige une attention
 Un arbre CART (Classification And Regression Tree) est construit en utilisant une approche hiérarchique pour diviser un ensemble de données en sous-groupes de plus en plus homogènes. Intuitivement, voici comment cela se passe :
 
 1. **Choix de la meilleure coupure** :  
-   - L’arbre commence à la racine, c’est-à-dire l’ensemble complet des données.  
+   - L'arbre commence à la racine, c'est-à-dire l'ensemble complet des données.  
    - À chaque étape, on cherche la variable et la valeur de seuil qui divisent le mieux les données en deux groupes selon un critère spécifique (comme l'entropie, l'indice de Gini pour la classification, ou la variance pour la régression).  
-   - L'objectif est de minimiser l’hétérogénéité (ou maximiser l’homogénéité) au sein des groupes créés par la division.
+   - L'objectif est de minimiser l'hétérogénéité (ou maximiser l'homogénéité) au sein des groupes créés par la division.
 
 2. **Division récursive** :  
    - Une fois la meilleure coupure trouvée, les données sont séparées en deux sous-groupes : un groupe pour les observations qui satisfont la condition de la coupure, et l'autre pour celles qui ne la satisfont pas.  
-   - Ce processus est répété récursivement sur chaque sous-groupe, formant ainsi de nouveaux "nœuds" dans l’arbre.
+   - Ce processus est répété récursivement sur chaque sous-groupe, formant ainsi de nouveaux "nœuds" dans l'arbre.
 
-3. **Arrêt de la croissance de l’arbre** :  
-   - L’arbre ne continue pas à se développer indéfiniment. La division s’arrête lorsque l’un des critères de fin est atteint, par exemple :  
-     - Un nombre minimal d’observations dans un nœud.  
+3. **Arrêt de la croissance de l'arbre** :  
+   - L'arbre ne continue pas à se développer indéfiniment. La division s'arrête lorsque l'un des critères de fin est atteint, par exemple :  
+     - Un nombre minimal d'observations dans un nœud.  
      - Une amélioration trop faible dans le critère de division.  
      - Une profondeur maximale spécifiée.
 
 4. **Assignation des prédictions** :  
-   - Une fois l’arbre construit, chaque feuille (nœud terminal) contient un sous-ensemble de données.  
+   - Une fois l'arbre construit, chaque feuille (nœud terminal) contient un sous-ensemble de données.  
    - Pour la classification, la classe prédominante dans une feuille est assignée comme prédiction pour toutes les observations appartenant à cette feuille.  
    - Pour la régression, la moyenne (ou médiane) des valeurs dans une feuille est utilisée comme prédiction.
 
 **Exemple intuitif** :  
-Imaginez que vous essayez de deviner si une personne préfère le café ou le thé. Vous commencez par poser une question générale, comme "Préfères-tu les boissons chaudes ?" Selon la réponse, vous posez d'autres questions plus spécifiques (comme "Ajoutes-tu du lait ?" ou "Aimes-tu les boissons amères ?"), jusqu’à ce que vous puissiez deviner leur préférence avec un haut degré de certitude.
+Imaginez que vous essayez de deviner si une personne préfère le café ou le thé. Vous commencez par poser une question générale, comme "Préfères-tu les boissons chaudes ?" Selon la réponse, vous posez d'autres questions plus spécifiques (comme "Ajoutes-tu du lait ?" ou "Aimes-tu les boissons amères ?"), jusqu'à ce que vous puissiez deviner leur préférence avec un haut degré de certitude.
 
 En résumé, construire un arbre CART revient à poser des questions successives qui divisent les données de manière optimale pour parvenir à une prédiction claire et précise.
 
