@@ -354,16 +354,16 @@ Et par rapport au <em>deep learning</em>?
 <section id="quest-ce-quun-arbre-cart" class="level4" data-number="1.3.1.1">
 <h4 data-number="1.3.1.1" class="anchored" data-anchor-id="quest-ce-quun-arbre-cart"><span class="header-section-number">1.3.1.1</span> Qu’est-ce qu’un arbre CART?</h4>
 <p>Le modèle de base des méthodes ensemblistes est souvent un arbre de classification et de régression (CART, <span class="citation" data-cites="breiman1984cart">Breiman et al. (<a href="#ref-breiman1984cart" role="doc-biblioref">1984</a>)</span>). Un arbre CART est un algorithme prédictif qui traite un problème de prédiction complexe en le décomposant en une série de décisions simples, organisées de manière hiérarchique. Ces décisions permettent de segmenter progressivement les données en régions homogènes au sein desquelles il est plus simple de faire des prédictions. Il s’agit d’un outil puissant pour explorer les relations entre les variables explicatives et la variable cible, sans recourir à des hypothèses <em>a priori</em> sur la forme de cette relation.</p>
-<p>Trois caractéristiques essentielles définissent un arbre CART :</p>
+<p>Trois caractéristiques essentielles définissent un arbre CART:</p>
 <ul>
-<li>L’arbre partitionne l’espace des variables explicatives <span class="math inline">\(X\)</span> en régions (appelées feuilles ou <em>leaves</em>) les plus homogènes possible, au sens d’une mesure de l’hétérogénéité (par exemple, l’entropie ou l’erreur quadratique moyenne). Ces divisions vont permettre de regrouper des observations similaires pour faciliter la prédiction;</li>
-<li>Chaque région est définie par un ensemble de conditions, appelées régles de décision (<em>splitting rules</em>), appliquées successivement sur les variables explicatives. Par exemple, une première règle pourrait poser la question : “L’individu est-il en emploi ?”, et subdiviser les données en deux groupes (oui/non). Une deuxième règle pourrait alors affiner la segmentation en posant la question : “L’individu est-il diplômé du supérieur ?”. Une région spécifique serait ainsi définie par la condition combinée : “l’individu est en emploi et est diplômé du supérieur”.</li>
-<li>Une fois l’arbre construit, chaque feuille produit une prédiction en se basant sur les données de la région correspondante. En classification, la prédiction est généralement la classe la plus fréquente parmi les observations de la région. En régression, la prédiction est souvent la moyenne des valeurs observées dans la région.</li>
+<li><p>L’arbre partitionne l’espace des variables explicatives <span class="math inline">\(X\)</span> en régions (appelées feuilles ou <em>leaves</em>) les plus homogènes possible, au sens d’une mesure de l’hétérogénéité (par exemple, l’entropie ou l’erreur quadratique moyenne). Ces divisions vont permettre de regrouper des observations similaires pour faciliter la prédiction;</p></li>
+<li><p>Chaque région est définie par un ensemble de conditions, appelées règles de décision (<em>splitting rules</em>), appliquées successivement sur les variables explicatives. Par exemple, une première règle pourrait poser la question : “L’individu est-il en emploi ?”, et subdiviser les données en deux groupes (oui/non). Une deuxième règle pourrait alors affiner la segmentation en posant la question : “L’individu est-il diplômé du supérieur ?”. Une région spécifique serait ainsi définie par la condition combinée : “l’individu est en emploi et est diplômé du supérieur”.</p></li>
+<li><p>Une fois l’arbre construit, chaque feuille produit une prédiction en se basant sur les données de la région correspondante. En classification, la prédiction est généralement la classe la plus fréquente parmi les observations de la région. En régression, la prédiction est souvent la moyenne des valeurs observées dans la région.</p></li>
 </ul>
 <p>Deux conséquences importantes découlent de cette construction:</p>
 <ul>
-<li>L’algorithme CART ne fait <strong>aucune hypothèse <em>a priori</em></strong> sur la relation entre les variables explicatives <span class="math inline">\(\mathbf{X}\)</span> et la variable cible <span class="math inline">\(y\)</span>. C’est une différence majeure avec les modèles économétriques standards, tels que la régression linéaire qui suppose une relation linéaire de la forme <span class="math inline">\(E(y) = \mathbf{X \beta}\)</span>.</li>
-<li><strong>L’arbre final est une fonction constante par morceaux</strong>: la prédiction est <strong>identique</strong> pour toutes les observations situées dans la même région; elle ne peut varier qu’entre régions.</li>
+<li><p>L’algorithme CART ne fait <strong>aucune hypothèse <em>a priori</em></strong> sur la relation entre les variables explicatives <span class="math inline">\(\mathbf{X}\)</span> et la variable cible <span class="math inline">\(y\)</span>. C’est une différence majeure avec les modèles économétriques standards, tels que la régression linéaire qui suppose une relation linéaire de la forme <span class="math inline">\(E(y) = \mathbf{X \beta}\)</span>.</p></li>
+<li><p><strong>L’arbre final est une fonction constante par morceaux</strong>: la prédiction est <strong>identique</strong> pour toutes les observations situées dans la même région; elle ne peut varier qu’entre régions.</p></li>
 </ul>
 <p>Illustration, et représentation graphique (sous forme d’arbre et de graphique).</p>
 <!-- #### Comment construit-on un arbre?
@@ -401,11 +401,11 @@ Les familles de méthodes ensemblistes
 <section id="le-bagging" class="level4" data-number="1.3.2.1">
 <h4 data-number="1.3.2.1" class="anchored" data-anchor-id="le-bagging"><span class="header-section-number">1.3.2.1</span> Le <em>bagging</em></h4>
 <p>Le <em>bagging</em> (Bootstrap Aggregating) est une méthode ensembliste qui repose sur l’agrégation des prédictions de plusieurs modèles individuels, entraînés indépendamment les uns des autres, pour construire un modèle global plus performant (<span class="citation" data-cites="breiman1996bagging">Breiman (<a href="#ref-breiman1996bagging" role="doc-biblioref">1996</a>)</span>). Cette approche constitue également le socle des forêts aléatoires, qui en sont une version améliorée.</p>
-<p>Le bagging offre deux avantages majeurs par rapport aux arbres de décision CART : une meilleure capacité prédictive et une plus grande stabilité des prédictions. Cette amélioration découle de la stratégie d’entraînement. Au lieu d’entraîner un seul modèle sur l’ensemble des données, le bagging procède en trois étapes principales:</p>
+<p>Le <em>bagging</em> offre deux avantages majeurs par rapport aux arbres de décision CART : une meilleure capacité prédictive et une plus grande stabilité des prédictions. Cette amélioration découle de la stratégie d’entraînement. Au lieu d’entraîner un seul modèle sur l’ensemble des données, le bagging procède en trois étapes principales:</p>
 <ul>
-<li><strong>Tirage de sous-échantillons aléatoires</strong>: À partir du jeu de données initial, plusieurs sous-échantillons sont générés par échantillonnage aléatoire avec remise (<em>bootstrapping</em>). Chaque sous-échantillon a la même taille que le jeu de données original, mais peut contenir des observations répétées, tandis que d’autres peuvent être omises.</li>
-<li><strong>Entraînement parallèle</strong>: Un arbre est entraîné sur chaque sous-échantillon de manière indépendante. Ces arbres sont habituellement assez complexes et profonds.</li>
-<li><strong>Agrégation des prédictions</strong>: Les prédictions des modèles sont combinées pour produire le résultat final. En classification, la prédiction finale est souvent déterminée par un vote majoritaire, tandis qu’en régression, elle correspond généralement à la moyenne des prédictions.</li>
+<li><p><strong>Tirage de sous-échantillons aléatoires</strong>: À partir du jeu de données initial, plusieurs sous-échantillons sont générés par échantillonnage aléatoire avec remise (<em>bootstrapping</em>). Chaque sous-échantillon a la même taille que le jeu de données original, mais peut contenir des observations répétées, tandis que d’autres peuvent être omises.</p></li>
+<li><p><strong>Entraînement parallèle</strong>: Un arbre est entraîné sur chaque sous-échantillon de manière indépendante. Ces arbres sont habituellement assez complexes et profonds.</p></li>
+<li><p><strong>Agrégation des prédictions</strong>: Les prédictions des modèles sont combinées pour produire le résultat final. En classification, la prédiction finale est souvent déterminée par un vote majoritaire, tandis qu’en régression, elle correspond généralement à la moyenne des prédictions.</p></li>
 </ul>
 <div id="fig-bagging" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -487,27 +487,27 @@ Figure&nbsp;3: Représentation schématique d’un algorithme de <em>gradient bo
 Un arbre CART (Classification And Regression Tree) est construit en utilisant une approche hiérarchique pour diviser un ensemble de données en sous-groupes de plus en plus homogènes. Intuitivement, voici comment cela se passe :
 
 1. **Choix de la meilleure coupure** :  
-   - L’arbre commence à la racine, c’est-à-dire l’ensemble complet des données.  
+   - L'arbre commence à la racine, c'est-à-dire l'ensemble complet des données.  
    - À chaque étape, on cherche la variable et la valeur de seuil qui divisent le mieux les données en deux groupes selon un critère spécifique (comme l'entropie, l'indice de Gini pour la classification, ou la variance pour la régression).  
-   - L'objectif est de minimiser l’hétérogénéité (ou maximiser l’homogénéité) au sein des groupes créés par la division.
+   - L'objectif est de minimiser l'hétérogénéité (ou maximiser l'homogénéité) au sein des groupes créés par la division.
 
 2. **Division récursive** :  
    - Une fois la meilleure coupure trouvée, les données sont séparées en deux sous-groupes : un groupe pour les observations qui satisfont la condition de la coupure, et l'autre pour celles qui ne la satisfont pas.  
-   - Ce processus est répété récursivement sur chaque sous-groupe, formant ainsi de nouveaux "nœuds" dans l’arbre.
+   - Ce processus est répété récursivement sur chaque sous-groupe, formant ainsi de nouveaux "nœuds" dans l'arbre.
 
-3. **Arrêt de la croissance de l’arbre** :  
-   - L’arbre ne continue pas à se développer indéfiniment. La division s’arrête lorsque l’un des critères de fin est atteint, par exemple :  
-     - Un nombre minimal d’observations dans un nœud.  
+3. **Arrêt de la croissance de l'arbre** :  
+   - L'arbre ne continue pas à se développer indéfiniment. La division s'arrête lorsque l'un des critères de fin est atteint, par exemple :  
+     - Un nombre minimal d'observations dans un nœud.  
      - Une amélioration trop faible dans le critère de division.  
      - Une profondeur maximale spécifiée.
 
 4. **Assignation des prédictions** :  
-   - Une fois l’arbre construit, chaque feuille (nœud terminal) contient un sous-ensemble de données.  
+   - Une fois l'arbre construit, chaque feuille (nœud terminal) contient un sous-ensemble de données.  
    - Pour la classification, la classe prédominante dans une feuille est assignée comme prédiction pour toutes les observations appartenant à cette feuille.  
    - Pour la régression, la moyenne (ou médiane) des valeurs dans une feuille est utilisée comme prédiction.
 
 **Exemple intuitif** :  
-Imaginez que vous essayez de deviner si une personne préfère le café ou le thé. Vous commencez par poser une question générale, comme "Préfères-tu les boissons chaudes ?" Selon la réponse, vous posez d'autres questions plus spécifiques (comme "Ajoutes-tu du lait ?" ou "Aimes-tu les boissons amères ?"), jusqu’à ce que vous puissiez deviner leur préférence avec un haut degré de certitude.
+Imaginez que vous essayez de deviner si une personne préfère le café ou le thé. Vous commencez par poser une question générale, comme "Préfères-tu les boissons chaudes ?" Selon la réponse, vous posez d'autres questions plus spécifiques (comme "Ajoutes-tu du lait ?" ou "Aimes-tu les boissons amères ?"), jusqu'à ce que vous puissiez deviner leur préférence avec un haut degré de certitude.
 
 En résumé, construire un arbre CART revient à poser des questions successives qui divisent les données de manière optimale pour parvenir à une prédiction claire et précise.
 
