@@ -1,95 +1,82 @@
 # La brique élémentaire: l'arbre de décision
 
-Les arbres de décision sont des outils puissants en apprentissage automatique, utilisés pour des tâches de classification et de régression. Ces algorithmes non paramétriques consistent à diviser l'espace des caractéristiques en sous-ensembles homogènes à l'aide de règles simples, afin de faire des prédictions. Malgré leur simplicité apparente, les arbres de décision sont capable de saisir des relations complexes et non linéaires entre les variables (ou _caractéristiques_) d'un jeu de données.
+Les arbres de décision sont des outils puissants en apprentissage automatique, utilisés notamment pour des tâches de classification et de régression. Le principe de cet algorithme consiste à diviser l'espace des caractéristiques en sous-ensembles homogènes à l'aide de règles simples, puis de former pour chaque sous-ensemble une prédiction à partir des observations présentes dans ce sous-ensemble. Malgré leur simplicité apparente, les arbres de décision sont capable de saisir des relations complexes et non linéaires entre les variables (ou _caractéristiques_) d'un jeu de données.
 
-## Le principe fondamental : partitionner pour prédire
+## Le principe fondamental: partitionner pour prédire
 
-Imaginez que vous souhaitiez prédire le prix d'une maison en fonction de sa superficie et de son nombre de pièces, à partir d'un ensemble de transactions pour lesquelles le prix est connu. L'espace des caractéristiques (superficie et nombre de pièces) est vaste, et les prix des maisons (la _réponse_ à prédire) sont très variables. L'idée centrale des arbres de décision est de diviser cet espace en zones plus petites, au sein desquelles les maisons ont des prix proches, et d'attribuer une prédiction identique à toutes les maisons situées dans la même zone.
+Imaginez que vous souhaitiez prédire le prix d'une maison en fonction de sa superficie et de son nombre de pièces, à partir d'un ensemble de transactions pour lesquelles le prix est connu. L'espace des caractéristiques (superficie et nombre de pièces) est vaste, et les prix des maisons (la _réponse_ à prédire) sont très variables. L'idée centrale des arbres de décision est de diviser cet espace en zones plus petites, au sein desquelles les maisons ayant des surfaces et un nombre de pièces similaire ont des prix proches, et d'attribuer une prédiction identique à toutes les maisons situées dans la même zone.
 
 ### Les défis du partitionnement optimal
 
 L'objectif principal est de trouver la partition de l'espace des caractéristiques qui offre les meilleures prédictions possibles. Cependant, cet objectif se heurte à plusieurs difficultés, et la complexité du problème augmente rapidement avec le nombre de caractéristiques et la taille de l'échantillon:
 
-- **Infinité des découpages possibles** : Il existe une infinité de façons de diviser l'espace des caractéristiques.
-- **Complexité de la paramétrisation** : Il est difficile de représenter tous ces découpages avec un nombre limité de paramètres.
-- **Optimisation complexe** : Même avec une paramétrisation, trouver le meilleur découpage nécessite une optimisation complexe, souvent irréaliste en pratique.
+- **Infinité des découpages possibles**: Il existe une infinité de façons de diviser l'espace des caractéristiques;
 
+- **Complexité de la paramétrisation**: Il est difficile de représenter tous ces découpages avec un nombre limité de paramètres;
+
+- **Optimisation complexe**: Même avec une paramétrisation, trouver le meilleur découpage nécessite une optimisation complexe, souvent irréaliste en pratique.
 
 ### Les solutions apportées par les arbres de décision
 
-Pour surmonter ces difficultés, les méthodes d'arbres de décision, et notamment la plus célèbre, l'algorithme CART (Classication And Regression Tree, @breiman1984cart), procèdent à trois simplifications cruciales :
+Pour surmonter ces difficultés, les algorithmes d'arbres de décision, et notamment la plus célèbre, l'algorithme CART (Classification And Regression Tree, @breiman1984cart), procèdent à trois simplifications cruciales:
 
-   1. **Optimisation gloutonne (__greedy optimization__)**: plutôt que de rechercher d'emblée un partitionnement optimal, les arbres de décision partitionnent l'espace des caractéristiques en régions disjointes (non chevauchantes) selon une approche simplifiée, récursive et séquentielle : à chaque étape, l'arbre choisit la meilleure division possible d'une région en deux sous-régions sur la base d'un critère de réduction de l'hétérogénéité intra-région. Le point essentiel est que cette décision ne prend pas en compte les étapes d'optimisation futures, et est guidée uniquement par la réduction immédiate de l'impureté ou de l'erreur de prédiction (par exemple, la réduction de la variance pour la régression). Ce processus est répété pour chaque sous-région, ce qui permet d'affiner progressivement le partitionnement de l'espace en fonction des caractéristiques qui s'avèrent les plus discriminantes à chaque étape. Cette méthode dite "gloutonne" (_greedy_) s'avère efficace pour construire un partitionnement de l'espace des caractéristiques, car elle décompose un problème d'optimisation complexe en une succession de problèmes plus simples et plus rapides à résoudre. Le résultat obtenu n'est pas nécessairement un optimum global, mais il s'en approche raisonnablement et surtout rapidement.
+   1. **Optimisation gloutonne (__greedy optimization__)**: plutôt que de rechercher d'emblée un partitionnement optimal, les arbres de décision partitionnent l'espace des caractéristiques en régions disjointes selon une approche récursive et séquentielle: à chaque étape, l'arbre choisit la meilleure division possible d'une région en deux sous-régions sur la base d'un critère de réduction de l'hétérogénéité intra-région. Le point essentiel est que cette décision ne prend pas en compte les étapes d'optimisation futures, et est guidée uniquement par la réduction immédiate de l'impureté ou de l'erreur de prédiction (par exemple, la réduction de la variance pour la régression). Ce processus est répété pour chaque sous-région, ce qui permet d'affiner progressivement le partitionnement de l'espace en fonction des caractéristiques qui s'avèrent les plus discriminantes à chaque étape. Cette méthode dite "gloutonne" (_greedy_) s'avère efficace pour construire un partitionnement de l'espace des caractéristiques, car elle décompose un problème d'optimisation complexe en une succession de problèmes plus simples et plus rapides à résoudre. Le résultat obtenu n'est pas nécessairement un optimum global, mais il s'en approche raisonnablement et surtout rapidement.
 
-   2. **Simplification des règles de partitionnement**: au lieu d'explorer tous les règles de décision possibles, les arbres de décision se restreignent à des règles de décision très simples, appelés **découpages binaires** (_binary splits_): à chaque étape, l'algorithme divise chaque région de l'espace en deux sous-régions en se basant __sur une seule caractéristique__ (ou _variable_) et en définissant __un seul seuil__ (ou _critère_) pour cette segmentation. Cela revient à poser une question simple telle que : "La valeur de la caractéristique $X$ dépasse-t-elle le seuil $x$ ?" Par exemple : "La superficie de la maison est-elle supérieure à 100 m² ?". Les deux réponses possibles ("Oui" ou "Non") définissent deux nouvelles sous-régions distinctes de l'espace, chacune correspondant à un sous-ensemble de données plus homogènes. 
+   2. **Simplification des règles de partitionnement**: au lieu d'explorer tous les règles de décision possibles, les arbres de décision se restreignent à des règles de décision très simples, appelés **découpages binaires** (_binary splits_): à chaque étape, l'algorithme divise chaque région de l'espace en deux sous-régions à l'aide d'une règle de décision (_decision rule_) qui ne fait appel qu'à __une seule caractéristique__ (ou _variable_) et à __un seul seuil__ (ou _critère_) pour cette segmentation. Cela revient à poser une question simple telle que: "La valeur de la caractéristique $X$ dépasse-t-elle le seuil $x$ ?" Par exemple: "La superficie de la maison est-elle supérieure à 100 m² ?". Les deux réponses possibles ("Oui" ou "Non") définissent deux nouvelles sous-régions distinctes de l'espace, chacune correspondant à un sous-ensemble de données plus homogènes.
 
-   3. **Simplicité des prédictions locales**: une fois le partitionnement réalisé, une prédiction simple est faite dans chaque région. Il s'agit souvent de la moyenne des valeurs cibles dans cette région (régression) ou de la classe majoritaire (classification).
-
-
-Le terme "arbre de décision" provient de la structure descendante en forme d'arbre inversé qui émerge lorsqu'on utilise un algorithme glouton pour découper l'espace des caractéristiques en sous-ensemble de réponses homogènes de manière récursive. A chaque étape, deux nouvelles branches sont créées et forment une nouvelle partition de l'espace des caractéristiques.
-
-
-Une fois entraîné, un arbre de décision est une fonction **constante par morceaux** défini sur l'espace des caractéristiques. Le terme "arbre de décision" provient de la structure descendante en forme d'arbre inversé qui émerge lorsqu'on utilise un algorithme glouton pour découper l'espace des caractéristiques en sous-ensemble de réponses homogènes de manière récursive. A chaque étape, deux nouvelles branches sont créées et forment une nouvelle partition de l'espace des caractéristiques.
+   3. **Simplicité des prédictions locales**: une fois le partitionnement réalisé, une prédiction est calculée pour chaque région à partir des observations des données d'entraînement présentes dans cette région. Il s'agit souvent de la moyenne des valeurs cibles dans cette région (régression) ou de la classe majoritaire (classification). Un point essentiel est que la prédiction est constante au sein de chaque région.
 
 <!-- En raison de leur nature **non-continue** et **non-différentiable**, il est impossible d'utiliser des méthodes d'optimisation classiques reposant sur le calcul de gradients. -->
 
 
 ### Terminologie et structure d'un arbre de décision
 
-Nous présentons la structure d'un arbre de décision et les principaux éléments qui le composent.
+Cet algorithme est appelé __arbre de décision__ (_decision tree_) en raison provient de la structure arborescente en forme d'arbre inversé qui apparaît lorsqu'on en fait une représentation graphique. Plus généralement, les principaux éléments qui composent les arbres de décision sont désignés par des termes issus du champ lexical des arbres:
 
-- **Nœud Racine (Root Node)** : Le nœud racine est le point de départ de l'arbre de décision, il est situé au sommet de l'arbre. Il contient l'ensemble des données d'entraînement avant toute division. À ce niveau, l'algorithme cherche la caractéristique la plus discriminante, c'est-à-dire celle qui permet de diviser les données de manière à optimiser une fonction de perte (comme l'indice de Gini pour la classification ou la variance pour la régression).
+- **Nœud Racine (_Root Node_)**: Le nœud-racine est le point de départ de l'arbre de décision, il est situé au sommet de l'arbre. Il contient l'ensemble des données d'entraînement avant tout partitionnement. À ce niveau, l'algorithme cherche la caractéristique la plus discriminante, c'est-à-dire celle qui permet de diviser les données en deux régions de manière à minimiser un certain critère d'hétérogénéité (comme l'indice de Gini pour la classification ou la variance pour la régression).
 
-- **Nœuds Internes (Internal Nodes)** : Les nœuds internes sont les points intermédiaires où l'algorithme CART applique des règles de décision pour diviser les données en sous-ensembles plus petits. Chaque nœud interne représente une question ou condition basée sur une caractéristique particulière (par exemple, "La superficie de la maison est-elle supérieure à 100 m² ?"). À chaque étape, une seule caractéristique (la superficie) et un seul seuil (supérieur à 100) sont utilisés pour faire la division.
+- **Nœuds Internes (_Internal Nodes_)**: Les nœuds internes sont les points intermédiaires où l'algorithme CART applique des règles de décision pour diviser les données en sous-régions plus petites. Chaque nœud interne se définit par une règle de décision basée sur une variable et un seuil (par exemple, "La superficie de la maison est-elle supérieure à 100 m² ?"). À chaque étape, une seule caractéristique (la superficie) et un seul seuil (supérieur à 100) sont utilisés pour opérer au partitionnement des données.
 
-- **Branches**:  Les branches sont les connexions entre les nœuds, elles illustrent le chemin que les données suivent en fonction des réponses aux questions posées dans les nœuds internes. Chaque branche correspond à une décision binaire, "Oui" ou "Non", qui oriente les observations vers une nouvelle subdivision de l'espace des caractéristiques.
+- **Branches (_Branches_)**:  Les branches sont les connexions entre les nœuds, elles illustrent le chemin que les données suivent en fonction des réponses aux questions posées dans les nœuds internes. Chaque branche correspond à une décision binaire, "Oui" ou "Non", qui oriente les observations vers une nouvelle subdivision de l'espace des caractéristiques.
   
-- **Nœuds Terminaux ou Feuilles (Leaf Nodes ou Terminal Nodes)** : Les nœuds terminaux, situés à l'extrémité des branches, sont les points où le processus de division s'arrête. Ils fournissent la prédiction finale. 
-    - En **classification**, chaque feuille correspond à une classe prédite (par exemple, "Oui" ou "Non").
+- **Nœuds Terminaux ou Feuilles (_Leaf Nodes_,  _Terminal Nodes_ ou _Leaves_)**: Les nœuds terminaux, situés à l'extrémité des branches, sont les points où le processus de division s'arrête. Ils fournissent la prédiction finale. 
+    - En **classification**, chaque feuille correspond à une classe prédite (par exemple, "Oui" ou "Non") ou à une probabilité d'appartenir à la classe positive.
     - En **régression**, chaque feuille fournit une valeur numérique prédite (comme le prix estimé d'une maison).
     
     
-_Figure illustrative_ : Une représentation visuelle de la structure de l'arbre peut être utile ici pour illustrer les concepts de nœuds, branches et feuilles.
+_Figure illustrative_: Une représentation visuelle de la structure de l'arbre peut être utile ici pour illustrer les concepts de nœuds, branches et feuilles.
 
 
 
 
 ### Illustration
 
-Supposons que nous souhaitions prédire le prix d'une maison en fonction de sa superficie et de son nombre de pièces. Un arbre de décision pourrait procéder ainsi :
+Supposons que nous souhaitions prédire le prix d'une maison en fonction de sa superficie et de son nombre de pièces. Un arbre de décision pourrait procéder ainsi:
 
-1. **Première division** : "La superficie de la maison est-elle supérieure à 100 m² ?"
-   - Oui : Aller à la branche de gauche.
-   - Non : Aller à la branche de droite.
-2. **Deuxième division (branche de gauche)** : "Le nombre de pièces est-il supérieur à 4 ?"
-   - Oui : Prix élevé (par exemple, plus de 300 000 €).
-   - Non : Prix moyen (par exemple, entre 200 000 € et 300 000 €).
-3. **Deuxième division (branche de droite)** : "Le nombre de pièces est-il supérieur à 2 ?"
-   - Oui : Prix moyen (par exemple, entre 150 000 € et 200 000 €).
-   - Non : Prix bas (par exemple, moins de 150 000 €).
+1. **Première division**: "La superficie de la maison est-elle supérieure à 100 m² ?"
+   - Oui: Aller à la branche de gauche.
+   - Non: Aller à la branche de droite.
+2. **Deuxième division (branche de gauche)**: "Le nombre de pièces est-il supérieur à 4 ?"
+   - Oui: Prix élevé (par exemple, plus de 300 000 €).
+   - Non: Prix moyen (par exemple, entre 200 000 € et 300 000 €).
+3. **Deuxième division (branche de droite)**: "Le nombre de pièces est-il supérieur à 2 ?"
+   - Oui: Prix moyen (par exemple, entre 150 000 € et 200 000 €).
+   - Non: Prix bas (par exemple, moins de 150 000 €).
 
 Cet arbre utilise des règles simples pour diviser l'espace des caractéristiques (superficie et nombre de pièces) en sous-groupes homogènes et fournir une prédiction (estimer le prix d'une maison).
 
 _Figure illustrative_
 
 
-## L'algorithme CART, un partitionnement binaire récursif
-
-L'algorithme CART (Classification and Regression Trees) proposé par @breiman1984cart est une méthode utilisée pour construire des arbres de décision, que ce soit pour des tâches de classification ou de régression. L'algorithme CART fonctionne en partitionnant l'espace des caractéristiques en sous-ensembles de manière récursive, en suivant une logique de décisions binaires à chaque étape. Ce processus est itératif et suit plusieurs étapes clés.
-
-
 ### Définir une fonction d'impureté adaptée au problème
 
-La **fonction d'impureté** est une mesure locale utilisée dans la construction des arbres de décision pour évaluer la qualité des divisions à chaque nœud. Elle quantifie le degré d'hétérogénéité des observations dans un nœud par rapport à la variable cible (classe pour la classification, ou valeur continue pour la régression). Plus précisément, une mesure d'impureté est conçue pour croître avec la dispersion dans un nœud. Un nœud est dit **pur** lorsque toutes les observations qu'il contient appartiennent à la même classe (classification) ou présentent des valeurs similaires/identiques (régression).
+La **fonction d'impureté** quantifie l'hétérogénéité des observations au sein d'un nœud par rapport à la variable cible (classe pour la classification, ou valeur continue pour la régression). Plus précisément, une mesure d'impureté est conçue pour croître avec la dispersion dans un nœud: plus un noeud est homogène, plus son impureté est faible. Un nœud est dit **pur** lorsque toutes les observations qu'il contient appartiennent à la même classe (classification) ou présentent des valeurs similaires voire identiques (régression). Le choix de la fonction d'impureté dépend du type de problème (voir ci-dessous).
 
-L'algorithme CART utilise ce type de mesure pour choisir les divisions qui créent des sous-ensembles plus homogènes que le nœud parent. À chaque étape de construction, l'algorithme sélectionne la division qui réduit le plus l'impureté, afin de garantir des nœuds de plus en plus homogènes au fur et à mesure que l'arbre se développe.
+<!-- - **Classification**: L'**indice de Gini** ou l'**entropie** sont très souvent utilisées pour évaluer la dispersion des classes dans chaque nœud. 
 
-Le choix de la fonction d'impureté dépend du type de problème :
+- **Régression**: La **somme des erreurs quadratiques** (SSE) est souvent utilisée pour mesurer la variance des valeurs cibles dans chaque nœud.  -->
 
-- **Classification** : L'**indice de Gini** ou l'**entropie** sont très souvent utilisées pour évaluer la dispersion des classes dans chaque nœud. 
-
-- **Régression** : La **somme des erreurs quadratiques** (SSE) est souvent utilisée pour mesurer la variance des valeurs cibles dans chaque nœud. 
-
+**La fonction d'impureté est un élément essentiel de la construction des arbres de décision.** En effet, c'est elle qui est utilisée pour comparer entre elles les règles de décision possibles. À chaque étape de la croissance de l'arbre (_tree growing_), l'algorithme sélectionne la règle de décision qui réduit le plus l'impureté, afin de définir des nœuds les plus homogènes possibles. Il est à noter que l'arbre final dépend de la fonction d'impureté utilisée: si pour un problème donné on recommence l'entraînement avec une autre fonction d'impureté, on obtient généralement un arbre différent (car les règles de décision retenues à chaque noeud ne sont plus les mêmes).
 
 #### Mesures d'impureté classiques pour les problèmes de classification
 
@@ -98,11 +85,11 @@ Dans le cadre de la classification, l'objectif est de partitionner les données 
 
 **Propriété-définition d'une mesure d'impureté**
 
-Pour un nœud $t$ contenant $K$ classes, une **mesure d'impureté** $I(t)$ est une fonction qui quantifie l'hétérogénéité des classes dans ce nœud. Elle doit satisfaire les propriétés suivantes :
+Pour un nœud $t$ contenant $K$ classes, une **mesure d'impureté** $I(t)$ est une fonction qui quantifie l'hétérogénéité des classes dans ce nœud. Elle doit satisfaire les propriétés suivantes:
 
-- **Pureté maximale** : Lorsque toutes les observations du nœud appartiennent à une seule classe, c'est-à-dire que la proportion $p_k = 1$ pour une classe $k$ et $p_j = 0$ pour toutes les autres classes $j \neq k$, l'impureté est minimale et $I(t) = 0$. Cela indique que le nœud est **entièrement pur**, ou homogène.
+- **Pureté maximale**: Lorsque toutes les observations du nœud appartiennent à une seule classe, c'est-à-dire que la proportion $p_k = 1$ pour une classe $k$ et $p_j = 0$ pour toutes les autres classes $j \neq k$, l'impureté est minimale et $I(t) = 0$. Cela indique que le nœud est **entièrement pur**, ou homogène.
 
-- **Impureté maximale** : Lorsque les observations sont réparties de manière uniforme entre toutes les classes, c'est-à-dire que $p_k = \frac{1}{K}$ pour chaque classe $k$, l'impureté atteint son maximum. Cette situation reflète une **impureté élevée**, car le nœud est très hétérogène et contient une forte incertitude sur la classe des observations.
+- **Impureté maximale**: Lorsque les observations sont réparties de manière uniforme entre toutes les classes, c'est-à-dire que $p_k = \frac{1}{K}$ pour chaque classe $k$, l'impureté atteint son maximum. Cette situation reflète une **impureté élevée**, car le nœud est très hétérogène et contient une forte incertitude sur la classe des observations.
 
 
 
@@ -110,7 +97,7 @@ Pour un nœud $t$ contenant $K$ classes, une **mesure d'impureté** $I(t)$ est u
 
 L'**indice de Gini** est l'une des fonctions de perte les plus couramment utilisées pour la classification. Il mesure la probabilité qu'un individu sélectionné au hasard dans un nœud soit mal classé si on lui attribue une classe au hasard, en fonction de la distribution des classes dans ce nœud.
 
-Pour un nœud $t$ contenant $K$ classes, l'indice de Gini $G(t)$ est donné par :
+Pour un nœud $t$ contenant $K$ classes, l'indice de Gini $G(t)$ est donné par:
 
 $$
 G(t) = 1 - \sum_{k=1}^{K} p_k^2
@@ -119,20 +106,20 @@ $$
 où $p_k$ est la proportion d'observations appartenant à la classe $k$ dans le nœud $t$.
 
 
-<!-- **Propriété** :
+<!-- **Propriété**:
 
 - Lorsque toutes les observations appartiennent à une même classe, $p_k = 1$ pour cette classe et $G(t) = 0$, ce qui signifie que le nœud est **pur**.
 
 - À l'inverse, lorsque les observations sont également réparties entre les classes, $p_k$ tend vers des valeurs égales pour chaque classe, et $G(t)$ atteint son maximum, indiquant une **impureté élevée**.-->
 
-**Critère de choix** :
+**Critère de choix**:
 L'indice de Gini est souvent utilisé parce qu'il est simple à calculer et capture bien l'homogénéité des classes au sein d'un nœud. Il privilégie les partitions où une classe domine fortement dans chaque sous-ensemble.
 
 **2. L'entropie (ou entropie de Shannon)**
 
 L'**entropie** est une autre mesure de l'impureté utilisée dans les arbres de décision. Elle mesure la quantité d'incertitude ou de désordre dans un nœud, en s'appuyant sur la théorie de l'information.
 
-Pour un nœud $t$ contenant $K$ classes, l'entropie $E(t)$ est définie par :
+Pour un nœud $t$ contenant $K$ classes, l'entropie $E(t)$ est définie par:
 
 $$
 E(t) = - \sum_{k=1}^{K} p_k \log(p_k)
@@ -140,20 +127,20 @@ $$
 
 où $p_k$ est la proportion d'observations de la classe $k$ dans le nœud $t$.
 
-<!-- **Propriété** :
+<!-- **Propriété**:
 
 - Comme pour l'indice de Gini, si toutes les observations d'un nœud appartiennent à la même classe, l'entropie est nulle ($E(t) = 0$), indiquant un nœud pur.
 
 - L'entropie atteint son maximum lorsque les observations sont uniformément réparties entre les classes, reflétant une grande incertitude dans la classification.-->
 
-**Critère de choix** :
+**Critère de choix**:
 L'entropie a tendance à être plus sensible aux changements dans les distributions des classes que l'indice de Gini, car elle attribut un poids plus élevé aux événements rares (valeurs de $p_k$ très faibles). Elle est souvent utilisée lorsque l'erreur de classification des classes minoritaires est particulièrement importante.
 
 **3. Taux d'erreur**
 
 Le **taux d'erreur** est une autre mesure de l'impureté parfois utilisée dans les arbres de décision. Il représente la proportion d'observations mal classées dans un nœud.
 
-Pour un nœud $t$, le taux d'erreur $\text{TE}(t)$ est donné par :
+Pour un nœud $t$, le taux d'erreur $\text{TE}(t)$ est donné par:
 
 $$
 \text{TE}(t) = 1 - \max(p_k)
@@ -161,13 +148,13 @@ $$
 
 où $\max(p_k)$ est la proportion d'observations appartenant à la classe majoritaire dans le nœud.
 
-<!-- **Propriété** :
+<!-- **Propriété**:
 
 - Si toutes les observations d'un nœud appartiennent à la même classe, le taux d'erreur est nul ($\text{TE}(t) = 0$), indiquant un nœud pur.
 
 - Le taux d'erreur atteint son maximum lorsque les observations sont uniformément réparties entre les classes, reflétant une grande incertitude dans la classification.-->
 
-**Critère de choix** :
+**Critère de choix**:
 Bien que le taux d'erreur soit simple à comprendre, il est moins souvent utilisé dans la construction des arbres de décision parce qu'il est moins sensible que l'indice de Gini ou l'entropie aux petits changements dans la distribution des classes.
 
 #### Mesures d'impureté classiques pour les problèmes de régression
@@ -179,8 +166,8 @@ Dans les problèmes de régression, l'objectif est de partitionner les données 
 
 La **somme des erreurs quadratiques** (ou **SSE**, pour *Sum of Squared Errors*) est une mesure qui quantifie la dispersion des valeurs dans un nœud par rapport à la moyenne des valeurs dans ce nœud.
 
-**Formule** :
-Pour un nœud $t$, contenant $N$ observations avec des valeurs $y_i$, la SSE est donnée par :
+**Formule**:
+Pour un nœud $t$, contenant $N$ observations avec des valeurs $y_i$, la SSE est donnée par:
 
 $$
 \text{SSE}(t) = \sum_{i=1}^{N} (y_i - \hat{y})^2
@@ -188,13 +175,13 @@ $$
 
 où $\hat{y}$ est la moyenne des valeurs $y_i$ dans le nœud $t$.
 
-**Propriété** :
+**Propriété**:
 
 - Si toutes les valeurs de $y_i$ dans un nœud sont proches de la moyenne $\hat{y}$, la SSE sera faible, indiquant une homogénéité élevée dans le nœud.
 
 - En revanche, une SSE élevée indique une grande variabilité dans les valeurs, donc un nœud impur.
 
-**Critère de choix** :
+**Critère de choix**:
 La somme des erreurs quadratiques (SSE) est particulièrement sensible aux écarts élevés entre les valeurs observées et la moyenne prédite. En cherchant à minimiser la SSE, les modèles visent à former des nœuds dans lesquels les valeurs des observations sont aussi proches que possible de la moyenne locale. 
 
 
@@ -202,7 +189,7 @@ La somme des erreurs quadratiques (SSE) est particulièrement sensible aux écar
 
 Une fois la mesure d'impureté définie, l'algorithme CART examine toutes les divisions binaires possibles de l'espace des caractéristiques. À chaque nœud, et pour chaque caractéristique, il cherche à identifier le **seuil optimal**, c'est-à-dire le seuil qui minimise le plus efficacement l'impureté des deux sous-ensembles générés. L'algorithme compare ensuite toutes les divisions potentielles (caractéristiques et seuils optimaux associés à chaque nœud) et sélectionne celle qui entraîne la réduction maximale de l'impureté. 
 
-Prenons l'exemple d'une caractéristique continue, telle que la superficie d'une maison :
+Prenons l'exemple d'une caractéristique continue, telle que la superficie d'une maison:
 
 - Si l'algorithme teste la règle "Superficie > 100 m²", il calcule la fonction de perte pour les deux sous-ensembles générés par cette règle ("Oui" et "Non").
 
@@ -211,10 +198,10 @@ Prenons l'exemple d'une caractéristique continue, telle que la superficie d'une
 
 ### Réitérer le processus jusqu'à atteindre un critère d'arrêt
 
-L'algorithme CART poursuit le partitionnement de l'espace des caractéristiques en appliquant de manière récursive les mêmes étapes : identification de la caractéristique et du seuil optimal pour chaque nœud, puis sélection du partitionnement binaire qui maximise la réduction de l'impureté. Ce processus est répété jusqu'à ce qu'un **critère d'arrêt** soit atteint, par exemple :
+L'algorithme CART poursuit le partitionnement de l'espace des caractéristiques en appliquant de manière récursive les mêmes étapes: identification de la caractéristique et du seuil optimal pour chaque nœud, puis sélection du partitionnement binaire qui maximise la réduction de l'impureté. Ce processus est répété jusqu'à ce qu'un **critère d'arrêt** soit atteint, par exemple:
 
-- **Profondeur maximale de l'arbre** : Limiter le nombre de divisions successives pour éviter un arbre trop complexe.
-- **Nombre minimum d'observations par feuille** : Empêcher la création de feuilles contenant très peu d'observations, ce qui réduirait la capacité du modèle à généraliser.
+- **Profondeur maximale de l'arbre**: Limiter le nombre de divisions successives pour éviter un arbre trop complexe.
+- **Nombre minimum d'observations par feuille**: Empêcher la création de feuilles contenant très peu d'observations, ce qui réduirait la capacité du modèle à généraliser.
 - **Réduction minimale de l'impureté à chaque étape**
 
 
@@ -238,16 +225,16 @@ Pour améliorer la performance de l'arbre, on peut ajuster les hyperparamètres 
 
 ### Avantages
 
-- **Interprétabilité** : Les arbres de décision sont faciles à comprendre et à visualiser.
-- **Simplicité** : Pas besoin de transformations complexes des données.
-- **Flexibilité** : Ils peuvent gérer des caractéristiques numériques et catégorielles, ainsi que les valeurs manquantes.
-- **Gestion des interactions** : Modèles non paramétriques, pas d'hypothèses sur les lois par les variables. Ils capturent naturellement les interactions entre les caractéristiques.
+- **Interprétabilité**: Les arbres de décision sont faciles à comprendre et à visualiser.
+- **Simplicité**: Pas besoin de transformations complexes des données.
+- **Flexibilité**: Ils peuvent gérer des caractéristiques numériques et catégorielles, ainsi que les valeurs manquantes.
+- **Gestion des interactions**: Modèles non paramétriques, pas d'hypothèses sur les lois par les variables. Ils capturent naturellement les interactions entre les caractéristiques.
 
 ### Limites
 
-- **Surapprentissage** : Les arbres trop profonds peuvent surapprendre les données d'entraînement.
-- **Optimisation locale** : L'approche gloutonne peut conduire à des solutions sous-optimales globalement (optimum local).
-- **Stabilité** : De petits changements dans les données peuvent entraîner des changements significatifs dans la structure de l'arbre (manque de robustesse).
+- **Surapprentissage**: Les arbres trop profonds peuvent surapprendre les données d'entraînement.
+- **Optimisation locale**: L'approche gloutonne peut conduire à des solutions sous-optimales globalement (optimum local).
+- **Stabilité**: De petits changements dans les données peuvent entraîner des changements significatifs dans la structure de l'arbre (manque de robustesse).
 
 
 
