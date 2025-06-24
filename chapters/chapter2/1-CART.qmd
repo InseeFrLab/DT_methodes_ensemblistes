@@ -153,12 +153,12 @@ $$
 
 où $\hat{y}$ est la moyenne des valeurs $y_i$ dans le nœud.
 
-Cette fonction d'impureté a des propriétés similaires à celles présentées pour la classification: si toutes les valeurs de $y_i$ dans un nœud sont proches de la moyenne $\hat{y}$, la SSE sera faible, indiquant une homogénéité élevée dans le nœud. Inversement, une SSE élevée indique une grande variabilité dans les valeurs, donc un nœud impur. Une limite de cette mesure d'impureté est qu'elle est particulièrement sensible aux écarts élevés entre les valeurs observées et la moyenne prédite, et donc aux valeurs extrêmes. En cherchant à minimiser la SSE, les modèles visent à former des nœuds dans lesquels les valeurs des observations sont aussi proches que possible de la moyenne locale. 
+Cette fonction d'impureté a des propriétés similaires à celles présentées pour la classification: si toutes les valeurs de $y_i$ dans un nœud sont proches de la moyenne $\hat{y}$, la SSE sera faible, indiquant une homogénéité élevée dans le nœud. Inversement, une SSE élevée indique une grande variabilité dans les valeurs, donc un nœud impur. Une limite de cette mesure d'impureté est qu'elle est particulièrement sensible aux écarts élevés entre les valeurs observées et la moyenne prédite, et donc aux valeurs extrêmes.
 
 
 ### Identifier la partition maximisant la réduction de l'impureté
 
-Une fois la mesure d'impureté définie, l'algorithme CART construit séquentiellement le partitionnement de l'espace des caractéristiques en examinant les règles de décision possibles. À chaque nœud, et pour chaque caractéristique, il cherche à identifier le **seuil optimal**, c'est-à-dire le seuil qui minimise le plus efficacement l'impureté des deux sous-ensembles générés. L'algorithme compare ensuite toutes les divisions potentielles (caractéristiques et seuils optimaux associés à chaque nœud) et sélectionne celle qui entraîne la réduction maximale de l'impureté. 
+Une fois la mesure d'impureté définie, l'algorithme CART construit séquentiellement le partitionnement de l'espace des caractéristiques en comparant les règles de décision possibles. À chaque étape de la construction de l'arbre, l'algorithme construit des règles de décision candidates en parcourant toutes les valeurs de toutes les caractéristiques, calcule la réduction de l'impureté induite par chacune d'entre elles et sélectionne celle qui entraîne la réduction maximale. 
 
 Prenons l'exemple d'une caractéristique continue, telle que la superficie d'une maison:
 
