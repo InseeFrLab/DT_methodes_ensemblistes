@@ -1,6 +1,6 @@
 # La brique élémentaire: l'arbre de décision
 
-Les arbres de décision sont des outils puissants en apprentissage automatique, utilisés notamment pour des tâches de classification et de régression. Le principe de cet algorithme consiste à diviser l'espace des caractéristiques en sous-ensembles homogènes à l'aide de règles simples, puis de former pour chaque sous-ensemble une prédiction à partir des observations présentes dans ce sous-ensemble. Malgré leur simplicité apparente, les arbres de décision sont capable de saisir des relations complexes et non linéaires entre les variables (ou _caractéristiques_) d'un jeu de données.
+Les arbres de décision sont des outils puissants en apprentissage automatique, utilisés notamment pour des tâches de classification et de régression. Le principe de cet algorithme consiste à diviser l'espace des caractéristiques en sous-régions homogènes à l'aide de règles simples, puis de former pour chaque sous-ensemble une prédiction à partir des observations présentes dans cette sous-région. Malgré leur simplicité apparente, les arbres de décision sont capable de saisir des relations complexes et non linéaires entre les variables (ou _caractéristiques_) d'un jeu de données.
 
 ## Le principe fondamental: partitionner pour prédire
 
@@ -20,7 +20,7 @@ L'objectif principal est de trouver la partition de l'espace des caractéristiqu
 
 Pour surmonter ces difficultés, les algorithmes d'arbres de décision, et notamment la plus célèbre, l'algorithme CART (Classification And Regression Tree, @breiman1984cart), procèdent à trois simplifications cruciales:
 
-   1. **Optimisation gloutonne (__greedy optimization__)**: plutôt que de rechercher d'emblée un partitionnement optimal, les arbres de décision partitionnent l'espace des caractéristiques en régions disjointes selon une approche récursive et séquentielle. A chaque étape, l'arbre choisit la meilleure division possible d'une région en deux sous-régions sur la base d'un critère de réduction de l'hétérogénéité intra-région, indépendamment des étapes précédentes et suivantes. Ce processus est répété pour chaque sous-région, ce qui permet d'affiner progressivement le partitionnement de l'espace, jusqu'à ce qu'un critère d'arrêt soit atteint. Cette méthode dite "gloutonne" (_greedy_) s'avère très efficace, car elle décompose un problème d'optimisation complexe en une succession de problèmes plus simples et plus rapides à résoudre. Le résultat obtenu n'est pas nécessairement un optimum global, mais il s'en approche raisonnablement et surtout rapidement.
+   1. **Optimisation gloutonne (__greedy optimization__)**: plutôt que de rechercher d'emblée un partitionnement optimal, les arbres de décision partitionnent l'espace selon une approche séquentielle. A chaque étape, l'arbre choisit la meilleure division possible d'une région en deux sous-régions, _indépendamment des étapes précédentes ou suivantes_. Ce processus est répété pour chaque sous-région, ce qui permet d'affiner progressivement le partitionnement de l'espace, jusqu'à ce qu'un critère d'arrêt soit atteint. Cette méthode dite "gloutonne" (_greedy_) s'avère très efficace, car elle décompose un problème d'optimisation complexe en une succession de problèmes plus simples et plus rapides à résoudre. Le résultat obtenu n'est pas nécessairement un optimum global, mais il s'en approche raisonnablement et surtout rapidement.
 
    2. **Simplification des règles de partitionnement**: au lieu d'explorer tous les règles de décision possibles, les arbres de décision se restreignent à des règles de décision très simples, appelés **découpages binaires** (_binary splits_): à chaque étape, l'algorithme divise chaque région de l'espace en deux sous-régions à l'aide d'une règle de décision (_decision rule_) qui ne fait appel qu'à __une seule caractéristique__ (ou _variable_) et à __un seul seuil__ (ou _critère_) pour cette segmentation. Cela revient à poser une question simple telle que: "La valeur de la caractéristique $X$ dépasse-t-elle le seuil $x$ ?" Par exemple: "La superficie de la maison est-elle supérieure à 100 m² ?". Les deux réponses possibles ("Oui" ou "Non") définissent deux nouvelles sous-régions distinctes de l'espace, chacune correspondant à un sous-ensemble de données plus homogènes.
 
@@ -37,7 +37,7 @@ Cet algorithme est appelé __arbre de décision__ (_decision tree_) en raison pr
 
 - **Nœuds Internes (_Internal Nodes_)**: Les nœuds internes sont les points intermédiaires où l'algorithme CART applique des règles de décision pour diviser les données en sous-régions plus petites. Chaque nœud interne se définit par une règle de décision basée sur une variable et un seuil (par exemple, "La superficie de la maison est-elle supérieure à 100 m² ?"). À chaque étape, une seule caractéristique (la superficie) et un seul seuil (supérieur à 100) sont utilisés pour opérer au partitionnement des données.
 
-- **Branches (_Branches_)**:  Les branches sont les connexions entre les nœuds, elles illustrent le chemin que les données suivent en fonction des réponses aux questions posées dans les nœuds internes. Chaque branche correspond à une décision binaire, "Oui" ou "Non", qui oriente les observations vers une nouvelle subdivision de l'espace des caractéristiques.
+- **Branches (_Branches_)**:  Les branches sont les connexions entre les nœuds et représentent le chemin suivies par les données. Chaque branche correspond à une décision binaire, "Oui" ou "Non", qui oriente les observations vers une nouvelle subdivision de l'espace des caractéristiques.
   
 - **Nœuds Terminaux ou Feuilles (_Leaf Nodes_,  _Terminal Nodes_ ou _Leaves_)**: Les nœuds terminaux, situés à l'extrémité des branches, sont les points où le processus de division s'arrête. Ils fournissent la prédiction finale. Dans un problème de classification, la prédiction d'une feuille est soit la classe majoritaire parmi les observations de la feuille (par exemple, "Oui" ou "Non"), soit une probabilité d'appartenir à chaque classe. Dans un problème de régression, la prédiction d'une feuille est une valeur numérique, souvent la moyenne des observations de la feuille.
     
@@ -65,52 +65,39 @@ Cet arbre utilise des règles simples pour diviser l'espace des caractéristique
 _Figure illustrative_
 
 
+## La construction d'un arbre de décision par l'algorithme CART
+
 ### Définir une fonction d'impureté adaptée au problème
 
-La **fonction d'impureté** quantifie l'hétérogénéité des observations au sein d'un nœud par rapport à la variable cible (classe pour la classification, ou valeur continue pour la régression). Plus précisément, une mesure d'impureté est conçue pour croître avec la dispersion dans un nœud: plus un noeud est homogène, plus son impureté est faible. Un nœud est dit **pur** lorsque toutes les observations qu'il contient appartiennent à la même classe (classification) ou présentent des valeurs similaires voire identiques (régression). Le choix de la fonction d'impureté dépend du type de problème (voir ci-dessous).
+La **fonction d'impureté** quantifie l'hétérogénéité des observations au sein d'un nœud par rapport à la variable cible (classe pour la classification, ou valeur continue pour la régression). Plus précisément, une mesure d'impureté est conçue pour croître avec la dispersion dans un nœud: plus un nœud est homogène, plus son impureté est faible. Un nœud est dit **pur** lorsque toutes les observations qu'il contient appartiennent à la même classe (classification) ou présentent des valeurs similaires voire identiques (régression). Le choix de la fonction d'impureté dépend du type de problème (voir ci-dessous).
 
 <!-- - **Classification**: L'**indice de Gini** ou l'**entropie** sont très souvent utilisées pour évaluer la dispersion des classes dans chaque nœud. 
 
 - **Régression**: La **somme des erreurs quadratiques** (SSE) est souvent utilisée pour mesurer la variance des valeurs cibles dans chaque nœud.  -->
 
-**La fonction d'impureté est un élément essentiel de la construction des arbres de décision.** En effet, c'est elle qui est utilisée pour comparer entre elles les règles de décision possibles. À chaque étape de la croissance de l'arbre (_tree growing_), l'algorithme sélectionne la règle de décision qui réduit le plus l'impureté, afin de définir des nœuds les plus homogènes possibles. Il est à noter que l'arbre final dépend de la fonction d'impureté utilisée: si pour un problème donné on recommence l'entraînement avec une autre fonction d'impureté, on obtient généralement un arbre différent (car les règles de décision retenues à chaque noeud ne sont plus les mêmes).
+**La fonction d'impureté est un élément essentiel de la construction des arbres de décision.** En effet, c'est elle qui est utilisée pour comparer entre elles les règles de décision possibles. À chaque étape de la croissance de l'arbre (_tree growing_), l'algorithme sélectionne la règle de décision qui réduit le plus l'impureté, afin de définir des nœuds les plus homogènes possibles. Il est à noter que l'arbre final dépend de la fonction d'impureté utilisée: si pour un problème donné on recommence l'entraînement avec une autre fonction d'impureté, on obtient généralement un arbre différent (car les règles de décision retenues à chaque nœud ne sont plus les mêmes).
 
-#### Mesures d'impureté classiques pour les problèmes de classification
+#### Mesures d'impureté pour les problèmes de classification
 
-Dans le cadre de la classification, l'objectif est de partitionner les données de manière à ce que chaque sous-ensemble (ou région) soit le plus homogène possible en termes de classe prédite. Plusieurs mesures d'impureté sont couramment utilisées pour évaluer la qualité des divisions.
+Dans un problème de classification où l'on souhaite classifier des observations parmi $K$ classes, une **mesure d'impureté** $I(t)$ est une fonction qui quantifie l'hétérogénéité des classes dans un nœud donnée. Les mesures d'impureté usuelles détaillées ci-dessous partagent les deux propriétés suivantes:
 
+- **Pureté maximale**: lorsque toutes les observations du nœud appartiennent à une seule classe, c'est-à-dire que la proportion $p_k = 1$ pour une classe $k$ et $p_j = 0$ pour toutes les autres classes $j \neq k$, l'impureté est minimale et $I(t) = 0$. Cela indique que le nœud est **entièrement pur**, ou homogène.
 
-**Propriété-définition d'une mesure d'impureté**
+- **Impureté maximale**: lorsque les observations sont réparties de manière uniforme entre toutes les classes, c'est-à-dire que la proportion $p_k = \frac{1}{K}$ pour chaque classe $k$, l'impureté atteint son maximum. Cette situation reflète une **impureté élevée**, car le nœud est très hétérogène et contient une forte incertitude sur la classe des observations.
 
-Pour un nœud $t$ contenant $K$ classes, une **mesure d'impureté** $I(t)$ est une fonction qui quantifie l'hétérogénéité des classes dans ce nœud. Elle doit satisfaire les propriétés suivantes:
-
-- **Pureté maximale**: Lorsque toutes les observations du nœud appartiennent à une seule classe, c'est-à-dire que la proportion $p_k = 1$ pour une classe $k$ et $p_j = 0$ pour toutes les autres classes $j \neq k$, l'impureté est minimale et $I(t) = 0$. Cela indique que le nœud est **entièrement pur**, ou homogène.
-
-- **Impureté maximale**: Lorsque les observations sont réparties de manière uniforme entre toutes les classes, c'est-à-dire que $p_k = \frac{1}{K}$ pour chaque classe $k$, l'impureté atteint son maximum. Cette situation reflète une **impureté élevée**, car le nœud est très hétérogène et contient une forte incertitude sur la classe des observations.
-
+Il existe trois mesures d'impureté couramment utilisées en classification:
 
 
 **1. L'indice de Gini**
 
-L'**indice de Gini** est l'une des fonctions de perte les plus couramment utilisées pour la classification. Il mesure la probabilité qu'un individu sélectionné au hasard dans un nœud soit mal classé si on lui attribue une classe au hasard, en fonction de la distribution des classes dans ce nœud.
+L'**indice de Gini** mesure la probabilité qu'un individu sélectionné au hasard dans un nœud soit mal classé si on lui attribue une classe au hasard, en fonction de la distribution des classes dans ce nœud. Pour un nœud $t$ contenant $K$ classes, l'indice de Gini $G(t)$ est donné par
 
-Pour un nœud $t$ contenant $K$ classes, l'indice de Gini $G(t)$ est donné par:
-
-$$
-G(t) = 1 - \sum_{k=1}^{K} p_k^2
-$$
+$$ G(t) = 1 - \sum_{k=1}^{K} p_k^2 $$
 
 où $p_k$ est la proportion d'observations appartenant à la classe $k$ dans le nœud $t$.
 
-
-<!-- **Propriété**:
-
-- Lorsque toutes les observations appartiennent à une même classe, $p_k = 1$ pour cette classe et $G(t) = 0$, ce qui signifie que le nœud est **pur**.
-
-- À l'inverse, lorsque les observations sont également réparties entre les classes, $p_k$ tend vers des valeurs égales pour chaque classe, et $G(t)$ atteint son maximum, indiquant une **impureté élevée**.-->
-
 **Critère de choix**:
-L'indice de Gini est souvent utilisé parce qu'il est simple à calculer et capture bien l'homogénéité des classes au sein d'un nœud. Il privilégie les partitions où une classe domine fortement dans chaque sous-ensemble.
+L'indice de Gini est très souvent utilisé parce qu'il est simple à calculer et capture bien l'homogénéité des classes au sein d'un nœud. Il privilégie les partitions où une classe domine fortement dans chaque sous-ensemble.
 
 **2. L'entropie (ou entropie de Shannon)**
 
@@ -131,7 +118,7 @@ où $p_k$ est la proportion d'observations de la classe $k$ dans le nœud $t$.
 - L'entropie atteint son maximum lorsque les observations sont uniformément réparties entre les classes, reflétant une grande incertitude dans la classification.-->
 
 **Critère de choix**:
-L'entropie a tendance à être plus sensible aux changements dans les distributions des classes que l'indice de Gini, car elle attribut un poids plus élevé aux événements rares (valeurs de $p_k$ très faibles). Elle est souvent utilisée lorsque l'erreur de classification des classes minoritaires est particulièrement importante.
+L'entropie a tendance à être plus sensible aux changements dans les distributions des classes que l'indice de Gini, car elle attribue un poids plus élevé aux événements rares (valeurs de $p_k$ très faibles). Elle est souvent utilisée lorsque l'erreur de classification des classes minoritaires est particulièrement importante.
 
 **3. Taux d'erreur**
 
@@ -154,37 +141,24 @@ où $\max(p_k)$ est la proportion d'observations appartenant à la classe majori
 **Critère de choix**:
 Bien que le taux d'erreur soit simple à comprendre, il est moins souvent utilisé dans la construction des arbres de décision parce qu'il est moins sensible que l'indice de Gini ou l'entropie aux petits changements dans la distribution des classes.
 
-#### Mesures d'impureté classiques pour les problèmes de régression
+#### Mesures d'impureté pour les problèmes de régression
 
-Dans les problèmes de régression, l'objectif est de partitionner les données de manière à réduire au maximum la variabilité des valeurs au sein de chaque sous-ensemble. Pour mesurer cette variabilité, la somme des erreurs quadratiques (SSE) est la fonction d'impureté la plus couramment employée. Elle évalue l'impureté d'une région en quantifiant à quel point les valeurs de cette région s'écartent de la moyenne locale.
+<!-- Dans un problème de classification où l'on souhaite classifier des observations parmi $K$ classes, une **mesure d'impureté** $I(t)$ est une fonction qui quantifie l'hétérogénéité des classes dans un nœud donnée. Les mesures d'impureté usuelles détaillées ci-dessous partagent les deux propriétés suivantes: -->
 
-
-**1.Somme des erreurs quadratiques (SSE) ou variance**
-
-La **somme des erreurs quadratiques** (ou **SSE**, pour *Sum of Squared Errors*) est une mesure qui quantifie la dispersion des valeurs dans un nœud par rapport à la moyenne des valeurs dans ce nœud.
-
-**Formule**:
-Pour un nœud $t$, contenant $N$ observations avec des valeurs $y_i$, la SSE est donnée par:
+Dans les problèmes de régression, l'objectif est de partitionner les données de manière à réduire au maximum la variabilité des valeurs au sein de chaque sous-région. Pour mesurer cette variabilité, la fonction d'impureté la plus couramment employée est la somme des erreurs quadratiques (SSE). Elle évalue l'impureté d'une région en quantifiant à quel point les valeurs de cette région s'écartent de la moyenne locale. Pour un nœud $t$, contenant $N$ observations avec des valeurs $y_i$, la SSE est donnée par:
 
 $$
 \text{SSE}(t) = \sum_{i=1}^{N} (y_i - \hat{y})^2
 $$
 
-où $\hat{y}$ est la moyenne des valeurs $y_i$ dans le nœud $t$.
+où $\hat{y}$ est la moyenne des valeurs $y_i$ dans le nœud.
 
-**Propriété**:
-
-- Si toutes les valeurs de $y_i$ dans un nœud sont proches de la moyenne $\hat{y}$, la SSE sera faible, indiquant une homogénéité élevée dans le nœud.
-
-- En revanche, une SSE élevée indique une grande variabilité dans les valeurs, donc un nœud impur.
-
-**Critère de choix**:
-La somme des erreurs quadratiques (SSE) est particulièrement sensible aux écarts élevés entre les valeurs observées et la moyenne prédite. En cherchant à minimiser la SSE, les modèles visent à former des nœuds dans lesquels les valeurs des observations sont aussi proches que possible de la moyenne locale. 
+Cette fonction d'impureté a des propriétés similaires à celles présentées pour la classification: si toutes les valeurs de $y_i$ dans un nœud sont proches de la moyenne $\hat{y}$, la SSE sera faible, indiquant une homogénéité élevée dans le nœud. Inversement, une SSE élevée indique une grande variabilité dans les valeurs, donc un nœud impur. Une limite de cette mesure d'impureté est qu'elle est particulièrement sensible aux écarts élevés entre les valeurs observées et la moyenne prédite, et donc aux valeurs extrêmes. En cherchant à minimiser la SSE, les modèles visent à former des nœuds dans lesquels les valeurs des observations sont aussi proches que possible de la moyenne locale. 
 
 
-### Identifier la partition binaire maximisant la réduction de l'impureté
+### Identifier la partition maximisant la réduction de l'impureté
 
-Une fois la mesure d'impureté définie, l'algorithme CART examine toutes les divisions binaires possibles de l'espace des caractéristiques. À chaque nœud, et pour chaque caractéristique, il cherche à identifier le **seuil optimal**, c'est-à-dire le seuil qui minimise le plus efficacement l'impureté des deux sous-ensembles générés. L'algorithme compare ensuite toutes les divisions potentielles (caractéristiques et seuils optimaux associés à chaque nœud) et sélectionne celle qui entraîne la réduction maximale de l'impureté. 
+Une fois la mesure d'impureté définie, l'algorithme CART construit séquentiellement le partitionnement de l'espace des caractéristiques en examinant les règles de décision possibles. À chaque nœud, et pour chaque caractéristique, il cherche à identifier le **seuil optimal**, c'est-à-dire le seuil qui minimise le plus efficacement l'impureté des deux sous-ensembles générés. L'algorithme compare ensuite toutes les divisions potentielles (caractéristiques et seuils optimaux associés à chaque nœud) et sélectionne celle qui entraîne la réduction maximale de l'impureté. 
 
 Prenons l'exemple d'une caractéristique continue, telle que la superficie d'une maison:
 
