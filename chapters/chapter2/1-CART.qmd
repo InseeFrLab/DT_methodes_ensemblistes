@@ -1,12 +1,10 @@
 # La brique élémentaire: l'arbre de décision
 
-Les arbres de décision désignent un éventail d'algorithmes de _machine learning_, utilisés notamment pour des tâches de classification et de régression. Ces algorithmes constituent l'élément de base des méthodes ensemblistes. Cette section a pour objectif de présenter en détail ce qu'est un arbre de décision, sa structure et la terminologie associée. 
+Les arbres de décision désignent un éventail d'algorithmes de _machine learning_, utilisés notamment pour des tâches de classification et de régression. Ces algorithmes constituent l'élément de base des méthodes ensemblistes à base d'arbres (forêt aléatoire et _gradient boosting_). Cette section a pour objectif de présenter ce qu'est un arbre de décision, sa structure et la terminologie associée (@sec-partitionner), puis de détailler la méthode de construction des arbres par l'algorithme CART (@sec-construire).
 
-## Le principe fondamental: partitionner pour prédire
+## Le principe fondamental: partitionner pour prédire {#sec-partitionner}
 
-Le principe des arbres de décision consiste à __diviser l'espace des caractéristiques en sous-régions homogènes à l'aide de règles simples__, puis de former pour chaque sous-région une prédiction à partir des observations présentes dans cette sous-région. Malgré leur apparente simplicité, les arbres de décision sont puissants et capables de modéliser des interactions complexes et non linéaires entre les variables d'un jeu de données.
-
-Imaginez que vous souhaitiez prédire le prix d'une maison en fonction de sa superficie et de son nombre de pièces, à partir d'un ensemble de transactions pour lesquelles le prix est connu. L'espace des caractéristiques (superficie et nombre de pièces) est vaste, et les prix des maisons (la _réponse_ à prédire) sont très variables. L'idée centrale des arbres de décision est de diviser cet espace en zones plus petites, au sein desquelles les maisons ayant des surfaces et un nombre de pièces similaire ont des prix proches, et d'attribuer une prédiction identique à toutes les maisons situées dans la même zone.
+Le principe des arbres de décision consiste à __diviser l'espace des caractéristiques en sous-régions homogènes à l'aide de règles simples__, puis de former pour chaque sous-région une prédiction à partir des observations présentes dans cette sous-région. Imaginons par exemple que l'on souhaite prédire le prix d'une maison en fonction de sa superficie et de son nombre de pièces, à partir d'un ensemble de transactions pour lesquelles le prix est connu. L'espace des caractéristiques (superficie et nombre de pièces) est vaste, et les prix des maisons (la _réponse_ à prédire) sont très variables. L'idée centrale des arbres de décision est de diviser cet espace en zones plus petites, au sein desquelles les maisons ayant des surfaces et un nombre de pièces similaire ont des prix proches, et d'attribuer une prédiction identique à toutes les maisons situées dans la même zone. Malgré cette apparente simplicité, les arbres de décision sont puissants et capables de modéliser des interactions complexes et non linéaires entre les variables d'un jeu de données.
 
 ### Les défis du partitionnement optimal
 
@@ -20,7 +18,7 @@ L'objectif principal est de trouver la partition de l'espace des caractéristiqu
 
 ### Les solutions apportées par les arbres de décision
 
-Pour surmonter ces difficultés, les algorithmes d'arbres de décision, et notamment la plus célèbre, l'algorithme CART (Classification And Regression Tree, @breiman1984cart), procèdent à trois simplifications cruciales:
+Pour surmonter ces difficultés, les algorithmes d'arbres de décision, et notamment le plus célèbre, l'algorithme CART (Classification And Regression Tree, @breiman1984cart), procèdent à trois simplifications cruciales:
 
    1. **Optimisation gloutonne (__greedy optimization__)**: plutôt que de rechercher d'emblée un partitionnement optimal, les arbres de décision partitionnent l'espace selon une approche séquentielle. A chaque étape, l'arbre choisit la meilleure division possible d'une région en deux sous-régions, _indépendamment des étapes précédentes ou suivantes_. Ce processus est répété pour chaque sous-région, ce qui permet d'affiner progressivement le partitionnement de l'espace, jusqu'à ce qu'un critère d'arrêt soit atteint. Cette méthode dite "gloutonne" (_greedy_) s'avère très efficace, car elle décompose un problème d'optimisation complexe en une succession de problèmes plus simples et plus rapides à résoudre. Le résultat obtenu n'est pas nécessairement un optimum global, mais il s'en approche raisonnablement et surtout rapidement.
 
@@ -67,17 +65,28 @@ Cet arbre utilise des règles simples pour diviser l'espace des caractéristique
 _Figure illustrative_
 
 
-## La construction d'un arbre de décision par l'algorithme CART
+## La construction d'un arbre de décision par l'algorithme CART {#sec-construire}
 
-### Définir une fonction d'impureté adaptée au problème
+Depuis les années 1980, de multiples algorithmes ont été proposés pour construire des arbres de décision, notamment CART (@breiman1984cart), C4.5 (@quinlan2014c4) et MARS (@friedman1991multivariate). La présente section présente la méthode de construction et l'utilisation d'un arbre de décision par l'algorithme CART. Il y a quatre étapes:
 
-La **fonction d'impureté** quantifie l'hétérogénéité des observations au sein d'un nœud par rapport à la variable cible (classe pour la classification, ou valeur continue pour la régression). Plus précisément, une mesure d'impureté est conçue pour croître avec la dispersion dans un nœud: plus un nœud est homogène, plus son impureté est faible. Un nœud est dit **pur** lorsque toutes les observations qu'il contient appartiennent à la même classe (classification) ou présentent des valeurs similaires voire identiques (régression). Le choix de la fonction d'impureté dépend du type de problème (voir ci-dessous).
+- Choisir une mesure d'impureté adaptée au problème;
+
+- Construire l'arbre de décision par un partitionnement séquentiel;
+
+- Élaguer l'arbre de décision;
+
+- Utiliser l'arbre pour prédire.
+
+
+### Définir une mesure d'impureté adaptée au problème
+
+La **mesure d'impureté** quantifie l'hétérogénéité des observations au sein d'un nœud par rapport à la variable cible (classe pour la classification, ou valeur continue pour la régression). Plus précisément, une mesure d'impureté est conçue pour croître avec la dispersion dans un nœud: plus un nœud est homogène, plus son impureté est faible. Un nœud est dit **pur** lorsque toutes les observations qu'il contient appartiennent à la même classe (classification) ou présentent des valeurs similaires voire identiques (régression). Le choix de la mesure d'impureté dépend du type de problème (voir ci-dessous).
 
 <!-- - **Classification**: L'**indice de Gini** ou l'**entropie** sont très souvent utilisées pour évaluer la dispersion des classes dans chaque nœud. 
 
 - **Régression**: La **somme des erreurs quadratiques** (SSE) est souvent utilisée pour mesurer la variance des valeurs cibles dans chaque nœud.  -->
 
-**La fonction d'impureté est un élément essentiel de la construction des arbres de décision.** En effet, c'est elle qui est utilisée pour comparer entre elles les règles de décision possibles. À chaque étape de la croissance de l'arbre (_tree growing_), l'algorithme sélectionne la règle de décision qui réduit le plus l'impureté, afin de définir des nœuds les plus homogènes possibles. Il est à noter que l'arbre final dépend de la fonction d'impureté utilisée: si pour un problème donné on recommence l'entraînement avec une autre fonction d'impureté, on obtient généralement un arbre différent (car les règles de décision retenues à chaque nœud ne sont plus les mêmes).
+**La mesure d'impureté est un élément essentiel de la construction des arbres de décision.** En effet, c'est elle qui est utilisée pour comparer entre elles les règles de décision possibles. À chaque étape de la croissance de l'arbre (_tree growing_), l'algorithme sélectionne la règle de décision qui réduit le plus l'impureté, afin de définir des nœuds les plus homogènes possibles. L'arbre final dépend donc de la mesure d'impureté utilisée: si pour un problème donné on construit un second arbre avec une autre mesure d'impureté, on obtient généralement un arbre différent du premier (car les règles de décision retenues à chaque nœud ne sont plus les mêmes).
 
 #### Mesures d'impureté pour les problèmes de classification
 
@@ -147,7 +156,7 @@ Bien que le taux d'erreur soit simple à comprendre, il est moins souvent utilis
 
 <!-- Dans un problème de classification où l'on souhaite classifier des observations parmi $K$ classes, une **mesure d'impureté** $I(t)$ est une fonction qui quantifie l'hétérogénéité des classes dans un nœud donnée. Les mesures d'impureté usuelles détaillées ci-dessous partagent les deux propriétés suivantes: -->
 
-Dans les problèmes de régression, l'objectif est de partitionner les données de manière à réduire au maximum la variabilité des valeurs au sein de chaque sous-région. Pour mesurer cette variabilité, la fonction d'impureté la plus couramment employée est la somme des erreurs quadratiques (SSE). Elle évalue l'impureté d'une région en quantifiant à quel point les valeurs de cette région s'écartent de la moyenne locale. Pour un nœud $t$, contenant $N$ observations avec des valeurs $y_i$, la SSE est donnée par:
+Dans les problèmes de régression, l'objectif est de partitionner les données de manière à réduire au maximum la variabilité des valeurs au sein de chaque sous-région. Pour mesurer cette variabilité, la mesure d'impureté la plus couramment employée est la somme des erreurs quadratiques (SSE). Elle évalue l'impureté d'une région en quantifiant à quel point les valeurs de cette région s'écartent de la moyenne locale. Pour un nœud $t$, contenant $N$ observations avec des valeurs $y_i$, la SSE est donnée par:
 
 $$
 \text{SSE}(t) = \sum_{i=1}^{N} (y_i - \hat{y})^2
@@ -155,10 +164,11 @@ $$
 
 où $\hat{y}$ est la moyenne des valeurs $y_i$ dans le nœud.
 
-Cette fonction d'impureté a des propriétés similaires à celles présentées pour la classification: si toutes les valeurs de $y_i$ dans un nœud sont proches de la moyenne $\hat{y}$, la SSE sera faible, indiquant une homogénéité élevée dans le nœud. Inversement, une SSE élevée indique une grande variabilité dans les valeurs, donc un nœud impur. Une limite de cette mesure d'impureté est qu'elle est particulièrement sensible aux écarts élevés entre les valeurs observées et la moyenne prédite, et donc aux valeurs extrêmes.
+Cette mesure d'impureté a des propriétés similaires à celles présentées pour la classification: si toutes les valeurs de $y_i$ dans un nœud sont proches de la moyenne $\hat{y}$, la SSE sera faible, indiquant une homogénéité élevée dans le nœud. Inversement, une SSE élevée indique une grande variabilité dans les valeurs, donc un nœud impur. Une limite de cette mesure d'impureté est qu'elle est particulièrement sensible aux écarts élevés entre les valeurs observées et la moyenne prédite, et donc aux valeurs extrêmes.
 
+### Construire l'arbre de décision par un partitionnement séquentiel
 
-### Identifier la partition maximisant la réduction de l'impureté
+#### Identifier la partition maximisant la réduction de l'impureté
 
 Une fois la mesure d'impureté définie, l'algorithme CART construit séquentiellement le partitionnement de l'espace des caractéristiques en comparant les règles de décision possibles. À chaque étape de la construction de l'arbre, l'algorithme construit des règles de décision candidates en parcourant toutes les valeurs de toutes les caractéristiques, calcule la réduction de l'impureté induite par chacune d'entre elles et sélectionne celle qui entraîne la réduction maximale. 
 
@@ -169,7 +179,7 @@ Prenons l'exemple d'une caractéristique continue, telle que la superficie d'une
 - Ce processus est répété pour différentes valeurs seuils afin de trouver la partition qui minimise le plus efficacement l’impureté au sein des sous-ensembles.
 
 
-### Réitérer le processus jusqu'à atteindre un critère d'arrêt
+#### Réitérer le processus jusqu'à atteindre un critère d'arrêt
 
 L'algorithme CART poursuit le partitionnement de l'espace des caractéristiques en appliquant de manière récursive les mêmes étapes: identification de la caractéristique et du seuil optimal pour chaque nœud, puis sélection du partitionnement binaire qui maximise la réduction de l'impureté. Ce processus est répété jusqu'à ce qu'un **critère d'arrêt** soit atteint, par exemple:
 
@@ -178,10 +188,12 @@ L'algorithme CART poursuit le partitionnement de l'espace des caractéristiques 
 - **Réduction minimale de l'impureté à chaque étape**
 
 
-### Elagage (_pruning_)
+### Élaguer l'arbre de décision
+
+L'élagage (_pruning_)
 
 
-### Prédire
+### Utiliser l'arbre pour prédire
 
 Une fois l'arbre construit, la prédiction pour une nouvelle observation s'effectue en suivant les branches de l'arbre, en partant du nœud racine jusqu'à un nœud terminal (ou feuille). À chaque nœud interne, une décision est prise en fonction des valeurs des caractéristiques de l'observation, ce qui détermine la direction à suivre vers l'un des sous-ensembles. Ce cheminement se poursuit jusqu'à ce que l'observation atteigne une feuille, où la prédiction finale est effectuée.
 
