@@ -1,8 +1,10 @@
 # La brique élémentaire: l'arbre de décision
 
-Les arbres de décision sont des outils puissants en apprentissage automatique, utilisés notamment pour des tâches de classification et de régression. Le principe de cet algorithme consiste à diviser l'espace des caractéristiques en sous-régions homogènes à l'aide de règles simples, puis de former pour chaque sous-ensemble une prédiction à partir des observations présentes dans cette sous-région. Malgré leur simplicité apparente, les arbres de décision sont capable de saisir des relations complexes et non linéaires entre les variables (ou _caractéristiques_) d'un jeu de données.
+Les arbres de décision désignent un éventail d'algorithmes de _machine learning_, utilisés notamment pour des tâches de classification et de régression. Ces algorithmes constituent l'élément de base des méthodes ensemblistes. Cette section a pour objectif de présenter en détail ce qu'est un arbre de décision, sa structure et la terminologie associée. 
 
 ## Le principe fondamental: partitionner pour prédire
+
+Le principe des arbres de décision consiste à __diviser l'espace des caractéristiques en sous-régions homogènes à l'aide de règles simples__, puis de former pour chaque sous-région une prédiction à partir des observations présentes dans cette sous-région. Malgré leur apparente simplicité, les arbres de décision sont puissants et capables de modéliser des interactions complexes et non linéaires entre les variables d'un jeu de données.
 
 Imaginez que vous souhaitiez prédire le prix d'une maison en fonction de sa superficie et de son nombre de pièces, à partir d'un ensemble de transactions pour lesquelles le prix est connu. L'espace des caractéristiques (superficie et nombre de pièces) est vaste, et les prix des maisons (la _réponse_ à prédire) sont très variables. L'idée centrale des arbres de décision est de diviser cet espace en zones plus petites, au sein desquelles les maisons ayant des surfaces et un nombre de pièces similaire ont des prix proches, et d'attribuer une prédiction identique à toutes les maisons situées dans la même zone.
 
