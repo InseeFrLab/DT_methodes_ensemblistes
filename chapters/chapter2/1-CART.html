@@ -283,11 +283,10 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#définir-une-mesure-dimpureté-adaptée-au-problème" id="toc-définir-une-mesure-dimpureté-adaptée-au-problème" class="nav-link" data-scroll-target="#définir-une-mesure-dimpureté-adaptée-au-problème"><span class="header-section-number">1.2.1</span> Définir une mesure d’impureté adaptée au problème</a></li>
   <li><a href="#construire-larbre-de-décision-par-un-partitionnement-séquentiel" id="toc-construire-larbre-de-décision-par-un-partitionnement-séquentiel" class="nav-link" data-scroll-target="#construire-larbre-de-décision-par-un-partitionnement-séquentiel"><span class="header-section-number">1.2.2</span> Construire l’arbre de décision par un partitionnement séquentiel</a></li>
-  <li><a href="#élaguer-larbre-de-décision" id="toc-élaguer-larbre-de-décision" class="nav-link" data-scroll-target="#élaguer-larbre-de-décision"><span class="header-section-number">1.2.3</span> Élaguer l’arbre de décision</a></li>
+  <li><a href="#contrôler-la-complexité-de-larbre" id="toc-contrôler-la-complexité-de-larbre" class="nav-link" data-scroll-target="#contrôler-la-complexité-de-larbre"><span class="header-section-number">1.2.3</span> Contrôler la complexité de l’arbre</a></li>
   <li><a href="#utiliser-larbre-pour-prédire" id="toc-utiliser-larbre-pour-prédire" class="nav-link" data-scroll-target="#utiliser-larbre-pour-prédire"><span class="header-section-number">1.2.4</span> Utiliser l’arbre pour prédire</a></li>
-  <li><a href="#critères-de-qualité-et-ajustements" id="toc-critères-de-qualité-et-ajustements" class="nav-link" data-scroll-target="#critères-de-qualité-et-ajustements"><span class="header-section-number">1.2.5</span> Critères de qualité et ajustements</a></li>
   </ul></li>
-  <li><a href="#avantages-et-limites-de-cette-approche" id="toc-avantages-et-limites-de-cette-approche" class="nav-link" data-scroll-target="#avantages-et-limites-de-cette-approche"><span class="header-section-number">1.3</span> Avantages et limites de cette approche</a>
+  <li><a href="#avantages-et-limites-des-arbres-de-décision" id="toc-avantages-et-limites-des-arbres-de-décision" class="nav-link" data-scroll-target="#avantages-et-limites-des-arbres-de-décision"><span class="header-section-number">1.3</span> Avantages et limites des arbres de décision</a>
   <ul class="collapse">
   <li><a href="#avantages" id="toc-avantages" class="nav-link" data-scroll-target="#avantages"><span class="header-section-number">1.3.1</span> Avantages</a></li>
   <li><a href="#limites" id="toc-limites" class="nav-link" data-scroll-target="#limites"><span class="header-section-number">1.3.2</span> Limites</a></li>
@@ -354,9 +353,10 @@ window.Quarto = {
 <p>Cet algorithme est appelé <strong>arbre de décision</strong> (<em>decision tree</em>) en raison provient de la structure arborescente en forme d’arbre inversé qui apparaît lorsqu’on en fait une représentation graphique. Plus généralement, les principaux éléments qui composent les arbres de décision sont désignés par des termes issus du champ lexical des arbres:</p>
 <ul>
 <li><p><strong>Nœud Racine (<em>Root Node</em>)</strong>: Le nœud-racine est le point de départ de l’arbre de décision, il est situé au sommet de l’arbre. Il contient l’ensemble des données d’entraînement avant tout partitionnement. À ce niveau, l’algorithme cherche la caractéristique la plus discriminante, c’est-à-dire celle qui permet de diviser les données en deux régions de manière à minimiser un certain critère d’hétérogénéité (comme l’indice de Gini pour la classification ou la variance pour la régression).</p></li>
-<li><p><strong>Nœuds Internes (<em>Internal Nodes</em>)</strong>: Les nœuds internes sont les points intermédiaires où l’algorithme CART applique des règles de décision pour diviser les données en sous-régions plus petites. Chaque nœud interne se définit par une règle de décision basée sur une variable et un seuil (par exemple, “La superficie de la maison est-elle supérieure à 100 m² ?”). À chaque étape, une seule caractéristique (la superficie) et un seul seuil (supérieur à 100) sont utilisés pour opérer au partitionnement des données.</p></li>
+<li><p><strong>Nœuds Internes (<em>Internal Nodes</em>)</strong>: Les nœuds internes sont les points intermédiaires où l’algorithme CART applique des règles de décision pour diviser les données en sous-régions plus petites. Chaque nœud interne se définit par une règle de décision basée sur une variable et un seuil (par exemple, “La superficie de la maison est-elle supérieure à 100 m² ?”). À chaque étape, une seule caractéristique (la superficie) et un seul seuil (supérieur à 100) sont utilisés pour opérer au partitionnement des données. Chaque nœud interne a la fois un <strong>nœud-parent</strong> (<em>parent node</em>) dont il constitue une sous-région et deux <strong>nœuds-enfants</strong> (<em>child nodes</em>) qui le partitionnent.</p></li>
 <li><p><strong>Branches (<em>Branches</em>)</strong>: Les branches sont les connexions entre les nœuds et représentent le chemin suivies par les données. Chaque branche correspond à une décision binaire, “Oui” ou “Non”, qui oriente les observations vers une nouvelle subdivision de l’espace des caractéristiques.</p></li>
 <li><p><strong>Nœuds Terminaux ou Feuilles (<em>Leaf Nodes</em>, <em>Terminal Nodes</em> ou <em>Leaves</em>)</strong>: Les nœuds terminaux, situés à l’extrémité des branches, sont les points où le processus de division s’arrête. Ils fournissent la prédiction finale. Dans un problème de classification, la prédiction d’une feuille est soit la classe majoritaire parmi les observations de la feuille (par exemple, “Oui” ou “Non”), soit une probabilité d’appartenir à chaque classe. Dans un problème de régression, la prédiction d’une feuille est une valeur numérique, souvent la moyenne des observations de la feuille.</p></li>
+<li><p><strong>Profondeur</strong> (<em>Depth</em>): La profondeur d’un arbre de décision correspond à la longueur du chemin le plus long entre le nœud racine et une feuille. Le nœud racine est situé par définition à la profondeur 0, et chaque niveau supplémentaire de l’arbre ajoute une unité à la profondeur. La profondeur totale de l’arbre est donc le nombre maximal de décisions (ou de nœuds internes) à traverser pour passer du nœud racine à une feuille.</p></li>
 </ul>
 <p><em>Figure illustrative</em>: Une représentation visuelle de la structure de l’arbre peut être utile ici pour illustrer les concepts de nœuds, branches et feuilles.</p>
 </section>
@@ -412,7 +412,7 @@ window.Quarto = {
 <p>L’<strong>indice de Gini</strong> mesure la probabilité qu’un individu sélectionné au hasard dans un nœud soit mal classé si on lui attribue une classe au hasard, en fonction de la distribution des classes dans ce nœud. Pour un nœud <span class="math inline">\(t\)</span> contenant <span class="math inline">\(K\)</span> classes, l’indice de Gini <span class="math inline">\(G(t)\)</span> est donné par</p>
 <p><span class="math display">\[ G(t) = 1 - \sum_{k=1}^{K} p_k^2 \]</span></p>
 <p>où <span class="math inline">\(p_k\)</span> est la proportion d’observations appartenant à la classe <span class="math inline">\(k\)</span> dans le nœud <span class="math inline">\(t\)</span>.</p>
-<p><strong>Critère de choix</strong>: L’indice de Gini est très souvent utilisé parce qu’il est simple à calculer et capture bien l’homogénéité des classes au sein d’un nœud. Il privilégie les partitions où une classe domine fortement dans chaque sous-ensemble.</p>
+<p><strong>Critère de choix</strong>: L’indice de Gini est très souvent utilisé parce qu’il est simple à calculer et capture bien l’homogénéité des classes au sein d’un nœud. Il privilégie les partitions où une classe domine fortement dans chaque sous-région.</p>
 <p><strong>2. L’entropie (ou entropie de Shannon)</strong></p>
 <p>L’<strong>entropie</strong> est une autre mesure de l’impureté utilisée dans les arbres de décision. Elle mesure la quantité d’incertitude ou de désordre dans un nœud, en s’appuyant sur la théorie de l’information.</p>
 <p>Pour un nœud <span class="math inline">\(t\)</span> contenant <span class="math inline">\(K\)</span> classes, l’entropie <span class="math inline">\(E(t)\)</span> est définie par:</p>
@@ -453,44 +453,26 @@ E(t) = - \sum_{k=1}^{K} p_k \log(p_k)
 </section>
 <section id="construire-larbre-de-décision-par-un-partitionnement-séquentiel" class="level3" data-number="1.2.2">
 <h3 data-number="1.2.2" class="anchored" data-anchor-id="construire-larbre-de-décision-par-un-partitionnement-séquentiel"><span class="header-section-number">1.2.2</span> Construire l’arbre de décision par un partitionnement séquentiel</h3>
-<section id="identifier-la-partition-maximisant-la-réduction-de-limpureté" class="level4" data-number="1.2.2.1">
-<h4 data-number="1.2.2.1" class="anchored" data-anchor-id="identifier-la-partition-maximisant-la-réduction-de-limpureté"><span class="header-section-number">1.2.2.1</span> Identifier la partition maximisant la réduction de l’impureté</h4>
-<p>Une fois la mesure d’impureté définie, l’algorithme CART construit séquentiellement le partitionnement de l’espace des caractéristiques en comparant les règles de décision possibles. À chaque étape de la construction de l’arbre, l’algorithme construit des règles de décision candidates en parcourant toutes les valeurs de toutes les caractéristiques, calcule la réduction de l’impureté induite par chacune d’entre elles et sélectionne celle qui entraîne la réduction maximale.</p>
-<p>Prenons l’exemple d’une caractéristique continue, telle que la superficie d’une maison:</p>
+<p>Une fois la mesure d’impureté définie, l’algorithme CART construit séquentiellement le partitionnement de l’espace des caractéristiques en comparant les règles de décision possibles. La première étape de partitionnement part du nœud-racine, qui comprend l’ensemble des données d’entraînement. L’algorithme construit toutes les règles de décision candidates en parcourant toutes les valeurs de toutes les caractéristiques, les évalue en calculant la réduction de l’impureté induite par chacune d’entre elles et sélectionne la règle de décision (caractéristique et seuil) qui entraîne la réduction d’impureté maximale. Par exemple, l’algorithme évalue la règle candidate “Superficie &gt; 100 m²” en calculant la somme des impuretés au sein des deux sous-régions générées par cette règle (“Oui” et “Non”). L’algorithme évalue ensuite la règle candidate “Superficie &gt; 101 m²” de la même façon, et ainsi de suite pour toutes les valeurs de superficie, puis évalue les règles candidates construites avec le nombre de pièces, et enfin sélectionne la meilleure règle. La deuxième étape du partitionnement reproduit le même processus, cette fois au niveau d’un deux nœuds-enfants, et ainsi de suite.</p>
+<p><em>Illustration par une figure</em></p>
+<p>L’algorithme CART poursuit ce partitionnement récursif jusqu’à ce qu’un <strong>critère d’arrêt</strong> prédéfini soit atteint. Dans la plupart des implémentations de CART, les valeurs par défaut de ces critères d’arrêt sont telles que que l’algorithme construit un arbre maximal: le plus profond possible, avec une observation par feuille terminale.</p>
+</section>
+<section id="contrôler-la-complexité-de-larbre" class="level3" data-number="1.2.3">
+<h3 data-number="1.2.3" class="anchored" data-anchor-id="contrôler-la-complexité-de-larbre"><span class="header-section-number">1.2.3</span> Contrôler la complexité de l’arbre</h3>
+<p>Il est généralement préférable d’éviter les arbres trop complexes car ils sont souvent affectés par un problème de surajustement. Deux approches permettent de contrôler la complexité d’un arbre de décision:</p>
 <ul>
-<li><p>Si l’algorithme teste la règle “Superficie &gt; 100 m²”, il calcule la fonction de perte pour les deux sous-ensembles générés par cette règle (“Oui” et “Non”).</p></li>
-<li><p>Ce processus est répété pour différentes valeurs seuils afin de trouver la partition qui minimise le plus efficacement l’impureté au sein des sous-ensembles.</p></li>
+<li><p>Approche <em>a priori</em>: la complexité de l’arbre peut être plafonnée pendant sa construction à l’aide d’hyperparamètres telles que la profondeur maximale de l’arbre, le nombre minimal d’observations par feuille ou la réduction minimale de l’impureté nécessaire à chaque étape pour ajouter un noeud interne.</p></li>
+<li><p>Approche <em>a posteriori</em>: l’autre approche consiste à construire un arbre maximal puis à procéder à un <strong>élagage</strong> (<em>tree pruning</em>) qui vise à simplifier l’arbre et à augmenter sa capacité à généraliser sur de nouvelles données en supprimant progressivement les branches les moins utiles. Il existe différents critères d’élagage, parmi lesquels le chemin de coût-complexité <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p></li>
 </ul>
-</section>
-<section id="réitérer-le-processus-jusquà-atteindre-un-critère-darrêt" class="level4" data-number="1.2.2.2">
-<h4 data-number="1.2.2.2" class="anchored" data-anchor-id="réitérer-le-processus-jusquà-atteindre-un-critère-darrêt"><span class="header-section-number">1.2.2.2</span> Réitérer le processus jusqu’à atteindre un critère d’arrêt</h4>
-<p>L’algorithme CART poursuit le partitionnement de l’espace des caractéristiques en appliquant de manière récursive les mêmes étapes: identification de la caractéristique et du seuil optimal pour chaque nœud, puis sélection du partitionnement binaire qui maximise la réduction de l’impureté. Ce processus est répété jusqu’à ce qu’un <strong>critère d’arrêt</strong> soit atteint, par exemple:</p>
-<ul>
-<li><strong>Profondeur maximale de l’arbre</strong>: Limiter le nombre de divisions successives pour éviter un arbre trop complexe.</li>
-<li><strong>Nombre minimum d’observations par feuille</strong>: Empêcher la création de feuilles contenant très peu d’observations, ce qui réduirait la capacité du modèle à généraliser.</li>
-<li><strong>Réduction minimale de l’impureté à chaque étape</strong></li>
-</ul>
-</section>
-</section>
-<section id="élaguer-larbre-de-décision" class="level3" data-number="1.2.3">
-<h3 data-number="1.2.3" class="anchored" data-anchor-id="élaguer-larbre-de-décision"><span class="header-section-number">1.2.3</span> Élaguer l’arbre de décision</h3>
-<p>L’élagage (<em>pruning</em>)</p>
 </section>
 <section id="utiliser-larbre-pour-prédire" class="level3" data-number="1.2.4">
 <h3 data-number="1.2.4" class="anchored" data-anchor-id="utiliser-larbre-pour-prédire"><span class="header-section-number">1.2.4</span> Utiliser l’arbre pour prédire</h3>
-<p>Une fois l’arbre construit, la prédiction pour une nouvelle observation s’effectue en suivant les branches de l’arbre, en partant du nœud racine jusqu’à un nœud terminal (ou feuille). À chaque nœud interne, une décision est prise en fonction des valeurs des caractéristiques de l’observation, ce qui détermine la direction à suivre vers l’un des sous-ensembles. Ce cheminement se poursuit jusqu’à ce que l’observation atteigne une feuille, où la prédiction finale est effectuée.</p>
-<ul>
-<li>En <strong>classification</strong>, la classe attribuée est celle majoritaire dans la feuille atteinte.</li>
-<li>En <strong>régression</strong>, la valeur prédite est généralement la moyenne des valeurs cibles des observations dans la feuille.</li>
-</ul>
-</section>
-<section id="critères-de-qualité-et-ajustements" class="level3" data-number="1.2.5">
-<h3 data-number="1.2.5" class="anchored" data-anchor-id="critères-de-qualité-et-ajustements"><span class="header-section-number">1.2.5</span> Critères de qualité et ajustements</h3>
-<p>Pour améliorer la performance de l’arbre, on peut ajuster les hyperparamètres tels que la profondeur maximale ou le nombre minimum d’observations dans une feuille. De plus, des techniques comme la <strong>prédiction avec arbres multiples</strong> (bagging, forêts aléatoires) permettent de surmonter les limites des arbres individuels, souvent sujets au surapprentissage.</p>
+<p>Une fois l’arbre construit, la prédiction pour une nouvelle observation s’effectue en suivant les branches de l’arbre depuis le nœud racine jusqu’à un nœud terminal (ou feuille). À chaque nœud interne, une décision est prise en fonction des valeurs des caractéristiques de l’observation, ce qui détermine la direction à suivre vers l’une des sous-régions. Ce cheminement se poursuit jusqu’à ce que l’observation atteigne une feuille, où la prédiction finale sera simplement la valeur associée à cette feuille.</p>
+<p><em>Illustration par une figure (flèches rouges)</em></p>
 </section>
 </section>
-<section id="avantages-et-limites-de-cette-approche" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="avantages-et-limites-de-cette-approche"><span class="header-section-number">1.3</span> Avantages et limites de cette approche</h2>
+<section id="avantages-et-limites-des-arbres-de-décision" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="avantages-et-limites-des-arbres-de-décision"><span class="header-section-number">1.3</span> Avantages et limites des arbres de décision</h2>
 <section id="avantages" class="level3" data-number="1.3.1">
 <h3 data-number="1.3.1" class="anchored" data-anchor-id="avantages"><span class="header-section-number">1.3.1</span> Avantages</h3>
 <ul>
@@ -514,6 +496,7 @@ E(t) = - \sum_{k=1}^{K} p_k \log(p_k)
 </section>
 </section>
 
+
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-breiman1984cart" class="csl-entry" role="listitem">
 Breiman, Leo, Jerome Friedman, Richard Olshen, and Charles Stone. 1984. <span>“Cart.”</span> <em>Classification and Regression Trees</em>.
@@ -524,7 +507,12 @@ Friedman, Jerome H. 1991. <span>“Multivariate Adaptive Regression Splines.”<
 <div id="ref-quinlan2014c4" class="csl-entry" role="listitem">
 Quinlan, J Ross. 2014. <em>C4. 5: Programs for Machine Learning</em>. Elsevier.
 </div>
-</div></section></div></main> <!-- /main -->
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Les approches d’élagage sont détaillées notamment dans ce <a href="https://eric.univ-lyon2.fr/ricco/cours/slides/cart_post_elagage_arbres_decision.pdf">cours</a> et dans la <a href="https://scikit-learn.org/stable/auto_examples/tree/plot_cost_complexity_pruning.html">documentation de <code>scikit-learn</code></a>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
