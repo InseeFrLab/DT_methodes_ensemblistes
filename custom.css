@@ -1,0 +1,8 @@
+/*-- scss:defaults --*/
+
+/*-- scss:rules --*/
+.figcaption{
+   text-align: center;
+   text-align-last: center;
+   margin: auto;
+}

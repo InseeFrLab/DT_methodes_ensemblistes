@@ -74,8 +74,10 @@ website:
         text: "NMFS Open Science"
 
 format:
-  html: 
-    theme: litera
+  html:
+    css: custom.css
+    theme: 
+      - litera
     code-copy: true
     code-overflow: wrap
     toc: true
