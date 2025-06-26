@@ -61,12 +61,14 @@ Supposons que nous souhaitions prédire le prix d'une maison en fonction de sa s
 
 Cet arbre utilise des règles simples pour diviser l'espace des caractéristiques (superficie et nombre de pièces) en sous-groupes homogènes et fournir une prédiction (estimer le prix d'une maison).
 
+__Parler des interactions entre variables__
+
 _Figure illustrative_
 
 
 ## La construction d'un arbre de décision par l'algorithme CART {#sec-construire}
 
-Depuis les années 1980, de multiples algorithmes ont été proposés pour construire des arbres de décision, notamment CART (@breiman1984cart), C4.5 (@quinlan2014c4) et MARS (@friedman1991multivariate). La présente section présente la méthode de construction et l'utilisation d'un arbre de décision par l'algorithme CART. Il y a quatre étapes:
+Depuis les années 1980, de multiples algorithmes ont été proposés pour construire des arbres de décision, notamment CART (@breiman1984cart), C4.5 (@quinlan2014c4) et MARS (@friedman1991multivariate). La présente section présente la méthode de construction et l'utilisation d'un arbre de décision par l'algorithme CART. Cette méthode comprend quatre étapes:
 
 - Choisir une mesure d'impureté adaptée au problème;
 
@@ -167,7 +169,7 @@ Cette mesure d'impureté a des propriétés similaires à celles présentées po
 
 ### Construire l'arbre de décision par un partitionnement séquentiel
 
-Une fois la mesure d'impureté définie, l'algorithme CART construit séquentiellement le partitionnement de l'espace des caractéristiques en comparant les règles de décision possibles. La première étape de partitionnement part du nœud-racine, qui comprend l'ensemble des données d'entraînement. L'algorithme construit toutes les règles de décision candidates en parcourant toutes les valeurs de toutes les caractéristiques, les évalue en calculant la réduction de l'impureté induite par chacune d'entre elles et sélectionne la règle de décision (caractéristique et seuil) qui entraîne la réduction d'impureté maximale. Par exemple,  l'algorithme évalue la règle candidate "Superficie > 100 m²" en calculant la somme des impuretés au sein des deux sous-régions générées par cette règle ("Oui" et "Non"). L'algorithme évalue ensuite la règle candidate "Superficie > 101 m²" de la même façon, et ainsi de suite pour toutes les valeurs de superficie, puis évalue les règles candidates construites avec le nombre de pièces, et enfin sélectionne la meilleure règle. La deuxième étape du partitionnement reproduit le même processus, cette fois au niveau d'un deux nœuds-enfants, et ainsi de suite. 
+Une fois la mesure d'impureté définie, l'algorithme CART construit séquentiellement le partitionnement de l'espace des caractéristiques en comparant les règles de décision possibles. La première étape de partitionnement part du nœud-racine, qui comprend l'ensemble des données d'entraînement. L'algorithme construit toutes les règles de décision candidates en parcourant toutes les valeurs de toutes les caractéristiques, les évalue en calculant la réduction de l'impureté induite par chacune d'entre elles et sélectionne la règle de décision (caractéristique et seuil) qui entraîne la réduction d'impureté maximale. Par exemple, l'algorithme évalue la règle candidate "Superficie > 100 m²" en calculant la somme des impuretés au sein des deux sous-régions générées par cette règle ("Oui" et "Non"), puis calcule la différence entre cette somme et l'impureté du noeud-racine. L'algorithme évalue ensuite la règle candidate "Superficie > 101 m²" de la même façon, et ainsi de suite pour toutes les valeurs de superficie, puis évalue les règles candidates construites avec le nombre de pièces, et enfin sélectionne la meilleure règle. La deuxième étape du partitionnement reproduit le même processus, cette fois au niveau d'un deux nœuds-enfants, et ainsi de suite. 
 
 _Illustration par une figure_
 
@@ -179,7 +181,7 @@ L'algorithme CART poursuit ce partitionnement récursif jusqu'à ce qu'un **crit
 
 Il est généralement préférable d'éviter les arbres trop complexes car ils sont souvent affectés par un problème de surajustement. Deux approches permettent de contrôler la complexité d'un arbre de décision:
 
-- Approche _a priori_: la complexité de l'arbre peut être plafonnée pendant sa construction à l'aide d'hyperparamètres telles que la profondeur maximale de l'arbre, le nombre minimal d'observations par feuille ou la réduction minimale de l'impureté nécessaire à chaque étape pour ajouter un noeud interne.
+- Approche _a priori_: la complexité de l'arbre peut être plafonnée pendant sa construction à l'aide d'hyperparamètres telles que la profondeur maximale de l'arbre, le nombre minimal d'observations par feuille ou la réduction minimale de l'impureté nécessaire à chaque étape pour ajouter un noeud interne. Cette approche est simple à mettre en oeuvre, mais peut aboutir à des arbres trop simples et peu prédictifs si les hyperparamètres sont mal choisis.
 
 - Approche _a posteriori_: l'autre approche consiste à construire un arbre maximal puis à procéder à un __élagage__ (_tree pruning_) qui vise à simplifier l'arbre et à augmenter sa capacité à généraliser sur de nouvelles données en supprimant progressivement les branches les moins utiles. Il existe différents critères d'élagage, parmi lesquels le chemin de coût-complexité ^[Les approches d'élagage sont détaillées notamment dans ce [cours](https://eric.univ-lyon2.fr/ricco/cours/slides/cart_post_elagage_arbres_decision.pdf) et dans la [documentation de `scikit-learn`](https://scikit-learn.org/stable/auto_examples/tree/plot_cost_complexity_pruning.html).].
 
@@ -195,7 +197,7 @@ _Illustration par une figure (flèches rouges)_
 
 ### Avantages
 
-- **Interprétabilité**: Les arbres de décision sont faciles à comprendre et à visualiser.
+- **Interprétabilité**: Les arbres de décision sont faciles à comprendre et à visualiser (à condition qu'ils ne soient pas trop profonds).
 - **Simplicité**: Pas besoin de transformations complexes des données.
 - **Flexibilité**: Ils peuvent gérer des caractéristiques numériques et catégorielles, ainsi que les valeurs manquantes.
 - **Gestion des interactions**: Modèles non paramétriques, pas d'hypothèses sur les lois par les variables. Ils capturent naturellement les interactions entre les caractéristiques.
@@ -203,8 +205,8 @@ _Illustration par une figure (flèches rouges)_
 ### Limites
 
 - **Surapprentissage**: Les arbres trop profonds peuvent surapprendre les données d'entraînement.
-- **Optimisation locale**: L'approche gloutonne peut conduire à des solutions sous-optimales globalement (optimum local).
-- **Stabilité**: De petits changements dans les données peuvent entraîner des changements significatifs dans la structure de l'arbre (manque de robustesse).
+- **Optimisation locale**: L'approche gloutonne peut conduire à des solutions globalement sous-optimales (optimum local).
+- **Instabilité**: De petits changements dans les données peuvent entraîner des changements significatifs dans la structure de l'arbre (manque de robustesse).
 
 
 
