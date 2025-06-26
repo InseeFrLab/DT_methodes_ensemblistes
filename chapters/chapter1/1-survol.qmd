@@ -127,9 +127,9 @@ Les forêts aléatoires (_random forests_, @breiman2001random) sont une variante
 Pour atteindre ce second objectif, la forêt aléatoire introduit une nouvelle source de randomisation: la **sélection aléatoire de variables**. Lors de la construction de chaque arbre, au lieu d'utiliser toutes les variables disponibles pour déterminer la meilleure séparation à chaque nœud, un sous-ensemble aléatoire de variables est sélectionné. En limitant la quantité d'information à laquelle chaque arbre a accès au moment de chaque nouvelle division, cette étape supplémentaire contraint mécaniquement les arbres à être plus diversifiés (car deux arbres ne pourront plus nécessairement choisir les mêmes variables pour les mêmes séparations). Cela réduit significativement la corrélation entre les arbres, améliorant ainsi l'efficacité de l'agrégation. L'ensemble des prédictions devient ainsi plus précis et moins sujet aux fluctuations aléatoires.
 
 
-![Représentation schématique d'un algorithme de forêt aléatoire](/figures/rf.svg){#fig-rf}
+![Représentation schématique d'un algorithme de forêt aléatoire](/figures/rf.svg){#fig-rf-survol}
 
-La figure @fig-rf propose une représentation schématique d'une forêt aléatoire. La logique d'ensemble reste la même que celle du _bagging_. L'échantillonnage _bootstrap_ est inchangé, mais l'étape de construction de chaque arbre est modifiée pour n'utiliser, à chaque nouvelle division, qu'un sous-ensemble aléatoire de variables. L'agrégation des prédictions se fait ensuite de la même manière que pour le _bagging_.
+La figure @fig-rf-survol propose une représentation schématique d'une forêt aléatoire. La logique d'ensemble reste la même que celle du _bagging_. L'échantillonnage _bootstrap_ est inchangé, mais l'étape de construction de chaque arbre est modifiée pour n'utiliser, à chaque nouvelle division, qu'un sous-ensemble aléatoire de variables. L'agrégation des prédictions se fait ensuite de la même manière que pour le _bagging_.
 
 
 <!--Cette restriction de la liste des variables considérées permet de réduire l'utilisation des variables les plus prédictives et de mieux mobiliser l'information disponible dans les variables peu corrélées avec $y$.-->
@@ -154,9 +154,9 @@ Le surapprentissage (_overfitting_) est un phénomène fréquent en _machine lea
 
 Contrairement aux forêts aléatoires qui combinent des arbres de décision complexes et indépendants, le _gradient boosting_ construit un ensemble d'arbres plus simples et entraînés de manière séquentielle. Chaque arbre vise à corriger les erreurs commises par les arbres précédents, améliorant progressivement la précision du modèle global. Cette approche repose sur des fondements théoriques très différents de ceux du _bagging_.
 
-La logique du *gradient boosting* est illustrée par la figure @fig-gb:
+La logique du *gradient boosting* est illustrée par la figure @fig-gb-survol:
 
-![Représentation schématique d'un algorithme de _gradient boosting_](/figures/gb.svg){#fig-gb}
+![Représentation schématique d'un algorithme de _gradient boosting_](/figures/gb.svg){#fig-gb-survol}
 
 -   Un premier modèle simple et peu performant est entraîné sur les données.
 -   Un deuxième modèle est entraîné de façon à corriger les erreurs du premier modèle (par exemple en pondérant davantage les observations mal prédites);
