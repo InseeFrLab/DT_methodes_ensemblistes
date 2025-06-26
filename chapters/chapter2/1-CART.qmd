@@ -31,7 +31,7 @@ Pour surmonter ces difficultés, les algorithmes d'arbres de décision, et notam
 
 ### Terminologie et structure d'un arbre de décision
 
-Cet algorithme est appelé __arbre de décision__ (_decision tree_) en raison provient de la structure arborescente en forme d'arbre inversé qui apparaît lorsqu'on en fait une représentation graphique. Plus généralement, les principaux éléments qui composent les arbres de décision sont désignés par des termes issus du champ lexical des arbres:
+Cet algorithme est appelé __arbre de décision__ (_decision tree_) en raison provient de la structure arborescente en forme d'arbre inversé qui apparaît lorsqu'on en fait une représentation graphique (voir figure @fig-decision-tree-description). Plus généralement, les principaux éléments qui composent les arbres de décision sont désignés par des termes issus du champ lexical des arbres:
 
 - **Nœud Racine (_Root Node_)**: Le nœud-racine est le point de départ de l'arbre de décision, il est situé au sommet de l'arbre. Il contient l'ensemble des données d'entraînement avant tout partitionnement. À ce niveau, l'algorithme cherche la caractéristique la plus discriminante, c'est-à-dire celle qui permet de diviser les données en deux régions de manière à minimiser un certain critère d'hétérogénéité (comme l'indice de Gini pour la classification ou la variance pour la régression).
 
@@ -41,9 +41,9 @@ Cet algorithme est appelé __arbre de décision__ (_decision tree_) en raison pr
   
 - **Nœuds Terminaux ou Feuilles (_Leaf Nodes_,  _Terminal Nodes_ ou _Leaves_)**: Les nœuds terminaux, situés à l'extrémité des branches, sont les points où le processus de division s'arrête. Ils fournissent la prédiction finale. Dans un problème de classification, la prédiction d'une feuille est soit la classe majoritaire parmi les observations de la feuille (par exemple, "Oui" ou "Non"), soit une probabilité d'appartenir à chaque classe. Dans un problème de régression, la prédiction d'une feuille est une valeur numérique, souvent la moyenne des observations de la feuille.
 
-- **Profondeur** (_Depth_): La profondeur d'un arbre de décision correspond à la longueur du chemin le plus long entre le nœud racine et une feuille. Le nœud racine est situé par définition à la profondeur 0, et chaque niveau supplémentaire de l'arbre ajoute une unité à la profondeur. La profondeur totale de l'arbre est donc le nombre maximal de décisions (ou de nœuds internes) à traverser pour passer du nœud racine à une feuille.
+- **Profondeur** (_Depth_): La profondeur d'un arbre de décision correspond à la longueur du chemin le plus long entre le nœud-racine et une feuille. Le nœud-racine est situé par définition à la profondeur 0, et chaque niveau supplémentaire de l'arbre ajoute une unité à la profondeur. La profondeur totale de l'arbre est donc le nombre maximal de décisions (ou de nœuds internes) à traverser pour passer du nœud-racine à une feuille.
     
-_Figure illustrative_: Une représentation visuelle de la structure de l'arbre peut être utile ici pour illustrer les concepts de nœuds, branches et feuilles.
+![Structure d'un arbre de décision](/figures/decision_tree_description.svg){#fig-decision-tree-description width=90%}
 
 ### Illustration
 
@@ -62,8 +62,6 @@ Supposons que nous souhaitions prédire le prix d'une maison en fonction de sa s
 Cet arbre utilise des règles simples pour diviser l'espace des caractéristiques (superficie et nombre de pièces) en sous-groupes homogènes et fournir une prédiction (estimer le prix d'une maison).
 
 __Parler des interactions entre variables__
-
-![Structure d'un arbre de décision](../../figures/decision_tree_description.svg){width=90%}
 
 
 ## La construction d'un arbre de décision par l'algorithme CART {#sec-construire}
@@ -165,9 +163,9 @@ Cette mesure d'impureté a des propriétés similaires à celles présentées po
 
 ### Construire l'arbre de décision par un partitionnement séquentiel
 
-Une fois la mesure d'impureté définie, l'algorithme CART construit séquentiellement le partitionnement de l'espace des caractéristiques en comparant les règles de décision possibles. La première étape de partitionnement part du nœud-racine, qui comprend l'ensemble des données d'entraînement. L'algorithme construit toutes les règles de décision candidates en parcourant toutes les valeurs de toutes les caractéristiques, les évalue en calculant la réduction de l'impureté induite par chacune d'entre elles et sélectionne la règle de décision (caractéristique et seuil) qui entraîne la réduction d'impureté maximale. Par exemple, l'algorithme évalue la règle candidate "Superficie > 100 m²" en calculant la somme des impuretés au sein des deux sous-régions générées par cette règle ("Oui" et "Non"), puis calcule la différence entre cette somme et l'impureté du noeud-racine. L'algorithme évalue ensuite la règle candidate "Superficie > 101 m²" de la même façon, et ainsi de suite pour toutes les valeurs de superficie, puis évalue les règles candidates construites avec le nombre de pièces, et enfin sélectionne la meilleure règle. La deuxième étape du partitionnement reproduit le même processus, cette fois au niveau d'un deux nœuds-enfants, et ainsi de suite. 
+Une fois la mesure d'impureté définie, l'algorithme CART construit séquentiellement le partitionnement de l'espace des caractéristiques en comparant les règles de décision possibles (voir figure @fig-decision-tree-construction). La première étape de partitionnement part du nœud-racine, qui comprend l'ensemble des données d'entraînement. L'algorithme construit toutes les règles de décision candidates en parcourant toutes les valeurs de toutes les caractéristiques, les évalue en calculant la réduction de l'impureté induite par chacune d'entre elles et sélectionne la règle de décision (caractéristique et seuil) qui entraîne la réduction d'impureté maximale. Par exemple, l'algorithme évalue la règle candidate "Superficie > 100 m²" en calculant la somme des impuretés au sein des deux sous-régions générées par cette règle ("Oui" et "Non"), puis calcule la différence entre cette somme et l'impureté du noeud-racine. L'algorithme évalue ensuite la règle candidate "Superficie > 101 m²" de la même façon, et ainsi de suite pour toutes les valeurs de superficie, puis évalue les règles candidates construites avec le nombre de pièces, et enfin sélectionne la meilleure règle. La deuxième étape du partitionnement reproduit le même processus, cette fois au niveau d'un des deux nœuds-enfants, et ainsi de suite. 
 
-![Construction d'un arbre de décision](../../figures/decision_tree_construction.svg){width=90%}
+![Construction d'un arbre de décision](/figures/decision_tree_construction.svg){#fig-decision-tree-construction width=90%}
 
 
 L'algorithme CART poursuit ce partitionnement récursif jusqu'à ce qu'un **critère d'arrêt** prédéfini soit atteint. Dans la plupart des implémentations de CART, les valeurs par défaut de ces critères d'arrêt sont telles que que l'algorithme construit un arbre maximal: le plus profond possible, avec une observation par feuille terminale.
@@ -183,10 +181,10 @@ Il est généralement préférable d'éviter les arbres trop complexes car ils s
 
 ### Utiliser l'arbre pour prédire
 
-Une fois l'arbre construit, la prédiction pour une nouvelle observation s'effectue en suivant les branches de l'arbre depuis le nœud racine jusqu'à un nœud terminal (ou feuille), comme l'illustre la figure ci-dessous. À chaque nœud interne, une décision est prise en fonction des valeurs des caractéristiques de l'observation, ce qui détermine la direction à suivre vers l'une des sous-régions. Ce cheminement se poursuit jusqu'à ce que l'observation atteigne une feuille, où la prédiction finale sera simplement la valeur associée à cette feuille.
+Une fois l'arbre construit, la prédiction pour une nouvelle observation s'effectue en suivant les branches de l'arbre depuis le nœud racine jusqu'à un nœud terminal (ou feuille), comme l'illustre la figure @#fig-decision-tree-prediction. À chaque nœud interne, une décision est prise en fonction des valeurs des caractéristiques de l'observation, ce qui détermine la direction à suivre vers l'une des sous-régions. Ce cheminement se poursuit jusqu'à ce que l'observation atteigne une feuille, où la prédiction finale sera simplement la valeur associée à cette feuille.
 
 
-![Prédire avec un arbre de décision](../../figures/decision_tree_prediction.svg){width=500}
+![Prédire avec un arbre de décision](/figures/decision_tree_prediction.svg){#fig-decision-tree-prediction width=70%}
 
 ## Avantages et limites des arbres de décision
 
