@@ -202,7 +202,7 @@ k(w_j) = \sum_{i \in I_j} \bigl(g_i\,w_j + \tfrac12\,h_i\,w_j^2\bigr) + \tfrac12
 $$
 
 
-Pour un arbre de structure donnée, la valeur optimale $w_j^{\ast}$ de la feuille $j$, c'est-à-dire la valeur qui minimise la contribution de la feuille à la fonction de perte globale se calcule facilement (en résolvant pour chaque feuille $j$, $\frac{\partial k}{\partial w_j} = 0$):
+Pour un arbre de structure donnée, la valeur optimale $w_j^{\ast}$ de la feuille $j$, c'est-à-dire la valeur qui minimise la contribution de la feuille à la fonction de perte globale se calcule facilement (en résolvant pour chaque feuille $j$ la condition du premier ordre $\frac{\partial k}{\partial w_j} = 0$):
 
 $$ 
 w_j^{\ast} = -\frac{\sum_{i \in I_j} g_i}{\sum_{i \in I_j} h_i + \lambda} 
