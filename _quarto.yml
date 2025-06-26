@@ -7,7 +7,6 @@ project:
   render:
     - index.qmd
     - chapters/chapter1/1-survol.qmd
-    - chapters/chapter1/2-comparaison_GB_RF.qmd
     - chapters/chapter2/1-CART.qmd
     - chapters/chapter2/2-bagging.qmd
     - chapters/chapter2/3-random_forest.qmd
