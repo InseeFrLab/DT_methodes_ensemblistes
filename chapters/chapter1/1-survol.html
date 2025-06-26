@@ -49,7 +49,7 @@ div.csl-indent {
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
-<link href="../../chapters/chapter1/2-comparaison_GB_RF.html" rel="next">
+<link href="../../chapters/chapter2/1-CART.html" rel="next">
 <link href="../../index.html" rel="prev">
 <link href="../../images/favicon.ico" rel="icon">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
@@ -167,27 +167,8 @@ window.Quarto = {
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a href="../../chapters/chapter1/1-survol.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Survol des méthodes ensemblistes</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../chapters/chapter1/1-survol.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Aperçu des méthodes ensemblistes</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../chapters/chapter1/2-comparaison_GB_RF.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Comparaison entre forêts aléatoires et <em>gradient boosting</em></span></a>
-  </div>
-</li>
-      </ul>
+      <span class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Survol des méthodes ensemblistes</span></span>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
@@ -278,6 +259,10 @@ window.Quarto = {
   <li><a href="#sec-cart-intuition" id="toc-sec-cart-intuition" class="nav-link" data-scroll-target="#sec-cart-intuition"><span class="header-section-number">1.3.1</span> Le modèle de base: l’arbre de classification et de régression</a></li>
   <li><a href="#sec-rf-intuition" id="toc-sec-rf-intuition" class="nav-link" data-scroll-target="#sec-rf-intuition"><span class="header-section-number">1.3.2</span> Le <em>bagging</em> (Bootstrap Aggregating) et les forêts aléatoires</a></li>
   <li><a href="#sec-gb-intuition" id="toc-sec-gb-intuition" class="nav-link" data-scroll-target="#sec-gb-intuition"><span class="header-section-number">1.3.3</span> Le <em>gradient boosting</em></a></li>
+  </ul></li>
+  <li><a href="#comparaison-entre-forêts-aléatoires-et-gradient-boosting" id="toc-comparaison-entre-forêts-aléatoires-et-gradient-boosting" class="nav-link" data-scroll-target="#comparaison-entre-forêts-aléatoires-et-gradient-boosting"><span class="header-section-number">1.4</span> Comparaison entre forêts aléatoires et <em>gradient boosting</em></a>
+  <ul class="collapse">
+  <li><a href="#quelle-approche-choisir" id="toc-quelle-approche-choisir" class="nav-link" data-scroll-target="#quelle-approche-choisir"><span class="header-section-number">1.4.1</span> Quelle approche choisir?</a></li>
   </ul></li>
   </ul></li>
   </ul>
@@ -459,6 +444,21 @@ Figure&nbsp;3: Représentation schématique d’un algorithme de <em>gradient bo
 <li>Tous ces modèles sont finalement combinés (souvent par une somme pondérée) pour obtenir un modèle complexe et performant.</li>
 </ul>
 <p>Le <em>gradient boosting</em> offre des performances élevées mais exige une attention particulière portée sur la configuration des hyperparamètres et sur la prévention du surapprentissage. En particulier, les hyperparamètres sont nombreux et, contrairement aux forêts aléatoires, nécessitent un ajustement minutieux pour obtenir des résultats optimaux. Une mauvaise configuration peut conduire à des performances médiocres ou à un surapprentissage. L’utilisation du <em>gradient boosting</em> nécessite donc une bonne connaissance du fonctionnement des algorithmes. En outre, les algorithmes de <em>gradient boosting</em> peuvent être sensibles au bruit dans les données et aux erreurs dans la variable cible. Un prétraitement rigoureux des données est donc essentiel. Enfin, une validation rigoureuse sur un jeu de données de test indépendant (non utilisé pendant l’entraînement) est indispensable pour évaluer la qualité du modèle obtenu par <em>gradient boosting</em>.</p>
+</section>
+</section>
+<section id="comparaison-entre-forêts-aléatoires-et-gradient-boosting" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="comparaison-entre-forêts-aléatoires-et-gradient-boosting"><span class="header-section-number">1.4</span> Comparaison entre forêts aléatoires et <em>gradient boosting</em></h2>
+<p>Les forêts aléatoires et le <em>gradient boosting</em> paraissent très similaires au premier abord: il s’agit de deux approches ensemblistes, qui construisent des modèles très prédictifs performants en combinant un grand nombre d’arbres de décision. Mais en réalité, ces deux approches présentent plusieurs différences fondamentales:</p>
+<ul>
+<li><p>Les deux approches reposent sur des <strong>fondements théoriques différents</strong>: la loi des grands nombres pour les forêts aléatoires, la théorie de l’apprentissage statistique pour le <em>boosting</em>.</p></li>
+<li><p><strong>Les arbres n’ont pas le même statut dans les deux approches</strong>. Dans une forêt aléatoire, les arbres sont entraînés indépendamment les uns des autres et constituent chacun un modèle à part entière, qui peut être utilisé, représenté et interprété isolément. Dans un modèle de <em>boosting</em>, les arbres sont entraînés séquentiellement, ce qui implique que chaque arbre n’a pas de sens indépendamment de l’ensemble des arbres qui l’ont précédé dans l’entraînement. Par ailleurs, les arbres d’une forêt aléatoire sont relativement complexes et profonds (car ce sont des modèles à part entière), alors que dans le <em>boosting</em> les arbres sont plus souvent simples et peu profonds.</p></li>
+<li><p>Les <strong>points d’attention lors de l’entraînement</strong> des algorithmes sont différents: l’enjeu principal de l’entraînement d’une forêt aléatoire est trouver le bon arbitrage entre puissance prédictive des arbres et corrélation entre arbres, tandis que l’entraînement d’un algorithme de <em>gradient boosting</em> porte davantage sur la lutte contre le surapprentissage.</p></li>
+<li><p><strong>Complexité d’usage</strong>: les forêts aléatoires s’avèrent plus faciles à prendre en main que le <em>gradient boosting</em>, car elles comprennent moins d’hyperparamètres et leur optimisation est moins complexe.</p></li>
+<li><p><strong>Conditions d’utilisation</strong>: il est possible d’évaluer la qualité d’une forêt aléatoire en utilisant les données sur lesquelles elle a été entraînée grâce à l’approche <em>out-of-bag</em>, alors que c’est impossible avec le <em>gradient boosting</em>, pour lequel il faut impérativement conserver un ensemble de test. Cette différence peut sembler purement technique en apparence, mais elle s’avère importante en pratique dans de nombreuses situations, par exemple lorsque les données disponibles sont de taille restreinte, lorsque le modèle doit être utilisé sur les données sur lesquelles il est entraîné (pour repondérer une enquête par exemple) ou lorsque les ressources informatiques disponibles ne sont pas suffisantes pour mener un exercice de validation croisée.</p></li>
+</ul>
+<section id="quelle-approche-choisir" class="level3" data-number="1.4.1">
+<h3 data-number="1.4.1" class="anchored" data-anchor-id="quelle-approche-choisir"><span class="header-section-number">1.4.1</span> Quelle approche choisir?</h3>
+<p>De façon générale, le point de départ recommandé est d’entraîner une forêt aléatoire avec les hyperparamètres par défaut, puis d’optimiser ces hyperparamètres, et enfin de se tourner vers le <em>gradient boosting</em> lorsque les performances de la forêt aléatoire ne sont pas suffisantes, ou lorsqu’elle est inadaptée au cas d’usage.</p>
 <!-- ::: {.callout-note title="Qu'est-ce qu'on fait de cette partie?"}
 
 Un arbre CART (Classification And Regression Tree) est construit en utilisant une approche hiérarchique pour diviser un ensemble de données en sous-groupes de plus en plus homogènes. Intuitivement, voici comment cela se passe :
@@ -922,8 +922,8 @@ Shwartz-Ziv, Ravid, and Amitai Armon. 2022. <span>“Tabular Data: Deep Learning
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../chapters/chapter1/2-comparaison_GB_RF.html" class="pagination-link" aria-label="Comparaison entre forêts aléatoires et _gradient boosting_">
-        <span class="nav-page-text">Comparaison entre forêts aléatoires et <em>gradient boosting</em></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../../chapters/chapter2/1-CART.html" class="pagination-link" aria-label="Présentation formelle des algorithmes">
+        <span class="nav-page-text">Présentation formelle des algorithmes</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
