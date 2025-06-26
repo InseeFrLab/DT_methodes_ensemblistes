@@ -236,6 +236,8 @@ L'objectif des **méthodes d'interprétabilité** (ou d'importance des variables
 
 ### Mesures d'importance classiques (et leurs biais)
 
+Il existe de multiples mesures d'importance des variables. Deux d'entre elles sont fréquemment utilisées:
+
 - **Réduction moyenne de l'impureté** (_Mean Decrease in Impurity_ - _MDI_) : Cette méthode quantifie l'importance d'une variable par la somme des réductions d'impureté qu'elle induit dans tous les arbres de la forêt. Plus spécifiquement, pour chaque variable, on s'intéresse à la moyenne des réductions d'impureté qu'elle a engendrées dans tous les nœuds de tous les arbres où elle est impliquée. Les variables présentant la réduction moyenne d'impureté la plus élevée sont considérées comme les prédicteurs les plus importants. 
 
 La MDI présente des biais importants. Elle est notamment sensible aux variables catégorielles avec de nombreuses modalités, qui peuvent apparaître artificiellement importantes (même si leur influence réelle est faible), ainsi qu'aux variables avec une échelle de valeurs plus étendues, qui obtiennent des scores plus élevés, indépendamment de leur importance réelle. Elle est également fortement biaisée en présence de variables explicatives corrélées, ce qui conduit à surestimer l'importance de variables redondantes. Les interactions entre variables ne sont pas non plus prises en compte de manière adéquate.
@@ -250,7 +252,9 @@ Comme la MDI, la MDA présente des biais lorsque les variables sont corrélées.
 Plusieurs stratégies peuvent aider à réduire les biais d'interprétation :
 
 - Prétraitement des variables: Standardisation des variables, regroupement des modalités rares des variables catégorielles, réduction de la cardinalité des variables catégorielles.
+
 - Analyse des corrélations: Identification et gestion des variables fortement corrélées, qui peuvent fausser les mesures d'importance.
+
 - Choix de méthodes robustes: Privilégier les méthodes moins sensibles aux biais, comme les CIF ou la Sobol-MDA, et, le cas échéant, SHAFF pour les valeurs de Shapley. Ces méthodes sont présentées dans la sectio suivante.
 
 
