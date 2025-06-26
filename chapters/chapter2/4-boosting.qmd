@@ -14,6 +14,7 @@ Le fondement théorique du *boosting* est un article de de 1990 (@shapire1990str
 En termes plus techniques, les différentes variantes du *boosting* partagent toutes trois caractéristiques communes:
 
 -   Ils visent à **trouver une approximation** $\hat{F}$ d'une fonction inconnue $F^{\ast}: \mathbf{x} \mapsto y$ à partir d'un ensemble d'entraînement $(y_i, \mathbf{x_i})_{i= 1,\dots,n}$;
+
 -   Ils supposent que la fonction $F^{\ast}$ peut être approchée par une **somme pondérée de modèles simples** $f$ de paramètres $\theta$:
 $$ F\left(\mathbf{x}\right) = \sum_{m=1}^M \beta_m f\left(\mathbf{x}, \mathbf{\theta}_m\right) $$
 
@@ -33,8 +34,11 @@ Dans les années 1990, de nombreux travaux ont tâché de proposer des mise en a
 Le principe d'Adaboost consiste à pondérer les erreurs commises à chaque itération en donnant plus d'importance aux observations mal prédites, de façon à obliger les modèles simples à se concentrer sur les observations les plus difficiles à prédire. Voici une esquisse du fonctionnement d'AdaBoost:
 
 -   Un premier modèle simple est entraîné sur un jeu d'entraînement dans lequel toutes les observations ont le même poids.
+
 -   A l'issue de cette première itération, les observations mal prédites reçoivent une pondération plus élevée que les observations bien prédites, et un deuxième modèle est entraîné sur ce jeu d'entraînement pondéré.
+
 -   Ce deuxième modèle est ajouté au premier, puis on repondère à nouveau les observations en fonction de la qualité de prédiction de ce nouveau modèle.
+
 -   Cette procédure est répétée en ajoutant de nouveaux modèles et en ajustant les pondérations.
 
 L'algorithme Adaboost a été au coeur de la littérature sur le *boosting* à la fin des années 1990 et dans les années 2000, en raison de ses performances sur les problèmes de classification binaire. Il a toutefois été progressivement remplacé par les algorithmes de *gradient boosting* mis au point quelques années plus tard.
@@ -51,14 +55,19 @@ La *Gradient Boosting Machine* (GBM) propose une approche assez différente: ell
 -   La qualité du modèle final est évaluée sur un ensemble de test. -->
 
 -   Le modèle global est __initialisé__ à partir des données d'entraînement. A ce stade, le modèle prédit en général la moyenne de la variable-cible pour toutes les observations.
+
 -   Première itération de _boosting_:
 
     -   On calcule la dérivée partielle (*gradient*) de la fonction de perte par rapport à la prédiction pour chaque observation de l'ensemble d'entraînement. Cette dérivée partielle est parfois appelée __pseudo-résidu__. L'opposé de ce gradient indique à la fois dans quelle direction et dans quelle ampleur la prédiction devrait être modifiée afin de réduire la perte.
+
     -   Un premier arbre est entraîné à prédire l'opposé du gradient de la fonction de perte.
+
     -   Cet arbre est ajouté au modèle global (après multiplication par un facteur d'échelle).
     
 -   Deuxième itération de _boosting_: on calcule à nouveau la dérivée partielle de la fonction de perte par rapport aux nouvelles prédictions du modèle global, puis un deuxième arbre est entraîné à prédire l'opposé du gradient de la fonction de perte, et enfin cet arbre est ajouté au modèle global.
+
 -   Cette procédure est répétée en ajoutant de nouveaux modèles et en recalculant le gradient à chaque étape.
+
 -   La qualité du modèle final est évaluée sur un ensemble de test.
 
 L'approche de *gradient boosting* proposée par @friedman2001greedy présente deux grands avantages. D'une part, __toute la mécanique du _gradient boosting_ est indépendante de la fonction de perte choisie et de la nature du problème modélisé__. Autrement dit, cette approche peut être utilisée avec n'importe quelle fonction de perte différentiable, ce qui permet d'appliquer le _gradient boosting_ à de multiples problèmes (régression, classification binaire ou multiclasse, *learning-to-rank*...). D'autre part, __le *gradient boosting* offre souvent des performances comparables ou supérieures aux autres approches de *boosting*__. Le *gradient boosting* d'arbres de décision (*Gradient boosted Decision Trees* - GBDT) est donc devenue l'approche de référence en matière de *boosting*: toutes les implémentations modernes du *gradient boosting* comme `scikit-learn`, `XGBoost`, `LightGBM`, et `CatBoost` sont des extensions et améliorations de la *Gradient Boosting Machine*.
@@ -99,7 +108,9 @@ La méthode de *gradient boosting* proposée @friedman2001greedy a fait l'objet 
 On dispose d'un jeu de données ${(x_i, y_i)}_{i=1}^n$ avec $x_i \in \mathbb{R}^m$ et une cible $y_i$. On veut entraîner un modèle global qui soit une somme de $K$ arbres de régression ou de classification: $\hat{y}_i = F\left(\mathbf{x}_i\right) = \sum_{k=1}^K f_k(x_i)$. On rappelle que chaque arbre $f$ est défini par trois paramètres:
 
 -   sa __structure__ qui est une fonction $q: \mathbb{R}^m \rightarrow \{1, \dots, T\}$ qui à un vecteur $\mathbf{x}$ de dimension $m$ associe une feuille terminale de l'arbre;cette structure est définie par l'ensemble des règles de décision de l'arbre;
+
 -   son __nombre de feuilles terminales__ $T$;
+
 -   les __prédictions__ figurant sur ses feuilles terminales $\mathbf{w}\in \mathbb{R}^T$ (appelées poids ou *weights*).
 
 Le modèle complet est impossible à entraîner en une seule fois, car c'est un problème trop complexe. Le principe du _boosting_ consiste donc à construire le modèle complet de façon itérative, par **ajout successif d'arbres**. À l'itération $t$, on ajoute un nouvel arbre $f_t$ pour améliorer la prédiction actuelle $\hat{y}_i^{(t-1)}$. Le modèle devient:
@@ -114,7 +125,8 @@ $$ {#eq-fct-obj-initial}
 
 Dans cette expression:
 
-- La fonction de perte $\ell$ mesure la distance entre la prédiction $\hat{y}$ et la vraie valeur $y$ (exemples: erreur quadratique moyenne, erreur absolue moyenne, perte d'entropie croisée binaire, etc.).  
+- La fonction de perte $\ell$ mesure la distance entre la prédiction $\hat{y}$ et la vraie valeur $y$ (exemples: erreur quadratique moyenne, erreur absolue moyenne, perte d'entropie croisée binaire, etc.).
+
 - Le terme de régularisation $\Omega(f)$ pénalise la complexité de l'arbre $f$ via deux termes: le terme $\gamma\,T$ pénalise les arbres avec un grand nombre de feuilles ($T$ élevé) et le terme $\tfrac{1}{2} \lambda\sum_{j=1}^{T_t} w_j^2$ pénalise les arbres avec des poids élevés ($w_j$ élevés en valeur absolue). Cette pénalisation privilégie les arbres plus « simples » (moins de feuilles, poids de feuilles plus petits) afin d'éviter le sur-ajustement (*overfitting*). $\gamma$ et $\lambda$ sont des hyperparamètres de régularisation qui contrôlent la complexité de l'arbre.
 
 
@@ -133,12 +145,17 @@ La construction de l'arbre se fait selon une approche **gloutonne**, _nœud apr�
 1. On part d'une feuille unique (l'arbre de profondeur 0) qui contient toutes les données d'entraînement.
 
 2. Pour **chaque** feuille de l'arbre, on essaie de trouver un partitionnement optimal:
+
     - On teste toutes les règles de décision possibles (en faisant une boucle sur toutes les variables, et sur les différents seuils possibles).
+
     - Pour chaque règle de décision candidate, on calcule le **gain** associé (c'est-à-dire la réduction de la perte globale si l'on retient cette règle de décision).
+
     - Si la meilleure règle de décision apporte un gain suffisamment élevé, on crée deux nouvelles feuilles.
 
 3. On répète le processus récursivement (en partant des feuilles nouvellement créées) jusqu'à :
+
     - soit atteindre les limites de complexité définies _a priori_ (**profondeur maximale** de l'arbre, **nombre maximal de feuilles**, **nombre minimal d'observations par feuille**);
+
     - soit ne plus trouver de partitionnement intéressant (c'est-à-dire qui permette de réduire suffisamment la perte).
 
 Les paragraphes qui suivent détaillent ce processus et les équations utilisées.
