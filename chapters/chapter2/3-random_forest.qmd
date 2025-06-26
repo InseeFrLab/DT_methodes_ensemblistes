@@ -190,11 +190,9 @@ La procédure d'estimation de l'erreur OOB se déroule comme ceci:
 
 1. **Entraînement de la forêt aléatoire**: la forêt aléatoire est entraînée sur les données d'entraînement selon la procédure détaillée ci-dessus.
 
-2. **Prédiction _out-of-bag_** : Pour chaque observation $(x_i, y_i)$ des données d'entraînement, on calcule la prédiction de tous les arbres pour lesquels elle fait partie de l'échantillon _out-of-bag_.
+2. **Calcul des prédictions _out-of-bag_** : Pour chaque observation $(x_i, y_i)$ des données d'entraînement, on calcule la prédiction de tous les arbres pour lesquels elle fait partie de l'échantillon _out-of-bag_. La prédiction _out-of-bag_ finale est obtenue en agrégeant ces prédictions selon la procédure standard détaillée ci-dessus (moyenne pour la régression, vote majoritaire pour la classification).
 
-3. **Agrégation des prédictions** : La prédiction finale est obtenue en agrégeant les prédictions selon la procédure standard détaillée ci-dessus (moyenne pour la régression, vote majoritaire pour la classification).
-
-4. **Calcul de l'erreur OOB** : L'erreur OOB est ensuite calculée en comparant les prédictions avec la variable-cible $y$ sur toutes les observations, à l'aide d'une métrique (précision, rappel, AUC, erreur quadratique moyenne, score de Brier...).
+3. **Calcul de l'erreur OOB** : L'erreur OOB est ensuite calculée en comparant les prédictions avec la variable-cible $y$ sur toutes les observations, à l'aide d'une métrique (précision, rappel, AUC, erreur quadratique moyenne, score de Brier...).
 
 L'utilisation de l'erreur OOB présente de multiples avantages:
 
