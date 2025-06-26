@@ -1,6 +1,6 @@
-# La brique élémentaire: l'arbre de décision
+# Les arbres de décision
 
-Les arbres de décision désignent un éventail d'algorithmes de _machine learning_, utilisés notamment pour des tâches de classification et de régression. Ces algorithmes constituent l'élément de base des méthodes ensemblistes à base d'arbres (forêt aléatoire et _gradient boosting_). Cette section a pour objectif de présenter ce qu'est un arbre de décision, sa structure et la terminologie associée (@sec-partitionner), puis de détailler la méthode de construction des arbres par l'algorithme CART (@sec-construire).
+Les arbres de décision désignent un éventail d'algorithmes de _machine learning_, utilisés notamment pour des tâches de classification et de régression. Ces algorithmes constituent la brique élémentaire des méthodes ensemblistes à base d'arbres (forêt aléatoire et _gradient boosting_). Cette section a pour objectif de présenter ce qu'est un arbre de décision, sa structure et la terminologie associée (@sec-partitionner), puis de détailler la méthode de construction des arbres par l'algorithme CART (@sec-construire).
 
 ## Le principe fondamental: partitionner pour prédire {#sec-partitionner}
 
@@ -63,7 +63,7 @@ Cet arbre utilise des règles simples pour diviser l'espace des caractéristique
 
 __Parler des interactions entre variables__
 
-_Figure illustrative_
+![Structure d'un arbre de décision](../../figures/decision_tree_description.svg){width=90%}
 
 
 ## La construction d'un arbre de décision par l'algorithme CART {#sec-construire}
@@ -113,9 +113,7 @@ L'indice de Gini est très souvent utilisé parce qu'il est simple à calculer e
 
 **2. L'entropie (ou entropie de Shannon)**
 
-L'**entropie** est une autre mesure de l'impureté utilisée dans les arbres de décision. Elle mesure la quantité d'incertitude ou de désordre dans un nœud, en s'appuyant sur la théorie de l'information.
-
-Pour un nœud $t$ contenant $K$ classes, l'entropie $E(t)$ est définie par:
+L'**entropie** est une autre mesure de l'impureté utilisée dans les arbres de décision. Elle mesure la quantité d'incertitude ou de désordre dans un nœud, en s'appuyant sur la théorie de l'information. Pour un nœud $t$ contenant $K$ classes, l'entropie $E(t)$ est définie par:
 
 $$
 E(t) = - \sum_{k=1}^{K} p_k \log(p_k)
@@ -134,9 +132,7 @@ L'entropie a tendance à être plus sensible aux changements dans les distributi
 
 **3. Taux d'erreur**
 
-Le **taux d'erreur** est une autre mesure de l'impureté parfois utilisée dans les arbres de décision. Il représente la proportion d'observations mal classées dans un nœud.
-
-Pour un nœud $t$, le taux d'erreur $\text{TE}(t)$ est donné par:
+Le **taux d'erreur** est une autre mesure de l'impureté parfois utilisée dans les arbres de décision. Il représente la proportion d'observations mal classées dans un nœud. Pour un nœud $t$, le taux d'erreur $\text{TE}(t)$ est donné par:
 
 $$
 \text{TE}(t) = 1 - \max(p_k)
@@ -171,7 +167,7 @@ Cette mesure d'impureté a des propriétés similaires à celles présentées po
 
 Une fois la mesure d'impureté définie, l'algorithme CART construit séquentiellement le partitionnement de l'espace des caractéristiques en comparant les règles de décision possibles. La première étape de partitionnement part du nœud-racine, qui comprend l'ensemble des données d'entraînement. L'algorithme construit toutes les règles de décision candidates en parcourant toutes les valeurs de toutes les caractéristiques, les évalue en calculant la réduction de l'impureté induite par chacune d'entre elles et sélectionne la règle de décision (caractéristique et seuil) qui entraîne la réduction d'impureté maximale. Par exemple, l'algorithme évalue la règle candidate "Superficie > 100 m²" en calculant la somme des impuretés au sein des deux sous-régions générées par cette règle ("Oui" et "Non"), puis calcule la différence entre cette somme et l'impureté du noeud-racine. L'algorithme évalue ensuite la règle candidate "Superficie > 101 m²" de la même façon, et ainsi de suite pour toutes les valeurs de superficie, puis évalue les règles candidates construites avec le nombre de pièces, et enfin sélectionne la meilleure règle. La deuxième étape du partitionnement reproduit le même processus, cette fois au niveau d'un deux nœuds-enfants, et ainsi de suite. 
 
-_Illustration par une figure_
+![Construction d'un arbre de décision](../../figures/decision_tree_construction.svg){width=90%}
 
 
 L'algorithme CART poursuit ce partitionnement récursif jusqu'à ce qu'un **critère d'arrêt** prédéfini soit atteint. Dans la plupart des implémentations de CART, les valeurs par défaut de ces critères d'arrêt sont telles que que l'algorithme construit un arbre maximal: le plus profond possible, avec une observation par feuille terminale.
@@ -187,26 +183,31 @@ Il est généralement préférable d'éviter les arbres trop complexes car ils s
 
 ### Utiliser l'arbre pour prédire
 
-Une fois l'arbre construit, la prédiction pour une nouvelle observation s'effectue en suivant les branches de l'arbre depuis le nœud racine jusqu'à un nœud terminal (ou feuille). À chaque nœud interne, une décision est prise en fonction des valeurs des caractéristiques de l'observation, ce qui détermine la direction à suivre vers l'une des sous-régions. Ce cheminement se poursuit jusqu'à ce que l'observation atteigne une feuille, où la prédiction finale sera simplement la valeur associée à cette feuille.
+Une fois l'arbre construit, la prédiction pour une nouvelle observation s'effectue en suivant les branches de l'arbre depuis le nœud racine jusqu'à un nœud terminal (ou feuille), comme l'illustre la figure ci-dessous. À chaque nœud interne, une décision est prise en fonction des valeurs des caractéristiques de l'observation, ce qui détermine la direction à suivre vers l'une des sous-régions. Ce cheminement se poursuit jusqu'à ce que l'observation atteigne une feuille, où la prédiction finale sera simplement la valeur associée à cette feuille.
 
 
-_Illustration par une figure (flèches rouges)_
-
+![Prédire avec un arbre de décision](../../figures/decision_tree_prediction.svg){width=500}
 
 ## Avantages et limites des arbres de décision
 
 ### Avantages
 
 - **Simplicité et interprétabilité**: Les arbres de décision sont faciles à comprendre et à visualiser (à condition qu'ils ne soient pas trop profonds).
+
 - **Facilité d'usage**: les arbres de décision ne demandent pas de transformations complexes des données.
+
 - **Flexibilité**: Ils peuvent gérer des caractéristiques numériques et catégorielles, ainsi que les valeurs manquantes.
+
 - **Gestion des interactions**: Les arbres sont des modèles non paramétriques et ne font aucune hypothèse sur la distribution des variables. Ils capturent aisément les relations non-linéaires et les interactions entre les caractéristiques.
 
 ### Limites
 
 - **Surapprentissage**: Les arbres de décision peuvent facilement devenir trop complexes et être surajustés d'entraînement, ce qui nuit à leur capacité prédictive sur de nouvelles données.
+
 - **Biais envers les classes majoritaires**: En présence de données déséquilibrées, les arbres de décision peuvent privilégier la classe majoritaire, ce qui dégrade la performance sur les classes minoritaires.
+
 - **Optimisation locale**: L'approche gloutonne peut conduire à des solutions globalement sous-optimales (optimum local).
+
 - **Instabilité**: De petits changements dans les données peuvent entraîner des changements significatifs dans la structure de l'arbre (manque de robustesse).
 
 
