@@ -38,7 +38,9 @@ où $\phi_A(x)$ représente la prédiction agrégée, $E_L[.]$ correspond à l'e
 
 Pour mieux comprendre comment l'agrégation améliore la performance globale d'un modèle individuel $\phi(x, L)$, revenons à la **décomposition biais-variance** de l'erreur quadratique moyenne (il s'agit de la mesure de performance classiquement considérée dans un problème de régression): 
 
-$E_L[\left(Y - \phi(x, L)\right)^2] = \underbrace{\left(E_L\left[\phi(x, L) - Y\right]\right)^2}_{\text{Biais}^2} + \underbrace{E_L[\left(\phi(x, L) - E_L[\phi(x, L)]\right)^2]}_{\text{Variance}}$ {#eq-decompo-biais-variance}
+$$
+E_L[\left(Y - \phi(x, L)\right)^2] = \underbrace{\left(E_L\left[\phi(x, L) - Y\right]\right)^2}_{\text{Biais}^2} + \underbrace{E_L[\left(\phi(x, L) - E_L[\phi(x, L)]\right)^2]}_{\text{Variance}}
+$$ {#eq-decompo-biais-variance}
 
 
   - Le **biais** est la différence entre la valeur observée $Y$ que l'on souhaite prédire et la prédiction moyenne $E_L[\phi(x, L)]$. Si le modèle est sous-ajusté, le biais sera élevé.
@@ -55,7 +57,9 @@ L'équation @eq-decompo-biais-variance illustre l'__arbitrage biais-variance__ q
 <!-- La démonstration s'appuie sur l'inégalité de Jensen appliquée au modèle agrégé: $E_L[\phi(x,L)^2]≥(E_L[\phi(x,L)])^2$.-->
 
 
-$(Y - \phi_{A}(x))^2 \leq E_L[(Y - \phi(x, L))^2] $ {#eq-inegalite-breiman1996}
+$$
+(Y - \phi_{A}(x))^2 \leq E_L[(Y - \phi(x, L))^2]
+$$ {#eq-inegalite-breiman1996}
 
   - Le terme $(Y - \phi_A(x))^2$ représente l'erreur quadratique du **prédicteur agrégé** $\phi_A(x)$;
   
@@ -63,7 +67,7 @@ $(Y - \phi_{A}(x))^2 \leq E_L[(Y - \phi(x, L))^2] $ {#eq-inegalite-breiman1996}
     
 Cette inégalité montre que **l'erreur quadratique moyenne du prédicteur agrégé est toujours inférieure ou égale à la moyenne des erreurs des prédicteurs individuels**. Puisque le biais du prédicteur agrégé est identique au biais du prédicteur individuel, alors l'inégalité précédente implique que la **variance du modèle agrégé** $\phi_A(x)$ est **toujours inférieure ou égale** à la variance moyenne d'un modèle individuel : 
 
-$ \text{Var}(\phi_A(x)) = \text{Var}(E_L[\phi(x, L)]) \leq E_L[\text{Var}(\phi(x, L))] $
+$\text{Var}(\phi_A(x)) = \text{Var}(E_L[\phi(x, L)]) \leq E_L[\text{Var}(\phi(x, L))] $
 
 Autrement dit, le processus d'agrégation réduit l'erreur de prédiction globale en réduisant la **variance** des prédictions, tout en conservant un biais constant.
 
