@@ -35,9 +35,7 @@ Dans le contexte de la **régression**, l'objectif est de prédire une valeur nu
 
 Dans le cas de la régression, le **prédicteur agrégé** est défini comme suit :
 
-$$ 
-\phi_{A}(x) = E_L[\phi(x, L)]
-$$
+$\phi_{A}(x) = E_L[\phi(x, L)]$
 
 où $\phi_A(x)$ représente la prédiction agrégée, $E_L[.]$ correspond à l'espérance prise sur tous les échantillons d'apprentissage possibles $L$, chacun étant tiré selon la même distribution que le jeu de données initial, et $\phi(x, L)$ correspond à la prédiction du modèle construit sur l'échantillon d'apprentissage $L$.
 
@@ -46,9 +44,7 @@ où $\phi_A(x)$ représente la prédiction agrégée, $E_L[.]$ correspond à l'e
 
 Pour mieux comprendre comment l'agrégation améliore la performance globale d'un modèle individuel $\phi(x, L)$, revenons à la **décomposition biais-variance** de l'erreur quadratique moyenne (il s'agit de la mesure de performance classiquement considérée dans un problème de régression): 
 
-$$
-E_L[\left(Y - \phi(x, L)\right)^2] = \underbrace{\left(E_L\left[\phi(x, L) - Y\right]\right)^2}_{\text{Biais}^2} + \underbrace{E_L[\left(\phi(x, L) - E_L[\phi(x, L)]\right)^2]}_{\text{Variance}}
-$$ {#eq-decompo-biais-variance}
+$E_L[\left(Y - \phi(x, L)\right)^2] = \underbrace{\left(E_L\left[\phi(x, L) - Y\right]\right)^2}_{\text{Biais}^2} + \underbrace{E_L[\left(\phi(x, L) - E_L[\phi(x, L)]\right)^2]}_{\text{Variance}}$ {#eq-decompo-biais-variance}
 
 
   - Le **biais** est la différence entre la valeur observée $Y$ que l'on souhaite prédire et la prédiction moyenne $E_L[\phi(x, L)]$. Si le modèle est sous-ajusté, le biais sera élevé.
@@ -65,9 +61,7 @@ L'équation @eq-decompo-biais-variance illustre l'__arbitrage biais-variance__ q
 <!-- La démonstration s'appuie sur l'inégalité de Jensen appliquée au modèle agrégé: $E_L[\phi(x,L)^2]≥(E_L[\phi(x,L)])^2$.-->
 
 
-$$
-(Y - \phi_{A}(x))^2 \leq E_L[(Y - \phi(x, L))^2] 
-$$ {#eq-inegalite-breiman1996}
+$(Y - \phi_{A}(x))^2 \leq E_L[(Y - \phi(x, L))^2] $ {#eq-inegalite-breiman1996}
 
   - Le terme $(Y - \phi_A(x))^2$ représente l'erreur quadratique du **prédicteur agrégé** $\phi_A(x)$;
   
@@ -98,7 +92,7 @@ Cela signifie que si l'on considérait tous les ensemble de données possibles, 
 
 Formellement, un prédicteur est dit "order-correct" pour une entrée $x$ si :
 
-$ argmax_j Q(j|x) = argmax_j P(j|x) $
+$argmax_j Q(j|x) = argmax_j P(j|x) $
 
 où $P(j|x)$ est la vraie probabilité que l’observation $x$ appartienne à la classe $j$, et $Q(j|x)$ est la probabilité que $x$ appartienne à la classe $j$ prédite par le modèle $φ(x, L)$.
 
