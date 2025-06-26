@@ -1,6 +1,5 @@
 ---
 title: "Introduction aux méthodes ensemblistes"
-subtitle: "On va vous booster le gradient"
 preview:
   port: 4200
   browser: true

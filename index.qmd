@@ -1,7 +1,6 @@
 
 ---
 title: "Introduction aux méthodes ensemblistes"
-<!-- subtitle: "On va vous booster le gradient" -->
 author:
   - name: Mélina Hillion
     url: https://github.com/melinahillion
