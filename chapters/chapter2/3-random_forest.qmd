@@ -202,7 +202,7 @@ L'utilisation de l'erreur OOB présente de multiples avantages:
 
 - **Gain de temps** : Contrairement à la validation croisée qui requiert de réentraîner plusieurs fois le modèle pour un jeu donné d'hyperparamètres, l'erreur OOB ne nécessite qu'un seul entraînement du modèle. Cela induit un gain de temps appréciable lors de l'optimisation des hyperparamètres.
 
-- **Pertinence pour certains cas d'usage** : les prédictions _out-of-bag_ peuvent être particulièrement utiles lorsqu'on veut utiliser le modèle sur les données d'entraînement. C'est notamment le cas si l'on veut utiliser une forêt aléatoire pour prédire la probabilité de réponse dans une enquête, dans le cadre d'une repondération selon la méthode des groupes de réponse homogène.
+- **Pertinence pour certains cas d'usage** : les prédictions _out-of-bag_ peuvent être particulièrement utiles lorsqu'on veut utiliser le modèle _sur les données qui ont servi à l'entraîner. Bien qu'elle soit inhabituelle, cette situation se rencontre dans les travaux de la statistique publique, par exemple si l'on veut entraîner une forêt aléatoire pour prédire la probabilité de réponse dans une enquête, puis utiliser ce modèle dans le cadre d'une repondération selon la méthode des groupes de réponse homogène.
 
 
 <!-- 
