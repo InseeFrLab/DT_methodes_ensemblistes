@@ -200,11 +200,12 @@ _Illustration par une figure (flèches rouges)_
 - **Interprétabilité**: Les arbres de décision sont faciles à comprendre et à visualiser (à condition qu'ils ne soient pas trop profonds).
 - **Simplicité**: Pas besoin de transformations complexes des données.
 - **Flexibilité**: Ils peuvent gérer des caractéristiques numériques et catégorielles, ainsi que les valeurs manquantes.
-- **Gestion des interactions**: Modèles non paramétriques, pas d'hypothèses sur les lois par les variables. Ils capturent naturellement les interactions entre les caractéristiques.
+- **Gestion des interactions**: Les arbres sont des modèles non paramétriques et ne font aucune hypothèse sur la distribution des variables. Ils capturent naturellement les interactions entre les caractéristiques.
 
 ### Limites
 
-- **Surapprentissage**: Les arbres trop profonds peuvent surapprendre les données d'entraînement.
+- **Surapprentissage**: Les arbres de décision peuvent facilement devenir trop complexes et être surajustés d'entraînement, ce qui nuit à leur capacité prédictive sur de nouvelles données.
+- **Biais envers les classes majoritaires**: En présence de données déséquilibrées, les arbres de décision peuvent privilégier la classe majoritaire, ce qui dégrade la performance sur les classes minoritaires.
 - **Optimisation locale**: L'approche gloutonne peut conduire à des solutions globalement sous-optimales (optimum local).
 - **Instabilité**: De petits changements dans les données peuvent entraîner des changements significatifs dans la structure de l'arbre (manque de robustesse).
 
