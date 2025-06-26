@@ -6,8 +6,6 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Mélina Hillion">
-<meta name="author" content="Olivier Meslin">
 
 <title>cart – Introduction aux méthodes ensemblistes</title>
 <style>
@@ -122,6 +120,7 @@ window.Quarto = {
 };
 </script>
 
+<link rel="stylesheet" href="../../custom.css">
 </head>
 
 <body class="nav-sidebar docked quarto-light">
@@ -202,7 +201,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../chapters/chapter2/1-CART.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">La brique élémentaire: l’arbre de décision</span></a>
+ <span class="menu-text">Les arbres de décision</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -270,7 +269,7 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#la-brique-élémentaire-larbre-de-décision" id="toc-la-brique-élémentaire-larbre-de-décision" class="nav-link active" data-scroll-target="#la-brique-élémentaire-larbre-de-décision"><span class="header-section-number">1</span> La brique élémentaire: l’arbre de décision</a>
+  <li><a href="#les-arbres-de-décision" id="toc-les-arbres-de-décision" class="nav-link active" data-scroll-target="#les-arbres-de-décision"><span class="header-section-number">1</span> Les arbres de décision</a>
   <ul class="collapse">
   <li><a href="#sec-partitionner" id="toc-sec-partitionner" class="nav-link" data-scroll-target="#sec-partitionner"><span class="header-section-number">1.1</span> Le principe fondamental: partitionner pour prédire</a>
   <ul class="collapse">
@@ -296,36 +295,14 @@ window.Quarto = {
 <div class="toc-actions"><ul><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/edit/main/chapters/chapter2/1-CART.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/blob/main/chapters/chapter2/1-CART.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-</div>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
 
 
 
-<div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Authors</div>
-    <div class="quarto-title-meta-contents">
-             <p><a href="https://github.com/melinahillion">Mélina Hillion</a> <a href="mailto:melina.hillion@insee.fr" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
-             <p><a href="https://github.com/oliviermeslin">Olivier Meslin</a> <a href="mailto:olivier.meslin@insee.fr" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
-          </div>
-  </div>
-    
-  
-    
-  </div>
-  
-
-
-</header>
-
-
-<section id="la-brique-élémentaire-larbre-de-décision" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> La brique élémentaire: l’arbre de décision</h1>
-<p>Les arbres de décision désignent un éventail d’algorithmes de <em>machine learning</em>, utilisés notamment pour des tâches de classification et de régression. Ces algorithmes constituent l’élément de base des méthodes ensemblistes à base d’arbres (forêt aléatoire et <em>gradient boosting</em>). Cette section a pour objectif de présenter ce qu’est un arbre de décision, sa structure et la terminologie associée (<a href="#sec-partitionner" class="quarto-xref">Section&nbsp;1.1</a>), puis de détailler la méthode de construction des arbres par l’algorithme CART (<a href="#sec-construire" class="quarto-xref">Section&nbsp;1.2</a>).</p>
+<section id="les-arbres-de-décision" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Les arbres de décision</h1>
+<p>Les arbres de décision désignent un éventail d’algorithmes de <em>machine learning</em>, utilisés notamment pour des tâches de classification et de régression. Ces algorithmes constituent la brique élémentaire des méthodes ensemblistes à base d’arbres (forêt aléatoire et <em>gradient boosting</em>). Cette section a pour objectif de présenter ce qu’est un arbre de décision, sa structure et la terminologie associée (<a href="#sec-partitionner" class="quarto-xref">Section&nbsp;1.1</a>), puis de détailler la méthode de construction des arbres par l’algorithme CART (<a href="#sec-construire" class="quarto-xref">Section&nbsp;1.2</a>).</p>
 <section id="sec-partitionner" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="sec-partitionner"><span class="header-section-number">1.1</span> Le principe fondamental: partitionner pour prédire</h2>
 <p>Le principe des arbres de décision consiste à <strong>diviser l’espace des caractéristiques en sous-régions homogènes à l’aide de règles simples</strong>, puis de former pour chaque sous-région une prédiction à partir des observations présentes dans cette sous-région. Imaginons par exemple que l’on souhaite prédire le prix d’une maison en fonction de sa superficie et de son nombre de pièces, à partir d’un ensemble de transactions pour lesquelles le prix est connu. L’espace des caractéristiques (superficie et nombre de pièces) est vaste, et les prix des maisons (la <em>réponse</em> à prédire) sont très variables. L’idée centrale des arbres de décision est de diviser cet espace en zones plus petites, au sein desquelles les maisons ayant des surfaces et un nombre de pièces similaire ont des prix proches, et d’attribuer une prédiction identique à toutes les maisons situées dans la même zone. Malgré cette apparente simplicité, les arbres de décision sont puissants et capables de modéliser des interactions complexes et non linéaires entre les variables d’un jeu de données.</p>
@@ -350,15 +327,24 @@ window.Quarto = {
 </section>
 <section id="terminologie-et-structure-dun-arbre-de-décision" class="level3" data-number="1.1.3">
 <h3 data-number="1.1.3" class="anchored" data-anchor-id="terminologie-et-structure-dun-arbre-de-décision"><span class="header-section-number">1.1.3</span> Terminologie et structure d’un arbre de décision</h3>
-<p>Cet algorithme est appelé <strong>arbre de décision</strong> (<em>decision tree</em>) en raison provient de la structure arborescente en forme d’arbre inversé qui apparaît lorsqu’on en fait une représentation graphique. Plus généralement, les principaux éléments qui composent les arbres de décision sont désignés par des termes issus du champ lexical des arbres:</p>
+<p>Cet algorithme est appelé <strong>arbre de décision</strong> (<em>decision tree</em>) en raison provient de la structure arborescente en forme d’arbre inversé qui apparaît lorsqu’on en fait une représentation graphique (voir figure <a href="#fig-decision-tree-description" class="quarto-xref">1</a>). Plus généralement, les principaux éléments qui composent les arbres de décision sont désignés par des termes issus du champ lexical des arbres:</p>
 <ul>
 <li><p><strong>Nœud Racine (<em>Root Node</em>)</strong>: Le nœud-racine est le point de départ de l’arbre de décision, il est situé au sommet de l’arbre. Il contient l’ensemble des données d’entraînement avant tout partitionnement. À ce niveau, l’algorithme cherche la caractéristique la plus discriminante, c’est-à-dire celle qui permet de diviser les données en deux régions de manière à minimiser un certain critère d’hétérogénéité (comme l’indice de Gini pour la classification ou la variance pour la régression).</p></li>
 <li><p><strong>Nœuds Internes (<em>Internal Nodes</em>)</strong>: Les nœuds internes sont les points intermédiaires où l’algorithme CART applique des règles de décision pour diviser les données en sous-régions plus petites. Chaque nœud interne se définit par une règle de décision basée sur une variable et un seuil (par exemple, “La superficie de la maison est-elle supérieure à 100 m² ?”). À chaque étape, une seule caractéristique (la superficie) et un seul seuil (supérieur à 100) sont utilisés pour opérer au partitionnement des données. Chaque nœud interne a la fois un <strong>nœud-parent</strong> (<em>parent node</em>) dont il constitue une sous-région et deux <strong>nœuds-enfants</strong> (<em>child nodes</em>) qui le partitionnent.</p></li>
 <li><p><strong>Branches (<em>Branches</em>)</strong>: Les branches sont les connexions entre les nœuds et représentent le chemin suivies par les données. Chaque branche correspond à une décision binaire, “Oui” ou “Non”, qui oriente les observations vers une nouvelle subdivision de l’espace des caractéristiques.</p></li>
 <li><p><strong>Nœuds Terminaux ou Feuilles (<em>Leaf Nodes</em>, <em>Terminal Nodes</em> ou <em>Leaves</em>)</strong>: Les nœuds terminaux, situés à l’extrémité des branches, sont les points où le processus de division s’arrête. Ils fournissent la prédiction finale. Dans un problème de classification, la prédiction d’une feuille est soit la classe majoritaire parmi les observations de la feuille (par exemple, “Oui” ou “Non”), soit une probabilité d’appartenir à chaque classe. Dans un problème de régression, la prédiction d’une feuille est une valeur numérique, souvent la moyenne des observations de la feuille.</p></li>
-<li><p><strong>Profondeur</strong> (<em>Depth</em>): La profondeur d’un arbre de décision correspond à la longueur du chemin le plus long entre le nœud racine et une feuille. Le nœud racine est situé par définition à la profondeur 0, et chaque niveau supplémentaire de l’arbre ajoute une unité à la profondeur. La profondeur totale de l’arbre est donc le nombre maximal de décisions (ou de nœuds internes) à traverser pour passer du nœud racine à une feuille.</p></li>
+<li><p><strong>Profondeur</strong> (<em>Depth</em>): La profondeur d’un arbre de décision correspond à la longueur du chemin le plus long entre le nœud-racine et une feuille. Le nœud-racine est situé par définition à la profondeur 0, et chaque niveau supplémentaire de l’arbre ajoute une unité à la profondeur. La profondeur totale de l’arbre est donc le nombre maximal de décisions (ou de nœuds internes) à traverser pour passer du nœud-racine à une feuille.</p></li>
 </ul>
-<p><em>Figure illustrative</em>: Une représentation visuelle de la structure de l’arbre peut être utile ici pour illustrer les concepts de nœuds, branches et feuilles.</p>
+<div id="fig-decision-tree-description" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-decision-tree-description-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../../figures/decision_tree_description.svg" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-decision-tree-description-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Structure d’un arbre de décision
+</figcaption>
+</figure>
+</div>
 </section>
 <section id="illustration" class="level3" data-number="1.1.4">
 <h3 data-number="1.1.4" class="anchored" data-anchor-id="illustration"><span class="header-section-number">1.1.4</span> Illustration</h3>
@@ -382,7 +368,6 @@ window.Quarto = {
 </ol>
 <p>Cet arbre utilise des règles simples pour diviser l’espace des caractéristiques (superficie et nombre de pièces) en sous-groupes homogènes et fournir une prédiction (estimer le prix d’une maison).</p>
 <p><strong>Parler des interactions entre variables</strong></p>
-<p><em>Figure illustrative</em></p>
 </section>
 </section>
 <section id="sec-construire" class="level2" data-number="1.2">
@@ -415,8 +400,7 @@ window.Quarto = {
 <p>où <span class="math inline">\(p_k\)</span> est la proportion d’observations appartenant à la classe <span class="math inline">\(k\)</span> dans le nœud <span class="math inline">\(t\)</span>.</p>
 <p><strong>Critère de choix</strong>: L’indice de Gini est très souvent utilisé parce qu’il est simple à calculer et capture bien l’homogénéité des classes au sein d’un nœud. Il privilégie les partitions où une classe domine fortement dans chaque sous-région.</p>
 <p><strong>2. L’entropie (ou entropie de Shannon)</strong></p>
-<p>L’<strong>entropie</strong> est une autre mesure de l’impureté utilisée dans les arbres de décision. Elle mesure la quantité d’incertitude ou de désordre dans un nœud, en s’appuyant sur la théorie de l’information.</p>
-<p>Pour un nœud <span class="math inline">\(t\)</span> contenant <span class="math inline">\(K\)</span> classes, l’entropie <span class="math inline">\(E(t)\)</span> est définie par:</p>
+<p>L’<strong>entropie</strong> est une autre mesure de l’impureté utilisée dans les arbres de décision. Elle mesure la quantité d’incertitude ou de désordre dans un nœud, en s’appuyant sur la théorie de l’information. Pour un nœud <span class="math inline">\(t\)</span> contenant <span class="math inline">\(K\)</span> classes, l’entropie <span class="math inline">\(E(t)\)</span> est définie par:</p>
 <p><span class="math display">\[
 E(t) = - \sum_{k=1}^{K} p_k \log(p_k)
 \]</span></p>
@@ -428,8 +412,7 @@ E(t) = - \sum_{k=1}^{K} p_k \log(p_k)
 - L'entropie atteint son maximum lorsque les observations sont uniformément réparties entre les classes, reflétant une grande incertitude dans la classification.-->
 <p><strong>Critère de choix</strong>: L’entropie a tendance à être plus sensible aux changements dans les distributions des classes que l’indice de Gini, car elle attribue un poids plus élevé aux événements rares (valeurs de <span class="math inline">\(p_k\)</span> très faibles). Elle est souvent utilisée lorsque l’erreur de classification des classes minoritaires est particulièrement importante.</p>
 <p><strong>3. Taux d’erreur</strong></p>
-<p>Le <strong>taux d’erreur</strong> est une autre mesure de l’impureté parfois utilisée dans les arbres de décision. Il représente la proportion d’observations mal classées dans un nœud.</p>
-<p>Pour un nœud <span class="math inline">\(t\)</span>, le taux d’erreur <span class="math inline">\(\text{TE}(t)\)</span> est donné par:</p>
+<p>Le <strong>taux d’erreur</strong> est une autre mesure de l’impureté parfois utilisée dans les arbres de décision. Il représente la proportion d’observations mal classées dans un nœud. Pour un nœud <span class="math inline">\(t\)</span>, le taux d’erreur <span class="math inline">\(\text{TE}(t)\)</span> est donné par:</p>
 <p><span class="math display">\[
 \text{TE}(t) = 1 - \max(p_k)
 \]</span></p>
@@ -454,8 +437,17 @@ E(t) = - \sum_{k=1}^{K} p_k \log(p_k)
 </section>
 <section id="construire-larbre-de-décision-par-un-partitionnement-séquentiel" class="level3" data-number="1.2.2">
 <h3 data-number="1.2.2" class="anchored" data-anchor-id="construire-larbre-de-décision-par-un-partitionnement-séquentiel"><span class="header-section-number">1.2.2</span> Construire l’arbre de décision par un partitionnement séquentiel</h3>
-<p>Une fois la mesure d’impureté définie, l’algorithme CART construit séquentiellement le partitionnement de l’espace des caractéristiques en comparant les règles de décision possibles. La première étape de partitionnement part du nœud-racine, qui comprend l’ensemble des données d’entraînement. L’algorithme construit toutes les règles de décision candidates en parcourant toutes les valeurs de toutes les caractéristiques, les évalue en calculant la réduction de l’impureté induite par chacune d’entre elles et sélectionne la règle de décision (caractéristique et seuil) qui entraîne la réduction d’impureté maximale. Par exemple, l’algorithme évalue la règle candidate “Superficie &gt; 100 m²” en calculant la somme des impuretés au sein des deux sous-régions générées par cette règle (“Oui” et “Non”), puis calcule la différence entre cette somme et l’impureté du noeud-racine. L’algorithme évalue ensuite la règle candidate “Superficie &gt; 101 m²” de la même façon, et ainsi de suite pour toutes les valeurs de superficie, puis évalue les règles candidates construites avec le nombre de pièces, et enfin sélectionne la meilleure règle. La deuxième étape du partitionnement reproduit le même processus, cette fois au niveau d’un deux nœuds-enfants, et ainsi de suite.</p>
-<p><em>Illustration par une figure</em></p>
+<p>Une fois la mesure d’impureté définie, l’algorithme CART construit séquentiellement le partitionnement de l’espace des caractéristiques en comparant les règles de décision possibles (voir figure <a href="#fig-decision-tree-construction" class="quarto-xref">2</a>). La première étape de partitionnement part du nœud-racine, qui comprend l’ensemble des données d’entraînement. L’algorithme construit toutes les règles de décision candidates en parcourant toutes les valeurs de toutes les caractéristiques, les évalue en calculant la réduction de l’impureté induite par chacune d’entre elles et sélectionne la règle de décision (caractéristique et seuil) qui entraîne la réduction d’impureté maximale. Par exemple, l’algorithme évalue la règle candidate “Superficie &gt; 100 m²” en calculant la somme des impuretés au sein des deux sous-régions générées par cette règle (“Oui” et “Non”), puis calcule la différence entre cette somme et l’impureté du noeud-racine. L’algorithme évalue ensuite la règle candidate “Superficie &gt; 101 m²” de la même façon, et ainsi de suite pour toutes les valeurs de superficie, puis évalue les règles candidates construites avec le nombre de pièces, et enfin sélectionne la meilleure règle. La deuxième étape du partitionnement reproduit le même processus, cette fois au niveau d’un des deux nœuds-enfants, et ainsi de suite.</p>
+<div id="fig-decision-tree-construction" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-decision-tree-construction-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../../figures/decision_tree_construction.svg" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-decision-tree-construction-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Construction d’un arbre de décision
+</figcaption>
+</figure>
+</div>
 <p>L’algorithme CART poursuit ce partitionnement récursif jusqu’à ce qu’un <strong>critère d’arrêt</strong> prédéfini soit atteint. Dans la plupart des implémentations de CART, les valeurs par défaut de ces critères d’arrêt sont telles que que l’algorithme construit un arbre maximal: le plus profond possible, avec une observation par feuille terminale.</p>
 </section>
 <section id="contrôler-la-complexité-de-larbre" class="level3" data-number="1.2.3">
@@ -468,8 +460,17 @@ E(t) = - \sum_{k=1}^{K} p_k \log(p_k)
 </section>
 <section id="utiliser-larbre-pour-prédire" class="level3" data-number="1.2.4">
 <h3 data-number="1.2.4" class="anchored" data-anchor-id="utiliser-larbre-pour-prédire"><span class="header-section-number">1.2.4</span> Utiliser l’arbre pour prédire</h3>
-<p>Une fois l’arbre construit, la prédiction pour une nouvelle observation s’effectue en suivant les branches de l’arbre depuis le nœud racine jusqu’à un nœud terminal (ou feuille). À chaque nœud interne, une décision est prise en fonction des valeurs des caractéristiques de l’observation, ce qui détermine la direction à suivre vers l’une des sous-régions. Ce cheminement se poursuit jusqu’à ce que l’observation atteigne une feuille, où la prédiction finale sera simplement la valeur associée à cette feuille.</p>
-<p><em>Illustration par une figure (flèches rouges)</em></p>
+<p>Une fois l’arbre construit, la prédiction pour une nouvelle observation s’effectue en suivant les branches de l’arbre depuis le nœud racine jusqu’à un nœud terminal (ou feuille), comme l’illustre la figure @#fig-decision-tree-prediction. À chaque nœud interne, une décision est prise en fonction des valeurs des caractéristiques de l’observation, ce qui détermine la direction à suivre vers l’une des sous-régions. Ce cheminement se poursuit jusqu’à ce que l’observation atteigne une feuille, où la prédiction finale sera simplement la valeur associée à cette feuille.</p>
+<div id="fig-decision-tree-prediction" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-decision-tree-prediction-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../../figures/decision_tree_prediction.svg" class="img-fluid figure-img" style="width:70.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-decision-tree-prediction-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Prédire avec un arbre de décision
+</figcaption>
+</figure>
+</div>
 </section>
 </section>
 <section id="avantages-et-limites-des-arbres-de-décision" class="level2" data-number="1.3">
@@ -477,19 +478,19 @@ E(t) = - \sum_{k=1}^{K} p_k \log(p_k)
 <section id="avantages" class="level3" data-number="1.3.1">
 <h3 data-number="1.3.1" class="anchored" data-anchor-id="avantages"><span class="header-section-number">1.3.1</span> Avantages</h3>
 <ul>
-<li><strong>Simplicité et interprétabilité</strong>: Les arbres de décision sont faciles à comprendre et à visualiser (à condition qu’ils ne soient pas trop profonds).</li>
-<li><strong>Facilité d’usage</strong>: les arbres de décision ne demandent pas de transformations complexes des données.</li>
-<li><strong>Flexibilité</strong>: Ils peuvent gérer des caractéristiques numériques et catégorielles, ainsi que les valeurs manquantes.</li>
-<li><strong>Gestion des interactions</strong>: Les arbres sont des modèles non paramétriques et ne font aucune hypothèse sur la distribution des variables. Ils capturent aisément les relations non-linéaires et les interactions entre les caractéristiques.</li>
+<li><p><strong>Simplicité et interprétabilité</strong>: Les arbres de décision sont faciles à comprendre et à visualiser (à condition qu’ils ne soient pas trop profonds).</p></li>
+<li><p><strong>Facilité d’usage</strong>: les arbres de décision ne demandent pas de transformations complexes des données.</p></li>
+<li><p><strong>Flexibilité</strong>: Ils peuvent gérer des caractéristiques numériques et catégorielles, ainsi que les valeurs manquantes.</p></li>
+<li><p><strong>Gestion des interactions</strong>: Les arbres sont des modèles non paramétriques et ne font aucune hypothèse sur la distribution des variables. Ils capturent aisément les relations non-linéaires et les interactions entre les caractéristiques.</p></li>
 </ul>
 </section>
 <section id="limites" class="level3" data-number="1.3.2">
 <h3 data-number="1.3.2" class="anchored" data-anchor-id="limites"><span class="header-section-number">1.3.2</span> Limites</h3>
 <ul>
-<li><strong>Surapprentissage</strong>: Les arbres de décision peuvent facilement devenir trop complexes et être surajustés d’entraînement, ce qui nuit à leur capacité prédictive sur de nouvelles données.</li>
-<li><strong>Biais envers les classes majoritaires</strong>: En présence de données déséquilibrées, les arbres de décision peuvent privilégier la classe majoritaire, ce qui dégrade la performance sur les classes minoritaires.</li>
-<li><strong>Optimisation locale</strong>: L’approche gloutonne peut conduire à des solutions globalement sous-optimales (optimum local).</li>
-<li><strong>Instabilité</strong>: De petits changements dans les données peuvent entraîner des changements significatifs dans la structure de l’arbre (manque de robustesse).</li>
+<li><p><strong>Surapprentissage</strong>: Les arbres de décision peuvent facilement devenir trop complexes et être surajustés d’entraînement, ce qui nuit à leur capacité prédictive sur de nouvelles données.</p></li>
+<li><p><strong>Biais envers les classes majoritaires</strong>: En présence de données déséquilibrées, les arbres de décision peuvent privilégier la classe majoritaire, ce qui dégrade la performance sur les classes minoritaires.</p></li>
+<li><p><strong>Optimisation locale</strong>: L’approche gloutonne peut conduire à des solutions globalement sous-optimales (optimum local).</p></li>
+<li><p><strong>Instabilité</strong>: De petits changements dans les données peuvent entraîner des changements significatifs dans la structure de l’arbre (manque de robustesse).</p></li>
 </ul>
 
 

@@ -1,0 +1,10 @@
+/*-- scss:defaults --*/
+
+/*-- scss:rules --*/
+figcaption, figure-caption{
+   text-align: center;
+   text-align-last: center;
+   margin: auto;
+   font-size: 1.2rem;
+   color: black;
+}
