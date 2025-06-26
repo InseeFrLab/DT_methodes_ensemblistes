@@ -393,17 +393,17 @@ Figure&nbsp;1: Représentation schématique d’un algorithme de <em>bagging</em
 <h4 data-number="1.3.2.2" class="anchored" data-anchor-id="les-forêts-aléatoires-random-forests"><span class="header-section-number">1.3.2.2</span> Les forêts aléatoires (<em>random forests</em>)</h4>
 <p>Les forêts aléatoires (<em>random forests</em>, <span class="citation" data-cites="breiman2001random">Breiman (<a href="#ref-breiman2001random" role="doc-biblioref">2001</a>)</span>) sont une variante du <em>bagging</em> qui vise à produire des modèles très performants en conciliant deux objectifs: maximiser le pouvoir prédictif des arbres pris isolément, et minimiser la corrélation entre ces arbres (le problème inhérent au <em>bagging</em>).</p>
 <p>Pour atteindre ce second objectif, la forêt aléatoire introduit une nouvelle source de randomisation: la <strong>sélection aléatoire de variables</strong>. Lors de la construction de chaque arbre, au lieu d’utiliser toutes les variables disponibles pour déterminer la meilleure séparation à chaque nœud, un sous-ensemble aléatoire de variables est sélectionné. En limitant la quantité d’information à laquelle chaque arbre a accès au moment de chaque nouvelle division, cette étape supplémentaire contraint mécaniquement les arbres à être plus diversifiés (car deux arbres ne pourront plus nécessairement choisir les mêmes variables pour les mêmes séparations). Cela réduit significativement la corrélation entre les arbres, améliorant ainsi l’efficacité de l’agrégation. L’ensemble des prédictions devient ainsi plus précis et moins sujet aux fluctuations aléatoires.</p>
-<div id="fig-rf" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-rf-survol" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-rf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div aria-describedby="fig-rf-survol-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="../../figures/rf.svg" class="img-fluid figure-img">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rf-survol-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;2: Représentation schématique d’un algorithme de forêt aléatoire
 </figcaption>
 </figure>
 </div>
-<p>La figure <a href="#fig-rf" class="quarto-xref">2</a> propose une représentation schématique d’une forêt aléatoire. La logique d’ensemble reste la même que celle du <em>bagging</em>. L’échantillonnage <em>bootstrap</em> est inchangé, mais l’étape de construction de chaque arbre est modifiée pour n’utiliser, à chaque nouvelle division, qu’un sous-ensemble aléatoire de variables. L’agrégation des prédictions se fait ensuite de la même manière que pour le <em>bagging</em>.</p>
+<p>La figure <a href="#fig-rf-survol" class="quarto-xref">2</a> propose une représentation schématique d’une forêt aléatoire. La logique d’ensemble reste la même que celle du <em>bagging</em>. L’échantillonnage <em>bootstrap</em> est inchangé, mais l’étape de construction de chaque arbre est modifiée pour n’utiliser, à chaque nouvelle division, qu’un sous-ensemble aléatoire de variables. L’agrégation des prédictions se fait ensuite de la même manière que pour le <em>bagging</em>.</p>
 <!--Cette restriction de la liste des variables considérées permet de réduire l'utilisation des variables les plus prédictives et de mieux mobiliser l'information disponible dans les variables peu corrélées avec $y$.-->
 <p>Le principal enjeu de l’entraînement d’une forêt aléatoire est de trouver le bon arbitrage entre puissance prédictive des arbres individuels (que l’on souhaite maximiser) et corrélation entre les arbres (que l’on souhaite minimiser). L’optimisation des hyper-paramètres des forêts aléatoires (dont le plus important est le nombre de variables sélectionnées à chaque noeud) vise précisément à choisir le meilleur compromis possible entre pouvoir prédictif invividuel et diversité des arbres.</p>
 <p>Les forêts aléatoires sont très populaires car elles sont faciles à implémenter, peu sensibles aux hyperparamètres (elles fonctionnent bien avec les valeurs par défaut de la plupart des implémentations proposées en <code>R</code> ou en Python), et offrent de très bonnes performances dans de nombreux cas. Cependant, comme toute méthode d’apprentissage automatique, elles restent sujettes au surapprentissage (voir encadré), bien que dans une moindre mesure par rapport à d’autres techniques comme le <em>gradient boosting</em>.</p>
@@ -428,13 +428,13 @@ Qu’est-ce que le surapprentissage?
 <section id="sec-gb-intuition" class="level3" data-number="1.3.3">
 <h3 data-number="1.3.3" class="anchored" data-anchor-id="sec-gb-intuition"><span class="header-section-number">1.3.3</span> Le <em>gradient boosting</em></h3>
 <p>Contrairement aux forêts aléatoires qui combinent des arbres de décision complexes et indépendants, le <em>gradient boosting</em> construit un ensemble d’arbres plus simples et entraînés de manière séquentielle. Chaque arbre vise à corriger les erreurs commises par les arbres précédents, améliorant progressivement la précision du modèle global. Cette approche repose sur des fondements théoriques très différents de ceux du <em>bagging</em>.</p>
-<p>La logique du <em>gradient boosting</em> est illustrée par la figure <a href="#fig-gb" class="quarto-xref">3</a>:</p>
-<div id="fig-gb" class="quarto-float quarto-figure quarto-figure-center anchored">
+<p>La logique du <em>gradient boosting</em> est illustrée par la figure <a href="#fig-gb-survol" class="quarto-xref">3</a>:</p>
+<div id="fig-gb-survol" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-gb-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div aria-describedby="fig-gb-survol-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="../../figures/gb.svg" class="img-fluid figure-img">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gb-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gb-survol-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;3: Représentation schématique d’un algorithme de <em>gradient boosting</em>
 </figcaption>
 </figure>

@@ -295,35 +295,45 @@ Objectifs:
 <p>La forêt aléatoire est une extension du <em>bagging</em>, présenté dans la section <strong>?@sec-bagging-detail</strong>. Elle introduit un niveau supplémentaire de randomisation dans la construction des arbres, puisqu’à chaque nouvelle division (<em>noeud</em>), le critère de séparation est choisi en considérant uniquement un sous-ensemble de variables <strong>sélectionné aléatoirement</strong>. Cette randomisation supplémentaire <strong>réduit la corrélation</strong> entre les arbres, ce qui permet de diminuer la variance des prédiction du modèle agrégé.</p>
 <p>Les forêts aléatoires reposent sur quatre éléments essentiels:</p>
 <ul>
-<li><p><strong>Les arbres CART</strong>: Les modèles élémentaires sont des arbres CART non élagués, c’est-à-dire autorisés à pousser jusqu’à l’atteinte d’un critère d’arrêt défini en amont.</p></li>
+<li><p><strong>Les arbres de régression et de classification</strong>: Les modèles élémentaires sont des arbres de décision profonds.</p></li>
 <li><p><strong>L’échantillonnage <em>bootstrap</em></strong>: Chaque arbre est construit à partir d’un échantillon aléatoire du jeu de données d’entraînement tiré avec remise (ou parfois sans remise).</p></li>
-<li><p><strong>La sélection aléatoire de variables</strong> : Lors de la construction d’un arbre, à chaque nœud de celui-ci, un sous-ensemble aléatoire de variables est sélectionné. La meilleure division est ensuite choisie parmi ces caractéristiques aléatoires.</p></li>
+<li><p><strong>La sélection aléatoire de variables</strong> : Lors de la construction d’un arbre, à chaque nœud de celui-ci, un sous-ensemble aléatoire de variables est sélectionné. La meilleure règle de décision est ensuite choisie uniquement parmi ces caractéristiques.</p></li>
 <li><p><strong>L’agrégation des prédictions</strong> : Comme pour le <em>bagging</em>, les prédictions de tous les arbres sont combinées. On procède généralement à la moyenne (ou à la médiane) des prédictions dans le cas de la régression, et au vote majoritaire (ou à la moyenne des probabilités prédites pour chaque classe) dans le cas de la classification.</p></li>
 </ul>
 </section>
 <section id="comment-construit-on-une-forêt-aléatoire" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="comment-construit-on-une-forêt-aléatoire"><span class="header-section-number">1.2</span> Comment construit-on une forêt aléatoire?</h2>
-<p>L’entraînement d’une forêt aléatoire est très similaire à celui du <em>bagging</em> et se résume comme suit:</p>
+<p>L’entraînement d’une forêt aléatoire est très similaire à celui du <em>bagging</em> et se résume comme suit (voir figure <a href="#fig-rf" class="quarto-xref">1</a>):</p>
 <ul>
-<li>Le nombre d’arbres à construire est défini <em>a priori</em>.</li>
-<li>Pour chaque arbre, on effectue les étapes suivantes:
+<li><p>Le nombre d’arbres à construire est défini <em>a priori</em>.</p></li>
+<li><p>Pour chaque arbre, on effectue les étapes suivantes:</p>
 <ul>
-<li>Générer un échantillon <em>bootstrap</em> de taille fixe à partir des données d’entraînement.</li>
-<li>Construire récursivement un arbre de décision à partir de cet échantillon:
+<li><p>Générer un échantillon <em>bootstrap</em> de taille fixe à partir des données d’entraînement.</p></li>
+<li><p>Construire récursivement un arbre de décision à partir de cet échantillon:</p>
 <ul>
-<li>À chaque nœud de l’arbre, un sous-ensemble de <em>features</em> est sélectionné aléatoirement.</li>
-<li>Déterminer quel couple (variable, valeur) définit la règle de décision qui divise la population du nœud en deux sous-groupes les plus homogènes possibles.</li>
-<li>Créer les deux nœuds-enfants à partir de cette règle de décision.</li>
-<li>Arrêter la croissance de l’arbre selon des critères d’arrêt fixés <em>a priori</em>.</li>
+<li><p>À chaque nœud de l’arbre, un sous-ensemble de <em>features</em> est sélectionné aléatoirement.</p></li>
+<li><p>Déterminer le couple (variable, valeur) qui définit la règle de décision divisant la population du nœud en deux sous-groupes les plus homogènes possibles.</p></li>
+<li><p>Créer les deux nœuds-enfants à partir de cette règle de décision.</p></li>
+<li><p>Arrêter la croissance de l’arbre selon des critères d’arrêt fixés <em>a priori</em>.</p></li>
 </ul></li>
 </ul></li>
 </ul>
 <p>Pour construire la prédiction de la forêt aléatoire une fois celle-ci entraînée, on agrège les arbres selon une méthode qui dépend du problème modélisé:</p>
 <ul>
-<li>Régression: la prédiction finale est la moyenne des prédictions de tous les arbres.</li>
-<li>Classification: chaque arbre vote pour une classe, et la classe majoritaire est retenue.</li>
+<li><p>Régression: la prédiction finale est la moyenne des prédictions de tous les arbres.</p></li>
+<li><p>Classification: chaque arbre vote pour une classe, et la classe majoritaire est retenue.</p></li>
 </ul>
 <p>Les principaux hyper-paramètres des forêts aléatoires (détaillés dans la section <strong>?@sec-guide-rf</strong>) sont les suivants: le nombre d’arbres, la méthode et le taux d’échantillonnage, le nombre (ou la proportion) de variables considérées à chaque nœud, le critère de division des nœuds (ou mesure d’hétérogénéité), et les critères d’arrêt (notamment la profondeur de l’arbre, le nombre minimal d’observations dans une feuille terminale, et le nombre minimal d’observations qu’un nœud doit comprendre pour être divisé en deux).</p>
+<div id="fig-rf" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../../figures/rf.svg" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Entraînement d’une forêt aléatoire
+</figcaption>
+</figure>
+</div>
 <!-- ::: {.content-visible unless-format="html"}
 ```{=typst}
 #import "@preview/lovelace:0.3.0": *
@@ -417,8 +427,8 @@ Objectifs:
 \]</span></p>
 <p>où <span class="math inline">\(\rho(x)\)</span> est le coefficient de corrélation moyen entre les arbres individuels, <span class="math inline">\(\sigma(x)^2\)</span> est la variance d’un arbre individuel, <span class="math inline">\(M\)</span> est le nombre d’arbres dans la forêt. Cette décomposition fait apparaître l’influence de la corrélation entre les arbres sur les performance de la forêt aléatoire:</p>
 <ul>
-<li><strong>Si <span class="math inline">\(\rho(x)\)</span> est proche de 1</strong> (forte corrélation entre les arbres) : la première composante <span class="math inline">\(\rho \sigma^2\)</span> domine et la réduction de variance est moindre lorsque le nombre d’arbres augmente.</li>
-<li><strong>Si <span class="math inline">\(\rho(x)\)</span> est proche de 0</strong> (faible corrélation entre les arbres) : la seconde composante <span class="math inline">\(\frac{1 - \rho}{M} \sigma^2\)</span> et la variance est davantage réduite avec l’augmentation du nombre d’arbres <span class="math inline">\(M\)</span>.</li>
+<li><p><strong>Si <span class="math inline">\(\rho(x)\)</span> est proche de 1</strong> (forte corrélation entre les arbres) : la première composante <span class="math inline">\(\rho \sigma^2\)</span> domine et la réduction de variance est moindre lorsque le nombre d’arbres augmente.</p></li>
+<li><p><strong>Si <span class="math inline">\(\rho(x)\)</span> est proche de 0</strong> (faible corrélation entre les arbres) : la seconde composante <span class="math inline">\(\frac{1 - \rho}{M} \sigma^2\)</span> et la variance est davantage réduite avec l’augmentation du nombre d’arbres <span class="math inline">\(M\)</span>.</p></li>
 </ul>
 <p>L’objectif de l’entraînement des forêts aléatoires est donc de minimiser la corrélation entre les arbres tout en maximisant leur capacité à prédire correctement, ce qui permet de réduire la variance globale sans augmenter excessivement le biais. La sélection aléatoires des caractéristiques (<em>features</em>) à chaque nœud joue un rôle majeur dans cet arbitrage entre puissance prédictive des arbres et corrélation entre arbres.</p>
 <!-- ## Les hyper-paramètres clés des forêts aléatoires
@@ -442,19 +452,19 @@ Objectifs:
 </section>
 <section id="sec-rf-oob" class="level2" data-number="1.4">
 <h2 data-number="1.4" class="anchored" data-anchor-id="sec-rf-oob"><span class="header-section-number">1.4</span> Evaluation des performances par l’erreur <em>Out-of-Bag</em> (OOB)</h2>
-<p>La forêt aléatoire présente une particularité intéressante et très utile en pratique: <strong>il est possible d’évaluer les performances d’une forêt aléatoire directement à partir des données d’entraînement</strong>, grâce à l’estimation de l’erreur <em>Out-of-Bag</em> (OOB). Cette technique repose sur le fait que chaque arbre est construit à partir d’un échantillon <em>bootstrap</em>, c’est-à-dire un échantillon tiré avec remise. Cela implique qu’une part conséquente des observations ne sont pas utilisées pour entraîner un arbre donné. Ces observations laissées de côté forment un <strong>échantillon dit <em>out-of-bag</em></strong>, que l’on peut utiliser pour évaluer la performance de chaque arbre. On peut donc construire pour chaque observation du jeu d’entraînement une prédiction qui agrège uniquement les prédictions des arbres pour lesquels cette observation est <em>out-of-bag</em>; cette prédiction n’est pas affectée par le surapprentissage (puisque cette observation n’a jamais été utilisée pour entraîner ces arbres). De cette façon, il est possible d’évaluer correctement la performance de la forêt aléatoire en comparant ces prédictions avec la variable-cible à l’aide d’une métrique bien choisie.</p>
+<p>La forêt aléatoire présente une particularité intéressante et très utile en pratique: <strong>il est possible d’évaluer les performances d’une forêt aléatoire directement à partir des données d’entraînement</strong>, grâce à l’estimation de l’erreur <em>Out-of-Bag</em> (OOB). Cette technique repose sur le fait que chaque arbre est construit à partir d’un échantillon <em>bootstrap</em>, c’est-à-dire un échantillon tiré avec remise. Cela implique qu’une part des observations ne sont pas utilisées pour entraîner un arbre donné. Ces observations laissées de côté forment un <strong>échantillon dit <em>out-of-bag</em></strong>, que l’on peut utiliser pour évaluer la performance de chaque arbre. On peut donc construire pour chaque observation du jeu d’entraînement une prédiction qui agrège uniquement les prédictions des arbres pour lesquels cette observation est <em>out-of-bag</em>; cette prédiction n’est pas affectée par le surapprentissage (puisque cette observation n’a jamais été utilisée pour entraîner ces arbres). De cette façon, il est possible d’évaluer correctement la performance de la forêt aléatoire en comparant ces prédictions avec la variable-cible à l’aide d’une métrique bien choisie.</p>
 <p>La procédure d’estimation de l’erreur OOB se déroule comme ceci:</p>
 <ol type="1">
-<li><strong>Entraînement de la forêt aléatoire</strong>: la forêt aléatoire est entraînée sur les données d’entraînement selon la procédure détaillée ci-dessus.</li>
-<li><strong>Prédiction <em>out-of-bag</em></strong> : Pour chaque observation <span class="math inline">\((x_i, y_i)\)</span> des données d’entraînement, on calcule la prédiction de tous les arbres pour lesquels elle fait partie de l’échantillon <em>out-of-bag</em>.</li>
-<li><strong>Agrégation des prédictions</strong> : La prédiction finale est obtenue en agrégeant les prédictions selon la procédure standard détaillée ci-dessus (moyenne pour la régression, vote majoritaire pour la classification).</li>
-<li><strong>Calcul de l’erreur OOB</strong> : L’erreur OOB est ensuite calculée en comparant les prédictions avec la variable-cible <span class="math inline">\(y\)</span> sur toutes les observations, à l’aide d’une métrique (précision, rappel, AUC, erreur quadratique moyenne, score de Brier…).</li>
+<li><p><strong>Entraînement de la forêt aléatoire</strong>: la forêt aléatoire est entraînée sur les données d’entraînement selon la procédure détaillée ci-dessus.</p></li>
+<li><p><strong>Calcul des prédictions <em>out-of-bag</em></strong> : Pour chaque observation <span class="math inline">\((x_i, y_i)\)</span> des données d’entraînement, on calcule la prédiction de tous les arbres pour lesquels elle fait partie de l’échantillon <em>out-of-bag</em>. La prédiction <em>out-of-bag</em> finale est obtenue en agrégeant ces prédictions selon la procédure standard détaillée ci-dessus (moyenne pour la régression, vote majoritaire pour la classification).</p></li>
+<li><p><strong>Calcul de l’erreur OOB</strong> : L’erreur OOB est ensuite calculée en comparant les prédictions avec la variable-cible <span class="math inline">\(y\)</span> sur toutes les observations, à l’aide d’une métrique (précision, rappel, AUC, erreur quadratique moyenne, score de Brier…).</p></li>
 </ol>
 <p>L’utilisation de l’erreur OOB présente de multiples avantages:</p>
 <ul>
-<li><strong>Approximation de l’erreur de généralisation</strong>: L’erreur OOB est en général considérée comme une bonne approximation de l’erreur de généralisation, comparable à celle obtenue par une validation croisée.</li>
-<li><strong>Pas besoin de jeu de validation séparé</strong> : L’un des principaux avantages de l’erreur OOB est qu’elle ne nécessite pas de réserver une partie des données pour la validation. Cela est particulièrement utile lorsque la taille du jeu de données est limitée, car toutes les données peuvent être utilisées pour l’entraînement tout en ayant une estimation fiable de la performance. Ceci dit, il est malgré tout recommandé de conserver un ensemble de test si la taille des données le permet, car il arrive que l’erreur OOB sous</li>
-<li><strong>Gain de temps</strong> : Contrairement à la validation croisée qui requiert de réentraîner plusieurs fois le modèle pour un jeu donné d’hyperparamètres, l’erreur OOB ne nécessite qu’un seul entraînement du modèle. Cela induit un gain de temps appréciable lors de l’optimisation des hyperparamètres.</li>
+<li><p><strong>Approximation de l’erreur de généralisation</strong>: L’erreur OOB est en général considérée comme une bonne approximation de l’erreur de généralisation, comparable à celle obtenue par une validation croisée.</p></li>
+<li><p><strong>Pas besoin de jeu de test séparé</strong> : L’un des principaux avantages de l’erreur OOB est qu’elle ne nécessite pas de réserver une partie des données pour la mesure de la performance. Cela est particulièrement utile lorsque la taille du jeu de données est limitée, car toutes les données peuvent être utilisées pour l’entraînement tout en ayant une estimation fiable de la performance. Ceci dit, il est malgré tout recommandé de conserver un ensemble de test si la taille des données le permet, car il arrive que l’erreur OOB surestime la performance du modèle.</p></li>
+<li><p><strong>Gain de temps</strong> : Contrairement à la validation croisée qui requiert de réentraîner plusieurs fois le modèle pour un jeu donné d’hyperparamètres, l’erreur OOB ne nécessite qu’un seul entraînement du modèle. Cela induit un gain de temps appréciable lors de l’optimisation des hyperparamètres.</p></li>
+<li><p><strong>Pertinence pour certains cas d’usage</strong> : les prédictions <em>out-of-bag</em> peuvent être particulièrement utiles lorsqu’on veut utiliser le modèle sur les données d’entraînement. C’est notamment le cas si l’on veut utiliser une forêt aléatoire pour prédire la probabilité de réponse dans une enquête, dans le cadre d’une repondération selon la méthode des groupes de réponse homogène.</p></li>
 </ul>
 <!-- 
 ANCIENNE VERSION DU PARAGRAPHE
@@ -482,6 +492,7 @@ L'estimation **Out-of-Bag (OOB)** est une méthode particulièrement efficace po
 <p>L’objectif des <strong>méthodes d’interprétabilité</strong> (ou d’importance des variables) est d’identifier les variables les plus influentes sur la variable cible, de comprendre les mécanismes prédictifs sous-jacents, et potentiellement d’extraire des règles de décision simples et transparentes. Plusieurs méthodes d’importance des variables existent, mais il est important de comprendre leurs forces et faiblesses.</p>
 <section id="mesures-dimportance-classiques-et-leurs-biais" class="level3" data-number="1.5.1">
 <h3 data-number="1.5.1" class="anchored" data-anchor-id="mesures-dimportance-classiques-et-leurs-biais"><span class="header-section-number">1.5.1</span> Mesures d’importance classiques (et leurs biais)</h3>
+<p>Il existe de multiples mesures d’importance des variables. Deux d’entre elles sont fréquemment utilisées:</p>
 <ul>
 <li><strong>Réduction moyenne de l’impureté</strong> (<em>Mean Decrease in Impurity</em> - <em>MDI</em>) : Cette méthode quantifie l’importance d’une variable par la somme des réductions d’impureté qu’elle induit dans tous les arbres de la forêt. Plus spécifiquement, pour chaque variable, on s’intéresse à la moyenne des réductions d’impureté qu’elle a engendrées dans tous les nœuds de tous les arbres où elle est impliquée. Les variables présentant la réduction moyenne d’impureté la plus élevée sont considérées comme les prédicteurs les plus importants.</li>
 </ul>
@@ -492,9 +503,9 @@ L'estimation **Out-of-Bag (OOB)** est une méthode particulièrement efficace po
 <p>Comme la MDI, la MDA présente des biais lorsque les variables sont corrélées. En particulier, la MDA peut surévaluer l’importance de variables qui sont corrélées à d’autres variables importantes, même si elles n’ont pas d’influence directe sur la cible (<span class="citation" data-cites="benard2022mda">Bénard, Da Veiga, and Scornet (<a href="#ref-benard2022mda" role="doc-biblioref">2022</a>)</span>).</p>
 <p>Plusieurs stratégies peuvent aider à réduire les biais d’interprétation :</p>
 <ul>
-<li>Prétraitement des variables: Standardisation des variables, regroupement des modalités rares des variables catégorielles, réduction de la cardinalité des variables catégorielles.</li>
-<li>Analyse des corrélations: Identification et gestion des variables fortement corrélées, qui peuvent fausser les mesures d’importance.</li>
-<li>Choix de méthodes robustes: Privilégier les méthodes moins sensibles aux biais, comme les CIF ou la Sobol-MDA, et, le cas échéant, SHAFF pour les valeurs de Shapley. Ces méthodes sont présentées dans la sectio suivante.</li>
+<li><p>Prétraitement des variables: Standardisation des variables, regroupement des modalités rares des variables catégorielles, réduction de la cardinalité des variables catégorielles.</p></li>
+<li><p>Analyse des corrélations: Identification et gestion des variables fortement corrélées, qui peuvent fausser les mesures d’importance.</p></li>
+<li><p>Choix de méthodes robustes: Privilégier les méthodes moins sensibles aux biais, comme les CIF ou la Sobol-MDA, et, le cas échéant, SHAFF pour les valeurs de Shapley. Ces méthodes sont présentées dans la sectio suivante.</p></li>
 </ul>
 </section>
 <section id="méthodes-dimportance-avancées" class="level3" data-number="1.5.2">
