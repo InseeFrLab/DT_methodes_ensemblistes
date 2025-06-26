@@ -197,10 +197,10 @@ _Illustration par une figure (flèches rouges)_
 
 ### Avantages
 
-- **Interprétabilité**: Les arbres de décision sont faciles à comprendre et à visualiser (à condition qu'ils ne soient pas trop profonds).
-- **Simplicité**: Pas besoin de transformations complexes des données.
+- **Simplicité et interprétabilité**: Les arbres de décision sont faciles à comprendre et à visualiser (à condition qu'ils ne soient pas trop profonds).
+- **Facilité d'usage**: les arbres de décision ne demandent pas de transformations complexes des données.
 - **Flexibilité**: Ils peuvent gérer des caractéristiques numériques et catégorielles, ainsi que les valeurs manquantes.
-- **Gestion des interactions**: Les arbres sont des modèles non paramétriques et ne font aucune hypothèse sur la distribution des variables. Ils capturent naturellement les interactions entre les caractéristiques.
+- **Gestion des interactions**: Les arbres sont des modèles non paramétriques et ne font aucune hypothèse sur la distribution des variables. Ils capturent aisément les relations non-linéaires et les interactions entre les caractéristiques.
 
 ### Limites
 
