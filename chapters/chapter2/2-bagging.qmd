@@ -18,13 +18,7 @@ Le _bagging_ comporte trois étapes principales:
 
 ## Pourquoi (et dans quelles situations) le _bagging_ fonctionne
 
-Certains modèles sont très sensibles aux données d'entraînement, et leurs prédictions sont très instables d'un échantillon à l'autre. L'objectif du _bagging_ est de construire un prédicteur plus précis en agrégeant les prédictions de plusieurs modèles entraînés sur des échantillons (légèrement) différents les uns des autres. 
-
-@breiman1996bagging montre que cette méthode est particulièrement efficace lorsqu'elle est appliquée à des modèles très instables, dont les performances sont particulièrement sensibles aux variations du jeu de données d'entraînement, et peu biaisés.
-
-Cette section vise à mieux comprendre comment (et sous quelles conditions) l'agrégation par _bagging_ permet de construire un prédicteur plus performant. 
-
-Dans la suite, nous notons $φ(x, L)$ un prédicteur (d'une valeur numérique dans le cas de la *régression* ou d'un label dans le cas de la *classification*), entraîné sur un ensemble d'apprentissage $L$, et prenant en entrée un vecteur de caractéristiques $x$. 
+L'objectif du _bagging_ est de construire un prédicteur plus précis en agrégeant les prédictions de plusieurs modèles entraînés sur des échantillons (légèrement) différents les uns des autres. @breiman1996bagging a démontré que cette méthode est particulièrement efficace lorsqu'elle est appliquée à des modèles très instables, dont les performances sont particulièrement sensibles aux variations du jeu de données d'entraînement, et peu biaisés. Cette section vise à expliquer pourquoi (et sous quelles conditions) l'agrégation par _bagging_ permet de construire un prédicteur plus performant. Dans la suite, nous notons $φ(x, L)$ un prédicteur (d'une valeur numérique dans le cas de la *régression* ou d'un label dans le cas de la *classification*), entraîné sur un ensemble d'apprentissage $L$, et prenant en entrée un vecteur de caractéristiques $x$. 
 
 ### La régression: réduction de l'erreur quadratique moyenne par agrégation
 
