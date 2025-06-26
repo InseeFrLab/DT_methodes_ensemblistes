@@ -47,9 +47,8 @@ website:
       - index.qmd
       - section: "Survol des méthodes ensemblistes"
         href: chapters/chapter1/1-survol.qmd
-        contents:
-          - chapters/chapter1/1-survol.qmd
-          - chapters/chapter1/2-comparaison_GB_RF.qmd
+        # contents:
+        #   - chapters/chapter1/1-survol.qmd
       - section: "Présentation formelle des algorithmes"
         href: chapters/chapter2/1-CART.qmd
         contents:
