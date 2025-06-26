@@ -44,7 +44,7 @@ website:
     search: true
     contents:
       - index.qmd
-      - section: "Survol des méthodes ensemblistes"
+      - text: "Survol des méthodes ensemblistes"
         href: chapters/chapter1/1-survol.qmd
         # contents:
         #   - chapters/chapter1/1-survol.qmd
