@@ -1,15 +1,49 @@
 
 ## Préparation des données
 
-### Préparation des données (Feature Engineering)
 
-- **Valeurs manquantes** : Les forêts aléatoires peuvent gérer les données manquantes, mais une imputation préalable peut améliorer les performances.
+### Préparation des variables explicatives
 
-- **Variables catégorielles** : Utiliser un encodage adapté (one-hot encoding, ordinal encoding) en fonction de la nature des données. Convertir en variables continues dès que c'est possible.
 
-- **Échelle des Variables** : Pas nécessaire de normaliser, les arbres sont invariants aux transformations monotones.
+
+- valeurs manquantes;
+- variables catégorielles;
+- Création de variables.
+
+
+En revanche, un certain nombre de retraitements ne sont pas nécessaires: 
+
+- Il est inutile de normaliser ou de standardiser les variables numériques car c'est l'_ordre_ défini par les valeurs qui est essentiel, pas les valeurs numériques elles-mêmes (voir la section @sec-CART).
+- Pour la même raison, il est inutile de modifier ou supprimer les valeurs extrêmes (mais il peut être utile  de les corriger si elles sont clairement erronées).
+- Pour la même raison, il est inutile d'ajouter aux données des variables numériques issues de transformations __monotones__ de variables existantes, telles que  d'inclure des variables supplémentaires telles que le carré ou le cube d'une variable déjà présente dans les données.
+- Il n'est pas indispensable de supprimer les variables corrélées car les méthodes ensemblistes sont robustes à la multicollinéarité. Ceci dit, réduire le nombre de variables peut accélérer légèrement l'entraînement des modèles.
+
+
+_feature engineering_
 
 ### Process: utiliser les pipelines scikit, pour expliciter la structure du modèle complet et réduire les risques d'erreur
+
+- **Nettoyage des données**
+  - Gestion des valeurs manquantes : Imputation ou suppression si nécessaire (même si certaines implémentations de Random Forest gèrent les valeurs manquantes, il est préférable de les traiter pour éviter les biais)[5].
+  - Suppression des doublons : Pour éviter qu'ils n'influencent trop l'apprentissage.
+- **Traitement des variables catégorielles**
+  - Encodage (par exemple, one-hot encoding ou ordinal encoding) : Les variables catégorielles doivent être converties en format numérique[1].
+- **Création et sélection de variables**
+  - Création de nouvelles variables pertinentes (agrégats, interactions, etc.) si le domaine le justifie[4].
+  - Suppression de variables non pertinentes ou redondantes.
+- **Traitement des valeurs aberrantes**
+  - Détection et gestion si elles sont dues à des erreurs de saisie (les forêts aléatoires sont robustes aux valeurs aberrantes, mais il peut être pertinent de les traiter dans certains cas)[5].
+
+**Étapes inutiles ou non nécessaires :**
+
+
+### Préparation de la variable-cible
+
+Les méthodes ensemblistes sont sensibles aux valeurs prises par la variable-cible. La préparation de la variable-cible obéit donc à des règles différentes de celles applicables aux variables explicatives:
+
+- Il faut choisir soigneusement les transformations appliquées à la variable-cible: on obtient des modèles très différents selon qu'on entraîne un algorithme avec pour variable-cible le prix de vente des logements, le prix au mètre carré ou le logarithme du prix au mètre carré.
+- Il faut repérer et traiter les valeurs extrêmes, aberrantes ou erronées prises par la variable-cible, soit en les corrigeant, soit en supprimant les observations concernés. Ce point est particulièrement important lorsqu'on veut entraîner un algorithme de _gradient boosting_.
+
 
 
 ### Train-test
@@ -71,9 +105,9 @@ Voici les étapes clés de cette méthode:
 
 - Définition du problème: On spécifie une mesure d'évaluation (ex: AUC pour la classification, MSE pour la régression), une stratégie d'évaluation (ex: validation croisée k-fold), et l'espace des hyperparamètres à explorer.
 
-- Initialisation: échantillonner aléatoirement des points dans l’espace des hyperparamètres et évaluer leurs performances.
+- Initialisation: échantillonner aléatoirement des points dans l'espace des hyperparamètres et évaluer leurs performances.
 
 - Boucle itérative :
   - Construction d'un modèle de substitution (surrogate model): un modèle de régression (ex: krigeage ou une forêt aléatoire) est ajusté aux données déjà observées. Ce modèle prédit la performance en fonction des hyperparamètres.
   - Sélection d'un nouvel hyperparamètre: un critère basé sur le modèle de substitution sélectionne le prochain ensemble d'hyperparamètres à évaluer. Ce critère vise à explorer des régions prometteuses de l'espace des hyperparamètres qui n'ont pas encore été suffisamment explorées.
-  - Évaluer les points proposés et les ajouter à l’ensemble déjà exploré: la performance du nouvel ensemble d'hyperparamètres est évaluée et ajoutée à l'ensemble des données d'apprentissage du modèle de substitution afin d'orienter les recherches vers de nouveaux hyper-paramètres prometteurs.
+  - Évaluer les points proposés et les ajouter à l'ensemble déjà exploré: la performance du nouvel ensemble d'hyperparamètres est évaluée et ajoutée à l'ensemble des données d'apprentissage du modèle de substitution afin d'orienter les recherches vers de nouveaux hyper-paramètres prometteurs.
