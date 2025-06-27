@@ -1,4 +1,4 @@
-# Les arbres de décision
+# Les arbres de décision {#sec-CART}
 
 Les arbres de décision désignent un éventail d'algorithmes de _machine learning_, utilisés notamment pour des tâches de classification et de régression. Ces algorithmes constituent la brique élémentaire des méthodes ensemblistes à base d'arbres (forêt aléatoire et _gradient boosting_). Cette section a pour objectif de présenter ce qu'est un arbre de décision, sa structure et la terminologie associée (@sec-partitionner), puis de détailler la méthode de construction des arbres par l'algorithme CART (@sec-construire).
 
@@ -51,7 +51,7 @@ Les arbres de décision ont plusieurs propriétés qui contribuent à leur puiss
 
 - __Les arbres de décision ne font aucune hypothèse _a priori_ sur la relation entre les variables explicatives et la variable-cible__. C'est une différence majeure avec les modèles économétriques standards, tels que la régression linéaire qui suppose une relation linéaire de la forme $E(y) = \mathbf{X \beta}$.
 
--  **Un arbre de décision est une fonction constante par morceaux**: la prédiction est **identique** pour toutes les observations situées dans la même région, et ne peut varier qu'entre régions^[Il existe néanmoins des variantes d'arbres de décision où la prédiction n'est pas constante au sein de chaque feuille, mais elles sont peu courantes en pratique et ne sont pas couvertes par le présent document]. Une conséquence de cette propriété est qu'__un arbre de décision peut capter sans difficultés les non-linéarités__ dans la relation entre la variable-cible et les variables continues (voir la figure @fig-nonlinearite). Il est donc inutile d'inclure des variables supplémentaires telles que le carré ou le cube des variables continues.
+-  **Un arbre de décision est une fonction constante par morceaux**: la prédiction est **identique** pour toutes les observations situées dans la même région, et ne peut varier qu'entre régions^[Il existe néanmoins des variantes d'arbres de décision où la prédiction n'est pas constante au sein de chaque feuille, mais elles sont peu courantes en pratique et ne sont pas couvertes par le présent document]. Une conséquence de cette propriété est qu'__un arbre de décision peut capter sans difficultés les non-linéarités__ dans la relation entre la variable-cible et les variables numériques (voir la figure @fig-nonlinearite). Il est donc inutile d'inclure des variables supplémentaires telles que le carré ou le cube des variables continues.
 
    ![Arbre de décision et non-linéarité](/figures/non_linearite.png){#fig-nonlinearite width=90%}
 
@@ -60,7 +60,7 @@ Les arbres de décision ont plusieurs propriétés qui contribuent à leur puiss
    ![Structure d'un arbre de décision](/figures/decision_tree_interaction.svg){#fig-decision-tree-interaction width=90%}
 
 
-- __Dans un arbre de décision, les valeurs prises par les variables continues (par exemple l'âge) n'ont pas d'importance par elles-mêmes, c'est l'_ordre_ de ces valeurs qui est essentiel__. Ainsi, dans la règle de décision "L'âge est-il supérieur à 30 ans?", ce n'est pas la valeur “30” qui importe par elle-même, c’est le fait qu'elle **sépare les observations** en deux groupes, selon que l'âge est inférieur ou supérieur à 30 ans. Cette propriété a pour conséquence que les arbres de décision sont insensibles aux modifications strictement monotones des variables continues. Par exemple, remplacer l'âge par l'âge au carré ne changera rien à l'arbre de décision, car les règles de décision "L'âge est-il supérieur à 30 ans?" et "L'âge au carré est-il supérieur à 900?" sont strictement équivalentes (car elles définissent les mêmes groupes).
+- __Dans un arbre de décision, les valeurs prises par les variables numériques (par exemple l'âge) n'ont pas d'importance par elles-mêmes, c'est l'_ordre_ de ces valeurs qui est essentiel__. Ainsi, dans la règle de décision "L'âge est-il supérieur à 30 ans?", ce n'est pas la valeur “30” qui importe par elle-même, c’est le fait qu'elle **sépare les observations** en deux groupes, selon que l'âge est inférieur ou supérieur à 30 ans. Cette propriété a pour conséquence que les arbres de décision sont insensibles aux modifications strictement monotones des variables continues. Par exemple, remplacer l'âge par l'âge au carré ne changera rien à l'arbre de décision, car les règles de décision "L'âge est-il supérieur à 30 ans?" et "L'âge au carré est-il supérieur à 900?" sont strictement équivalentes (car elles définissent les mêmes groupes).
 
 ### Illustration
 
