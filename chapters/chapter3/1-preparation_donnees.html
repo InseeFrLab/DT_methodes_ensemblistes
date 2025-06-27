@@ -254,9 +254,10 @@ window.Quarto = {
   <ul>
   <li><a href="#préparation-des-données" id="toc-préparation-des-données" class="nav-link active" data-scroll-target="#préparation-des-données"><span class="header-section-number">1</span> Préparation des données</a>
   <ul class="collapse">
-  <li><a href="#préparation-des-données-feature-engineering" id="toc-préparation-des-données-feature-engineering" class="nav-link" data-scroll-target="#préparation-des-données-feature-engineering"><span class="header-section-number">1.1</span> Préparation des données (Feature Engineering)</a></li>
+  <li><a href="#préparation-des-variables-explicatives" id="toc-préparation-des-variables-explicatives" class="nav-link" data-scroll-target="#préparation-des-variables-explicatives"><span class="header-section-number">1.1</span> Préparation des variables explicatives</a></li>
   <li><a href="#process-utiliser-les-pipelines-scikit-pour-expliciter-la-structure-du-modèle-complet-et-réduire-les-risques-derreur" id="toc-process-utiliser-les-pipelines-scikit-pour-expliciter-la-structure-du-modèle-complet-et-réduire-les-risques-derreur" class="nav-link" data-scroll-target="#process-utiliser-les-pipelines-scikit-pour-expliciter-la-structure-du-modèle-complet-et-réduire-les-risques-derreur"><span class="header-section-number">1.2</span> Process: utiliser les pipelines scikit, pour expliciter la structure du modèle complet et réduire les risques d’erreur</a></li>
-  <li><a href="#train-test" id="toc-train-test" class="nav-link" data-scroll-target="#train-test"><span class="header-section-number">1.3</span> Train-test</a></li>
+  <li><a href="#préparation-de-la-variable-cible" id="toc-préparation-de-la-variable-cible" class="nav-link" data-scroll-target="#préparation-de-la-variable-cible"><span class="header-section-number">1.3</span> Préparation de la variable-cible</a></li>
+  <li><a href="#train-test" id="toc-train-test" class="nav-link" data-scroll-target="#train-test"><span class="header-section-number">1.4</span> Train-test</a></li>
   </ul></li>
   <li><a href="#evaluation-des-performances-du-modèle-et-optimisation-des-hyper-paramètres" id="toc-evaluation-des-performances-du-modèle-et-optimisation-des-hyper-paramètres" class="nav-link" data-scroll-target="#evaluation-des-performances-du-modèle-et-optimisation-des-hyper-paramètres"><span class="header-section-number">2</span> Evaluation des performances du modèle et optimisation des hyper-paramètres</a>
   <ul class="collapse">
@@ -274,19 +275,56 @@ window.Quarto = {
 
 <section id="préparation-des-données" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="préparation-des-données"><span class="header-section-number">1</span> Préparation des données</h2>
-<section id="préparation-des-données-feature-engineering" class="level3" data-number="1.1">
-<h3 data-number="1.1" class="anchored" data-anchor-id="préparation-des-données-feature-engineering"><span class="header-section-number">1.1</span> Préparation des données (Feature Engineering)</h3>
+<section id="préparation-des-variables-explicatives" class="level3" data-number="1.1">
+<h3 data-number="1.1" class="anchored" data-anchor-id="préparation-des-variables-explicatives"><span class="header-section-number">1.1</span> Préparation des variables explicatives</h3>
 <ul>
-<li><p><strong>Valeurs manquantes</strong> : Les forêts aléatoires peuvent gérer les données manquantes, mais une imputation préalable peut améliorer les performances.</p></li>
-<li><p><strong>Variables catégorielles</strong> : Utiliser un encodage adapté (one-hot encoding, ordinal encoding) en fonction de la nature des données. Convertir en variables continues dès que c’est possible.</p></li>
-<li><p><strong>Échelle des Variables</strong> : Pas nécessaire de normaliser, les arbres sont invariants aux transformations monotones.</p></li>
+<li>valeurs manquantes;</li>
+<li>variables catégorielles;</li>
+<li>Création de variables.</li>
 </ul>
+<p>En revanche, un certain nombre de retraitements ne sont pas nécessaires:</p>
+<ul>
+<li>Il est inutile de normaliser ou de standardiser les variables numériques car c’est l’<em>ordre</em> défini par les valeurs qui est essentiel, pas les valeurs numériques elles-mêmes (voir la section <strong>?@sec-CART</strong>).</li>
+<li>Pour la même raison, il est inutile de modifier ou supprimer les valeurs extrêmes (mais il peut être utile de les corriger si elles sont clairement erronées).</li>
+<li>Pour la même raison, il est inutile d’ajouter aux données des variables numériques issues de transformations <strong>monotones</strong> de variables existantes, telles que d’inclure des variables supplémentaires telles que le carré ou le cube d’une variable déjà présente dans les données.</li>
+<li>Il n’est pas indispensable de supprimer les variables corrélées car les méthodes ensemblistes sont robustes à la multicollinéarité. Ceci dit, réduire le nombre de variables peut accélérer légèrement l’entraînement des modèles.</li>
+</ul>
+<p><em>feature engineering</em></p>
 </section>
 <section id="process-utiliser-les-pipelines-scikit-pour-expliciter-la-structure-du-modèle-complet-et-réduire-les-risques-derreur" class="level3" data-number="1.2">
 <h3 data-number="1.2" class="anchored" data-anchor-id="process-utiliser-les-pipelines-scikit-pour-expliciter-la-structure-du-modèle-complet-et-réduire-les-risques-derreur"><span class="header-section-number">1.2</span> Process: utiliser les pipelines scikit, pour expliciter la structure du modèle complet et réduire les risques d’erreur</h3>
+<ul>
+<li><strong>Nettoyage des données</strong>
+<ul>
+<li>Gestion des valeurs manquantes : Imputation ou suppression si nécessaire (même si certaines implémentations de Random Forest gèrent les valeurs manquantes, il est préférable de les traiter pour éviter les biais)[5].</li>
+<li>Suppression des doublons : Pour éviter qu’ils n’influencent trop l’apprentissage.</li>
+</ul></li>
+<li><strong>Traitement des variables catégorielles</strong>
+<ul>
+<li>Encodage (par exemple, one-hot encoding ou ordinal encoding) : Les variables catégorielles doivent être converties en format numérique[1].</li>
+</ul></li>
+<li><strong>Création et sélection de variables</strong>
+<ul>
+<li>Création de nouvelles variables pertinentes (agrégats, interactions, etc.) si le domaine le justifie[4].</li>
+<li>Suppression de variables non pertinentes ou redondantes.</li>
+</ul></li>
+<li><strong>Traitement des valeurs aberrantes</strong>
+<ul>
+<li>Détection et gestion si elles sont dues à des erreurs de saisie (les forêts aléatoires sont robustes aux valeurs aberrantes, mais il peut être pertinent de les traiter dans certains cas)[5].</li>
+</ul></li>
+</ul>
+<p><strong>Étapes inutiles ou non nécessaires :</strong></p>
 </section>
-<section id="train-test" class="level3" data-number="1.3">
-<h3 data-number="1.3" class="anchored" data-anchor-id="train-test"><span class="header-section-number">1.3</span> Train-test</h3>
+<section id="préparation-de-la-variable-cible" class="level3" data-number="1.3">
+<h3 data-number="1.3" class="anchored" data-anchor-id="préparation-de-la-variable-cible"><span class="header-section-number">1.3</span> Préparation de la variable-cible</h3>
+<p>Les méthodes ensemblistes sont sensibles aux valeurs prises par la variable-cible. La préparation de la variable-cible obéit donc à des règles différentes de celles applicables aux variables explicatives:</p>
+<ul>
+<li>Il faut choisir soigneusement les transformations appliquées à la variable-cible: on obtient des modèles très différents selon qu’on entraîne un algorithme avec pour variable-cible le prix de vente des logements, le prix au mètre carré ou le logarithme du prix au mètre carré.</li>
+<li>Il faut repérer et traiter les valeurs extrêmes, aberrantes ou erronées prises par la variable-cible, soit en les corrigeant, soit en supprimant les observations concernés. Ce point est particulièrement important lorsqu’on veut entraîner un algorithme de <em>gradient boosting</em>.</li>
+</ul>
+</section>
+<section id="train-test" class="level3" data-number="1.4">
+<h3 data-number="1.4" class="anchored" data-anchor-id="train-test"><span class="header-section-number">1.4</span> Train-test</h3>
 <p>Pas indispensable pour RF, mais souhaitable. Indispensable pour GB.</p>
 </section>
 </section>

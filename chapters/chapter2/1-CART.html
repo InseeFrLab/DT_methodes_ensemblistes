@@ -252,7 +252,7 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#les-arbres-de-décision" id="toc-les-arbres-de-décision" class="nav-link active" data-scroll-target="#les-arbres-de-décision"><span class="header-section-number">1</span> Les arbres de décision</a>
+  <li><a href="#sec-CART" id="toc-sec-CART" class="nav-link active" data-scroll-target="#sec-CART"><span class="header-section-number">1</span> Les arbres de décision</a>
   <ul class="collapse">
   <li><a href="#sec-partitionner" id="toc-sec-partitionner" class="nav-link" data-scroll-target="#sec-partitionner"><span class="header-section-number">1.1</span> Le principe fondamental: partitionner pour prédire</a>
   <ul class="collapse">
@@ -284,7 +284,7 @@ window.Quarto = {
 
 
 
-<section id="les-arbres-de-décision" class="level1" data-number="1">
+<section id="sec-CART" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Les arbres de décision</h1>
 <p>Les arbres de décision désignent un éventail d’algorithmes de <em>machine learning</em>, utilisés notamment pour des tâches de classification et de régression. Ces algorithmes constituent la brique élémentaire des méthodes ensemblistes à base d’arbres (forêt aléatoire et <em>gradient boosting</em>). Cette section a pour objectif de présenter ce qu’est un arbre de décision, sa structure et la terminologie associée (<a href="#sec-partitionner" class="quarto-xref">Section&nbsp;1.1</a>), puis de détailler la méthode de construction des arbres par l’algorithme CART (<a href="#sec-construire" class="quarto-xref">Section&nbsp;1.2</a>).</p>
 <section id="sec-partitionner" class="level2" data-number="1.1">
@@ -335,7 +335,7 @@ Figure&nbsp;1: Structure d’un arbre de décision
 <p>Les arbres de décision ont plusieurs propriétés qui contribuent à leur puissance prédictive et facilitent leur usage en pratique:</p>
 <ul>
 <li><p><strong>Les arbres de décision ne font aucune hypothèse <em>a priori</em> sur la relation entre les variables explicatives et la variable-cible</strong>. C’est une différence majeure avec les modèles économétriques standards, tels que la régression linéaire qui suppose une relation linéaire de la forme <span class="math inline">\(E(y) = \mathbf{X \beta}\)</span>.</p></li>
-<li><p><strong>Un arbre de décision est une fonction constante par morceaux</strong>: la prédiction est <strong>identique</strong> pour toutes les observations situées dans la même région, et ne peut varier qu’entre régions<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. Une conséquence de cette propriété est qu’<strong>un arbre de décision peut capter sans difficultés les non-linéarités</strong> dans la relation entre la variable-cible et les variables continues (voir la figure <a href="#fig-nonlinearite" class="quarto-xref">2</a>). Il est donc inutile d’inclure des variables supplémentaires telles que le carré ou le cube des variables continues.</p>
+<li><p><strong>Un arbre de décision est une fonction constante par morceaux</strong>: la prédiction est <strong>identique</strong> pour toutes les observations situées dans la même région, et ne peut varier qu’entre régions<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. Une conséquence de cette propriété est qu’<strong>un arbre de décision peut capter sans difficultés les non-linéarités</strong> dans la relation entre la variable-cible et les variables numériques (voir la figure <a href="#fig-nonlinearite" class="quarto-xref">2</a>). Il est donc inutile d’inclure des variables supplémentaires telles que le carré ou le cube des variables continues.</p>
 <div id="fig-nonlinearite" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-nonlinearite-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -357,7 +357,7 @@ Figure&nbsp;3: Structure d’un arbre de décision
 </figcaption>
 </figure>
 </div></li>
-<li><p><strong>Dans un arbre de décision, les valeurs prises par les variables continues (par exemple l’âge) n’ont pas d’importance par elles-mêmes, c’est l’<em>ordre</em> de ces valeurs qui est essentiel</strong>. Ainsi, dans la règle de décision “L’âge est-il supérieur à 30 ans?”, ce n’est pas la valeur “30” qui importe par elle-même, c’est le fait qu’elle <strong>sépare les observations</strong> en deux groupes, selon que l’âge est inférieur ou supérieur à 30 ans. Cette propriété a pour conséquence que les arbres de décision sont insensibles aux modifications strictement monotones des variables continues. Par exemple, remplacer l’âge par l’âge au carré ne changera rien à l’arbre de décision, car les règles de décision “L’âge est-il supérieur à 30 ans?” et “L’âge au carré est-il supérieur à 900?” sont strictement équivalentes (car elles définissent les mêmes groupes).</p></li>
+<li><p><strong>Dans un arbre de décision, les valeurs prises par les variables numériques (par exemple l’âge) n’ont pas d’importance par elles-mêmes, c’est l’<em>ordre</em> de ces valeurs qui est essentiel</strong>. Ainsi, dans la règle de décision “L’âge est-il supérieur à 30 ans?”, ce n’est pas la valeur “30” qui importe par elle-même, c’est le fait qu’elle <strong>sépare les observations</strong> en deux groupes, selon que l’âge est inférieur ou supérieur à 30 ans. Cette propriété a pour conséquence que les arbres de décision sont insensibles aux modifications strictement monotones des variables continues. Par exemple, remplacer l’âge par l’âge au carré ne changera rien à l’arbre de décision, car les règles de décision “L’âge est-il supérieur à 30 ans?” et “L’âge au carré est-il supérieur à 900?” sont strictement équivalentes (car elles définissent les mêmes groupes).</p></li>
 </ul>
 </section>
 <section id="illustration" class="level3" data-number="1.1.5">
