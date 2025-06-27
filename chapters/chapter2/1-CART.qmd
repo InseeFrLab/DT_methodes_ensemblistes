@@ -45,6 +45,23 @@ Cet algorithme est appelé __arbre de décision__ (_decision tree_) en raison pr
     
 ![Structure d'un arbre de décision](/figures/decision_tree_description.svg){#fig-decision-tree-description width=90%}
 
+### Propriétés des arbres de décision
+
+Les arbres de décision ont plusieurs propriétés qui contribuent à leur puissance prédictive et facilitent leur usage en pratique:
+
+- __Les arbres de décision ne font aucune hypothèse _a priori_ sur la relation entre les variables explicatives et la variable-cible__. C'est une différence majeure avec les modèles économétriques standards, tels que la régression linéaire qui suppose une relation linéaire de la forme $E(y) = \mathbf{X \beta}$.
+
+-  **Un arbre de décision est une fonction constante par morceaux**: la prédiction est **identique** pour toutes les observations situées dans la même région, et ne peut varier qu'entre régions^[Il existe néanmoins des variantes d'arbres de décision où la prédiction n'est pas constante au sein de chaque feuille, mais elles sont peu courantes en pratique et ne sont pas couvertes par le présent document]. Une conséquence de cette propriété est qu'__un arbre de décision peut capter sans difficultés les non-linéarités__ dans la relation entre la variable-cible et les variables continues (voir la figure @fig-nonlinearite). Il est donc inutile d'inclure des variables supplémentaires telles que le carré ou le cube des variables continues.
+
+   ![Arbre de décision et non-linéarité](/figures/non_linearite.png){#fig-nonlinearite width=90%}
+
+- __Les arbres de décision sont par construction capables de capter des interactions entre variables explicatives sans qu'il soit nécessaire de les spécifier explicitement__. En effet, la prédiction pour une observation dépend de la combinaison des différentes variables intervenant dans les règles de décision qui mènent à la feuille terminale, ce qui traduit une interaction entre les variables. La figure @fig-decision-tree-interaction illustre ces interactions avec un arbre de décision qui prédit le salaire en fonction de l'âge, du niveau d'étude, et de l'expérience. On voit d'une part que les feuilles terminales sont définies par la conjonction de règles de décision qui font intervenir ces trois variables, avec des seuils différents selon les branches de l'arbre, et d'autre part que l'effet d'une caractéristique sur le salaire dépend des autres caractéristiques de l'individu. Par exemple, une augmentation de l'expérience de 7 à 8 années se traduira une augmentation de salaire de 100 € si l'individu a moins de 35 ans et un niveau d'études inférieur au bac, par une augmentation de 200 € s'il a plus de 35 ans et un niveau d'étude supérieur à Bac+ 3, et sera sans effet sur le salaire dans les autres cas.
+
+   ![Structure d'un arbre de décision](/figures/decision_tree_interaction.svg){#fig-decision-tree-interaction width=90%}
+
+
+- __Dans un arbre de décision, les valeurs prises par les variables continues (par exemple l'âge) n'ont pas d'importance par elles-mêmes, c'est l'_ordre_ de ces valeurs qui est essentiel__. Ainsi, dans la règle de décision "L'âge est-il supérieur à 30 ans?", ce n'est pas la valeur “30” qui importe par elle-même, c’est le fait qu'elle **sépare les observations** en deux groupes, selon que l'âge est inférieur ou supérieur à 30 ans. Cette propriété a pour conséquence que les arbres de décision sont insensibles aux modifications strictement monotones des variables continues. Par exemple, remplacer l'âge par l'âge au carré ne changera rien à l'arbre de décision, car les règles de décision "L'âge est-il supérieur à 30 ans?" et "L'âge au carré est-il supérieur à 900?" sont strictement équivalentes (car elles définissent les mêmes groupes).
+
 ### Illustration
 
 Supposons que nous souhaitions prédire le prix d'une maison en fonction de sa superficie et de son nombre de pièces. Un arbre de décision pourrait procéder ainsi:
@@ -60,9 +77,6 @@ Supposons que nous souhaitions prédire le prix d'une maison en fonction de sa s
    - Non: Prix bas (par exemple, moins de 150 000 €).
 
 Cet arbre utilise des règles simples pour diviser l'espace des caractéristiques (superficie et nombre de pièces) en sous-groupes homogènes et fournir une prédiction (estimer le prix d'une maison).
-
-__Parler des interactions entre variables__
-
 
 ## La construction d'un arbre de décision par l'algorithme CART {#sec-construire}
 
