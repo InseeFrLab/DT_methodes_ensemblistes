@@ -259,7 +259,8 @@ window.Quarto = {
   <li><a href="#les-défis-du-partitionnement-optimal" id="toc-les-défis-du-partitionnement-optimal" class="nav-link" data-scroll-target="#les-défis-du-partitionnement-optimal"><span class="header-section-number">1.1.1</span> Les défis du partitionnement optimal</a></li>
   <li><a href="#les-solutions-apportées-par-les-arbres-de-décision" id="toc-les-solutions-apportées-par-les-arbres-de-décision" class="nav-link" data-scroll-target="#les-solutions-apportées-par-les-arbres-de-décision"><span class="header-section-number">1.1.2</span> Les solutions apportées par les arbres de décision</a></li>
   <li><a href="#terminologie-et-structure-dun-arbre-de-décision" id="toc-terminologie-et-structure-dun-arbre-de-décision" class="nav-link" data-scroll-target="#terminologie-et-structure-dun-arbre-de-décision"><span class="header-section-number">1.1.3</span> Terminologie et structure d’un arbre de décision</a></li>
-  <li><a href="#illustration" id="toc-illustration" class="nav-link" data-scroll-target="#illustration"><span class="header-section-number">1.1.4</span> Illustration</a></li>
+  <li><a href="#propriétés-des-arbres-de-décision" id="toc-propriétés-des-arbres-de-décision" class="nav-link" data-scroll-target="#propriétés-des-arbres-de-décision"><span class="header-section-number">1.1.4</span> Propriétés des arbres de décision</a></li>
+  <li><a href="#illustration" id="toc-illustration" class="nav-link" data-scroll-target="#illustration"><span class="header-section-number">1.1.5</span> Illustration</a></li>
   </ul></li>
   <li><a href="#sec-construire" id="toc-sec-construire" class="nav-link" data-scroll-target="#sec-construire"><span class="header-section-number">1.2</span> La construction d’un arbre de décision par l’algorithme CART</a>
   <ul class="collapse">
@@ -329,8 +330,38 @@ Figure&nbsp;1: Structure d’un arbre de décision
 </figure>
 </div>
 </section>
-<section id="illustration" class="level3" data-number="1.1.4">
-<h3 data-number="1.1.4" class="anchored" data-anchor-id="illustration"><span class="header-section-number">1.1.4</span> Illustration</h3>
+<section id="propriétés-des-arbres-de-décision" class="level3" data-number="1.1.4">
+<h3 data-number="1.1.4" class="anchored" data-anchor-id="propriétés-des-arbres-de-décision"><span class="header-section-number">1.1.4</span> Propriétés des arbres de décision</h3>
+<p>Les arbres de décision ont plusieurs propriétés qui contribuent à leur puissance prédictive et facilitent leur usage en pratique:</p>
+<ul>
+<li><p><strong>Les arbres de décision ne font aucune hypothèse <em>a priori</em> sur la relation entre les variables explicatives et la variable-cible</strong>. C’est une différence majeure avec les modèles économétriques standards, tels que la régression linéaire qui suppose une relation linéaire de la forme <span class="math inline">\(E(y) = \mathbf{X \beta}\)</span>.</p></li>
+<li><p><strong>Un arbre de décision est une fonction constante par morceaux</strong>: la prédiction est <strong>identique</strong> pour toutes les observations situées dans la même région, et ne peut varier qu’entre régions<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. Une conséquence de cette propriété est qu’<strong>un arbre de décision peut capter sans difficultés les non-linéarités</strong> dans la relation entre la variable-cible et les variables continues (voir la figure <a href="#fig-nonlinearite" class="quarto-xref">2</a>). Il est donc inutile d’inclure des variables supplémentaires telles que le carré ou le cube des variables continues.</p>
+<div id="fig-nonlinearite" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-nonlinearite-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../../figures/non_linearite.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-nonlinearite-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Arbre de décision et non-linéarité
+</figcaption>
+</figure>
+</div></li>
+<li><p><strong>Les arbres de décision sont par construction capables de capter des interactions entre variables explicatives sans qu’il soit nécessaire de les spécifier explicitement</strong>. En effet, la prédiction pour une observation dépend de la combinaison des différentes variables intervenant dans les règles de décision qui mènent à la feuille terminale, ce qui traduit une interaction entre les variables. La figure <a href="#fig-decision-tree-interaction" class="quarto-xref">3</a> illustre ces interactions avec un arbre de décision qui prédit le salaire en fonction de l’âge, du niveau d’étude, et de l’expérience. On voit d’une part que les feuilles terminales sont définies par la conjonction de règles de décision qui font intervenir ces trois variables, avec des seuils différents selon les branches de l’arbre, et d’autre part que l’effet d’une caractéristique sur le salaire dépend des autres caractéristiques de l’individu. Par exemple, une augmentation de l’expérience de 7 à 8 années se traduira une augmentation de salaire de 100 € si l’individu a moins de 35 ans et un niveau d’études inférieur au bac, par une augmentation de 200 € s’il a plus de 35 ans et un niveau d’étude supérieur à Bac+ 3, et sera sans effet sur le salaire dans les autres cas.</p>
+<div id="fig-decision-tree-interaction" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-decision-tree-interaction-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../../figures/decision_tree_interaction.svg" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-decision-tree-interaction-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Structure d’un arbre de décision
+</figcaption>
+</figure>
+</div></li>
+<li><p><strong>Dans un arbre de décision, les valeurs prises par les variables continues (par exemple l’âge) n’ont pas d’importance par elles-mêmes, c’est l’<em>ordre</em> de ces valeurs qui est essentiel</strong>. Ainsi, dans la règle de décision “L’âge est-il supérieur à 30 ans?”, ce n’est pas la valeur “30” qui importe par elle-même, c’est le fait qu’elle <strong>sépare les observations</strong> en deux groupes, selon que l’âge est inférieur ou supérieur à 30 ans. Cette propriété a pour conséquence que les arbres de décision sont insensibles aux modifications strictement monotones des variables continues. Par exemple, remplacer l’âge par l’âge au carré ne changera rien à l’arbre de décision, car les règles de décision “L’âge est-il supérieur à 30 ans?” et “L’âge au carré est-il supérieur à 900?” sont strictement équivalentes (car elles définissent les mêmes groupes).</p></li>
+</ul>
+</section>
+<section id="illustration" class="level3" data-number="1.1.5">
+<h3 data-number="1.1.5" class="anchored" data-anchor-id="illustration"><span class="header-section-number">1.1.5</span> Illustration</h3>
 <p>Supposons que nous souhaitions prédire le prix d’une maison en fonction de sa superficie et de son nombre de pièces. Un arbre de décision pourrait procéder ainsi:</p>
 <ol type="1">
 <li><strong>Première division</strong>: “La superficie de la maison est-elle supérieure à 100 m² ?”
@@ -350,7 +381,6 @@ Figure&nbsp;1: Structure d’un arbre de décision
 </ul></li>
 </ol>
 <p>Cet arbre utilise des règles simples pour diviser l’espace des caractéristiques (superficie et nombre de pièces) en sous-groupes homogènes et fournir une prédiction (estimer le prix d’une maison).</p>
-<p><strong>Parler des interactions entre variables</strong></p>
 </section>
 </section>
 <section id="sec-construire" class="level2" data-number="1.2">
@@ -420,14 +450,14 @@ E(t) = - \sum_{k=1}^{K} p_k \log(p_k)
 </section>
 <section id="construire-larbre-de-décision-par-un-partitionnement-séquentiel" class="level3" data-number="1.2.2">
 <h3 data-number="1.2.2" class="anchored" data-anchor-id="construire-larbre-de-décision-par-un-partitionnement-séquentiel"><span class="header-section-number">1.2.2</span> Construire l’arbre de décision par un partitionnement séquentiel</h3>
-<p>Une fois la mesure d’impureté définie, l’algorithme CART construit séquentiellement le partitionnement de l’espace des caractéristiques en comparant les règles de décision possibles (voir figure <a href="#fig-decision-tree-construction" class="quarto-xref">2</a>). La première étape de partitionnement part du nœud-racine, qui comprend l’ensemble des données d’entraînement. L’algorithme construit toutes les règles de décision candidates en parcourant toutes les valeurs de toutes les caractéristiques, les évalue en calculant la réduction de l’impureté induite par chacune d’entre elles et sélectionne la règle de décision (caractéristique et seuil) qui entraîne la réduction d’impureté maximale. Par exemple, l’algorithme évalue la règle candidate “Superficie &gt; 100 m²” en calculant la somme des impuretés au sein des deux sous-régions générées par cette règle (“Oui” et “Non”), puis calcule la différence entre cette somme et l’impureté du noeud-racine. L’algorithme évalue ensuite la règle candidate “Superficie &gt; 101 m²” de la même façon, et ainsi de suite pour toutes les valeurs de superficie, puis évalue les règles candidates construites avec le nombre de pièces, et enfin sélectionne la meilleure règle. La deuxième étape du partitionnement reproduit le même processus, cette fois au niveau d’un des deux nœuds-enfants, et ainsi de suite.</p>
+<p>Une fois la mesure d’impureté définie, l’algorithme CART construit séquentiellement le partitionnement de l’espace des caractéristiques en comparant les règles de décision possibles (voir figure <a href="#fig-decision-tree-construction" class="quarto-xref">4</a>). La première étape de partitionnement part du nœud-racine, qui comprend l’ensemble des données d’entraînement. L’algorithme construit toutes les règles de décision candidates en parcourant toutes les valeurs de toutes les caractéristiques, les évalue en calculant la réduction de l’impureté induite par chacune d’entre elles et sélectionne la règle de décision (caractéristique et seuil) qui entraîne la réduction d’impureté maximale. Par exemple, l’algorithme évalue la règle candidate “Superficie &gt; 100 m²” en calculant la somme des impuretés au sein des deux sous-régions générées par cette règle (“Oui” et “Non”), puis calcule la différence entre cette somme et l’impureté du noeud-racine. L’algorithme évalue ensuite la règle candidate “Superficie &gt; 101 m²” de la même façon, et ainsi de suite pour toutes les valeurs de superficie, puis évalue les règles candidates construites avec le nombre de pièces, et enfin sélectionne la meilleure règle. La deuxième étape du partitionnement reproduit le même processus, cette fois au niveau d’un des deux nœuds-enfants, et ainsi de suite.</p>
 <div id="fig-decision-tree-construction" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-decision-tree-construction-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="../../figures/decision_tree_construction.svg" class="img-fluid figure-img" style="width:90.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-decision-tree-construction-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: Construction d’un arbre de décision
+Figure&nbsp;4: Construction d’un arbre de décision
 </figcaption>
 </figure>
 </div>
@@ -438,7 +468,7 @@ Figure&nbsp;2: Construction d’un arbre de décision
 <p>Il est généralement préférable d’éviter les arbres trop complexes car ils sont souvent affectés par un problème de surajustement. Deux approches permettent de contrôler la complexité d’un arbre de décision:</p>
 <ul>
 <li><p>Approche <em>a priori</em>: la complexité de l’arbre peut être plafonnée pendant sa construction à l’aide d’hyperparamètres telles que la profondeur maximale de l’arbre, le nombre minimal d’observations par feuille ou la réduction minimale de l’impureté nécessaire à chaque étape pour ajouter un noeud interne. Cette approche est simple à mettre en oeuvre, mais peut aboutir à des arbres trop simples et peu prédictifs si les hyperparamètres sont mal choisis.</p></li>
-<li><p>Approche <em>a posteriori</em>: l’autre approche consiste à construire un arbre maximal puis à procéder à un <strong>élagage</strong> (<em>tree pruning</em>) qui vise à simplifier l’arbre et à augmenter sa capacité à généraliser sur de nouvelles données en supprimant progressivement les branches les moins utiles. Il existe différents critères d’élagage, parmi lesquels le chemin de coût-complexité <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p></li>
+<li><p>Approche <em>a posteriori</em>: l’autre approche consiste à construire un arbre maximal puis à procéder à un <strong>élagage</strong> (<em>tree pruning</em>) qui vise à simplifier l’arbre et à augmenter sa capacité à généraliser sur de nouvelles données en supprimant progressivement les branches les moins utiles. Il existe différents critères d’élagage, parmi lesquels le chemin de coût-complexité <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p></li>
 </ul>
 </section>
 <section id="utiliser-larbre-pour-prédire" class="level3" data-number="1.2.4">
@@ -450,7 +480,7 @@ Figure&nbsp;2: Construction d’un arbre de décision
 <img src="../../figures/decision_tree_prediction.svg" class="img-fluid figure-img" style="width:70.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-decision-tree-prediction-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3: Prédire avec un arbre de décision
+Figure&nbsp;5: Prédire avec un arbre de décision
 </figcaption>
 </figure>
 </div>
@@ -496,7 +526,8 @@ Quinlan, J Ross. 2014. <em>C4. 5: Programs for Machine Learning</em>. Elsevier.
 </div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>Les approches d’élagage sont détaillées notamment dans ce <a href="https://eric.univ-lyon2.fr/ricco/cours/slides/cart_post_elagage_arbres_decision.pdf">cours</a> et dans la <a href="https://scikit-learn.org/stable/auto_examples/tree/plot_cost_complexity_pruning.html">documentation de <code>scikit-learn</code></a>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Il existe néanmoins des variantes d’arbres de décision où la prédiction n’est pas constante au sein de chaque feuille, mais elles sont peu courantes en pratique et ne sont pas couvertes par le présent document<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Les approches d’élagage sont détaillées notamment dans ce <a href="https://eric.univ-lyon2.fr/ricco/cours/slides/cart_post_elagage_arbres_decision.pdf">cours</a> et dans la <a href="https://scikit-learn.org/stable/auto_examples/tree/plot_cost_complexity_pruning.html">documentation de <code>scikit-learn</code></a>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
