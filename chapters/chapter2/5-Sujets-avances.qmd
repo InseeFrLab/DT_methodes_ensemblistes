@@ -1,9 +1,5 @@
 ## Sujets avancés {#sec-sujets-avances}
 
-### Le traitement des variables manquantes {#sec-missing-values}
-
-A COMPLETER
-
 ### Le traitement des variables continues: l'utilisation des histogrammes {#sec-continuous-variables-hist}
 
 __L'algorithme de détermination des critères de partition (_split-finding algorithm_) est un enjeu de performance essentiel dans les méthodes ensemblistes.__ En effet, l'algorithme le plus simple qui consiste à énumérer tous les critères de partition possibles (en balayant toutes les valeurs de toutes les variables) s'avère très coûteux à utiliser dès lors que les données contiennent soit un grand nombre de variables, soit des variables continues prenant un grand nombre de valeurs. C'est pourquoi cet algorithme a fait l'objet de multiples améliorations et optimisations visant à réduire leur coût computationnel sans dégrader la qualité des critères de partition.
@@ -15,6 +11,8 @@ L'utilisation d'histogrammes (_histogram-based algorithms_) est une approche eff
 - __Énumération restreinte__: l'algorithme de détermination des critères de partition ne considère que les bornes des intervalles précédemment définies (10, 20, 30, etc. dans l'exemple précédent) et non l'ensemble des valeurs prises par les variables continues. Cette modification se traduit par une nette accélération de l'entraînement, dans la mesure où le nombre de _bins_ est en général beaucoup plus faible que le nombre de valeurs uniques des variables continues. Elle est en revanche sans effet notable sur les performances prédictives dans la plupart des cas.
 
 ### Le traitement des variables catégorielles {#sec-categorical-variables-encoding}
+
+Le traitement des variables catégorielles est l'un des points les plus délicats et les plus complexes dans les méthodes ensemblistes. Cette section présente les approches possibles et récapitule quelles approches sont proposées par chaque implémentation.
 
 <!-- IL NE FAUT PAS SUPPRIMER CE COMMENTAIRE. -->
 <!-- Faire en sorte que la police Font Awesome soit chargée -->
@@ -143,5 +141,26 @@ Prise en charge des variables catégorielles dans les implémentations des méth
 
 - `scikit-learn`: l'implémentation du _gradient boosting_ ([`HistGradientBoostingClassifier`](https://scikit-learn.org/dev/modules/generated/sklearn.ensemble.HistGradientBoostingClassifier.html), [`HistGradientBoostingRegressor`](https://scikit-learn.org/dev/modules/generated/sklearn.ensemble.HistGradientBoostingRegressor.html)) propose le support natif des variables catégorielles. Cette implémentation ne propose pas de _one-hot-encoding_ pour les variables catégorielles comprenant peu de modalités, et ne prend pas en charge ni l'_ordinal encoding_ ni le _target encoding_.
 
+### Le traitement des variables manquantes {#sec-missing-values}
 
+
+Deux approches sont envisageables: 
+
+- preprocessing;
+
+- Approches intégrées aux implémentations des méthodes ensemblistes
+
+Bien toutes les implémentations de référence prennent en charge les valeurs manquantes, les modalités exactes n'en sont le plus souvent pas décrites en détail dans les documentations de référence.
+
+
+
+
+
+L'implémentation XGBoost a proposé une solution innovante nommée _Sparsity-Aware Split Finding_ (@chen2016xgboost). Dans cette approche, l'algorithme de détermination des critères de partition recherche à la fois le meilleur _split_ et le meilleur noeud-enfant vers lequel envoyer les valeurs manquantes. Pour ce faire, le gain associé à chaque règle de décision candidate est calculé de deux façons différentes: en mettant les valeurs manquantes dans le noeud de droite, puis en les mettant dans le noeud de gauche. Le gain le plus élevé des deux indique si les valeurs manquantes sont envoyées dans le noeud de gauche ou de droite, conditionnellement à la règle de décision candidate. Cette procédure permet de déterminer simultanément la meilleure règle de décision, et la meilleure façon de traiter les valeurs manquantes. Il arrive fréquemment que la règle de décision optimale pour un noeud repose sur une variable qui ne comprend aucune valeur manquante dans la population du noeud à partitionner; en ce cas les valeurs manquantes sont envoyées à droite par défaut.
+
+L'implémentation LightGBM prend en charge les valeurs manquantes selon une approche très similaire à celle d'XGBoost. Dans le cas des variables numériques, l'algorithme de détermination des critères de partition recherche à la fois le meilleur _split_ et le meilleur noeud-enfant vers lequel envoyer les valeurs manquantes. Toutefois, lorsque la règle de décision optimale pour un noeud repose sur une variable qui ne comprend aucune valeur manquante dans la population du noeud à partitionner, toute valeur manquante rencontrée dans cette variable à l'étape de prédiction est convertie en 0, ce qui peut avoir des effets imprévisibles sur les prédictions^[Voir cette [issue](https://github.com/microsoft/LightGBM/issues/2921). Ce comportement imprévisible peut aisément être résolu par une étape de _preprocessing_ des variables numériques. Par exemple, le _transformer_ `MinMaxScaler` de `scikit-learn`permet de s'assurer que ces variables prennent des valeurs comprises entre 0 et 1, ce qui signifie que les valeurs manquantes seront toujours envoyées à gauche par défaut].
+
+CatBoost.
+
+Enfin, l'implémentation `ranger` des forêts aléatoires propose également une approche similaire à celle d'XGBoost, à une différence près:  l'algorithme de détermination des critères de partition recherche uniquement le meilleur _split_, puis une fois celui-ci trouvé, détermine vers quel noeud-enfant il est préférable d'envoyer les valeurs manquantes.
 
