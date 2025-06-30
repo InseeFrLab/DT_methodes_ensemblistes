@@ -31,6 +31,9 @@ A COMPLETER
 
 - En revanche, il peut être utile de les corriger si elles sont clairement erronées.
 
+- **Nettoyage des données**
+  - Gestion des valeurs manquantes : Imputation ou suppression si nécessaire (même si certaines implémentations de Random Forest gèrent les valeurs manquantes, il est préférable de les traiter pour éviter les biais)[5].
+
 #### Est-il utile de créer des variables additionnelles?
 
 Il n'est pas toujours simple de savoir s'il est nécessaire d'ajouter des variables additionnelles dans les données d'entraînement des algorithmes ensemblistes. Il arrive d'ailleurs qu'on affirme que créer des variables additionnelles ne présente pas d'intérêt, dans la mesure où ces algorithmes sont capables de modéliser des relations complexes, non linéaires et faisant intervenir des interactions arbitraires entre variables. Cette affirmation n'est que partiellement vraie, comme le montrent les paragraphes suivants.
@@ -44,21 +47,6 @@ Inversement, __une variable additionnelle peut s'avérer utile si elle est issue
   - __Transformation quelconque de deux ou plusieurs variables__: imaginons qu'on veuille prédire la probabilité de faillite d'une entreprise à partir de seulement deux variables: son chiffre d'affaires et de son excédent brut d'exploitation (EBE). Ajouter le carré de l'EBE est inutile car il s'agit d'une transformation monotone de cette variable: les entreprises ayant un EBE faible ont un EBE carré faible, et ainsi de suite. En revanche, il est probablement utile d'ajouter le taux de marge (défini comme le ratio entre chiffre d'affaires et EBE), car un taux de marge faible peut aider à repérer des sous-groupes d'entreprises en difficulté, et ce indépendamment de leur taille. 
 
 Il faut noter que dans ces deux exemples, un algorithme ensembliste parviendrait probablement à capter la saisonnalité du prix des glaces ou à repérer les entreprises à faible taux de marge même en l'absence de variables additionnelles. Mais il faut bien comprendre que ce résultat s'obtiendrait au prix d'un grand nombre de _splits_ aboutissant à des arbres profonds et complexes. Si elles ne sont donc effectivement pas strictement indispensables pour que les algorithmes soient performants, des variables additionnelles bien choisies ont néanmoins pour effet de faciliter et d'accélérer la construction du modèle.
-
-### Process: utiliser les pipelines scikit, pour expliciter la structure du modèle complet et réduire les risques d'erreur
-
-- **Nettoyage des données**
-  - Gestion des valeurs manquantes : Imputation ou suppression si nécessaire (même si certaines implémentations de Random Forest gèrent les valeurs manquantes, il est préférable de les traiter pour éviter les biais)[5].
-  - Suppression des doublons : Pour éviter qu'ils n'influencent trop l'apprentissage.
-- **Traitement des variables catégorielles**
-  - Encodage (par exemple, one-hot encoding ou ordinal encoding) : Les variables catégorielles doivent être converties en format numérique[1].
-- **Création et sélection de variables**
-  - Création de nouvelles variables pertinentes (agrégats, interactions, etc.) si le domaine le justifie[4].
-  - Suppression de variables non pertinentes ou redondantes.
-- **Traitement des valeurs aberrantes**
-  - Détection et gestion si elles sont dues à des erreurs de saisie (les forêts aléatoires sont robustes aux valeurs aberrantes, mais il peut être pertinent de les traiter dans certains cas)[5].
-
-**Étapes inutiles ou non nécessaires :**
 
 
 ### Préparation de la variable-cible
