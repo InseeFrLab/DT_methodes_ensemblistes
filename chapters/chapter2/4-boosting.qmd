@@ -142,17 +142,17 @@ A chaque étape de l'entraînement du modèle, l'algorithme de _gradient boostin
 
 La construction de l'arbre se fait selon une approche **gloutonne**, _nœud après nœud_: on divise les données d'entraînement en feuilles de plus en plus petites, tant que cela génère une réduction "suffisante" de la fonction de perte. Cette approche peut être résumée ainsi:
 
-1. On part d'une feuille unique (l'arbre de profondeur 0) qui contient toutes les données d'entraînement.
+1. On part du noeud-racine qui contient toutes les données d'entraînement.
 
-2. Pour **chaque** feuille de l'arbre, on essaie de trouver un partitionnement optimal:
+2. Pour **chaque** noeud de l'arbre, on essaie de trouver un partitionnement optimal:
 
-    - On teste toutes les règles de décision possibles (en faisant une boucle sur toutes les variables, et sur les différents seuils possibles).
+    - On teste toutes les règles de décision possibles, en faisant une boucle sur toutes les variables, et sur les différents seuils possibles.
 
-    - Pour chaque règle de décision candidate, on calcule le **gain** associé (c'est-à-dire la réduction de la perte globale si l'on retient cette règle de décision).
+    - Pour chaque règle de décision candidate, on calcule le **gain** associé (c'est-à-dire la réduction de la perte globale si l'on retient cette règle de décision), et on retient la règle de décision avec le gain maximal.
 
-    - Si la meilleure règle de décision apporte un gain suffisamment élevé, on crée deux nouvelles feuilles.
+    - Si la meilleure règle de décision apporte un gain suffisamment élevé, on crée deux nouveaux noeuds.
 
-3. On répète le processus récursivement (en partant des feuilles nouvellement créées) jusqu'à :
+3. On répète le processus récursivement (en partant des noeuds nouvellement créés) jusqu'à :
 
     - soit atteindre les limites de complexité définies _a priori_ (**profondeur maximale** de l'arbre, **nombre maximal de feuilles**, **nombre minimal d'observations par feuille**);
 
@@ -177,7 +177,11 @@ Les termes $g_i$ et $h_i$ désignent respectivement la dérivée première (le g
 $$ \tilde{\mathcal{L}}^{(t)} = \sum_{i=1}^{n} [g_i f_t(\mathbf{x}_i)+ \frac{1}{2} h_i [f_t(\mathbf{x}_i)]^2] + \Omega(f_t) 
 $$ {#eq-fct-obj-final}
 
-<!-- Cette expression montre que le problème initial où il fallait entraîner un grand nombre d'arbres simultanément (équation @eq-fct-obj-initial) à un problème beaucoup plus simple dans lequel il n'y a plus qu'un seul arbre à entraîner (équation @eq-fct-obj-final). -->
+Deux remarques:
+
+- Cette expression montre que le problème initial où il fallait entraîner un grand nombre d'arbres simultanément (équation @eq-fct-obj-initial) à un problème beaucoup plus simple dans lequel il n'y a plus qu'un seul arbre à entraîner (équation @eq-fct-obj-final).
+- A COMPLETER: il ne reste que g et h, cadre général applicable à tout problème.
+
 
 #### Étape 2: calculer les poids optimaux conditionnellement à la structure de l'arbre
 
@@ -241,9 +245,14 @@ L'algorithme de détermination des règles de décision est le composant le plus
 
 ##### Etape 4: Ajouter des arbres jusqu'à atteindre un critère d'arrêt
 
-Une fois que la structure du $t$-ième arbre a été définie et que les valeurs de chaque feuilles ont été calculées, cet arbre est ajouté au modèle global, et la prédiction est mise à jour par la formule suivante: 
+Une fois que la structure du $t$-ième arbre a été définie et que les valeurs de chaque feuille ont été calculées, cet arbre est ajouté au modèle global, et la prédiction est mise à jour par la formule suivante: 
 
 $$ F_{t}(x)=F_{t-1}(x)+ \eta f_{t}(x) $$ {#eq-update-model}
+
+Puis les valeurs des gradients et hessiennes sont mises à jour pour chaque observation par les formules
+
+$$ g_i = \frac{\partial l(y_i, \hat{y}_i^{(t)})}{\partial\hat{y}_i^{(t)}} \;\;\text{et}\;\; h_i = \frac{\partial^2 l(y_i, \hat{y}_i^{(t)})}{{\partial \hat{y}_i^{(t)}}^2} $$
+
 
 Il est alors possible de commencer l'entraînement de l'arbre suivant, selon la même logique que précédemment. Le processus de construction des arbres se poursuit jusqu'à atteindre soit le nombre maximum d'arbres autorisé dans le modèle ($K$), soit un autre **critère d'arrêt** (par exemple, une réduction de perte minimale par arbre).
 
@@ -260,15 +269,6 @@ __La lutte contre le surajustement est donc un enjeu majeur de l'entraînement d
 - l'__hyperparamètre de régularisation $\gamma$__ intervient dans l'équation @eq-fct-eval-split. Ce paramètre mesure la réduction minimale de la perte requise pour qu'un nœud soit divisé; une valeur plus élevée aboutit à des arbres moins profonds et contribue à limiter le surajustement en empêchant l'algorithme de créer des _splits_ dont l'apport est très faible et potentiellement dû à des variations non significatives des données d'entraînement.
 
 - la dernière approche consiste à __entraîner les arbres sur un échantillon d'observations et/ou de variables__. L'échantillonnage des observations permet de réduire l'influence des éventuels points extrêmes contenus dans les données (car ils n'apparaissent pas dans les données d'entraînement de certains arbres); l'échantillonnage des variables permet de varier les variables utilisées dans les _splits_.
-
-<!-- #### La préparation des données
-
--   les variables catégorielles:
-    -   ordonnées: passer en integer;
-    -   non-ordonnées: OHE ou approche de Fisher.
--   les variables continues:
-    -   inutile de faire des transformations monotones.
-    -   Utile d'ajouter des transformations non monotones.
 
 #### Les fonctions de perte -->
 
