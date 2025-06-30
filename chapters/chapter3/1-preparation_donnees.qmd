@@ -1,25 +1,49 @@
 
 ## Préparation des données
 
+Les méthodes ensemblistes à base d'arbres ne requièrent pas le même travail préparation des données que les méthodes économétriques traditionnelles. En particulier, certaines étapes indispensables à l'économétrie cessent d'être nécessaires. En revanche, d'autres, notamment le traitement des valeurs manquantes et des variables catégorielles. Cette section gagne à être lue après ou en parallèle de la section @sec-sujets-avances qui détaille les approches possibles.
 
 ### Préparation des variables explicatives
 
+#### Quels sont les traitements inutiles?
 
+Deux traitements usuels en économétrie ne sont pas nécessaires pour utiliser des méthodes ensemblistes: 
 
-- valeurs manquantes;
-- variables catégorielles;
-- Création de variables.
+- Il est inutile de normaliser ou de standardiser les variables numériques car c'est l'_ordre_ défini par les valeurs qui est essentiel, pas les valeurs numériques elles-mêmes (voir la section @sec-CART). Pour la même raison, il est inutile de modifier ou supprimer les valeurs extrêmes.
 
-
-En revanche, un certain nombre de retraitements ne sont pas nécessaires: 
-
-- Il est inutile de normaliser ou de standardiser les variables numériques car c'est l'_ordre_ défini par les valeurs qui est essentiel, pas les valeurs numériques elles-mêmes (voir la section @sec-CART).
-- Pour la même raison, il est inutile de modifier ou supprimer les valeurs extrêmes (mais il peut être utile  de les corriger si elles sont clairement erronées).
-- Pour la même raison, il est inutile d'ajouter aux données des variables numériques issues de transformations __monotones__ de variables existantes, telles que  d'inclure des variables supplémentaires telles que le carré ou le cube d'une variable déjà présente dans les données.
 - Il n'est pas indispensable de supprimer les variables corrélées car les méthodes ensemblistes sont robustes à la multicollinéarité. Ceci dit, réduire le nombre de variables peut accélérer légèrement l'entraînement des modèles.
 
+#### Comment traiter les variables catégorielles?
 
-_feature engineering_
+Le __traitement des variables catégorielles__ est un sujet plus complexe, car plusieurs approches sont possibles et certaines implémentations peuvent prendre en charge les variables catégorielles sans préparation particulière. Il est recommandé de lire la section @sec-categorical-variables-encoding qui détaille les approches possibles. L'approche à privilégier _in fine_ dépendra de trois facteurs: l'implémentation utilisée, l'existence d'un ordre des catégories, et le nombre total de catégories. Voici quelques recommandations générales:
+
+  - __il est nettement préférable de convertir les variables catégorielles en variables numériques lorsqu'elles comportent un ordre naturel__ (exemples: âge, niveau de revenu, niveau de diplôme, niveau de densité urbaine...). Cette approche a l'avantage de simplifier considérablement l'utilisation des variables catégorielles, en les traitant comme des variables numériques classiques. Par exemple, l'âge exprimé sous forme de tranche d'âge ($[0; 9]$, $[10; 19]$, $[20; 29]$, etc.) peut aisément être converti en variable numérique: la valeur 0 sera associée à la modalité $[0; 9]$, la valeur 1 à la modalité $[10; 19]$. L'encodeur `OrdinalEncoder` de `scikit-learn` permet d'automatiser cette tâche de façon efficace. De la même façon, il est possible de convertir une date en variable numérique exprimée en jours écoulés depuis une date de référence.
+
+  - dans le cas des variables catégorielles non ordonnées (exemple: secteur d'activité, PCS, département...), __il est préférable de tester les approches intégrées aux implémentations des méthodes ensemblistes__ avant se lancer dans la construction d'une approche _ad hoc_.
+
+  - __le _one-hot-encoding_ ne doit pas être utilisé pour les variables catégorielles qui présentent un nombre élevé de modalités__ (par exemple au-delà de 10 modalités).
+
+#### Comment traiter les valeurs manquantes?
+
+A COMPLETER
+
+(voir la partie @sec-valeurs-manquantes);
+
+- En revanche, il peut être utile de les corriger si elles sont clairement erronées.
+
+#### Est-il utile de créer des variables additionnelles?
+
+Il n'est pas toujours simple de savoir s'il est nécessaire d'ajouter des variables additionnelles dans les données d'entraînement des algorithmes ensemblistes. Il arrive d'ailleurs qu'on affirme que créer des variables additionnelles ne présente pas d'intérêt, dans la mesure où ces algorithmes sont capables de modéliser des relations complexes, non linéaires et faisant intervenir des interactions arbitraires entre variables. Cette affirmation n'est que partiellement vraie, comme le montrent les paragraphes suivants.
+
+Une chose est sûre: __il est inutile d'ajouter aux données des variables numériques issues d'une transformation _monotone_ d'une variable existante__. En effet, si une variable additionnelle $x_2$ est issue d'une transformation monotone de la variable $x_1$ déjà présente dans les données, alors les sous-régions qui peuvent être définies par une règle de décision basée sur $x_2$ sont identiques à celles qui peuvent être définies avec $x_1$. Par conséquent, $x_2$ ne permet pas d'affiner le partitionnement au-delà de ce qui était déjà possible avec $x_1$. Cela signifie en pratique qu'il faut éviter d'inclure des variables telles que le carré ou le cube d'une variable déjà présente dans les données.
+
+Inversement, __une variable additionnelle peut s'avérer utile si elle est issue d'une transformation _non monotone_ d'une variable, ou d'une transformation quelconque de deux ou plusieurs variables.__ Voici deux exemples qui en illustrent l'intérêt:
+
+  - __Transformation _non monotone_ d'une variable__: imaginons qu'on veuille prédire le prix moyen des glaces à Paris uniquement avec la date, exprimée sous forme numérique en jours écoulés depuis une date de référence. Il est probable que ce prix présente une saisonnalité marquée (prix élevé en été, faible en hiver). On peut alors envisager d'ajouter une variable issue d'une transformation sinusoïdale de la date; cette variable prendra une valeur élevée à certaines périodes et plus faible à d'autres, ce qui aidera à capter la saisonnalité.
+
+  - __Transformation quelconque de deux ou plusieurs variables__: imaginons qu'on veuille prédire la probabilité de faillite d'une entreprise à partir de seulement deux variables: son chiffre d'affaires et de son excédent brut d'exploitation (EBE). Ajouter le carré de l'EBE est inutile car il s'agit d'une transformation monotone de cette variable: les entreprises ayant un EBE faible ont un EBE carré faible, et ainsi de suite. En revanche, il est probablement utile d'ajouter le taux de marge (défini comme le ratio entre chiffre d'affaires et EBE), car un taux de marge faible peut aider à repérer des sous-groupes d'entreprises en difficulté, et ce indépendamment de leur taille. 
+
+Il faut noter que dans ces deux exemples, un algorithme ensembliste parviendrait probablement à capter la saisonnalité du prix des glaces ou à repérer les entreprises à faible taux de marge même en l'absence de variables additionnelles. Mais il faut bien comprendre que ce résultat s'obtiendrait au prix d'un grand nombre de _splits_ aboutissant à des arbres profonds et complexes. Si elles ne sont donc effectivement pas strictement indispensables pour que les algorithmes soient performants, des variables additionnelles bien choisies ont néanmoins pour effet de faciliter et d'accélérer la construction du modèle.
 
 ### Process: utiliser les pipelines scikit, pour expliciter la structure du modèle complet et réduire les risques d'erreur
 
