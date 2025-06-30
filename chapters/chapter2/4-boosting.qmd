@@ -144,7 +144,7 @@ La construction de l'arbre se fait selon une approche **gloutonne**, _nœud apr�
 
 1. On part du noeud-racine qui contient toutes les données d'entraînement.
 
-2. Pour **chaque** noeud de l'arbre, on essaie de trouver un partitionnement optimal:
+2. Pour ce noeud, on essaie de trouver un partitionnement optimal:
 
     - On teste toutes les règles de décision possibles, en faisant une boucle sur toutes les variables, et sur les différents seuils possibles.
 
@@ -152,7 +152,7 @@ La construction de l'arbre se fait selon une approche **gloutonne**, _nœud apr�
 
     - Si la meilleure règle de décision apporte un gain suffisamment élevé, on crée deux nouveaux noeuds.
 
-3. On répète le processus récursivement (en partant des noeuds nouvellement créés) jusqu'à :
+3. On répète le processus récursivement en partant des noeuds nouvellement créés, jusqu'à :
 
     - soit atteindre les limites de complexité définies _a priori_ (**profondeur maximale** de l'arbre, **nombre maximal de feuilles**, **nombre minimal d'observations par feuille**);
 
