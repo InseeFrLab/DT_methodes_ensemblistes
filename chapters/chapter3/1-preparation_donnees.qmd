@@ -54,6 +54,7 @@ Il faut noter que dans ces deux exemples, un algorithme ensembliste parviendrait
 Les méthodes ensemblistes sont sensibles aux valeurs prises par la variable-cible. La préparation de la variable-cible obéit donc à des règles différentes de celles applicables aux variables explicatives:
 
 - Il faut choisir soigneusement les transformations appliquées à la variable-cible: on obtient des modèles très différents selon qu'on entraîne un algorithme avec pour variable-cible le prix de vente des logements, le prix au mètre carré ou le logarithme du prix au mètre carré.
+
 - Il faut repérer et traiter les valeurs extrêmes, aberrantes ou erronées prises par la variable-cible, soit en les corrigeant, soit en supprimant les observations concernés. Ce point est particulièrement important lorsqu'on veut entraîner un algorithme de _gradient boosting_.
 
 
