@@ -256,9 +256,9 @@ window.Quarto = {
   <ul>
   <li><a href="#sec-sujets-avances" id="toc-sec-sujets-avances" class="nav-link active" data-scroll-target="#sec-sujets-avances"><span class="header-section-number">1</span> Sujets avancés</a>
   <ul class="collapse">
-  <li><a href="#sec-missing-values" id="toc-sec-missing-values" class="nav-link" data-scroll-target="#sec-missing-values"><span class="header-section-number">1.1</span> Le traitement des variables manquantes</a></li>
-  <li><a href="#sec-continuous-variables-hist" id="toc-sec-continuous-variables-hist" class="nav-link" data-scroll-target="#sec-continuous-variables-hist"><span class="header-section-number">1.2</span> Le traitement des variables continues: l’utilisation des histogrammes</a></li>
-  <li><a href="#sec-categorical-variables-encoding" id="toc-sec-categorical-variables-encoding" class="nav-link" data-scroll-target="#sec-categorical-variables-encoding"><span class="header-section-number">1.3</span> Le traitement des variables catégorielles</a></li>
+  <li><a href="#sec-continuous-variables-hist" id="toc-sec-continuous-variables-hist" class="nav-link" data-scroll-target="#sec-continuous-variables-hist"><span class="header-section-number">1.1</span> Le traitement des variables continues: l’utilisation des histogrammes</a></li>
+  <li><a href="#sec-categorical-variables-encoding" id="toc-sec-categorical-variables-encoding" class="nav-link" data-scroll-target="#sec-categorical-variables-encoding"><span class="header-section-number">1.2</span> Le traitement des variables catégorielles</a></li>
+  <li><a href="#sec-missing-values" id="toc-sec-missing-values" class="nav-link" data-scroll-target="#sec-missing-values"><span class="header-section-number">1.3</span> Le traitement des variables manquantes</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/edit/main/chapters/chapter2/5-Sujets-avances.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/blob/main/chapters/chapter2/5-Sujets-avances.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -271,27 +271,24 @@ window.Quarto = {
 
 <section id="sec-sujets-avances" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="sec-sujets-avances"><span class="header-section-number">1</span> Sujets avancés</h2>
-<section id="sec-missing-values" class="level3" data-number="1.1">
-<h3 data-number="1.1" class="anchored" data-anchor-id="sec-missing-values"><span class="header-section-number">1.1</span> Le traitement des variables manquantes</h3>
-<p>A COMPLETER</p>
-</section>
-<section id="sec-continuous-variables-hist" class="level3" data-number="1.2">
-<h3 data-number="1.2" class="anchored" data-anchor-id="sec-continuous-variables-hist"><span class="header-section-number">1.2</span> Le traitement des variables continues: l’utilisation des histogrammes</h3>
+<section id="sec-continuous-variables-hist" class="level3" data-number="1.1">
+<h3 data-number="1.1" class="anchored" data-anchor-id="sec-continuous-variables-hist"><span class="header-section-number">1.1</span> Le traitement des variables continues: l’utilisation des histogrammes</h3>
 <p><strong>L’algorithme de détermination des critères de partition (<em>split-finding algorithm</em>) est un enjeu de performance essentiel dans les méthodes ensemblistes.</strong> En effet, l’algorithme le plus simple qui consiste à énumérer tous les critères de partition possibles (en balayant toutes les valeurs de toutes les variables) s’avère très coûteux à utiliser dès lors que les données contiennent soit un grand nombre de variables, soit des variables continues prenant un grand nombre de valeurs. C’est pourquoi cet algorithme a fait l’objet de multiples améliorations et optimisations visant à réduire leur coût computationnel sans dégrader la qualité des critères de partition.</p>
 <p>L’utilisation d’histogrammes (<em>histogram-based algorithms</em>) est une approche efficace qui permet de réduire de manière significative le coût computationnel lié à la recherche des <em>splits</em> optimaux en discrétisant les variables continues. Elle est proposée par toutes les implémentations courantes du <em>gradient boosting</em> (XGBoost, LightGBM, CatBoost et scikit-learn). Elle comprend deux caractéristiques principales:</p>
 <ul>
-<li><p><strong>Discrétisation</strong>: avant le début de l’entraînement, chaque variable continue est discrétisée en un nombre limité d’intervalles (<em>bins</em>), construits le plus souvent à partir de ses quantiles. Ce processus est appelé <em>binning</em>. Par exemple, une variable continue uniformément distribuée de 0 à 100 peut être divisée en dix intervalles (<span class="math inline">\([0, 10), [10, 20), \dots, [90, 100)\)</span>). Le nombre maximal de <em>bins</em> est un hyperparamètre qui peut parfois jouer un rôle important. <!-- - __Construction de l'histogramme__: après la discrétisation, un histogramme est construit pour chaque variable continue; il résume combien d'observations appartiennent à chaque _bin_, ainsi que la somme des gradients et la somme des hessiennes de ces observations (il s'agit des quantités $\sum_{i \in \text{bin}} g_i$ et $\sum_{i \in \text{bin}} h_i$ mentionnées dans l'équation @eq-w-j-optimal. --></p></li>
-<li><p><strong>Énumération restreinte</strong>: l’algorithme de détermination des critères de partition ne considère que les bornes des intervalles précédemment définies (10, 20, 30, etc. dans l’exemple précédent) et non l’ensemble des valeurs prises par les variables continues. Cette modification se traduit par une nette accélération de l’entraînement, dans la mesure où le nombre de <em>bins</em> est en général beaucoup plus faible que le nombre de valeurs uniques des variables continues. <!-- - __Mise à jour de l'histogramme__: G et H sont mis à jour après chaque arbre. --></p></li>
+<li><p><strong>Discrétisation</strong>: avant le début de l’entraînement, chaque variable continue est discrétisée en un nombre limité d’intervalles (<em>bins</em>), construits le plus souvent à partir de ses quantiles. Ce processus est appelé <em>binning</em>. Par exemple, une variable continue uniformément distribuée de 0 à 100 peut être divisée en dix intervalles (<span class="math inline">\([0, 10), [10, 20), \dots, [90, 100)\)</span>). Le nombre maximal de <em>bins</em> est un hyperparamètre qui peut parfois jouer un rôle important.</p></li>
+<li><p><strong>Énumération restreinte</strong>: l’algorithme de détermination des critères de partition ne considère que les bornes des intervalles précédemment définies (10, 20, 30, etc. dans l’exemple précédent) et non l’ensemble des valeurs prises par les variables continues. Cette modification se traduit par une nette accélération de l’entraînement, dans la mesure où le nombre de <em>bins</em> est en général beaucoup plus faible que le nombre de valeurs uniques des variables continues. Elle est en revanche sans effet notable sur les performances prédictives dans la plupart des cas.</p></li>
 </ul>
 </section>
-<section id="sec-categorical-variables-encoding" class="level3" data-number="1.3">
-<h3 data-number="1.3" class="anchored" data-anchor-id="sec-categorical-variables-encoding"><span class="header-section-number">1.3</span> Le traitement des variables catégorielles</h3>
+<section id="sec-categorical-variables-encoding" class="level3" data-number="1.2">
+<h3 data-number="1.2" class="anchored" data-anchor-id="sec-categorical-variables-encoding"><span class="header-section-number">1.2</span> Le traitement des variables catégorielles</h3>
+<p>Le traitement des variables catégorielles est l’un des points les plus délicats et les plus complexes dans les méthodes ensemblistes. Cette section présente les approches possibles et récapitule quelles approches sont proposées par chaque implémentation.</p>
 <!-- IL NE FAUT PAS SUPPRIMER CE COMMENTAIRE. -->
 <!-- Faire en sorte que la police Font Awesome soit chargée -->
 <!--  -->
 <!-- IL NE FAUT PAS SUPPRIMER CE COMMENTAIRE. -->
-<section id="une-diversité-dapproches" class="level4" data-number="1.3.1">
-<h4 data-number="1.3.1" class="anchored" data-anchor-id="une-diversité-dapproches"><span class="header-section-number">1.3.1</span> Une diversité d’approches</h4>
+<section id="une-diversité-dapproches" class="level4" data-number="1.2.1">
+<h4 data-number="1.2.1" class="anchored" data-anchor-id="une-diversité-dapproches"><span class="header-section-number">1.2.1</span> Une diversité d’approches</h4>
 <p>A l’origine, les arbres CART ont été conçus pour partitionner l’espace en utilisant exclusivement des variables numériques, et ne pouvaient pas mobiliser les variables catégorielles sans un retraitement préalable. Plusieurs <strong>méthodes d’encodage</strong> (<em>one-hot-encoding</em>, <em>ordinal encoding</em>, <em>target encoding</em>) ont donc été développées pour surmonter ce problème en transformant les variables catégorielles en variables numériques; elles ne sont d’ailleurs pas spécifiques aux méthodes ensemblistes à base d’arbres. Depuis le milieu des années 2010, une nouvelle approche efficace et spécifique aux méthodes ensemblistes a été introduite dans les implémentations du <em>gradient boosting</em> (<em>native support for categorical features</em>). Ce paragraphe présente ces différentes approches des variables catégorielles, et précise quelle approche est proposée par les différentes implémentations.</p>
 <p>Les trois approches d’encodage les plus courantes sont les suivantes:</p>
 <ul>
@@ -305,8 +302,8 @@ https://stats.stackexchange.com/questions/501391/interpretation-of-gradient-and-
 $ \frac{\sum_{i=1}^{n} 1_{x_{i j}=x_{i k}} g_{i}}{\sum_{i=1}^{n} 1_{x_{i j}=x_{i k}} h_{i}} $
  -->
 </section>
-<section id="comparaison-des-différents-approches" class="level4" data-number="1.3.2">
-<h4 data-number="1.3.2" class="anchored" data-anchor-id="comparaison-des-différents-approches"><span class="header-section-number">1.3.2</span> Comparaison des différents approches</h4>
+<section id="comparaison-des-différents-approches" class="level4" data-number="1.2.2">
+<h4 data-number="1.2.2" class="anchored" data-anchor-id="comparaison-des-différents-approches"><span class="header-section-number">1.2.2</span> Comparaison des différents approches</h4>
 <p>Déterminer quelle approche des variables catégorielles est adaptée dans une situation donnée n’est pas toujours aisé. Les cas d’usage des différentes approches peuvent être résumés comme ceci:</p>
 <ul>
 <li><p>le <em>one-hot-encoding</em> est adapté uniquement aux variables catégorielles comprenant peu de modalités;</p></li>
@@ -321,8 +318,8 @@ $ \frac{\sum_{i=1}^{n} 1_{x_{i j}=x_{i k}} g_{i}}{\sum_{i=1}^{n} 1_{x_{i j}=x_{i
 - Les partitionnements obtenus ne sont pas forcément les plus pertinents;
 - La construction des arbres est plus lente et plus coûteuse sur le plan computationnel, en raison du nombre élevé de _splits_. -->
 </section>
-<section id="approches-intégrées-aux-implémentations-des-méthodes-ensemblistes" class="level4" data-number="1.3.3">
-<h4 data-number="1.3.3" class="anchored" data-anchor-id="approches-intégrées-aux-implémentations-des-méthodes-ensemblistes"><span class="header-section-number">1.3.3</span> Approches intégrées aux implémentations des méthodes ensemblistes</h4>
+<section id="approches-intégrées-aux-implémentations-des-méthodes-ensemblistes" class="level4" data-number="1.2.3">
+<h4 data-number="1.2.3" class="anchored" data-anchor-id="approches-intégrées-aux-implémentations-des-méthodes-ensemblistes"><span class="header-section-number">1.2.3</span> Approches intégrées aux implémentations des méthodes ensemblistes</h4>
 <p>Certaines implémentations des méthodes ensemblistes prennent en charge directement certaines des quatre approches présentées ci-dessus, auquel cas il est possible d’entraîner le modèle sur des données contenant des variables catégorielles sans <em>preprocessing</em> particulier; dans les autres cas, il faut préparer les données en amont de l’entraînement et de la prédiction, par exemple en utilisant un <code>ColumnTransformer</code> de <code>scikit-learn</code> (<a href="https://scikit-learn.org/dev/modules/generated/sklearn.preprocessing.OneHotEncoder.html"><code>OneHotEncoder()</code></a>, <a href="https://scikit-learn.org/dev/modules/generated/sklearn.preprocessing.TargetEncoder.html"><code>TargetEncoder()</code></a>, <a href="https://scikit-learn.org/dev/modules/generated/sklearn.preprocessing.OrdinalEncoder.html"><code>OrdinalEncoder()</code></a>). Le tableau et les notes ci-dessous résument quelles approches sont proposées par chaque implémentations des méthodes ensemblistes.</p>
 <div id="tbl-preprocessing" class="quarto-float quarto-figure quarto-figure-center anchored" data-tbl-colwidths="[30,10,10,10,10]">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -394,15 +391,31 @@ Table&nbsp;1: Prise en charge des variables catégorielles dans les implémentat
 <li><p><code>CatBoost</code>: cette implémentation est celle qui propose le plus d’options relatives aux variables catégorielles. Par défaut, elle utilise le <em>one-hot-encoding</em> pour les variables catégorielles comprenant peu de modalités, et une variante de <em>target encoding</em> aux autres. Le seuil par défaut varie selon le type de tâche et peut être modifié via le paramètre <code>one_hot_max_size</code>. La documentation de <code>CatBoost</code> propose un <a href="https://github.com/catboost/catboost/blob/master/catboost/tutorials/categorical_features/categorical_features_parameters.ipynb"><em>notebook</em></a> qui détaille les différents hyperparamètres.</p></li>
 <li><p><code>scikit-learn</code>: l’implémentation du <em>gradient boosting</em> (<a href="https://scikit-learn.org/dev/modules/generated/sklearn.ensemble.HistGradientBoostingClassifier.html"><code>HistGradientBoostingClassifier</code></a>, <a href="https://scikit-learn.org/dev/modules/generated/sklearn.ensemble.HistGradientBoostingRegressor.html"><code>HistGradientBoostingRegressor</code></a>) propose le support natif des variables catégorielles. Cette implémentation ne propose pas de <em>one-hot-encoding</em> pour les variables catégorielles comprenant peu de modalités, et ne prend pas en charge ni l’<em>ordinal encoding</em> ni le <em>target encoding</em>.</p></li>
 </ul>
-
-
-
 </section>
+</section>
+<section id="sec-missing-values" class="level3" data-number="1.3">
+<h3 data-number="1.3" class="anchored" data-anchor-id="sec-missing-values"><span class="header-section-number">1.3</span> Le traitement des variables manquantes</h3>
+<p>Deux approches sont envisageables:</p>
+<ul>
+<li><p>preprocessing;</p></li>
+<li><p>Approches intégrées aux implémentations des méthodes ensemblistes</p></li>
+</ul>
+<p>Bien toutes les implémentations de référence prennent en charge les valeurs manquantes, les modalités exactes n’en sont le plus souvent pas décrites en détail dans les documentations de référence.</p>
+<p>L’implémentation XGBoost a proposé une solution innovante nommée <em>Sparsity-Aware Split Finding</em> (<span class="citation" data-cites="chen2016xgboost">Chen and Guestrin (<a href="#ref-chen2016xgboost" role="doc-biblioref">2016</a>)</span>). Dans cette approche, l’algorithme de détermination des critères de partition recherche à la fois le meilleur <em>split</em> et le meilleur noeud-enfant vers lequel envoyer les valeurs manquantes. Pour ce faire, le gain associé à chaque règle de décision candidate est calculé de deux façons différentes: en mettant les valeurs manquantes dans le noeud de droite, puis en les mettant dans le noeud de gauche. Le gain le plus élevé des deux indique si les valeurs manquantes sont envoyées dans le noeud de gauche ou de droite, conditionnellement à la règle de décision candidate. Cette procédure permet de déterminer simultanément la meilleure règle de décision, et la meilleure façon de traiter les valeurs manquantes. Il arrive fréquemment que la règle de décision optimale pour un noeud repose sur une variable qui ne comprend aucune valeur manquante dans la population du noeud à partitionner; en ce cas les valeurs manquantes sont envoyées à droite par défaut.</p>
+<p>L’implémentation LightGBM prend en charge les valeurs manquantes selon une approche très similaire à celle d’XGBoost. Dans le cas des variables numériques, l’algorithme de détermination des critères de partition recherche à la fois le meilleur <em>split</em> et le meilleur noeud-enfant vers lequel envoyer les valeurs manquantes. Toutefois, lorsque la règle de décision optimale pour un noeud repose sur une variable qui ne comprend aucune valeur manquante dans la population du noeud à partitionner, toute valeur manquante rencontrée dans cette variable à l’étape de prédiction est convertie en 0, ce qui peut avoir des effets imprévisibles sur les prédictions<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>.</p>
+<p>CatBoost.</p>
+<p>Enfin, l’implémentation <code>ranger</code> des forêts aléatoires propose également une approche similaire à celle d’XGBoost, à une différence près: l’algorithme de détermination des critères de partition recherche uniquement le meilleur <em>split</em>, puis une fois celui-ci trouvé, détermine vers quel noeud-enfant il est préférable d’envoyer les valeurs manquantes.</p>
+
+
+
 </section>
 </section>
 
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-chen2016xgboost" class="csl-entry" role="listitem">
+Chen, Tianqi, and Carlos Guestrin. 2016. <span>“Xgboost: A Scalable Tree Boosting System.”</span> In <em>Proceedings of the 22nd Acm Sigkdd International Conference on Knowledge Discovery and Data Mining</em>, 785–94.
+</div>
 <div id="ref-fisher1958grouping" class="csl-entry" role="listitem">
 Fisher, Walter D. 1958. <span>“On Grouping for Maximum Homogeneity.”</span> <em>Journal of the American Statistical Association</em> 53 (284): 789–98.
 </div>
@@ -417,6 +430,7 @@ Prokhorenkova, Liudmila, Gleb Gusev, Aleksandr Vorobev, Anna Veronika Dorogush, 
 <li id="fn3"><p>Voir cet <a href="https://scikit-learn.org/dev/auto_examples/preprocessing/plot_target_encoder.html#sphx-glr-auto-examples-preprocessing-plot-target-encoder-py">exemple</a> dans la documentation de scikit-learn.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn4"><p>Il s’agit de l’<a href="../../chapters/chapter2/4-boosting.html#eq-w-j-optimal">équation donnant le poids optimal</a> d’une feuille terminale, avec <span class="math inline">\(\lambda = 0\)</span>.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn5"><p>Cet exemple s’appuie sur la <a href="https://scikit-learn.org/dev/auto_examples/ensemble/plot_gradient_boosting_categorical.html">documentation de <code>scikit-learn</code></a>.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>Voir cette <a href="https://github.com/microsoft/LightGBM/issues/2921">issue</a>. Ce comportement imprévisible peut aisément être résolu par une étape de <em>preprocessing</em> des variables numériques. Par exemple, le <em>transformer</em> <code>MinMaxScaler</code> de <code>scikit-learn</code>permet de s’assurer que ces variables prennent des valeurs comprises entre 0 et 1, ce qui signifie que les valeurs manquantes seront toujours envoyées à gauche par défaut<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
