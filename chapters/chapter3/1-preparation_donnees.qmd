@@ -1,5 +1,5 @@
 
-## Préparation des données
+## Préparation des données {#sec-preprocessing}
 
 Les méthodes ensemblistes à base d'arbres ne requièrent pas le même travail préparation des données que les méthodes économétriques traditionnelles. En particulier, certaines étapes indispensables à l'économétrie cessent d'être nécessaires. En revanche, d'autres, notamment le traitement des valeurs manquantes et des variables catégorielles. Cette section gagne à être lue après ou en parallèle de la section @sec-sujets-avances qui détaille les approches possibles.
 
