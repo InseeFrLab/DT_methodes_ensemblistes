@@ -254,14 +254,22 @@ window.Quarto = {
   <ul>
   <li><a href="#sec-preprocessing" id="toc-sec-preprocessing" class="nav-link active" data-scroll-target="#sec-preprocessing"><span class="header-section-number">1</span> Préparation des données</a>
   <ul class="collapse">
-  <li><a href="#préparation-des-variables-explicatives" id="toc-préparation-des-variables-explicatives" class="nav-link" data-scroll-target="#préparation-des-variables-explicatives"><span class="header-section-number">1.1</span> Préparation des variables explicatives</a></li>
-  <li><a href="#préparation-de-la-variable-cible" id="toc-préparation-de-la-variable-cible" class="nav-link" data-scroll-target="#préparation-de-la-variable-cible"><span class="header-section-number">1.2</span> Préparation de la variable-cible</a></li>
-  <li><a href="#train-test" id="toc-train-test" class="nav-link" data-scroll-target="#train-test"><span class="header-section-number">1.3</span> Train-test</a></li>
-  </ul></li>
-  <li><a href="#evaluation-des-performances-du-modèle-et-optimisation-des-hyper-paramètres" id="toc-evaluation-des-performances-du-modèle-et-optimisation-des-hyper-paramètres" class="nav-link" data-scroll-target="#evaluation-des-performances-du-modèle-et-optimisation-des-hyper-paramètres"><span class="header-section-number">2</span> Evaluation des performances du modèle et optimisation des hyper-paramètres</a>
+  <li><a href="#préparation-des-variables-explicatives" id="toc-préparation-des-variables-explicatives" class="nav-link" data-scroll-target="#préparation-des-variables-explicatives"><span class="header-section-number">1.1</span> Préparation des variables explicatives</a>
   <ul class="collapse">
-  <li><a href="#estimation-de-lerreur-par-validation-croisée" id="toc-estimation-de-lerreur-par-validation-croisée" class="nav-link" data-scroll-target="#estimation-de-lerreur-par-validation-croisée"><span class="header-section-number">2.1</span> Estimation de l’erreur par validation croisée</a></li>
-  <li><a href="#choix-des-hyper-paramètres-du-modèle" id="toc-choix-des-hyper-paramètres-du-modèle" class="nav-link" data-scroll-target="#choix-des-hyper-paramètres-du-modèle"><span class="header-section-number">2.2</span> Choix des hyper-paramètres du modèle</a></li>
+  <li><a href="#quels-sont-les-traitements-inutiles" id="toc-quels-sont-les-traitements-inutiles" class="nav-link" data-scroll-target="#quels-sont-les-traitements-inutiles"><span class="header-section-number">1.1.1</span> Quels sont les traitements inutiles?</a></li>
+  <li><a href="#comment-traiter-les-variables-catégorielles" id="toc-comment-traiter-les-variables-catégorielles" class="nav-link" data-scroll-target="#comment-traiter-les-variables-catégorielles"><span class="header-section-number">1.1.2</span> Comment traiter les variables catégorielles?</a></li>
+  <li><a href="#comment-traiter-les-valeurs-manquantes" id="toc-comment-traiter-les-valeurs-manquantes" class="nav-link" data-scroll-target="#comment-traiter-les-valeurs-manquantes"><span class="header-section-number">1.1.3</span> Comment traiter les valeurs manquantes?</a></li>
+  <li><a href="#est-il-utile-de-créer-des-variables-additionnelles" id="toc-est-il-utile-de-créer-des-variables-additionnelles" class="nav-link" data-scroll-target="#est-il-utile-de-créer-des-variables-additionnelles"><span class="header-section-number">1.1.4</span> Est-il utile de créer des variables additionnelles?</a></li>
+  </ul></li>
+  <li><a href="#préparation-de-la-variable-cible" id="toc-préparation-de-la-variable-cible" class="nav-link" data-scroll-target="#préparation-de-la-variable-cible"><span class="header-section-number">1.2</span> Préparation de la variable-cible</a>
+  <ul class="collapse">
+  <li><a href="#train-test" id="toc-train-test" class="nav-link" data-scroll-target="#train-test"><span class="header-section-number">1.2.1</span> Train-test</a></li>
+  </ul></li>
+  <li><a href="#evaluation-des-performances-du-modèle-et-optimisation-des-hyper-paramètres" id="toc-evaluation-des-performances-du-modèle-et-optimisation-des-hyper-paramètres" class="nav-link" data-scroll-target="#evaluation-des-performances-du-modèle-et-optimisation-des-hyper-paramètres"><span class="header-section-number">1.3</span> Evaluation des performances du modèle et optimisation des hyper-paramètres</a>
+  <ul class="collapse">
+  <li><a href="#estimation-de-lerreur-par-validation-croisée" id="toc-estimation-de-lerreur-par-validation-croisée" class="nav-link" data-scroll-target="#estimation-de-lerreur-par-validation-croisée"><span class="header-section-number">1.3.1</span> Estimation de l’erreur par validation croisée</a></li>
+  <li><a href="#choix-des-hyper-paramètres-du-modèle" id="toc-choix-des-hyper-paramètres-du-modèle" class="nav-link" data-scroll-target="#choix-des-hyper-paramètres-du-modèle"><span class="header-section-number">1.3.2</span> Choix des hyper-paramètres du modèle</a></li>
+  </ul></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/edit/main/chapters/chapter3/1-preparation_donnees.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/blob/main/chapters/chapter3/1-preparation_donnees.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -272,21 +280,21 @@ window.Quarto = {
 
 
 
-<section id="sec-preprocessing" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="sec-preprocessing"><span class="header-section-number">1</span> Préparation des données</h2>
+<section id="sec-preprocessing" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Préparation des données</h1>
 <p>Les méthodes ensemblistes à base d’arbres ne requièrent pas le même travail préparation des données que les méthodes économétriques traditionnelles. En particulier, certaines étapes indispensables à l’économétrie cessent d’être nécessaires. En revanche, d’autres, notamment le traitement des valeurs manquantes et des variables catégorielles. Cette section gagne à être lue après ou en parallèle de la section <strong>?@sec-sujets-avances</strong> qui détaille les approches possibles.</p>
-<section id="préparation-des-variables-explicatives" class="level3" data-number="1.1">
-<h3 data-number="1.1" class="anchored" data-anchor-id="préparation-des-variables-explicatives"><span class="header-section-number">1.1</span> Préparation des variables explicatives</h3>
-<section id="quels-sont-les-traitements-inutiles" class="level4" data-number="1.1.1">
-<h4 data-number="1.1.1" class="anchored" data-anchor-id="quels-sont-les-traitements-inutiles"><span class="header-section-number">1.1.1</span> Quels sont les traitements inutiles?</h4>
+<section id="préparation-des-variables-explicatives" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="préparation-des-variables-explicatives"><span class="header-section-number">1.1</span> Préparation des variables explicatives</h2>
+<section id="quels-sont-les-traitements-inutiles" class="level3" data-number="1.1.1">
+<h3 data-number="1.1.1" class="anchored" data-anchor-id="quels-sont-les-traitements-inutiles"><span class="header-section-number">1.1.1</span> Quels sont les traitements inutiles?</h3>
 <p>Deux traitements usuels en économétrie ne sont pas nécessaires pour utiliser des méthodes ensemblistes:</p>
 <ul>
 <li><p>Il est inutile de normaliser ou de standardiser les variables numériques car c’est l’<em>ordre</em> défini par les valeurs qui est essentiel, pas les valeurs numériques elles-mêmes (voir la section <strong>?@sec-CART</strong>). Pour la même raison, il est inutile de modifier ou supprimer les valeurs extrêmes.</p></li>
 <li><p>Il n’est pas indispensable de supprimer les variables corrélées car les méthodes ensemblistes sont robustes à la multicollinéarité. Ceci dit, réduire le nombre de variables peut accélérer légèrement l’entraînement des modèles.</p></li>
 </ul>
 </section>
-<section id="comment-traiter-les-variables-catégorielles" class="level4" data-number="1.1.2">
-<h4 data-number="1.1.2" class="anchored" data-anchor-id="comment-traiter-les-variables-catégorielles"><span class="header-section-number">1.1.2</span> Comment traiter les variables catégorielles?</h4>
+<section id="comment-traiter-les-variables-catégorielles" class="level3" data-number="1.1.2">
+<h3 data-number="1.1.2" class="anchored" data-anchor-id="comment-traiter-les-variables-catégorielles"><span class="header-section-number">1.1.2</span> Comment traiter les variables catégorielles?</h3>
 <p>Le <strong>traitement des variables catégorielles</strong> est un sujet plus complexe, car plusieurs approches sont possibles et certaines implémentations peuvent prendre en charge les variables catégorielles sans préparation particulière. Il est recommandé de lire la section <strong>?@sec-categorical-variables-encoding</strong> qui détaille les approches possibles. L’approche à privilégier <em>in fine</em> dépendra de trois facteurs: l’implémentation utilisée, l’existence d’un ordre des catégories, et le nombre total de catégories. Voici quelques recommandations générales:</p>
 <ul>
 <li><p><strong>il est nettement préférable de convertir les variables catégorielles en variables numériques lorsqu’elles comportent un ordre naturel</strong> (exemples: âge, niveau de revenu, niveau de diplôme, niveau de densité urbaine…). Cette approche a l’avantage de simplifier considérablement l’utilisation des variables catégorielles, en les traitant comme des variables numériques classiques. Par exemple, l’âge exprimé sous forme de tranche d’âge (<span class="math inline">\([0; 9]\)</span>, <span class="math inline">\([10; 19]\)</span>, <span class="math inline">\([20; 29]\)</span>, etc.) peut aisément être converti en variable numérique: la valeur 0 sera associée à la modalité <span class="math inline">\([0; 9]\)</span>, la valeur 1 à la modalité <span class="math inline">\([10; 19]\)</span>. L’encodeur <code>OrdinalEncoder</code> de <code>scikit-learn</code> permet d’automatiser cette tâche de façon efficace. De la même façon, il est possible de convertir une date en variable numérique exprimée en jours écoulés depuis une date de référence.</p></li>
@@ -294,47 +302,39 @@ window.Quarto = {
 <li><p><strong>le <em>one-hot-encoding</em> ne doit pas être utilisé pour les variables catégorielles qui présentent un nombre élevé de modalités</strong> (par exemple au-delà de 10 modalités).</p></li>
 </ul>
 </section>
-<section id="comment-traiter-les-valeurs-manquantes" class="level4" data-number="1.1.3">
-<h4 data-number="1.1.3" class="anchored" data-anchor-id="comment-traiter-les-valeurs-manquantes"><span class="header-section-number">1.1.3</span> Comment traiter les valeurs manquantes?</h4>
-<p>A COMPLETER</p>
-<p>(voir la partie <strong>?@sec-valeurs-manquantes</strong>);</p>
-<ul>
-<li><p>En revanche, il peut être utile de les corriger si elles sont clairement erronées.</p></li>
-<li><p><strong>Nettoyage des données</strong></p>
-<ul>
-<li>Gestion des valeurs manquantes : Imputation ou suppression si nécessaire (même si certaines implémentations de Random Forest gèrent les valeurs manquantes, il est préférable de les traiter pour éviter les biais)[5].</li>
-</ul></li>
-</ul>
+<section id="comment-traiter-les-valeurs-manquantes" class="level3" data-number="1.1.3">
+<h3 data-number="1.1.3" class="anchored" data-anchor-id="comment-traiter-les-valeurs-manquantes"><span class="header-section-number">1.1.3</span> Comment traiter les valeurs manquantes?</h3>
+<p>Dans la mesure où toutes les implémentations de référence des méthodes ensemblistes proposent une prise en charge des valeurs manquantes (voir la partie <strong>?@sec-missing-values</strong>), il est à première vue inutile de traiter les valeurs manquantes avant d’entraîner un modèle. Il peut néanmoins être utile de le faire, par exemple par une imputation déterministe, pour se prémunir d’éventuels problèmes difficiles à débugguer. <em>A minima</em>, si on veut utiliser le support des valeurs manquantes fonctionne correctement, <strong>il faut impérativement vérifier que les valeurs manquantes sont bien codées avec la modalité considérée comme valeur manquante dans l’implémentation utilisée</strong> (voir la partie <strong>?@sec-missing-values</strong>). Il peut par exemple arriver que les valeurs manquantes soient codées avec 0, ou -999, ou une chaîne de caractères telle que <code>Z</code> au sein d’une variable numérique. En ce cas il faut recoder la modalité manquante.</p>
 </section>
-<section id="est-il-utile-de-créer-des-variables-additionnelles" class="level4" data-number="1.1.4">
-<h4 data-number="1.1.4" class="anchored" data-anchor-id="est-il-utile-de-créer-des-variables-additionnelles"><span class="header-section-number">1.1.4</span> Est-il utile de créer des variables additionnelles?</h4>
-<p>Il n’est pas toujours simple de savoir s’il est nécessaire d’ajouter des variables additionnelles dans les données d’entraînement des algorithmes ensemblistes. Il arrive d’ailleurs qu’on affirme que créer des variables additionnelles ne présente pas d’intérêt, dans la mesure où ces algorithmes sont capables de modéliser des relations complexes, non linéaires et faisant intervenir des interactions arbitraires entre variables. Cette affirmation n’est que partiellement vraie, comme le montrent les paragraphes suivants.</p>
+<section id="est-il-utile-de-créer-des-variables-additionnelles" class="level3" data-number="1.1.4">
+<h3 data-number="1.1.4" class="anchored" data-anchor-id="est-il-utile-de-créer-des-variables-additionnelles"><span class="header-section-number">1.1.4</span> Est-il utile de créer des variables additionnelles?</h3>
+<p>Il n’est pas toujours simple de savoir s’il est nécessaire d’ajouter des variables additionnelles dans les données d’entraînement des algorithmes ensemblistes. Il arrive d’ailleurs qu’on affirme que créer des variables additionnelles ne présente pas d’intérêt, dans la mesure où ces algorithmes sont naturellement capables de modéliser des relations complexes, non linéaires et faisant intervenir des interactions arbitraires entre variables. Cette affirmation n’est que partiellement vraie, comme le montrent les paragraphes suivants.</p>
 <p>Une chose est sûre: <strong>il est inutile d’ajouter aux données des variables numériques issues d’une transformation <em>monotone</em> d’une variable existante</strong>. En effet, si une variable additionnelle <span class="math inline">\(x_2\)</span> est issue d’une transformation monotone de la variable <span class="math inline">\(x_1\)</span> déjà présente dans les données, alors les sous-régions qui peuvent être définies par une règle de décision basée sur <span class="math inline">\(x_2\)</span> sont identiques à celles qui peuvent être définies avec <span class="math inline">\(x_1\)</span>. Par conséquent, <span class="math inline">\(x_2\)</span> ne permet pas d’affiner le partitionnement au-delà de ce qui était déjà possible avec <span class="math inline">\(x_1\)</span>. Cela signifie en pratique qu’il faut éviter d’inclure des variables telles que le carré ou le cube d’une variable déjà présente dans les données.</p>
 <p>Inversement, <strong>une variable additionnelle peut s’avérer utile si elle est issue d’une transformation <em>non monotone</em> d’une variable, ou d’une transformation quelconque de deux ou plusieurs variables.</strong> Voici deux exemples qui en illustrent l’intérêt:</p>
 <ul>
 <li><p><strong>Transformation <em>non monotone</em> d’une variable</strong>: imaginons qu’on veuille prédire le prix moyen des glaces à Paris uniquement avec la date, exprimée sous forme numérique en jours écoulés depuis une date de référence. Il est probable que ce prix présente une saisonnalité marquée (prix élevé en été, faible en hiver). On peut alors envisager d’ajouter une variable issue d’une transformation sinusoïdale de la date; cette variable prendra une valeur élevée à certaines périodes et plus faible à d’autres, ce qui aidera à capter la saisonnalité.</p></li>
 <li><p><strong>Transformation quelconque de deux ou plusieurs variables</strong>: imaginons qu’on veuille prédire la probabilité de faillite d’une entreprise à partir de seulement deux variables: son chiffre d’affaires et de son excédent brut d’exploitation (EBE). Ajouter le carré de l’EBE est inutile car il s’agit d’une transformation monotone de cette variable: les entreprises ayant un EBE faible ont un EBE carré faible, et ainsi de suite. En revanche, il est probablement utile d’ajouter le taux de marge (défini comme le ratio entre chiffre d’affaires et EBE), car un taux de marge faible peut aider à repérer des sous-groupes d’entreprises en difficulté, et ce indépendamment de leur taille.</p></li>
 </ul>
-<p>Il faut noter que dans ces deux exemples, un algorithme ensembliste parviendrait probablement à capter la saisonnalité du prix des glaces ou à repérer les entreprises à faible taux de marge même en l’absence de variables additionnelles. Mais il faut bien comprendre que ce résultat s’obtiendrait au prix d’un grand nombre de <em>splits</em> aboutissant à des arbres profonds et complexes. Si elles ne sont donc effectivement pas strictement indispensables pour que les algorithmes soient performants, des variables additionnelles bien choisies ont néanmoins pour effet de faciliter et d’accélérer la construction du modèle.</p>
+<p>Il faut noter que dans ces deux exemples, un algorithme ensembliste parviendrait probablement à capter la saisonnalité du prix des glaces ou à repérer les entreprises à faible taux de marge même en l’absence de variables additionnelles. Ce résultat s’obtiendrait néanmoins au prix d’un grand nombre de <em>splits</em> aboutissant à des arbres profonds et complexes, autrement dit d’un modèle inutilement complexe. Si elles ne sont donc effectivement pas strictement indispensables pour que les algorithmes soient performants, des variables additionnelles bien choisies ont néanmoins pour effet de faciliter et d’accélérer la construction du modèle.</p>
 </section>
 </section>
-<section id="préparation-de-la-variable-cible" class="level3" data-number="1.2">
-<h3 data-number="1.2" class="anchored" data-anchor-id="préparation-de-la-variable-cible"><span class="header-section-number">1.2</span> Préparation de la variable-cible</h3>
-<p>Les méthodes ensemblistes sont sensibles aux valeurs prises par la variable-cible. La préparation de la variable-cible obéit donc à des règles différentes de celles applicables aux variables explicatives:</p>
+<section id="préparation-de-la-variable-cible" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="préparation-de-la-variable-cible"><span class="header-section-number">1.2</span> Préparation de la variable-cible</h2>
+<p>Alors qu’elles ne sont pas sensibles aux valeurs des variables explicatives, les méthodes ensemblistes sont sensibles aux valeurs prises par la variable-cible. La préparation de la variable-cible obéit donc à des règles différentes de celles applicables aux variables explicatives:</p>
 <ul>
-<li><p>Il faut choisir soigneusement les transformations appliquées à la variable-cible: on obtient des modèles très différents selon qu’on entraîne un algorithme avec pour variable-cible le prix de vente des logements, le prix au mètre carré ou le logarithme du prix au mètre carré.</p></li>
-<li><p>Il faut repérer et traiter les valeurs extrêmes, aberrantes ou erronées prises par la variable-cible, soit en les corrigeant, soit en supprimant les observations concernés. Ce point est particulièrement important lorsqu’on veut entraîner un algorithme de <em>gradient boosting</em>.</p></li>
+<li><p><strong>Choisir soigneusement les transformations appliquées à la variable-cible</strong>: on obtient des modèles très différents selon qu’on entraîne un algorithme avec pour variable-cible le prix de vente des logements, le prix au mètre carré ou le logarithme du prix au mètre carré.</p></li>
+<li><p><strong>Repérer et traiter les valeurs extrêmes, aberrantes ou erronées prises par la variable-cible</strong>, soit en les corrigeant, soit en supprimant les observations concernés. Ce point est particulièrement important lorsqu’on veut entraîner un algorithme de <em>gradient boosting</em>.</p></li>
+<li><p><strong>Traiter les valeurs manquantes</strong>, soit en imputant une valeur, soit en supprimant les observations concernés. Le choix entre les deux approches n’est pas simple: imputer la variable-cible risque d’introduire des erreurs dans les données d’entraînement, mais les supprimer risque de déséquilibrer ces mêmes données. De façon générale, l’imputation doit être privilégiée uniquement lorsqu’on dispose de solides éléments étayant cette approche.</p></li>
 </ul>
-</section>
-<section id="train-test" class="level3" data-number="1.3">
-<h3 data-number="1.3" class="anchored" data-anchor-id="train-test"><span class="header-section-number">1.3</span> Train-test</h3>
+<section id="train-test" class="level3" data-number="1.2.1">
+<h3 data-number="1.2.1" class="anchored" data-anchor-id="train-test"><span class="header-section-number">1.2.1</span> Train-test</h3>
 <p>Pas indispensable pour RF, mais souhaitable. Indispensable pour GB.</p>
 </section>
 </section>
-<section id="evaluation-des-performances-du-modèle-et-optimisation-des-hyper-paramètres" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="evaluation-des-performances-du-modèle-et-optimisation-des-hyper-paramètres"><span class="header-section-number">2</span> Evaluation des performances du modèle et optimisation des hyper-paramètres</h2>
-<section id="estimation-de-lerreur-par-validation-croisée" class="level3" data-number="2.1">
-<h3 data-number="2.1" class="anchored" data-anchor-id="estimation-de-lerreur-par-validation-croisée"><span class="header-section-number">2.1</span> Estimation de l’erreur par validation croisée</h3>
+<section id="evaluation-des-performances-du-modèle-et-optimisation-des-hyper-paramètres" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="evaluation-des-performances-du-modèle-et-optimisation-des-hyper-paramètres"><span class="header-section-number">1.3</span> Evaluation des performances du modèle et optimisation des hyper-paramètres</h2>
+<section id="estimation-de-lerreur-par-validation-croisée" class="level3" data-number="1.3.1">
+<h3 data-number="1.3.1" class="anchored" data-anchor-id="estimation-de-lerreur-par-validation-croisée"><span class="header-section-number">1.3.1</span> Estimation de l’erreur par validation croisée</h3>
 <p>La validation croisée est une méthode d’évaluation couramment utilisée en apprentissage automatique pour estimer la capacité d’un modèle à généraliser les prédictions à de nouvelles données. Bien que l’évaluation par l’erreur <em>Out-of-Bag</em> (OOB) soit généralement suffisante pour les forêts aléatoires, la validation croisée permet d’obtenir une évaluation plus robuste, car moins sensible à l’échantillon d’entraînement, notamment sur des jeux de données de petite taille.</p>
 <p>Concrètement, le jeu de donné est divisé en <span class="math inline">\(k\)</span> sous-ensembles, un modèle est entraîné sur <span class="math inline">\(k-1\)</span> sous-ensembles et testé sur le sous-ensemble restant. L’opération est répétée <span class="math inline">\(k\)</span> fois de manière à ce que chaque observation apparaisse au moins une fois dans l’échantillon test. L’erreur est ensuite moyennée sur l’ensemble des échantillons test.</p>
 <p><strong>Procédure de validation croisée</strong>:</p>
@@ -352,19 +352,19 @@ window.Quarto = {
 <p>Bien que plus coûteuse en termes de calcul, la validation croisée est souvent préférée lorsque les données sont limitées ou lorsque l’on souhaite évaluer différents modèles ou hyperparamètres avec précision.</p>
 <p><strong>Leave-One-Out Cross-Validation (LOOCV)</strong> : Il s’agit d’un cas particulier où le nombre de sous-échantillons est égal à la taille du jeu de données. En d’autres termes, chaque échantillon est utilisé une fois comme jeu de test, et tous les autres échantillons pour l’entraînement. LOOCV fournit une estimation très précise de la performance, mais est très coûteuse en temps de calcul, surtout pour de grands jeux de données.</p>
 </section>
-<section id="choix-des-hyper-paramètres-du-modèle" class="level3" data-number="2.2">
-<h3 data-number="2.2" class="anchored" data-anchor-id="choix-des-hyper-paramètres-du-modèle"><span class="header-section-number">2.2</span> Choix des hyper-paramètres du modèle</h3>
+<section id="choix-des-hyper-paramètres-du-modèle" class="level3" data-number="1.3.2">
+<h3 data-number="1.3.2" class="anchored" data-anchor-id="choix-des-hyper-paramètres-du-modèle"><span class="header-section-number">1.3.2</span> Choix des hyper-paramètres du modèle</h3>
 <p>L’estimation Out-of-Bag (OOB) et la validation croisée sont deux méthodes clés pour optimiser les hyper-paramètres d’une forêt aléatoire. Les deux approches permettent de comparer les performances obtenues pour différentes combinaisons d’hyper-paramètres et de sélectionner celles qui maximisent les performances prédictives, l’OOB étant souvent plus rapide et moins coûteuse, tandis que la validation croisée est plus fiable dans des situations où le surapprentissage est un risque important (<span class="citation" data-cites="probst2019hyperparameters">Probst, Wright, and Boulesteix (<a href="#ref-probst2019hyperparameters" role="doc-biblioref">2019</a>)</span>).</p>
 <p>Il convient de définir une stratégie d’optimisation des hyperparamètres pour ne pas perdre de temps à tester trop de jeux d’hyperparamètres. Plusieurs stratégies existent pour y parvenir, les principales sont exposées dans la section <strong>?@sec-guide-rf</strong>. Les implémentations des forêts aléatoires disponibles en <code>R</code> et en Python permettent d’optimiser aisément les principaux hyper-paramètres des forêts aléatoires.</p>
-<section id="méthodes-de-recherche-exhaustives" class="level4" data-number="2.2.1">
-<h4 data-number="2.2.1" class="anchored" data-anchor-id="méthodes-de-recherche-exhaustives"><span class="header-section-number">2.2.1</span> Méthodes de recherche exhaustives</h4>
+<section id="méthodes-de-recherche-exhaustives" class="level4" data-number="1.3.2.1">
+<h4 data-number="1.3.2.1" class="anchored" data-anchor-id="méthodes-de-recherche-exhaustives"><span class="header-section-number">1.3.2.1</span> Méthodes de recherche exhaustives</h4>
 <ul>
 <li><p><strong>Recherche sur grille</strong> (Grid Search): Cette approche simple explore toutes les combinaisons possibles d’hyperparamètres définis sur une grille. Les paramètres continus doivent être discrétisés au préalable. La méthode est exhaustive mais coûteuse en calcul, surtout pour un grand nombre d’hyperparamètres.</p></li>
 <li><p><strong>Recherche aléatoire</strong> (Random Search): Plus efficace que la recherche sur grille, cette méthode échantillonne aléatoirement les valeurs des hyperparamètres dans un espace défini. Bergstra et Bengio (2012) ont démontré sa supériorité pour les réseaux neuronaux, et elle est également pertinente pour les forêts aléatoires. La distribution d’échantillonnage est souvent uniforme.</p></li>
 </ul>
 </section>
-<section id="optimisation-séquentielleitérative-basée-sur-un-modèle-smbo" class="level4" data-number="2.2.2">
-<h4 data-number="2.2.2" class="anchored" data-anchor-id="optimisation-séquentielleitérative-basée-sur-un-modèle-smbo"><span class="header-section-number">2.2.2</span> Optimisation séquentielle/itérative basée sur un modèle (SMBO)</h4>
+<section id="optimisation-séquentielleitérative-basée-sur-un-modèle-smbo" class="level4" data-number="1.3.2.2">
+<h4 data-number="1.3.2.2" class="anchored" data-anchor-id="optimisation-séquentielleitérative-basée-sur-un-modèle-smbo"><span class="header-section-number">1.3.2.2</span> Optimisation séquentielle/itérative basée sur un modèle (SMBO)</h4>
 <p>La méthode SMBO (Sequential model-based optimization) est une approche plus efficace que les précédentes car elle s’appuie sur les résultats des évaluations déjà effectuées pour guider la recherche des prochains hyper-paramètres à tester (<span class="citation" data-cites="probst2019hyperparameters">Probst, Wright, and Boulesteix (<a href="#ref-probst2019hyperparameters" role="doc-biblioref">2019</a>)</span>).</p>
 <p>Voici les étapes clés de cette méthode:</p>
 <ul>
@@ -380,6 +380,7 @@ window.Quarto = {
 
 
 
+</section>
 </section>
 </section>
 </section>
