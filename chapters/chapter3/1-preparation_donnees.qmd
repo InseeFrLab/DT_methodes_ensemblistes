@@ -1,11 +1,11 @@
 
-## Préparation des données {#sec-preprocessing}
+# Préparation des données {#sec-preprocessing}
 
 Les méthodes ensemblistes à base d'arbres ne requièrent pas le même travail préparation des données que les méthodes économétriques traditionnelles. En particulier, certaines étapes indispensables à l'économétrie cessent d'être nécessaires. En revanche, d'autres, notamment le traitement des valeurs manquantes et des variables catégorielles. Cette section gagne à être lue après ou en parallèle de la section @sec-sujets-avances qui détaille les approches possibles.
 
-### Préparation des variables explicatives
+## Préparation des variables explicatives
 
-#### Quels sont les traitements inutiles?
+### Quels sont les traitements inutiles?
 
 Deux traitements usuels en économétrie ne sont pas nécessaires pour utiliser des méthodes ensemblistes: 
 
@@ -13,7 +13,7 @@ Deux traitements usuels en économétrie ne sont pas nécessaires pour utiliser 
 
 - Il n'est pas indispensable de supprimer les variables corrélées car les méthodes ensemblistes sont robustes à la multicollinéarité. Ceci dit, réduire le nombre de variables peut accélérer légèrement l'entraînement des modèles.
 
-#### Comment traiter les variables catégorielles?
+### Comment traiter les variables catégorielles?
 
 Le __traitement des variables catégorielles__ est un sujet plus complexe, car plusieurs approches sont possibles et certaines implémentations peuvent prendre en charge les variables catégorielles sans préparation particulière. Il est recommandé de lire la section @sec-categorical-variables-encoding qui détaille les approches possibles. L'approche à privilégier _in fine_ dépendra de trois facteurs: l'implémentation utilisée, l'existence d'un ordre des catégories, et le nombre total de catégories. Voici quelques recommandations générales:
 
@@ -23,20 +23,13 @@ Le __traitement des variables catégorielles__ est un sujet plus complexe, car p
 
   - __le _one-hot-encoding_ ne doit pas être utilisé pour les variables catégorielles qui présentent un nombre élevé de modalités__ (par exemple au-delà de 10 modalités).
 
-#### Comment traiter les valeurs manquantes?
+### Comment traiter les valeurs manquantes?
 
-A COMPLETER
+Dans la mesure où toutes les implémentations de référence des méthodes ensemblistes proposent une prise en charge des valeurs manquantes (voir la partie @sec-missing-values), il est à première vue inutile de traiter les valeurs manquantes avant d'entraîner un modèle. Il peut néanmoins être utile de le faire, par exemple par une imputation déterministe, pour se prémunir d'éventuels problèmes difficiles à débugguer. _A minima_, si on veut utiliser le support des valeurs manquantes fonctionne correctement, __il faut impérativement vérifier que les valeurs manquantes sont bien codées avec la modalité considérée comme valeur manquante dans l'implémentation utilisée__ (voir la partie @sec-missing-values). Il peut par exemple arriver que les valeurs manquantes soient codées avec 0, ou -999, ou une chaîne de caractères telle que `Z` au sein d'une variable numérique. En ce cas il faut recoder la modalité manquante.
 
-(voir la partie @sec-valeurs-manquantes);
+### Est-il utile de créer des variables additionnelles?
 
-- En revanche, il peut être utile de les corriger si elles sont clairement erronées.
-
-- **Nettoyage des données**
-  - Gestion des valeurs manquantes : Imputation ou suppression si nécessaire (même si certaines implémentations de Random Forest gèrent les valeurs manquantes, il est préférable de les traiter pour éviter les biais)[5].
-
-#### Est-il utile de créer des variables additionnelles?
-
-Il n'est pas toujours simple de savoir s'il est nécessaire d'ajouter des variables additionnelles dans les données d'entraînement des algorithmes ensemblistes. Il arrive d'ailleurs qu'on affirme que créer des variables additionnelles ne présente pas d'intérêt, dans la mesure où ces algorithmes sont capables de modéliser des relations complexes, non linéaires et faisant intervenir des interactions arbitraires entre variables. Cette affirmation n'est que partiellement vraie, comme le montrent les paragraphes suivants.
+Il n'est pas toujours simple de savoir s'il est nécessaire d'ajouter des variables additionnelles dans les données d'entraînement des algorithmes ensemblistes. Il arrive d'ailleurs qu'on affirme que créer des variables additionnelles ne présente pas d'intérêt, dans la mesure où ces algorithmes sont naturellement capables de modéliser des relations complexes, non linéaires et faisant intervenir des interactions arbitraires entre variables. Cette affirmation n'est que partiellement vraie, comme le montrent les paragraphes suivants.
 
 Une chose est sûre: __il est inutile d'ajouter aux données des variables numériques issues d'une transformation _monotone_ d'une variable existante__. En effet, si une variable additionnelle $x_2$ est issue d'une transformation monotone de la variable $x_1$ déjà présente dans les données, alors les sous-régions qui peuvent être définies par une règle de décision basée sur $x_2$ sont identiques à celles qui peuvent être définies avec $x_1$. Par conséquent, $x_2$ ne permet pas d'affiner le partitionnement au-delà de ce qui était déjà possible avec $x_1$. Cela signifie en pratique qu'il faut éviter d'inclure des variables telles que le carré ou le cube d'une variable déjà présente dans les données.
 
@@ -46,17 +39,17 @@ Inversement, __une variable additionnelle peut s'avérer utile si elle est issue
 
   - __Transformation quelconque de deux ou plusieurs variables__: imaginons qu'on veuille prédire la probabilité de faillite d'une entreprise à partir de seulement deux variables: son chiffre d'affaires et de son excédent brut d'exploitation (EBE). Ajouter le carré de l'EBE est inutile car il s'agit d'une transformation monotone de cette variable: les entreprises ayant un EBE faible ont un EBE carré faible, et ainsi de suite. En revanche, il est probablement utile d'ajouter le taux de marge (défini comme le ratio entre chiffre d'affaires et EBE), car un taux de marge faible peut aider à repérer des sous-groupes d'entreprises en difficulté, et ce indépendamment de leur taille. 
 
-Il faut noter que dans ces deux exemples, un algorithme ensembliste parviendrait probablement à capter la saisonnalité du prix des glaces ou à repérer les entreprises à faible taux de marge même en l'absence de variables additionnelles. Mais il faut bien comprendre que ce résultat s'obtiendrait au prix d'un grand nombre de _splits_ aboutissant à des arbres profonds et complexes. Si elles ne sont donc effectivement pas strictement indispensables pour que les algorithmes soient performants, des variables additionnelles bien choisies ont néanmoins pour effet de faciliter et d'accélérer la construction du modèle.
+Il faut noter que dans ces deux exemples, un algorithme ensembliste parviendrait probablement à capter la saisonnalité du prix des glaces ou à repérer les entreprises à faible taux de marge même en l'absence de variables additionnelles. Ce résultat s'obtiendrait néanmoins au prix d'un grand nombre de _splits_ aboutissant à des arbres profonds et complexes, autrement dit d'un modèle inutilement complexe. Si elles ne sont donc effectivement pas strictement indispensables pour que les algorithmes soient performants, des variables additionnelles bien choisies ont néanmoins pour effet de faciliter et d'accélérer la construction du modèle.
 
+## Préparation de la variable-cible
 
-### Préparation de la variable-cible
+Alors qu'elles ne sont pas sensibles aux valeurs des variables explicatives, les méthodes ensemblistes sont sensibles aux valeurs prises par la variable-cible. La préparation de la variable-cible obéit donc à des règles différentes de celles applicables aux variables explicatives:
 
-Les méthodes ensemblistes sont sensibles aux valeurs prises par la variable-cible. La préparation de la variable-cible obéit donc à des règles différentes de celles applicables aux variables explicatives:
+- __Choisir soigneusement les transformations appliquées à la variable-cible__: on obtient des modèles très différents selon qu'on entraîne un algorithme avec pour variable-cible le prix de vente des logements, le prix au mètre carré ou le logarithme du prix au mètre carré.
 
-- Il faut choisir soigneusement les transformations appliquées à la variable-cible: on obtient des modèles très différents selon qu'on entraîne un algorithme avec pour variable-cible le prix de vente des logements, le prix au mètre carré ou le logarithme du prix au mètre carré.
+- __Repérer et traiter les valeurs extrêmes, aberrantes ou erronées prises par la variable-cible__, soit en les corrigeant, soit en supprimant les observations concernés. Ce point est particulièrement important lorsqu'on veut entraîner un algorithme de _gradient boosting_.
 
-- Il faut repérer et traiter les valeurs extrêmes, aberrantes ou erronées prises par la variable-cible, soit en les corrigeant, soit en supprimant les observations concernés. Ce point est particulièrement important lorsqu'on veut entraîner un algorithme de _gradient boosting_.
-
+- __Traiter les valeurs manquantes__, soit en imputant une valeur, soit en supprimant les observations concernés. Le choix entre les deux approches n'est pas simple: imputer la variable-cible risque d'introduire des erreurs dans les données d'entraînement, mais les supprimer risque de déséquilibrer ces mêmes données. De façon générale, l'imputation doit être privilégiée uniquement lorsqu'on dispose de solides éléments étayant cette approche.
 
 
 ### Train-test
