@@ -1,4 +1,4 @@
-## Sujets avancés {#sec-sujets-avances}
+## Sujets avancés sur le traitement des variables {#sec-sujets-avances}
 
 ### Le traitement des variables continues: l'utilisation des histogrammes {#sec-continuous-variables-hist}
 
