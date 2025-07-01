@@ -1,0 +1,54 @@
+## Sujets avancés: algorithmes {#sec-sujets-avances-algo}
+
+### La classification multiclasse non-ordonnée
+
+Points d'attention:
+
+- Comment sont construits les modèles _exactement_? En faisant k modèles en 1-versus-all?
+
+- Comment les prédictions sont-elles agrégées _exactement_?
+
+- A quoi doit ressembler la target? Doit-elle être encodée ou pas?
+
+- Comment gérer les déséquilibres entre classes? Il me semble qu'il y a un peu partout des class weights.
+
+- Comment peut-on récupérer les probas de chaque classe?
+
+
+#### XGBoost
+
+La classification multi-classe avec XGBoost permet de prédire une classe parmi plusieurs possibles pour chaque exemple.
+
+- **Fonction objectif** : Pour la classification multi-classe, le paramètre `objective` doit généralement être défini sur `'multi:softmax'` (pour obtenir directement les étiquettes de classe) ou `'multi:softprob'` (pour obtenir les probabilités de chaque classe). Par défaut, le classifieur XGBoost utilise automatiquement `'multi:softprob'` s'il détecte plus de deux classes dans la variable cible.
+- **Nombre de classes** : Il faut spécifier le nombre de classes avec le paramètre `num_class`, qui doit correspondre au nombre de valeurs uniques dans la variable cible.
+- **Entraînement** : Pendant l’entraînement, XGBoost construit un modèle qui utilise une stratégie de type "un contre tous" (ou similaire) pour chaque classe, optimisant simultanément les probabilités ou les affectations de classe à l’aide de la fonction objectif.
+- **Prédiction** : Lors de la prédiction, le modèle retourne soit la classe prédite (`multi:softmax`), soit une probabilité pour chaque classe (`multi:softprob`), selon l’objectif choisi.
+- **Encodage de la cible** : La variable cible doit être encodée sous forme d’entiers (0, 1, 2, ...) pour chaque classe, et non sous forme de variables binaires (one-hot encoding).
+
+Cette méthode permet à XGBoost de gérer efficacement les problèmes multi-classes en optimisant la séparation des classes via le boosting de gradient.
+
+#### LightGBM
+
+La classification multiclasse avec LightGBM repose sur l’algorithme d’arbre de décision avec renforcement de gradient (GBDT) et des optimisations spécifiques comme GOSS et EFB pour améliorer l’efficacité et la vitesse[1][5].
+
+- **Paramétrage** : Pour une tâche multiclasse, il faut spécifier `objective='multiclass'` et indiquer le nombre de classes avec `num_class` (par exemple, `num_class=3` pour 3 classes)[4][7].
+- **Encodage de la cible** : La variable cible doit être encodée sous forme d’entiers (0, 1, 2, ...) correspondant à chaque classe[2][4].
+- **Apprentissage** : LightGBM entraîne un modèle qui, pour chaque itération, construit `num_class` arbres (un par classe), soit un total de `num_class * num_iterations` arbres au total[7].
+- **Prédiction** : Lors de la prédiction, le modèle retourne un vecteur de scores (probabilités) pour chaque classe, et la classe prédite est celle avec le score le plus élevé[2][3].
+- **Pas de normalisation requise** : Aucune normalisation ou prétraitement particulier n’est nécessaire pour la variable cible, sauf l’encodage correct[2].
+
+En résumé, LightGBM gère la classification multiclasse en optimisant simultanément la séparation de toutes les classes via le boosting de gradient, tout en restant très efficace sur de grands volumes de données[1][5].
+
+Lorsque vous utilisez le modèle pour la classification multiclasse, vous pouvez obtenir :
+
+- La __classe prédite__ avec la méthode `predict()` : cela retourne la classe avec la probabilité la plus élevée pour chaque échantillon.
+
+- La __probabilité de chaque classe__ avec la méthode `predict_proba()` : cela retourne un tableau de probabilités pour chaque classe, de dimension (n_échantillons, n_classes), où chaque ligne correspond à un échantillon et chaque colonne à la probabilité d’appartenir à une classe donnée.
+
+### La classification multiclasse ordonnée
+
+Attention, là on est franchement _advanced_.
+
+
+### Les fonctions de perte custom
+
