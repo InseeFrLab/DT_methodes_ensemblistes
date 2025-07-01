@@ -134,7 +134,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/chapter2/1-CART.html">Présentation formelle des algorithmes</a></li><li class="breadcrumb-item"><a href="../../chapters/chapter2/5-Sujets-avances.html">Sujets avancés</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/chapter2/1-CART.html">Présentation formelle des algorithmes</a></li><li class="breadcrumb-item"><a href="../../chapters/chapter2/5-Sujets-avances.html">Sujets avancés: traitement des données pendant l’entraînement</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -210,7 +210,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../chapters/chapter2/5-Sujets-avances.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Sujets avancés</span></a>
+ <span class="menu-text">Sujets avancés: traitement des données pendant l’entraînement</span></a>
   </div>
 </li>
       </ul>
@@ -254,7 +254,7 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#sec-sujets-avances" id="toc-sec-sujets-avances" class="nav-link active" data-scroll-target="#sec-sujets-avances"><span class="header-section-number">1</span> Sujets avancés</a>
+  <li><a href="#sec-sujets-avances" id="toc-sec-sujets-avances" class="nav-link active" data-scroll-target="#sec-sujets-avances"><span class="header-section-number">1</span> Sujets avancés: traitement des données pendant l’entraînement</a>
   <ul class="collapse">
   <li><a href="#sec-continuous-variables-hist" id="toc-sec-continuous-variables-hist" class="nav-link" data-scroll-target="#sec-continuous-variables-hist"><span class="header-section-number">1.1</span> Le traitement des variables continues: l’utilisation des histogrammes</a></li>
   <li><a href="#sec-categorical-variables-encoding" id="toc-sec-categorical-variables-encoding" class="nav-link" data-scroll-target="#sec-categorical-variables-encoding"><span class="header-section-number">1.2</span> Le traitement des variables catégorielles</a></li>
@@ -264,13 +264,13 @@ window.Quarto = {
 <div class="toc-actions"><ul><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/edit/main/chapters/chapter2/5-Sujets-avances.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/blob/main/chapters/chapter2/5-Sujets-avances.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/chapter2/1-CART.html">Présentation formelle des algorithmes</a></li><li class="breadcrumb-item"><a href="../../chapters/chapter2/5-Sujets-avances.html">Sujets avancés</a></li></ol></nav></header>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/chapter2/1-CART.html">Présentation formelle des algorithmes</a></li><li class="breadcrumb-item"><a href="../../chapters/chapter2/5-Sujets-avances.html">Sujets avancés: traitement des données pendant l’entraînement</a></li></ol></nav></header>
 
 
 
 
 <section id="sec-sujets-avances" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="sec-sujets-avances"><span class="header-section-number">1</span> Sujets avancés</h2>
+<h2 data-number="1" class="anchored" data-anchor-id="sec-sujets-avances"><span class="header-section-number">1</span> Sujets avancés: traitement des données pendant l’entraînement</h2>
 <section id="sec-continuous-variables-hist" class="level3" data-number="1.1">
 <h3 data-number="1.1" class="anchored" data-anchor-id="sec-continuous-variables-hist"><span class="header-section-number">1.1</span> Le traitement des variables continues: l’utilisation des histogrammes</h3>
 <p><strong>L’algorithme de détermination des critères de partition (<em>split-finding algorithm</em>) est un enjeu de performance essentiel dans les méthodes ensemblistes.</strong> En effet, l’algorithme le plus simple qui consiste à énumérer tous les critères de partition possibles (en balayant toutes les valeurs de toutes les variables) s’avère très coûteux à utiliser dès lors que les données contiennent soit un grand nombre de variables, soit des variables continues prenant un grand nombre de valeurs. C’est pourquoi cet algorithme a fait l’objet de multiples améliorations et optimisations visant à réduire leur coût computationnel sans dégrader la qualité des critères de partition.</p>
