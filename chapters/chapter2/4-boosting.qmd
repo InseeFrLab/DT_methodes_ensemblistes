@@ -132,7 +132,7 @@ Dans cette expression:
 
 #### Principe de l'entraînement du modèle
 
-A chaque étape de l'entraînement, l'algorithme de _gradient boosting_ ajoute un nouvel arbre au modèle en faisant deux choses: **déterminer la structure** de l'arbre en tenant compte de la régularisation (c'est-à-dire choisir les règles de décision qui définissent l'arbre) et **calculer la meilleure valeur $w_j$​** pour chaque feuille terminale (c'est-à-dire la valeur qui **minimise** la fonction de perte). La construction de l'arbre se fait selon une **approche gloutonne**, de façon très similaire à la construction d'un arbre CART (voir section @sec-CART): on divise les données d'entraînement en sous-régions de plus en plus petites, tant que cela génère une réduction "suffisante" de la fonction de perte.
+A chaque étape de l'entraînement, l'algorithme de _gradient boosting_ ajoute un nouvel arbre au modèle en faisant deux choses: **déterminer la structure** de l'arbre en tenant compte de la régularisation (c'est-à-dire choisir les règles de décision qui définissent l'arbre) et **calculer la meilleure valeur $w_j$​** pour chaque feuille terminale (c'est-à-dire la valeur qui **minimise** la fonction de perte). La construction de l'arbre se fait selon une **approche gloutonne**, de façon très similaire à la construction d'un arbre CART (voir section [@sec-CART]{.content-visible unless-format="html"} [sur les arbres CART]{.content-visible when-format="html"}): on divise les données d'entraînement en sous-régions de plus en plus petites, tant que cela génère une réduction "suffisante" de la fonction de perte.
 
 Deux différences notables séparent le _gradient boosting_ des arbres CART et des forêts aléatoires: 
 
@@ -252,7 +252,9 @@ $$ {#eq-fct-eval-split}
 Cette réduction de perte est simplement la différence entre la somme des pertes après partitionnement (noeud-enfant gauche + noeud-enfant droit) et la perte avant partitionnement. Le terme $\gamma$ est le terme de régularisation qui mesure le coût associé à la création d'un noeud supplémentaire. Si $\Delta \tilde{L}^{(t)}$ est **positive** et suffisamment grande, alors la scission fait **baisser** la perte globale et on la retient. Sinon, on renonce à scinder cette feuille. 
 
 ::: { .callout-note}
-L'algorithme de détermination des règles de décision est le composant le plus intense en calcul des algorithmes de _gradient boosting_. Les différentes implémentations du _gradient boosting_ proposent donc de multiples améliorations et optimisations visant à le rendre le plus efficace possible. Certaines de ces optimisations sont présentées dans la partie LIEN A LA PARTIE HISTOGRAMME/CATVAR.
+## 
+
+L'algorithme de détermination des règles de décision est le composant le plus intense en calcul des algorithmes de _gradient boosting_. Les différentes implémentations du _gradient boosting_ proposent donc de multiples améliorations et optimisations visant à le rendre le plus efficace possible. Certaines de ces optimisations sont présentées dans la partie [@sec-sujets-avances.]{.content-visible unless-format="html"} [sur les sujets avancés relatifs aux traitement des données pendant l'entraînement.]{.content-visible when-format="html"}
 :::
 
 ##### Etape 4: Ajouter des arbres jusqu'à atteindre un critère d'arrêt
@@ -270,6 +272,8 @@ Il est alors possible de commencer l'entraînement de l'arbre suivant, selon la 
 ### Un exemple simple: la régression avec perte quadratique
 
 Dans ce cas, le gradient de la fonction de perte coïncide avec le résidu $y-\hat{y}$.
+
+Expliciter la formule de $w_i$, et donner l'intuition de lambda.
 
 METTRE LA FIGURE COMPLIQUEE avec les résidus.
 
