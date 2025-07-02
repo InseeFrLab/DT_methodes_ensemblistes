@@ -58,7 +58,7 @@ La *Gradient Boosting Machine* (GBM) propose une approche assez différente: ell
 
 -   Première itération de _boosting_:
 
-    -   On calcule la dérivée partielle (*gradient*) de la fonction de perte par rapport à la prédiction pour chaque observation de l'ensemble d'entraînement. Cette dérivée partielle est parfois appelée __pseudo-résidu__. L'opposé de ce gradient indique à la fois dans quelle direction et dans quelle ampleur la prédiction devrait être modifiée afin de réduire la perte.
+    -   On calcule la dérivée partielle (*gradient*) de la fonction de perte par rapport à la prédiction pour chaque observation de l'ensemble d'entraînement. Cette dérivée partielle est parfois appelée __pseudo-résidu__. L'opposé de ce gradient indique à la fois dans quelle direction et dans quelle ampleur la prédiction devrait être modifiée afin de réduire la perte (ou autrement dit afin de rapprocher la prédiction de la vraie valeur).
 
     -   Un premier arbre est entraîné à prédire l'opposé du gradient de la fonction de perte.
 
