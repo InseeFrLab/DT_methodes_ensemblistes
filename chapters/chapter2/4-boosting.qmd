@@ -235,19 +235,21 @@ L'équation @eq-fct-obj-optimal est utile en pratique car elle permet de compare
 
 ##### Étape 3: déterminer la structure de l'arbre
 
-La méthode de construction des arbres dans les algorithmes de _gradient boosting_ est très similaire à celle décrite dans la partie sur les arbres de décision: le $t$-ième arbre n'est pas défini en une fois, mais construit de façon gloutonne (_greedy_). 
+La méthode de construction des arbres dans les algorithmes de _gradient boosting_ est très similaire à celle décrite dans la partie sur les arbres de décision: le $t$-ième arbre n'est pas défini en une fois, mais construit de façon gloutonne (_greedy_), avec un algorithme de détermination des règles de décision (*split finding algorithm*) qui énumère, évalue et compare les règles de décision possibles par une double boucle sur les variables et les valeurs prises par ces variables. La règle de décision retenue à chaque étape sera simplement celui dont le gain est le plus élevé. 
+
 <!-- On part du noeud-racine qui contient toutes les données d'entraînement, et à chaque étape on partitionne les noeuds de l'arbre en choisissant la règle de décision qui maximise la réduction de la perte. Le processus est réitéré jusqu'à ce que **l'arbre atteigne un critère d'arrêt**, ou jusqu'à ce que **plus aucune scission ne permette de réduire la fonction de perte**. -->
-La grande différence avec les arbres CART et les forêts aléatoires est que ces algorithmes utilisent l'équation @eq-fct-obj-optimal pour choisir la règle de décision (_split_) à chaque étape de la construction de l'arbre, et non une mesure d'impureté. Plus précisément, la réduction de perte associée au partitionnement de la feuille $I$ en deux feuilles gauche ($I_L$) et droite ($I_R$) à l'aide d'une certaine règle de décision s'écrit (à partir de l'équation @eq-fct-obj-optimal):
+
+La grande différence avec les arbres CART et les forêts aléatoires est que ces algorithmes utilisent l'équation @eq-fct-obj-optimal (et non une mesure d'impureté) pour évaluer les règles de décision candidates. Plus précisément, la réduction de perte associée au partitionnement de la feuille $I$ en deux noeuds-enfants gauche ($I_L$) et droit ($I_R$) à l'aide d'une certaine règle de décision s'écrit (à partir de l'équation @eq-fct-obj-optimal):
 $$
 \Delta \tilde{L}^{(t)} = \tfrac12 \bigl[
-    \underbrace{\frac{\bigl(\sum_{i \in I_L} g_i\bigr)^2}{\sum_{i \in I_L} h_i + \lambda}}_{\text{Perte de la feuille gauche}} + 
-    \underbrace{\frac{\bigl(\sum_{i \in I_R} g_i\bigr)^2}{\sum_{i \in I_R} h_i + \lambda}}_{\text{Perte de la feuille droite}} - 
-    \underbrace{\frac{\bigl(\sum_{i \in I} g_i\bigr)^2}{\sum_{i \in I} h_i + \lambda}}_{\text{Perte de la feuille d'origine}}
+    \underbrace{\frac{\bigl(\sum_{i \in I_L} g_i\bigr)^2}{\sum_{i \in I_L} h_i + \lambda}}_{\text{Perte du noeud-enfant gauche}} + 
+    \underbrace{\frac{\bigl(\sum_{i \in I_R} g_i\bigr)^2}{\sum_{i \in I_R} h_i + \lambda}}_{\text{Perte du noeud-enfant droit}} - 
+    \underbrace{\frac{\bigl(\sum_{i \in I} g_i\bigr)^2}{\sum_{i \in I} h_i + \lambda}}_{\text{Perte du noeud d'origine}}
 \bigr]
 - \gamma
 $$ {#eq-fct-eval-split}
 
-La réduction de perte permise par le partitionnement est simplement la différence entre la somme des pertes après partitionnement (feuille gauche + feuille droite) et l'ancienne perte avant partitionnement. Le terme $\gamma$ est le terme de régularisation qui mesure le coût associé à la création d'une feuille supplémentaire. Si $\Delta \tilde{L}^{(t)}$ est **positive** et suffisamment grande, alors la scission fait **baisser** la perte globale et on la retient. Sinon, on renonce à scinder cette feuille. 
+La réduction de perte permise par le partitionnement est simplement la différence entre la somme des pertes après partitionnement (noeud-enfant gauche + noeud-enfant droit) et l'ancienne perte avant partitionnement. Le terme $\gamma$ est le terme de régularisation qui mesure le coût associé à la création d'une feuille supplémentaire. Si $\Delta \tilde{L}^{(t)}$ est **positive** et suffisamment grande, alors la scission fait **baisser** la perte globale et on la retient. Sinon, on renonce à scinder cette feuille. 
 
 ::: { .callout-note}
 L'algorithme de détermination des règles de décision est le composant le plus intense en calcul des algorithmes de _gradient boosting_. Les différentes implémentations du _gradient boosting_ proposent donc de multiples améliorations et optimisations visant à le rendre le plus efficace possible. Certaines de ces optimisations sont présentées dans la partie LIEN A LA PARTIE HISTOGRAMME/CATVAR.
