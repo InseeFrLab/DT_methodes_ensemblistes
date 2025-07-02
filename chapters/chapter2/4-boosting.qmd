@@ -273,8 +273,13 @@ Il est alors possible de commencer l'entraînement de l'arbre suivant, selon la 
 
 ### Un exemple simple: la régression avec perte quadratique
 
-La partie qui précède peut donner l'impression que la mécanique du _gradient boosting_ est très complexe et difficile à comprendre. L'exemple qui suit permet de mieux saisir cette mécanique en se ramenant à une situation intuitive. On se place dans le cas d'un problème de régression, avec une perte quadratique: $ \ell\left(y,\;\hat{y}\right) = \frac{1}{2} \left(y - \hat{y})^2 $ et sans terme de régularisation.
+La partie qui précède peut donner l'impression que la mécanique du _gradient boosting_ est très complexe et difficile à comprendre. L'exemple qui suit permet de mieux saisir cette mécanique en se ramenant à une situation intuitive. 
 
+On se place dans le cas d'un problème de régression, avec une perte quadratique: $ \ell\left(y,\;\hat{y}\right) = \frac{1}{2} \left(y - \hat{y})^2 $ et sans terme de régularisation. Dans ce cas particulier, le gradient de la fonction de perte est égal au résidu $y-\hat{y}$, et la hessienne de la fonction de perte est égale à 1. L'équation @eq-fct-obj-final qui donne la fonction-objectif devient: 
+
+$$ 
+\tilde{\mathcal{L}}^{(t)} = \sum_{i=1}^{n} [\left(y-\hat{y}\right) f_t(\mathbf{x}_i)+ \frac{1}{2}]
+$$ {#eq-fct-obj-final-exemple}
 
 
 Dans ce cas, le gradient de la fonction de perte coïncide avec le résidu $y-\hat{y}$.
