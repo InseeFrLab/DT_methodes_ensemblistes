@@ -169,7 +169,7 @@ Les paragraphes qui suivent détaillent le processus de construction du $t$-ièm
 
 On souhaite construire le $t$-ième arbre qui minimise la perte, conditionnellement aux données d'entraînement et aux $t-1$ arbres déjà construits. Formellement d'après l'équation @eq-fct-obj-initial on cherche un arbre $f_t$ tel que
 
-$$ \hat{f}_t = \underset{f}{\arg\min} \mathcal{L}^{(t)} = \arg\min_{f} \sum_{i=1}^n \ell\left(y_i,\;\hat{y}_i^{(t-1)} + f_t(\mathbf{x}_i)\right) + \sum_k \Omega(f_{k}) $$
+$$ \hat{f}_t = \underset{f}{\arg\min} \mathcal{L}^{(t)} = \underset{f}{\arg\min} \sum_{i=1}^n \ell\left(y_i,\;\hat{y}_i^{(t-1)} + f_t(\mathbf{x}_i)\right) + \sum_k \Omega(f_{k}) $$
 
 Pour simplifier la construction de ce $t$-ième arbre, `XGBoost` reformule la fonction de perte en utilisant une **approximation de second ordre**. Plus précisément, on fait un développement limité d'ordre 2 de $l(y_i, \hat{y}_{i}^{(t-1)} + f_{t}(\mathbf{x}_i))$ au voisinage de $\hat{y}_{i}^{(t-1)}$, en considérant que la prédiction du $t$-ième arbre $f_{t}(\mathbf{x}_i)$ est un incrément de petite taille. On obtient alors la fonction de perte approchée $\mathcal{L}^{(t)}$:
 
@@ -273,7 +273,7 @@ Il est alors possible de commencer l'entraînement de l'arbre suivant, selon la 
 
 ### Un exemple simple: la régression avec perte quadratique
 
-La partie qui précède peut donner l'impression que la mécanique du _gradient boosting_ est très complexe et difficile à comprendre. L'exemple qui suit permet de mieux saisir cette mécanique en se ramenant à une situation intuitive. On se place dans le cas d'un problème de régression, avec une perte quadratique: $\ell\left(y,\;\hat{y}\right) = \frac{1}{2} \left(y - \hat{y})^2$ et sans terme de régularisation.
+La partie qui précède peut donner l'impression que la mécanique du _gradient boosting_ est très complexe et difficile à comprendre. L'exemple qui suit permet de mieux saisir cette mécanique en se ramenant à une situation intuitive. On se place dans le cas d'un problème de régression, avec une perte quadratique: $ \ell\left(y,\;\hat{y}\right) = \frac{1}{2} \left(y - \hat{y})^2 $ et sans terme de régularisation.
 
 
 
