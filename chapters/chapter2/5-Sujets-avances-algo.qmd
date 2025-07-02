@@ -6,6 +6,8 @@ Points d'attention:
 
 - Comment sont construits les modèles _exactement_? En faisant k modèles en 1-versus-all?
 
+- Quelle est la fonction de perte exacte?
+
 - Comment les prédictions sont-elles agrégées _exactement_?
 
 - A quoi doit ressembler la target? Doit-elle être encodée ou pas?
@@ -29,6 +31,16 @@ Cette méthode permet à XGBoost de gérer efficacement les problèmes multi-cla
 
 #### LightGBM
 
+LightGBM propose [deux approches](https://github.com/microsoft/LightGBM/issues/1518) de la classification multiclasse: `multiclass` et `multiclassova`:
+
+- `multiclassova` construit un modèle en mode one-vs-all pour chaque modalité, puis applique la fonction sigmoïde aux scores pour obtenir le résultat (pas clair); un point important est que les différents classifiers binaires sont entraînés indépendamment les uns des autres.
+
+- `multiclass`
+
+
+
+
+
 La classification multiclasse avec LightGBM repose sur l’algorithme d’arbre de décision avec renforcement de gradient (GBDT) et des optimisations spécifiques comme GOSS et EFB pour améliorer l’efficacité et la vitesse[1][5].
 
 - **Paramétrage** : Pour une tâche multiclasse, il faut spécifier `objective='multiclass'` et indiquer le nombre de classes avec `num_class` (par exemple, `num_class=3` pour 3 classes)[4][7].
@@ -45,9 +57,31 @@ Lorsque vous utilisez le modèle pour la classification multiclasse, vous pouvez
 
 - La __probabilité de chaque classe__ avec la méthode `predict_proba()` : cela retourne un tableau de probabilités pour chaque classe, de dimension (n_échantillons, n_classes), où chaque ligne correspond à un échantillon et chaque colonne à la probabilité d’appartenir à une classe donnée.
 
+
+
+
+#### ranger
+
+
+Extraits de la documentation:
+
+> The tree type is determined by the type of the dependent variable. For factors classification trees are grown, for numeric values regression trees and for survival objects survival trees.
+
+> With the probability option and factor dependent variable a probability forest is grown. Here, the node impurity is used for splitting, as in classification forests. Predictions are class probabilities for each sample. In contrast to other implementations, each tree returns a probability estimate and these estimates are averaged for the forest probability estimate.
+
+Je comprends que par défaut ranger construit une RF qui prédit une classe; il faut l'option `probability = TRUE` pour avoir une probabilité. 
+
+- la variable-cible doit être de type `factor`.
+- 
+
+
+
 ### La classification multiclasse ordonnée
 
 Attention, là on est franchement _advanced_.
+
+
+
 
 
 ### Les fonctions de perte custom
