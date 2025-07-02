@@ -121,6 +121,8 @@ Dans cette expression:
 
 - Le terme de régularisation $\Omega(f)$ pénalise la complexité de chaque arbre $f$ via deux termes: le terme $\gamma\,T$ pénalise les arbres avec un grand nombre de feuilles ($T$ élevé) et le terme $\tfrac{1}{2} \lambda\sum_{j=1}^{T_t} w_j^2$ pénalise les arbres avec des poids élevés ($w_j$ élevés en valeur absolue). Cette pénalisation privilégie les arbres plus « simples » (moins de feuilles terminales, poids de feuilles plus petits) afin d'éviter le sur-ajustement (*overfitting*). $\gamma$ et $\lambda$ sont des hyperparamètres de régularisation qui contrôlent la complexité de l'arbre.
 
+#### Le principe d'entraînement séquentiel
+
 On pourrait essayer d'entraîner directement ce modèle complet, en déterminant en une seule étape toutes les fonctions $f$ telles que:
 
 $$ F =  \underset{f_1, \dots, f_K}{\arg\min} \mathcal{L} \biggl( \sum_{i=1}^n \ell\left(y_i,\;\sum_{k=1}^K f_k(x_i)\right) + \gamma T + \frac{1}{2} \lambda \sum_{k=1}^K \sum_{j=1}^{T_k} w_j^2 \biggr) $$
@@ -132,11 +134,7 @@ $$
 L^{(t)} = \sum_{i=1}^n \ell\left(y_i,\;\hat{y}_i^{(t-1)} + f_t(x_i)\right) + \sum_k \Omega(f_{k}) 
 $$ {#eq-fct-obj-initial}
 
-L'objectif de l'itération $t$ devient donc de trouver le nouvel arbre $f_t$ qui minimise cette fonction-objectif.
-
-#### Principe de l'entraînement d'un algorithme de _gradient boosting_
-
-A chaque étape de l'entraînement, l'algorithme de _gradient boosting_ doit accomplir deux choses pour ajouter un nouvel arbre au modèle: **déterminer la structure** de l'arbre (c'est-à-dire choisir les règles de décision qui définissent l'arbre) en tenant compte de la régularisation et **calculer la meilleure valeur $w_j$​** pour chaque feuille terminale (c'est-à-dire la valeur qui **minimise** la fonction de perte). La construction de l'arbre se fait selon une **approche gloutonne**, de façon très similaire à la construction d'un arbre CART (voir section [@sec-CART]{.content-visible unless-format="html"} [sur les arbres CART]{.content-visible when-format="html"}): on divise les données d'entraînement en sous-régions de plus en plus petites, tant que cela génère une réduction "suffisante" de la fonction de perte.
+L'objectif de l'itération $t$ devient donc de trouver le nouvel arbre $f_t$ qui minimise cette fonction-objectif. Pour ce faire, l'algorithme doit accomplir deux choses: **déterminer la structure** de l'arbre (c'est-à-dire choisir les règles de décision qui définissent l'arbre) en tenant compte de la régularisation et **calculer la meilleure valeur $w_j$​** pour chaque feuille terminale (c'est-à-dire la valeur qui **minimise** la fonction de perte). La construction de l'arbre se fait selon une **approche gloutonne**, de façon très similaire à la construction d'un arbre CART (voir section [@sec-CART]{.content-visible unless-format="html"} [sur les arbres CART]{.content-visible when-format="html"}): on divise les données d'entraînement en sous-régions de plus en plus petites, tant que cela génère une réduction "suffisante" de la fonction de perte.
 
 Deux différences notables séparent toutefois le _gradient boosting_ des arbres CART et des forêts aléatoires: 
 
@@ -163,7 +161,7 @@ Deux différences notables séparent toutefois le _gradient boosting_ des arbres
 
     - soit ne plus trouver de partitionnement intéressant (c'est-à-dire qui permette de réduire suffisamment la perte). -->
 
-#### La mécanique du *gradient boosting*
+#### La mécanique interne du *gradient boosting*
 
 Les paragraphes qui suivent détaillent le processus de construction du $t$-ième arbre, et les équations utilisées dans ce processus.
 
