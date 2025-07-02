@@ -257,19 +257,25 @@ L'algorithme de détermination des règles de décision est le composant le plus
 
 ##### Etape 4: Ajouter des arbres jusqu'à atteindre un critère d'arrêt
 
-Une fois que la structure du $t$-ième arbre a été définie et que les valeurs de chaque feuille ont été calculées, cet arbre est ajouté au modèle global, et la prédiction est mise à jour par la formule suivante: 
+Une fois que la structure du $t$-ième arbre a été définie et que les valeurs des feuilles terminales ont été calculées, cet arbre est ajouté au modèle global, et la prédiction est mise à jour par la formule suivante: 
 
 $$ F_{t}(x)=F_{t-1}(x)+ \eta f_{t}(x) $$ {#eq-update-model}
 
-Puis les valeurs des gradients et hessiennes sont mises à jour pour chaque observation par les formules
+Puis les valeurs des gradients et hessiennes sont mises à jour pour chaque observation par les formules:
 
 $$ g_i = \frac{\partial l(y_i, \hat{y}_i^{(t)})}{\partial\hat{y}_i^{(t)}} \;\;\text{et}\;\; h_i = \frac{\partial^2 l(y_i, \hat{y}_i^{(t)})}{{\partial \hat{y}_i^{(t)}}^2} $$
 
 Il est alors possible de commencer l'entraînement de l'arbre suivant, selon la même logique que précédemment. Le processus de construction des arbres se poursuit jusqu'à atteindre soit le nombre maximum d'arbres autorisé dans le modèle ($K$), soit un autre **critère d'arrêt** (par exemple, une réduction de perte minimale par arbre).
 
+### Un exemple simple: la régression avec perte quadratique
+
+Dans ce cas, le gradient de la fonction de perte coïncide avec le résidu $y-\hat{y}$.
+
+METTRE LA FIGURE COMPLIQUEE avec les résidus.
+
 ### Le grand ennemi du _gradient boosting_: le surajustement {#sec-overfitting-gb}
 
-Une différence majeure entre les forêts aléatoires et les algorithmes de _boosting_ est que ces derniers ne contiennent en eux-mêmes aucune limite au surajustement, bien au contraire: le _gradient boosting_ est un algorithme conçu pour approximer le plus précisément possible la relation entre $X$ et $y$ telle qu'elle apparaît dans les données d'entraînement, qu'il s'agisse d'un signal pertinent ou d'un bruit statistique. Par conséquent, __tous les algorithmes de _gradient boosting_ sont très vulnérables au surajustement__. Plus précisément, il y a deux raisons à cela. D'une part, lors de l'entraînement d'un modèle de _gradient boosting_, chaque nouvel arbre essaie de réduire l'erreur résiduelle en s'ajustant toujours plus finement aux données. Ainsi, au fur et mesure que le nombre d'arbres augmente, l'algorithme capture non seulement des relations pertinentes entre $X$ et $y$, mais aussi le bruit et les particularités aléatoires de l'échantillon d'entraînement. D'autre part, les arbres de décision utilisés sont très flexibles et conçus pour refléter les relations entre $X$ et $y$ présentes dans les données d'entraînement, y compris celles qui ne se généralisent pas bien aux nouvelles données. Par exemple, un arbre très profond peut correspondre finement aux données d'entraînement, mais risque de manquer de robustesse sur les données de test. 
+Une différence majeure entre les forêts aléatoires et les algorithmes de _boosting_ est que ces derniers ne contiennent en eux-mêmes aucune limite au surajustement, bien au contraire: le _gradient boosting_ est un algorithme conçu pour approximer le plus précisément possible la relation entre $X$ et $y$ telle qu'elle apparaît dans les données d'entraînement, qu'il s'agisse d'un signal pertinent ou d'un bruit statistique. Par conséquent, __tous les algorithmes de _gradient boosting_ sont par nature très vulnérables au surajustement__. En pratique, ce risque de surajustement croît au cours de l'entraînement: au fur et mesure que le nombre d'arbres augmente, l'algorithme capture de moins en moins de relations pertinentes entre $X$ et $y$, et de plus en plus le bruit et les particularités aléatoires de l'échantillon d'entraînement.
 
 __La lutte contre le surajustement est donc un enjeu majeur de l'entraînement des modèles de _gradient boosting_.__ De multiples méthodes ont été proposées pour lutter contre le surajustement:
 
