@@ -1,12 +1,58 @@
+# install.packages(c("xgboost", "ranger", "viridis", "cowplot"))
 library(xgboost)
 library(dplyr)
 library(tidyr)
 library(stringr)
 library(ggplot2)
 library(viridis)
+library(cowplot)
 library(ranger)
 
 set.seed(321)
+
+########################################################################################
+# Define theme
+########################################################################################
+
+custom_theme <- function(base_size = 16) { 
+  theme_minimal_hgrid(font_size = base_size) +
+    theme(
+      legend.position="bottom",
+      legend.justification = "center",
+      plot.margin=unit(c(0.5,1,0.5,0.5), "cm"),
+      plot.title = element_text(hjust = 0.5),
+      panel.background = element_rect(fill = 'white', colour = 'gray40'),
+      plot.background = element_rect(fill = 'white', colour = 'white'),
+      panel.spacing = unit(3, "mm")
+      # panel.grid.major.x = element_line(
+      #   color = "gray70",
+      #   size = 0.5),
+      # panel.grid.major.y = element_line(
+      #   color = "gray70",
+      #   size = 0.5),
+      # panel.grid.minor.x = element_line(
+      #   color = "gray80",
+      #   size = 0.5),
+      # panel.grid.minor.y = element_line(
+      #   color = "gray80",
+      #   size = 0.5)
+    )
+}
+
+theme_set(custom_theme())
+update_geom_defaults("line", list(size = 0.75))
+
+options(ggplot2.continuous.colour="viridis")
+options(ggplot2.discrete.fill="viridis")
+options(ggplot2.discrete.color="viridis")
+fill_viridis_d_color <- "E"
+
+# Taille des pdf
+width_png <- 200
+height_png <- 120
+options(OutDec= ".")
+
+
 
 ########################################################################################
 # Generate data
@@ -17,28 +63,36 @@ data <- data.frame(
 ) |>
   mutate(id = row_number()) |>
   mutate(
-    target_clean = sin(x) + 0.02 * x^2 + 0.5 * cos((x - 1.5)^2/2.5),
+    target_clean = sin(x) + 0.02 * x^2 + 0.5 * cos((x - 1.5)^2/2.5) + 0.2,
     train = as.integer(runif(n()) > 0.2) 
   ) |>
   mutate(
-    target_noisy = target_clean 
-    + runif(n(), -4, 4) * (runif(n()) > 0.9) 
+    target_noisy_temp = target_clean + runif(n(), -3, 3) * (runif(n()) > 0.95)
+  ) |>
+  mutate(
+    target_noisy = case_when(
+      target_noisy_temp |> between(-1.5, 3.5) ~ target_noisy_temp,
+      target_noisy_temp > 3.5   ~ 3.5,
+      target_noisy_temp <= -1.5 ~ 1.5
+    )
   )
 
 # Clean target
 ggplot(data) + 
   geom_line(aes(x = x, y = target_clean), size = 0.5) + 
   labs(x = "x", y = "Target", color = NULL) +
-  scale_color_viridis_d(end = 0.7) + 
-  theme_minimal() +
+  scale_x_continuous(expand = c(0, 0), labels = NULL) +
+  scale_y_continuous(expand = c(0, 0), limits = c(-1.6, 3.6), labels = NULL) +
+  labs(x = NULL, y = NULL) +
   theme(legend.position = "bottom")
 
 # Noisy target
 ggplot(data) + 
   geom_line(aes(x = x, y = target_noisy), size = 0.5) + 
   labs(x = "x", y = "Target", color = NULL) +
-  scale_color_viridis_d(end = 0.7) + 
-  theme_minimal() +
+  scale_x_continuous(expand = c(0, 0), labels = NULL) +
+  scale_y_continuous(expand = c(0, 0), limits = c(-1.6, 3.6), labels = NULL) +
+  labs(x = NULL, y = NULL) +
   theme(legend.position = "bottom")
 
 
@@ -203,17 +257,20 @@ test2 |>
   ggplot() + 
   geom_line(aes(x = x, y = target_clean, color = "Target"), size = 0.5, linetype = "dashed") +
   geom_line(aes(x = x, y = prediction, color = "Prediction"), size = 0.5) +
-  labs(x = "x", y = "Prediction", color = "Type of target") +
-  scale_x_continuous(expand = c(0, 0), labels = NULL) + 
-  scale_y_continuous(expand = c(0, 0), labels = NULL) + 
-  theme_minimal() +
-  theme(legend.position = "bottom") +
-  facet_grid(label_single_tree ~ number_trees) +
+  labs(x = NULL, y = NULL, color = "Type of target") +
+  scale_x_continuous(expand = c(0, 0), labels = NULL) +
+  scale_y_continuous(expand = c(0, 0), limits = c(-1.6, 3.6), labels = NULL) +
+  facet_grid(label_single_tree ~ number_trees, switch = "y") +
   scale_color_manual(
     name = NULL, 
     values = c("Target" = "red", "Prediction" = "black")
-  ) + 
-  theme(panel.spacing = unit(1, "cm"))
+  )
+
+ggsave(
+  "./figures/single_trees_clean_rf.png", 
+  width = width_png, height = height_png, units = "mm"
+)
+
 
 # Gradient boosting model trained on the clean target
 test2 |> 
@@ -221,59 +278,65 @@ test2 |>
   ggplot() + 
   geom_line(aes(x = x, y = target_clean, color = "Target"), size = 0.5, linetype = "dashed") +
   geom_line(aes(x = x, y = prediction, color = "Prediction"), size = 0.5) +
-  labs(x = "x", y = "Prediction", color = "Type of target") +
-  scale_x_continuous(expand = c(0, 0), labels = NULL) + 
-  scale_y_continuous(expand = c(0, 0), labels = NULL) + 
-  theme_minimal() +
-  theme(legend.position = "bottom") +
-  facet_grid(label_single_tree ~ number_trees) +
+  labs(x = NULL, y = NULL, color = "Type of target") +
+  scale_x_continuous(expand = c(0, 0), labels = NULL) +
+  scale_y_continuous(expand = c(0, 0), limits = c(-1.6, 3.6), labels = NULL) +
+  facet_grid(label_single_tree ~ number_trees, switch = "y") +
   scale_color_manual(
     name = NULL, 
     values = c("Target" = "red", "Prediction" = "black")
-  ) + 
-  theme(panel.spacing = unit(1, "cm"))
+  )
+
+ggsave(
+  "./figures/single_trees_clean_gb.png", 
+  width = width_png, height = height_png, units = "mm"
+)
 
 
 ########################################################################################
 # Noisy target
 ########################################################################################
 
-# Random forest model trained on the clean target
+# Random forest model trained on the noisy target
 test2 |> 
   filter(label_model == "Random forest" & label_target == "Noisy data" & number_trees %in% selection0) |>
   ggplot() + 
   geom_line(aes(x = x, y = target_clean, color = "Target"), size = 0.5, linetype = "dashed") +
   geom_line(aes(x = x, y = prediction, color = "Prediction"), size = 0.5) +
-  labs(x = "x", y = "Prediction", color = "Type of target") +
-  scale_x_continuous(expand = c(0, 0), labels = NULL) + 
-  scale_y_continuous(expand = c(0, 0), labels = NULL) + 
-  theme_minimal() +
-  theme(legend.position = "bottom") +
-  facet_grid(label_single_tree ~ number_trees) +
+  labs(x = NULL, y = NULL, color = "Type of target") +
+  scale_x_continuous(expand = c(0, 0), labels = NULL) +
+  scale_y_continuous(expand = c(0, 0), limits = c(-1.6, 3.6), labels = NULL) +
+  facet_grid(label_single_tree ~ number_trees, switch = "y") +
   scale_color_manual(
     name = NULL, 
     values = c("Target" = "red", "Prediction" = "black")
-  ) + 
-  theme(panel.spacing = unit(1, "cm"))
+  )
 
-# Gradient boosting model trained on the clean target
+ggsave(
+  "./figures/single_trees_noisy_rf.png", 
+  width = width_png, height = height_png, units = "mm"
+)
+
+
+# Gradient boosting model trained on the noisy target
 test2 |> 
   filter(label_model == "Gradient boosting" & label_target == "Noisy data" & number_trees %in% selection0) |>
   ggplot() + 
   geom_line(aes(x = x, y = target_clean, color = "Target"), size = 0.5, linetype = "dashed") +
   geom_line(aes(x = x, y = prediction, color = "Prediction"), size = 0.5) +
-  labs(x = "x", y = "Prediction", color = "Type of target") +
-  scale_x_continuous(expand = c(0, 0), labels = NULL) + 
-  scale_y_continuous(expand = c(0, 0), labels = NULL) + 
-  theme_minimal() +
-  theme(legend.position = "bottom") +
-  facet_grid(label_single_tree ~ number_trees) +
+  labs(x = NULL, y = NULL, color = "Type of target") +
+  scale_x_continuous(expand = c(0, 0), labels = NULL) +
+  scale_y_continuous(expand = c(0, 0), limits = c(-1.6, 3.6), labels = NULL) +
+  facet_grid(label_single_tree ~ number_trees, switch = "y") +
   scale_color_manual(
     name = NULL, 
     values = c("Target" = "red", "Prediction" = "black")
-  ) + 
-  theme(panel.spacing = unit(1, "cm"))
+  )
 
+ggsave(
+  "./figures/single_trees_noisy_gb.png", 
+  width = width_png, height = height_png, units = "mm"
+)
 
 
 
