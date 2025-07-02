@@ -252,9 +252,9 @@ $$ {#eq-fct-eval-split}
 Cette réduction de perte est simplement la différence entre la somme des pertes après partitionnement (noeud-enfant gauche + noeud-enfant droit) et la perte avant partitionnement. Le terme $\gamma$ est le terme de régularisation qui mesure le coût associé à la création d'un noeud supplémentaire. Si $\Delta \tilde{L}^{(t)}$ est **positive** et suffisamment grande, alors la scission fait **baisser** la perte globale et on la retient. Sinon, on renonce à scinder cette feuille. 
 
 ::: { .callout-note}
-## 
+## Optimisations de l'entraînement
 
-L'algorithme de détermination des règles de décision est le composant le plus intense en calcul des algorithmes de _gradient boosting_. Les différentes implémentations du _gradient boosting_ proposent donc de multiples améliorations et optimisations visant à le rendre le plus efficace possible. Certaines de ces optimisations sont présentées dans la partie [@sec-sujets-avances.]{.content-visible unless-format="html"} [sur les sujets avancés relatifs aux traitement des données pendant l'entraînement.]{.content-visible when-format="html"}
+__L'algorithme de détermination des règles de décision est le composant le plus intense en calcul des algorithmes de _gradient boosting_.__ Les différentes implémentations du _gradient boosting_ proposent donc de multiples améliorations et optimisations visant à le rendre le plus efficace possible. Certaines de ces optimisations sont présentées dans la partie [@sec-sujets-avances.]{.content-visible unless-format="html"} [sur les sujets avancés relatifs aux traitement des données pendant l'entraînement.]{.content-visible when-format="html"}
 :::
 
 ##### Etape 4: Ajouter des arbres jusqu'à atteindre un critère d'arrêt
