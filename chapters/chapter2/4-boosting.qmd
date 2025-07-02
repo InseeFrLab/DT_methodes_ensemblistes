@@ -130,13 +130,14 @@ Dans cette expression:
 - Le terme de régularisation $\Omega(f)$ pénalise la complexité de l'arbre $f$ via deux termes: le terme $\gamma\,T$ pénalise les arbres avec un grand nombre de feuilles ($T$ élevé) et le terme $\tfrac{1}{2} \lambda\sum_{j=1}^{T_t} w_j^2$ pénalise les arbres avec des poids élevés ($w_j$ élevés en valeur absolue). Cette pénalisation privilégie les arbres plus « simples » (moins de feuilles, poids de feuilles plus petits) afin d'éviter le sur-ajustement (*overfitting*). $\gamma$ et $\lambda$ sont des hyperparamètres de régularisation qui contrôlent la complexité de l'arbre.
 
 
-#### L'entraînement du modèle
-
-##### Principe
+#### Principe de l'entraînement du modèle
 
 A chaque étape de l'entraînement, l'algorithme de _gradient boosting_ ajoute un nouvel arbre au modèle en faisant deux choses: **déterminer la structure** de l'arbre en tenant compte de la régularisation (c'est-à-dire choisir les règles de décision qui définissent l'arbre) et **calculer la meilleure valeur $w_j$​** pour chaque feuille terminale (c'est-à-dire la valeur qui **minimise** la fonction de perte).
 
-La construction de l'arbre se fait selon une approche **gloutonne**, _nœud après nœud_, de façon très similaire à la construction d'un arbre CART: on divise les données d'entraînement en sous-régions de plus en plus petites, tant que cela génère une réduction "suffisante" de la fonction de perte. Cette approche peut être résumée ainsi:
+La construction de l'arbre se fait selon une approche **gloutonne**, _nœud après nœud_, de façon très similaire à la construction d'un arbre CART (voir section @sec-CART): on divise les données d'entraînement en sous-régions de plus en plus petites, tant que cela génère une réduction "suffisante" de la fonction de perte. Une différence notable avec les arbres CART et les forêts aléatoires est que les arbres utilisés dans le _gradient boosting_ sont souvent relativement simples et peu profonds. Ainsi, le partitionnement récursif des données s'arrête généralement assez tôt, soit lorsqu'est atteinte une des limites de complexité définies _a priori_ (**profondeur maximale** de l'arbre, **nombre maximal de feuilles**, **nombre minimal d'observations par feuille**), soit lorsque l'algorithme ne parvient plus à trouver de partitionnement intéressant (c'est-à-dire qui permette de réduire suffisamment la perte).
+
+<!-- 
+: on divise les données d'entraînement en sous-régions de plus en plus petites, tant que cela génère une réduction "suffisante" de la fonction de perte. Cette approche peut être résumée ainsi:
 
 1. On part du noeud-racine qui contient toutes les données d'entraînement.
 
@@ -146,18 +147,23 @@ La construction de l'arbre se fait selon une approche **gloutonne**, _nœud apr�
 
     - Pour chaque règle de décision candidate, on calcule le **gain** associé (c'est-à-dire la réduction de la perte globale si l'on retient cette règle de décision), et on retient la règle de décision avec le gain maximal.
 
-    - Si la meilleure règle de décision apporte un gain suffisamment élevé, on crée deux nouveaux noeuds-enfant.
+    - On utilise la règle de décision optimale pour créer deux noeuds-enfants dans lesquels les observations sont réparties.
 
 3. On répète le processus récursivement en partant des noeuds nouvellement créés, jusqu'à :
 
     - soit atteindre les limites de complexité définies _a priori_ (**profondeur maximale** de l'arbre, **nombre maximal de feuilles**, **nombre minimal d'observations par feuille**);
 
-    - soit ne plus trouver de partitionnement intéressant (c'est-à-dire qui permette de réduire suffisamment la perte).
+    - soit ne plus trouver de partitionnement intéressant (c'est-à-dire qui permette de réduire suffisamment la perte). -->
 
-Les paragraphes qui suivent détaillent ce processus et les équations utilisées.
+#### Détail de l'entraînement du modèle
 
+Les paragraphes qui suivent détaillent le processus de construction du $t$-ième arbre, et les équations utilisées dans ce processus.
 
 ##### Étape 1: Faire apparaître le gradient de la fonction de perte
+
+On souhaite construire le $t$-ième arbre qui minimise la perte, conditionnellement aux données et aux $t-1$ arbres déjà construits. Formellement on cherche 
+
+$h_m =  \arg\min_{h} L_m = \arg\min_{h} \sum_{i=1}^{n} l(y_i, F_{m-1}(x_i) + h(x_i))$
 
 Pour simplifier la construction du $t$-ième arbre, `XGBoost` utilise une **approximation de second ordre** de la fonction de perte $L^{(t)}$. Plus précisément, on fait un développement limité d'ordre 2 de $l(y_i, \hat{y}_{i}^{(t-1)} + f_{t}(\mathbf{x}_i))$ au voisinage de $\hat{y}_{i}^{(t-1)}$, en considérant que la prédiction du $t$-ième arbre $f_{t}(\mathbf{x}_i)$ est un incrément de petite taille:
 
@@ -168,7 +174,7 @@ avec
 $$ g_i = \frac{\partial l(y_i, \hat{y}_i^{(t-1)})}{\partial\hat{y}_i^{(t-1)}} \;\;\text{et}\;\; h_i = \frac{\partial^2 l(y_i, \hat{y}_i^{(t-1)})}{{\partial \hat{y}_i^{(t-1)}}^2} $$
 
 
-Les termes $g_i$ et $h_i$ désignent respectivement la dérivée première (le gradient) et la dérivée seconde (la hessienne) de la fonction de perte par rapport à la variable prédite pour l'observation $i$. Dans cette équation, les termes (A) et (B) sont constants car les $t-1$ arbres précédents ont déjà été entraînés et ne sont pas modifiés par l'entraînement du $t$-ième arbre. <!-- Autrement dit, la seule façon d'améliorer le modèle sera de trouver un $t$-ième arbre $f_t$ qui minimise la fonction-objectif \mathcal{L}^{(t)} ainsi réécrite.  --> On peut donc retirer ces termes pour obtenir la fonction-objectif simplifiée $\tilde{L}^{(t)}$ qui sera utilisée pour l'entraînement du $t$-ième arbre:
+Les termes $g_i$ et $h_i$ désignent respectivement la dérivée première (le gradient) et la dérivée seconde (la hessienne) de la fonction de perte par rapport à la variable prédite pour l'observation $i$. Dans cette équation, les termes (A) et (B) sont constants car ils ne dépendent que des $t-1$ arbres précédents qui ont déjà été entraînés et qui ne sont pas modifiés par l'entraînement du $t$-ième arbre. <!-- Autrement dit, la seule façon d'améliorer le modèle sera de trouver un $t$-ième arbre $f_t$ qui minimise la fonction-objectif \mathcal{L}^{(t)} ainsi réécrite.  --> On peut donc retirer ces termes pour obtenir la fonction-objectif simplifiée $\tilde{L}^{(t)}$ qui sera utilisée pour l'entraînement du $t$-ième arbre:
 
 $$ \tilde{\mathcal{L}}^{(t)} = \sum_{i=1}^{n} [g_i f_t(\mathbf{x}_i)+ \frac{1}{2} h_i [f_t(\mathbf{x}_i)]^2] + \Omega(f_t) 
 $$ {#eq-fct-obj-final}
