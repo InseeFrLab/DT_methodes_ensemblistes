@@ -161,11 +161,11 @@ Les paragraphes qui suivent détaillent le processus de construction du $t$-ièm
 
 ##### Étape 1: Faire apparaître le gradient de la fonction de perte
 
-On souhaite construire le $t$-ième arbre qui minimise la perte, conditionnellement aux données et aux $t-1$ arbres déjà construits. Formellement on cherche 
+On souhaite construire le $t$-ième arbre qui minimise la perte, conditionnellement aux données et aux $t-1$ arbres déjà construits. Formellement on cherche la fonction $f_t$ telle que
 
-$h_m =  \arg\min_{h} L_m = \arg\min_{h} \sum_{i=1}^{n} l(y_i, F_{m-1}(x_i) + h(x_i))$
+$\hat{f}_t = \arg\min_{f} L^{(t)} = \arg\min_{f} \sum_{i=1}^n \ell\left(y_i,\;\hat{y}_i^{(t-1)} + f_t(x_i)\right) + \sum_k \Omega(f_{k})$
 
-Pour simplifier la construction du $t$-ième arbre, `XGBoost` utilise une **approximation de second ordre** de la fonction de perte $L^{(t)}$. Plus précisément, on fait un développement limité d'ordre 2 de $l(y_i, \hat{y}_{i}^{(t-1)} + f_{t}(\mathbf{x}_i))$ au voisinage de $\hat{y}_{i}^{(t-1)}$, en considérant que la prédiction du $t$-ième arbre $f_{t}(\mathbf{x}_i)$ est un incrément de petite taille:
+Pour simplifier la construction de ce $t$-ième arbre, `XGBoost` utilise une **approximation de second ordre** de la fonction de perte $L^{(t)}$. Plus précisément, on fait un développement limité d'ordre 2 de $l(y_i, \hat{y}_{i}^{(t-1)} + f_{t}(\mathbf{x}_i))$ au voisinage de $\hat{y}_{i}^{(t-1)}$, en considérant que la prédiction du $t$-ième arbre $f_{t}(\mathbf{x}_i)$ est un incrément de petite taille:
 
 $$ \mathcal{L}^{(t)} \approx \sum_{i=1}^{n} [\underbrace{l(y_i, \hat{y}_{i}^{(t-1)})}_{\text{(A)}} + g_i f_t(\mathbf{x}_i)+ \frac{1}{2} h_i f^2_t(\mathbf{x}_i)] + \underbrace{\sum_{j=1}^{t-1}\Omega(f_j)}_{\text{(B)}} + \Omega(f_t) $$
 
