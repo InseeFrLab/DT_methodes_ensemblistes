@@ -8,9 +8,9 @@ library(ranger)
 
 set.seed(321)
 
-############################################
+########################################################################################
 # Generate data
-############################################
+########################################################################################
 
 data <- data.frame(
   x = seq(0, 10, 10 / 500)
@@ -42,11 +42,12 @@ ggplot(data) +
   theme(legend.position = "bottom")
 
 
-############################################
+########################################################################################
 # Train the models
-############################################
+########################################################################################
 
-max.depth <- 4
+max.depth_rf <- 5
+max.depth_gb <- 3
 
 train <- data |> filter(train == 1)
 test  <- data |> filter(train == 0)
@@ -54,23 +55,26 @@ test  <- data |> filter(train == 0)
 model_xgb_clean <- xgboost(
   data = train  |> select(x) |> as.matrix(), 
   label = train |> pull(target_clean),
-  max.depth = max.depth, eta = 1, 
+  max.depth = max.depth_gb, eta = 1, 
   nthread = 2, nrounds = 50, objective = "reg:squarederror")
 
 model_xgb_noisy <- xgboost(
   data = train  |> select(x) |> as.matrix(), 
   label = train |> pull(target_noisy),
-  max.depth = max.depth, eta = 1, 
+  max.depth = max.depth_gb, eta = 1, 
   nthread = 2, nrounds = 50, objective = "reg:squarederror")
 
 model_rf_clean <- ranger(
-  target_clean ~ ., data = train  |> select(target_clean, x), num.trees = 50, max.depth = max.depth, replace = TRUE, sample.fraction = 0.2
+  target_clean ~ ., data = train  |> select(target_clean, x), num.trees = 50, max.depth = max.depth_rf, replace = TRUE, sample.fraction = 0.2
 )
 
 model_rf_noisy <- ranger(
-  target_noisy ~ ., data = train  |> select(target_noisy, x), num.trees = 50, max.depth = max.depth, replace = TRUE, sample.fraction = 0.2
+  target_noisy ~ ., data = train  |> select(target_noisy, x), num.trees = 50, max.depth = max.depth_rf, replace = TRUE, sample.fraction = 0.2
 )
 
+########################################################################################
+# Prepare data
+########################################################################################
 
 test2 <- test |>
   mutate(
@@ -91,24 +95,44 @@ test2 <- test |>
     prediction_xgb_noisy_20_trees   = predict(model_xgb_noisy, test |> pull(x) |> as.matrix(), iterationrange = c(1, 21)),
     prediction_xgb_noisy_50_trees   = predict(model_xgb_noisy, test |> pull(x) |> as.matrix(), iterationrange = c(1, 1)),
     
+    prediction_xgb_clean_single_tree1      = predict(model_xgb_clean, test |> pull(x) |> as.matrix(), iterationrange = c(1, 2)),
+    prediction_xgb_clean_single_tree2      = predict(model_xgb_clean, test |> pull(x) |> as.matrix(), iterationrange = c(2, 3)),
+    prediction_xgb_clean_single_tree3      = predict(model_xgb_clean, test |> pull(x) |> as.matrix(), iterationrange = c(3, 4)),
+    prediction_xgb_clean_single_tree4      = predict(model_xgb_clean, test |> pull(x) |> as.matrix(), iterationrange = c(4, 5)),
+    prediction_xgb_clean_single_tree50     = predict(model_xgb_clean, test |> pull(x) |> as.matrix(), iterationrange = c(50, 51)),
+    prediction_xgb_noisy_single_tree1      = predict(model_xgb_noisy, test |> pull(x) |> as.matrix(), iterationrange = c(1, 2)),
+    prediction_xgb_noisy_single_tree2      = predict(model_xgb_noisy, test |> pull(x) |> as.matrix(), iterationrange = c(2, 3)),
+    prediction_xgb_noisy_single_tree3      = predict(model_xgb_noisy, test |> pull(x) |> as.matrix(), iterationrange = c(3, 4)),
+    prediction_xgb_noisy_single_tree4      = predict(model_xgb_noisy, test |> pull(x) |> as.matrix(), iterationrange = c(4, 5)),
+    prediction_xgb_noisy_single_tree50     = predict(model_xgb_noisy, test |> pull(x) |> as.matrix(), iterationrange = c(50, 51)),
     
-    prediction_rf_clean_1_tree     = predict(model_rf_clean, data = test |> select(x), num.trees =  1)$predictions,
-    prediction_rf_clean_2_trees    = predict(model_rf_clean, data = test |> select(x), num.trees =  2)$predictions,
-    prediction_rf_clean_3_trees    = predict(model_rf_clean, data = test |> select(x), num.trees =  3)$predictions,
-    prediction_rf_clean_4_trees    = predict(model_rf_clean, data = test |> select(x), num.trees =  4)$predictions,
-    prediction_rf_clean_5_trees    = predict(model_rf_clean, data = test |> select(x), num.trees =  5)$predictions,
-    prediction_rf_clean_10_trees   = predict(model_rf_clean, data = test |> select(x), num.trees = 10)$predictions,
-    prediction_rf_clean_20_trees   = predict(model_rf_clean, data = test |> select(x), num.trees = 20)$predictions,
-    prediction_rf_clean_50_trees   = predict(model_rf_clean, data = test |> select(x), num.trees = 50)$predictions,
-    prediction_rf_noisy_1_tree     = predict(model_rf_noisy, data = test |> select(x), num.trees =  1)$predictions,
-    prediction_rf_noisy_2_trees    = predict(model_rf_noisy, data = test |> select(x), num.trees =  2)$predictions,
-    prediction_rf_noisy_3_trees    = predict(model_rf_noisy, data = test |> select(x), num.trees =  3)$predictions,
-    prediction_rf_noisy_4_trees    = predict(model_rf_noisy, data = test |> select(x), num.trees =  4)$predictions,
-    prediction_rf_noisy_5_trees    = predict(model_rf_noisy, data = test |> select(x), num.trees =  5)$predictions,
-    prediction_rf_noisy_10_trees   = predict(model_rf_noisy, data = test |> select(x), num.trees = 10)$predictions,
-    prediction_rf_noisy_20_trees   = predict(model_rf_noisy, data = test |> select(x), num.trees = 20)$predictions,
-    prediction_rf_noisy_50_trees   = predict(model_rf_noisy, data = test |> select(x), num.trees = 50)$predictions
+    prediction_rf_clean_1_tree      = predict(model_rf_clean, data = test |> select(x), num.trees =  1)$predictions,
+    prediction_rf_clean_2_trees     = predict(model_rf_clean, data = test |> select(x), num.trees =  2)$predictions,
+    prediction_rf_clean_3_trees     = predict(model_rf_clean, data = test |> select(x), num.trees =  3)$predictions,
+    prediction_rf_clean_4_trees     = predict(model_rf_clean, data = test |> select(x), num.trees =  4)$predictions,
+    prediction_rf_clean_5_trees     = predict(model_rf_clean, data = test |> select(x), num.trees =  5)$predictions,
+    prediction_rf_clean_10_trees    = predict(model_rf_clean, data = test |> select(x), num.trees = 10)$predictions,
+    prediction_rf_clean_20_trees    = predict(model_rf_clean, data = test |> select(x), num.trees = 20)$predictions,
+    prediction_rf_clean_50_trees    = predict(model_rf_clean, data = test |> select(x), num.trees = 50)$predictions,
+    prediction_rf_noisy_1_tree      = predict(model_rf_noisy, data = test |> select(x), num.trees =  1)$predictions,
+    prediction_rf_noisy_2_trees     = predict(model_rf_noisy, data = test |> select(x), num.trees =  2)$predictions,
+    prediction_rf_noisy_3_trees     = predict(model_rf_noisy, data = test |> select(x), num.trees =  3)$predictions,
+    prediction_rf_noisy_4_trees     = predict(model_rf_noisy, data = test |> select(x), num.trees =  4)$predictions,
+    prediction_rf_noisy_5_trees     = predict(model_rf_noisy, data = test |> select(x), num.trees =  5)$predictions,
+    prediction_rf_noisy_10_trees    = predict(model_rf_noisy, data = test |> select(x), num.trees = 10)$predictions,
+    prediction_rf_noisy_20_trees    = predict(model_rf_noisy, data = test |> select(x), num.trees = 20)$predictions,
+    prediction_rf_noisy_50_trees    = predict(model_rf_noisy, data = test |> select(x), num.trees = 50)$predictions,
     
+    prediction_rf_clean_single_tree1     = predict(model_rf_clean, data = test |> select(x), num.trees =  1)$predictions,
+    prediction_rf_clean_single_tree2     = 2 *  predict(model_rf_clean, data = test |> select(x), num.trees =   2)$predictions  - 1 * predict(model_rf_clean, data = test |> select(x), num.trees =  1)$predictions,
+    prediction_rf_clean_single_tree3     = 3 *  predict(model_rf_clean, data = test |> select(x), num.trees =   3)$predictions  - 2 * predict(model_rf_clean, data = test |> select(x), num.trees =  2)$predictions,
+    prediction_rf_clean_single_tree4     = 4 *  predict(model_rf_clean, data = test |> select(x), num.trees =   4)$predictions  - 3 * predict(model_rf_clean, data = test |> select(x), num.trees =  3)$predictions,
+    prediction_rf_clean_single_tree50    = 50 * predict(model_rf_clean, data = test |> select(x), num.trees =  50)$predictions - 49 * predict(model_rf_clean, data = test |> select(x), num.trees =  49)$predictions,
+    prediction_rf_noisy_single_tree1     = predict(model_rf_noisy, data = test |> select(x), num.trees =  1)$predictions,
+    prediction_rf_noisy_single_tree2     = 2 *  predict(model_rf_noisy, data = test |> select(x), num.trees =   2)$predictions  - 1 * predict(model_rf_noisy, data = test |> select(x), num.trees =  1)$predictions,
+    prediction_rf_noisy_single_tree3     = 3 *  predict(model_rf_noisy, data = test |> select(x), num.trees =   3)$predictions  - 2 * predict(model_rf_noisy, data = test |> select(x), num.trees =  2)$predictions,
+    prediction_rf_noisy_single_tree4     = 4 *  predict(model_rf_noisy, data = test |> select(x), num.trees =   4)$predictions  - 3 * predict(model_rf_noisy, data = test |> select(x), num.trees =  3)$predictions,
+    prediction_rf_noisy_single_tree50    = 50 * predict(model_rf_noisy, data = test |> select(x), num.trees =  50)$predictions - 49 * predict(model_rf_noisy, data = test |> select(x), num.trees =  49)$predictions
   ) |>
   pivot_longer(
     cols = starts_with("pred"),
@@ -118,27 +142,30 @@ test2 <- test |>
   mutate(
     model_type   = prediction_name |> str_extract("(xgb|rf)"),
     number_trees = prediction_name |> str_extract("\\d+") |> as.integer(),
-    target_type  = prediction_name |> str_extract("(noisy|clean)")
+    target_type  = prediction_name |> str_extract("(noisy|clean)"),
+    single_tree  = prediction_name |> str_detect("single_tree") |> as.integer()
   ) |>
   mutate(
     label_target = if_else(target_type == "clean", "Clean data", "Noisy data") |> 
       factor(levels = c("Clean data", "Noisy data"), ordered = TRUE),
-    label_model = if_else(model_type == "xgb", "Boosting", "Random forest") |> 
-      factor(levels = c("Boosting", "Random forest"), ordered = TRUE)
+    label_model = if_else(model_type == "xgb", "Gradient boosting", "Random forest") |> 
+      factor(levels = c("Gradient boosting", "Random forest"), ordered = TRUE),
+    label_single_tree = if_else(single_tree == 1, "Single tree", "Full model") |> 
+      factor(levels = c("Single tree", "Full model"), ordered = TRUE)
   )
 
 
-############################################
-############################################
-############################################
+########################################################################################
+########################################################################################
+########################################################################################
 # Plots
-############################################
-############################################
-############################################
+########################################################################################
+########################################################################################
+########################################################################################
 
-############################################
+########################################################################################
 # Plot the target
-############################################
+########################################################################################
 
 data |>
   pivot_longer(
@@ -158,27 +185,119 @@ data |>
   facet_wrap("label_target")
 
 
-############################################
-############################################
-# Plot the predictions
-############################################
-############################################
+########################################################################################
+########################################################################################
+# Plot the predictions of the single trees
+########################################################################################
+########################################################################################
 
-selection <- c(1, 2, 5, 10)
+selection0 <- c(1, 2, 3, 50)
 
-############################################
-# Random forest
-############################################
+########################################################################################
+# Clean target
+########################################################################################
 
 # Random forest model trained on the clean target
 test2 |> 
-  filter(label_model == "Random forest" & label_target == "Clean data" & number_trees %in% selection) |>
+  filter(label_model == "Random forest" & label_target == "Clean data" & number_trees %in% selection0) |>
   ggplot() + 
   geom_line(aes(x = x, y = target_clean, color = "Target"), size = 0.5, linetype = "dashed") +
   geom_line(aes(x = x, y = prediction, color = "Prediction"), size = 0.5) +
   labs(x = "x", y = "Prediction", color = "Type of target") +
-  scale_x_continuous(expand = c(0, 0)) + 
-  scale_y_continuous(expand = c(0, 0)) + 
+  scale_x_continuous(expand = c(0, 0), labels = NULL) + 
+  scale_y_continuous(expand = c(0, 0), labels = NULL) + 
+  theme_minimal() +
+  theme(legend.position = "bottom") +
+  facet_grid(label_single_tree ~ number_trees) +
+  scale_color_manual(
+    name = NULL, 
+    values = c("Target" = "red", "Prediction" = "black")
+  ) + 
+  theme(panel.spacing = unit(1, "cm"))
+
+# Gradient boosting model trained on the clean target
+test2 |> 
+  filter(label_model == "Gradient boosting" & label_target == "Clean data" & number_trees %in% selection0) |>
+  ggplot() + 
+  geom_line(aes(x = x, y = target_clean, color = "Target"), size = 0.5, linetype = "dashed") +
+  geom_line(aes(x = x, y = prediction, color = "Prediction"), size = 0.5) +
+  labs(x = "x", y = "Prediction", color = "Type of target") +
+  scale_x_continuous(expand = c(0, 0), labels = NULL) + 
+  scale_y_continuous(expand = c(0, 0), labels = NULL) + 
+  theme_minimal() +
+  theme(legend.position = "bottom") +
+  facet_grid(label_single_tree ~ number_trees) +
+  scale_color_manual(
+    name = NULL, 
+    values = c("Target" = "red", "Prediction" = "black")
+  ) + 
+  theme(panel.spacing = unit(1, "cm"))
+
+
+########################################################################################
+# Noisy target
+########################################################################################
+
+# Random forest model trained on the clean target
+test2 |> 
+  filter(label_model == "Random forest" & label_target == "Noisy data" & number_trees %in% selection0) |>
+  ggplot() + 
+  geom_line(aes(x = x, y = target_clean, color = "Target"), size = 0.5, linetype = "dashed") +
+  geom_line(aes(x = x, y = prediction, color = "Prediction"), size = 0.5) +
+  labs(x = "x", y = "Prediction", color = "Type of target") +
+  scale_x_continuous(expand = c(0, 0), labels = NULL) + 
+  scale_y_continuous(expand = c(0, 0), labels = NULL) + 
+  theme_minimal() +
+  theme(legend.position = "bottom") +
+  facet_grid(label_single_tree ~ number_trees) +
+  scale_color_manual(
+    name = NULL, 
+    values = c("Target" = "red", "Prediction" = "black")
+  ) + 
+  theme(panel.spacing = unit(1, "cm"))
+
+# Gradient boosting model trained on the clean target
+test2 |> 
+  filter(label_model == "Gradient boosting" & label_target == "Noisy data" & number_trees %in% selection0) |>
+  ggplot() + 
+  geom_line(aes(x = x, y = target_clean, color = "Target"), size = 0.5, linetype = "dashed") +
+  geom_line(aes(x = x, y = prediction, color = "Prediction"), size = 0.5) +
+  labs(x = "x", y = "Prediction", color = "Type of target") +
+  scale_x_continuous(expand = c(0, 0), labels = NULL) + 
+  scale_y_continuous(expand = c(0, 0), labels = NULL) + 
+  theme_minimal() +
+  theme(legend.position = "bottom") +
+  facet_grid(label_single_tree ~ number_trees) +
+  scale_color_manual(
+    name = NULL, 
+    values = c("Target" = "red", "Prediction" = "black")
+  ) + 
+  theme(panel.spacing = unit(1, "cm"))
+
+
+
+
+########################################################################################
+########################################################################################
+# Plot the predictions of the full models
+########################################################################################
+########################################################################################
+
+selection <- c(1, 2, 5, 10)
+
+########################################################################################
+# Random forest
+########################################################################################
+
+# Random forest model trained on the clean target
+test2 |> 
+  filter(label_model == "Random forest" & label_target == "Clean data" & number_trees %in% selection & single_tree == 0) |>
+  ggplot() + 
+  geom_line(aes(x = x, y = target_clean, color = "Target"), size = 0.5, linetype = "dashed") +
+  geom_line(aes(x = x, y = prediction, color = "Prediction"), size = 0.5) +
+  labs(x = "x", y = "Prediction", color = "Type of target") +
+  scale_x_continuous(expand = c(0, 0), labels = NULL) + 
+  scale_y_continuous(expand = c(0, 0), labels = NULL) + 
   theme_minimal() +
   theme(legend.position = "bottom") +
   facet_wrap("number_trees") +
@@ -189,13 +308,13 @@ test2 |>
 
 # Random forest model trained on the noisy target
 test2 |> 
-  filter(label_model == "Random forest" & label_target == "Noisy data" & number_trees %in% selection) |>
+  filter(label_model == "Random forest" & label_target == "Noisy data" & number_trees %in% selection & single_tree == 0) |>
   ggplot() + 
   geom_line(aes(x = x, y = target_clean, color = "Target"), size = 0.5, linetype = "dashed") +
   geom_line(aes(x = x, y = prediction, color = "Prediction"), size = 0.5) +
   labs(x = "x", y = "Prediction", color = "Type of target") +
-  scale_x_continuous(expand = c(0, 0)) + 
-  scale_y_continuous(expand = c(0, 0)) + 
+  scale_x_continuous(expand = c(0, 0), labels = NULL) + 
+  scale_y_continuous(expand = c(0, 0), labels = NULL) + 
   theme_minimal() +
   theme(legend.position = "bottom") +
   facet_wrap("number_trees") +
@@ -205,19 +324,19 @@ test2 |>
   )
 
 
-############################################
-# Boosting
-############################################
+########################################################################################
+# Gradient boosting
+########################################################################################
 
-# Boosting model trained on the clean target
+# Gradient boosting model trained on the clean target
 test2 |> 
-  filter(label_model == "Boosting" & label_target == "Clean data" & number_trees %in% selection) |>
+  filter(label_model == "Gradient boosting" & label_target == "Clean data" & number_trees %in% selection & single_tree == 0) |>
   ggplot() + 
   geom_line(aes(x = x, y = target_clean, color = "Target"), size = 0.5, linetype = "dashed") +
   geom_line(aes(x = x, y = prediction, color = "Prediction"), size = 0.5) +
   labs(x = "x", y = "Prediction", color = "Type of target") +
-  scale_x_continuous(expand = c(0, 0)) + 
-  scale_y_continuous(expand = c(0, 0)) + 
+  scale_x_continuous(expand = c(0, 0), labels = NULL) + 
+  scale_y_continuous(expand = c(0, 0), labels = NULL) + 
   theme_minimal() +
   theme(legend.position = "bottom") +
   facet_wrap("number_trees") +
@@ -227,15 +346,15 @@ test2 |>
   )
 
 
-# Boosting model trained on the noisy target
+# Gradient boosting model trained on the noisy target
 test2 |> 
-  filter(label_model == "Boosting" & label_target == "Noisy data" & number_trees %in% selection) |>
+  filter(label_model == "Gradient boosting" & label_target == "Noisy data" & number_trees %in% selection & single_tree == 0) |>
   ggplot() + 
   geom_line(aes(x = x, y = target_clean, color = "Target"), size = 0.5, linetype = "dashed") +
   geom_line(aes(x = x, y = prediction, color = "Prediction"), size = 0.5) +
   labs(x = "x", y = "Prediction", color = "Type of target") +
-  scale_x_continuous(expand = c(0, 0)) + 
-  scale_y_continuous(expand = c(0, 0)) + 
+  scale_x_continuous(expand = c(0, 0), labels = NULL) + 
+  scale_y_continuous(expand = c(0, 0), labels = NULL) + 
   theme_minimal() +
   theme(legend.position = "bottom") +
   facet_wrap("number_trees") +
@@ -245,57 +364,57 @@ test2 |>
   )
 
 
-############################################
-# Comparison boosting versus random forest
-############################################
+########################################################################################
+# Comparison Gradient boosting versus random forest
+########################################################################################
 
 
-# Boosting model and RF model trained on the clean target
+# Gradient boosting model and RF model trained on the clean target
 test2 |> 
-  filter(label_target == "Clean data" & number_trees == 50) |>
+  filter(label_target == "Clean data" & number_trees == 10 & single_tree == 0) |>
   ggplot() + 
   geom_line(aes(x = x, y = target_clean, color = "Target"), size = 0.5, linetype = "dashed") +
   geom_line(aes(x = x, y = prediction, color = label_model), size = 0.5) +
   labs(x = "x", y = "Prediction", color = "Type of target") +
-  scale_x_continuous(expand = c(0, 0)) + 
-  scale_y_continuous(expand = c(0, 0)) + 
+  scale_x_continuous(expand = c(0, 0), labels = NULL) + 
+  scale_y_continuous(expand = c(0, 0), labels = NULL) + 
   scale_color_viridis_d(end = 0.7) + 
   theme_minimal() +
   theme(legend.position = "bottom") +
   scale_color_manual(
     name = NULL, 
-    values = c("Target" = "red", "Boosting" = viridis::viridis(10)[1], "Random forest" = viridis::viridis(10)[7])
+    values = c("Target" = "red", "Gradient boosting" = viridis::viridis(10)[1], "Random forest" = viridis::viridis(10)[7])
   )
 
 
 
-# Boosting model and RF model trained on the noisy target
+# Gradient boosting model and RF model trained on the noisy target
 test2 |> 
-  filter(label_target == "Noisy data" & number_trees == 50) |>
+  filter(label_target == "Noisy data" & number_trees == 10 & single_tree == 0) |>
   ggplot() + 
   geom_line(aes(x = x, y = target_clean, color = "Target"), size = 0.5, linetype = "dashed") +
   geom_line(aes(x = x, y = prediction, color = label_model), size = 0.5) +
   labs(x = "x", y = "Prediction", color = "Type of target") +
-  scale_x_continuous(expand = c(0, 0)) + 
-  scale_y_continuous(expand = c(0, 0)) + 
+  scale_x_continuous(expand = c(0, 0), labels = NULL) + 
+  scale_y_continuous(expand = c(0, 0), labels = NULL) + 
   scale_color_viridis_d(end = 0.7) + 
   theme_minimal() +
   theme(legend.position = "bottom") +
   scale_color_manual(
     name = NULL, 
-    values = c("Target" = "red", "Boosting" = viridis::viridis(10)[1], "Random forest" = viridis::viridis(10)[7])
+    values = c("Target" = "red", "Gradient boosting" = viridis::viridis(10)[1], "Random forest" = viridis::viridis(10)[7])
   )
 
 
-# Boosting model trained on the noisy target
+# Gradient boosting model trained on the noisy target
 test2 |> 
-  filter(label_model == "Boosting" & label_target == "Noisy data" & number_trees %in% selection) |>
+  filter(label_model == "Gradient boosting" & label_target == "Noisy data" & number_trees %in% selection) |>
   ggplot() + 
   geom_line(aes(x = x, y = prediction, color = "Prediction"), size = 0.5) +
   geom_line(aes(x = x, y = target_clean, color = "Target"), size = 0.5, linetype = "dashed") +
   labs(x = "x", y = "Prediction", color = "Type of target") +
-  scale_x_continuous(expand = c(0, 0)) + 
-  scale_y_continuous(expand = c(0, 0)) + 
+  scale_x_continuous(expand = c(0, 0), labels = NULL) + 
+  scale_y_continuous(expand = c(0, 0), labels = NULL) + 
   theme_minimal() +
   theme(legend.position = "bottom") +
   facet_wrap("number_trees") +
@@ -304,14 +423,3 @@ test2 |>
     values = c("Target" = "red", "Prediction" = "black")
   )
 
-
-colors <- c("dudu" = "blue", "Petal Length" = "red", "Petal Width" = "orange")
-
-ggplot(iris, aes(x = Sepal.Length)) +
-  geom_line(aes(y = Sepal.Width, color = "Sepal Width"), size = 1.5) +
-  geom_line(aes(y = Petal.Length, color = "Petal Length"), size = 1.5) +
-  geom_line(aes(y = Petal.Width, color = "Petal Width"), size = 1.5) +
-  labs(x = "Year",
-       y = "(%)",
-       color = "Legend") +
-  scale_color_manual(values = colors)
