@@ -80,7 +80,7 @@ data <- data.frame(
 # Clean target
 ggplot(data) + 
   geom_line(aes(x = x, y = target_clean), size = 0.5) + 
-  labs(x = "x", y = "Target", color = NULL) +
+  labs(x = "x", y = "Variable-cible", color = NULL) +
   scale_x_continuous(expand = c(0, 0), labels = NULL) +
   scale_y_continuous(expand = c(0, 0), limits = c(-1.6, 3.6), labels = NULL) +
   labs(x = NULL, y = NULL) +
@@ -89,7 +89,7 @@ ggplot(data) +
 # Noisy target
 ggplot(data) + 
   geom_line(aes(x = x, y = target_noisy), size = 0.5) + 
-  labs(x = "x", y = "Target", color = NULL) +
+  labs(x = "x", y = "Variable-cible", color = NULL) +
   scale_x_continuous(expand = c(0, 0), labels = NULL) +
   scale_y_continuous(expand = c(0, 0), limits = c(-1.6, 3.6), labels = NULL) +
   labs(x = NULL, y = NULL) +
@@ -200,12 +200,12 @@ test2 <- test |>
     single_tree  = prediction_name |> str_detect("single_tree") |> as.integer()
   ) |>
   mutate(
-    label_target = if_else(target_type == "clean", "Clean data", "Noisy data") |> 
-      factor(levels = c("Clean data", "Noisy data"), ordered = TRUE),
-    label_model = if_else(model_type == "xgb", "Gradient boosting", "Random forest") |> 
-      factor(levels = c("Gradient boosting", "Random forest"), ordered = TRUE),
-    label_single_tree = if_else(single_tree == 1, "Single tree", "Full model") |> 
-      factor(levels = c("Single tree", "Full model"), ordered = TRUE)
+    label_target = if_else(target_type == "clean", "Données non-bruitées", "Données bruitées") |> 
+      factor(levels = c("Données non-bruitées", "Données bruitées"), ordered = TRUE),
+    label_model = if_else(model_type == "xgb", "Gradient boosting", "Forêt aléatoire") |> 
+      factor(levels = c("Gradient boosting", "Forêt aléatoire"), ordered = TRUE),
+    label_single_tree = if_else(single_tree == 1, "Arbre", "Modèle complet") |> 
+      factor(levels = c("Arbre", "Modèle complet"), ordered = TRUE)
   )
 
 
@@ -232,7 +232,7 @@ data |>
   ) |>
   ggplot() + 
   geom_point(aes(x = x, y = target_value), size = 0.5) + 
-  labs(x = "x", y = "Target", color = NULL) +
+  labs(x = "x", y = "Variable-cible", color = NULL) +
   scale_color_viridis_d(end = 0.7) + 
   theme_minimal() +
   theme(legend.position = "bottom") +
@@ -245,7 +245,7 @@ data |>
 ########################################################################################
 ########################################################################################
 
-selection0 <- c(1, 2, 3, 50)
+selection0 <- c(1, 2, 3, 4)
 
 ########################################################################################
 # Clean target
@@ -253,17 +253,17 @@ selection0 <- c(1, 2, 3, 50)
 
 # Random forest model trained on the clean target
 test2 |> 
-  filter(label_model == "Random forest" & label_target == "Clean data" & number_trees %in% selection0) |>
+  filter(label_model == "Forêt aléatoire" & label_target == "Données non-bruitées" & number_trees %in% selection0) |>
   ggplot() + 
-  geom_line(aes(x = x, y = target_clean, color = "Target"), size = 0.5, linetype = "dashed") +
-  geom_line(aes(x = x, y = prediction, color = "Prediction"), size = 0.5) +
-  labs(x = NULL, y = NULL, color = "Type of target") +
+  geom_line(aes(x = x, y = target_clean, color = "Variable-cible"), size = 0.5, linetype = "dashed") +
+  geom_line(aes(x = x, y = prediction, color = "Prédiction"), size = 0.5) +
+  labs(x = NULL, y = NULL, color = "Type de variable-cible") +
   scale_x_continuous(expand = c(0, 0), labels = NULL) +
   scale_y_continuous(expand = c(0, 0), limits = c(-1.6, 3.6), labels = NULL) +
   facet_grid(label_single_tree ~ number_trees, switch = "y") +
   scale_color_manual(
     name = NULL, 
-    values = c("Target" = "red", "Prediction" = "black")
+    values = c("Variable-cible" = "red", "Prédiction" = "black")
   )
 
 ggsave(
@@ -274,17 +274,17 @@ ggsave(
 
 # Gradient boosting model trained on the clean target
 test2 |> 
-  filter(label_model == "Gradient boosting" & label_target == "Clean data" & number_trees %in% selection0) |>
+  filter(label_model == "Gradient boosting" & label_target == "Données non-bruitées" & number_trees %in% selection0) |>
   ggplot() + 
-  geom_line(aes(x = x, y = target_clean, color = "Target"), size = 0.5, linetype = "dashed") +
-  geom_line(aes(x = x, y = prediction, color = "Prediction"), size = 0.5) +
-  labs(x = NULL, y = NULL, color = "Type of target") +
+  geom_line(aes(x = x, y = target_clean, color = "Variable-cible"), size = 0.5, linetype = "dashed") +
+  geom_line(aes(x = x, y = prediction, color = "Prédiction"), size = 0.5) +
+  labs(x = NULL, y = NULL, color = "Type de variable-cible") +
   scale_x_continuous(expand = c(0, 0), labels = NULL) +
   scale_y_continuous(expand = c(0, 0), limits = c(-1.6, 3.6), labels = NULL) +
   facet_grid(label_single_tree ~ number_trees, switch = "y") +
   scale_color_manual(
     name = NULL, 
-    values = c("Target" = "red", "Prediction" = "black")
+    values = c("Variable-cible" = "red", "Prédiction" = "black")
   )
 
 ggsave(
@@ -299,17 +299,17 @@ ggsave(
 
 # Random forest model trained on the noisy target
 test2 |> 
-  filter(label_model == "Random forest" & label_target == "Noisy data" & number_trees %in% selection0) |>
+  filter(label_model == "Forêt aléatoire" & label_target == "Données bruitées" & number_trees %in% selection0) |>
   ggplot() + 
-  geom_line(aes(x = x, y = target_clean, color = "Target"), size = 0.5, linetype = "dashed") +
-  geom_line(aes(x = x, y = prediction, color = "Prediction"), size = 0.5) +
-  labs(x = NULL, y = NULL, color = "Type of target") +
+  geom_line(aes(x = x, y = target_clean, color = "Variable-cible"), size = 0.5, linetype = "dashed") +
+  geom_line(aes(x = x, y = prediction, color = "Prédiction"), size = 0.5) +
+  labs(x = NULL, y = NULL, color = "Type de variable-cible") +
   scale_x_continuous(expand = c(0, 0), labels = NULL) +
   scale_y_continuous(expand = c(0, 0), limits = c(-1.6, 3.6), labels = NULL) +
   facet_grid(label_single_tree ~ number_trees, switch = "y") +
   scale_color_manual(
     name = NULL, 
-    values = c("Target" = "red", "Prediction" = "black")
+    values = c("Variable-cible" = "red", "Prédiction" = "black")
   )
 
 ggsave(
@@ -320,17 +320,17 @@ ggsave(
 
 # Gradient boosting model trained on the noisy target
 test2 |> 
-  filter(label_model == "Gradient boosting" & label_target == "Noisy data" & number_trees %in% selection0) |>
+  filter(label_model == "Gradient boosting" & label_target == "Données bruitées" & number_trees %in% selection0) |>
   ggplot() + 
-  geom_line(aes(x = x, y = target_clean, color = "Target"), size = 0.5, linetype = "dashed") +
-  geom_line(aes(x = x, y = prediction, color = "Prediction"), size = 0.5) +
-  labs(x = NULL, y = NULL, color = "Type of target") +
+  geom_line(aes(x = x, y = target_clean, color = "Variable-cible"), size = 0.5, linetype = "dashed") +
+  geom_line(aes(x = x, y = prediction, color = "Prédiction"), size = 0.5) +
+  labs(x = NULL, y = NULL, color = "Type de variable-cible") +
   scale_x_continuous(expand = c(0, 0), labels = NULL) +
   scale_y_continuous(expand = c(0, 0), limits = c(-1.6, 3.6), labels = NULL) +
   facet_grid(label_single_tree ~ number_trees, switch = "y") +
   scale_color_manual(
     name = NULL, 
-    values = c("Target" = "red", "Prediction" = "black")
+    values = c("Variable-cible" = "red", "Prédiction" = "black")
   )
 
 ggsave(
@@ -354,11 +354,11 @@ selection <- c(1, 2, 5, 10)
 
 # Random forest model trained on the clean target
 test2 |> 
-  filter(label_model == "Random forest" & label_target == "Clean data" & number_trees %in% selection & single_tree == 0) |>
+  filter(label_model == "Forêt aléatoire" & label_target == "Données non-bruitées" & number_trees %in% selection & single_tree == 0) |>
   ggplot() + 
-  geom_line(aes(x = x, y = target_clean, color = "Target"), size = 0.5, linetype = "dashed") +
-  geom_line(aes(x = x, y = prediction, color = "Prediction"), size = 0.5) +
-  labs(x = "x", y = "Prediction", color = "Type of target") +
+  geom_line(aes(x = x, y = target_clean, color = "Variable-cible"), size = 0.5, linetype = "dashed") +
+  geom_line(aes(x = x, y = prediction, color = "Prédiction"), size = 0.5) +
+  labs(x = "x", y = "Prédiction", color = "Type de variable-cible") +
   scale_x_continuous(expand = c(0, 0), labels = NULL) + 
   scale_y_continuous(expand = c(0, 0), labels = NULL) + 
   theme_minimal() +
@@ -366,16 +366,16 @@ test2 |>
   facet_wrap("number_trees") +
   scale_color_manual(
     name = NULL, 
-    values = c("Target" = "red", "Prediction" = "black")
+    values = c("Variable-cible" = "red", "Prédiction" = "black")
   )
 
 # Random forest model trained on the noisy target
 test2 |> 
-  filter(label_model == "Random forest" & label_target == "Noisy data" & number_trees %in% selection & single_tree == 0) |>
+  filter(label_model == "Forêt aléatoire" & label_target == "Données bruitées" & number_trees %in% selection & single_tree == 0) |>
   ggplot() + 
-  geom_line(aes(x = x, y = target_clean, color = "Target"), size = 0.5, linetype = "dashed") +
-  geom_line(aes(x = x, y = prediction, color = "Prediction"), size = 0.5) +
-  labs(x = "x", y = "Prediction", color = "Type of target") +
+  geom_line(aes(x = x, y = target_clean, color = "Variable-cible"), size = 0.5, linetype = "dashed") +
+  geom_line(aes(x = x, y = prediction, color = "Prédiction"), size = 0.5) +
+  labs(x = "x", y = "Prédiction", color = "Type de variable-cible") +
   scale_x_continuous(expand = c(0, 0), labels = NULL) + 
   scale_y_continuous(expand = c(0, 0), labels = NULL) + 
   theme_minimal() +
@@ -383,7 +383,7 @@ test2 |>
   facet_wrap("number_trees") +
   scale_color_manual(
     name = NULL, 
-    values = c("Target" = "red", "Prediction" = "black")
+    values = c("Variable-cible" = "red", "Prédiction" = "black")
   )
 
 
@@ -393,11 +393,11 @@ test2 |>
 
 # Gradient boosting model trained on the clean target
 test2 |> 
-  filter(label_model == "Gradient boosting" & label_target == "Clean data" & number_trees %in% selection & single_tree == 0) |>
+  filter(label_model == "Gradient boosting" & label_target == "Données non-bruitées" & number_trees %in% selection & single_tree == 0) |>
   ggplot() + 
-  geom_line(aes(x = x, y = target_clean, color = "Target"), size = 0.5, linetype = "dashed") +
-  geom_line(aes(x = x, y = prediction, color = "Prediction"), size = 0.5) +
-  labs(x = "x", y = "Prediction", color = "Type of target") +
+  geom_line(aes(x = x, y = target_clean, color = "Variable-cible"), size = 0.5, linetype = "dashed") +
+  geom_line(aes(x = x, y = prediction, color = "Prédiction"), size = 0.5) +
+  labs(x = "x", y = "Prédiction", color = "Type de variable-cible") +
   scale_x_continuous(expand = c(0, 0), labels = NULL) + 
   scale_y_continuous(expand = c(0, 0), labels = NULL) + 
   theme_minimal() +
@@ -405,17 +405,17 @@ test2 |>
   facet_wrap("number_trees") +
   scale_color_manual(
     name = NULL, 
-    values = c("Target" = "red", "Prediction" = "black")
+    values = c("Variable-cible" = "red", "Prédiction" = "black")
   )
 
 
 # Gradient boosting model trained on the noisy target
 test2 |> 
-  filter(label_model == "Gradient boosting" & label_target == "Noisy data" & number_trees %in% selection & single_tree == 0) |>
+  filter(label_model == "Gradient boosting" & label_target == "Données bruitées" & number_trees %in% selection & single_tree == 0) |>
   ggplot() + 
-  geom_line(aes(x = x, y = target_clean, color = "Target"), size = 0.5, linetype = "dashed") +
-  geom_line(aes(x = x, y = prediction, color = "Prediction"), size = 0.5) +
-  labs(x = "x", y = "Prediction", color = "Type of target") +
+  geom_line(aes(x = x, y = target_clean, color = "Variable-cible"), size = 0.5, linetype = "dashed") +
+  geom_line(aes(x = x, y = prediction, color = "Prédiction"), size = 0.5) +
+  labs(x = "x", y = "Prédiction", color = "Type de variable-cible") +
   scale_x_continuous(expand = c(0, 0), labels = NULL) + 
   scale_y_continuous(expand = c(0, 0), labels = NULL) + 
   theme_minimal() +
@@ -423,7 +423,7 @@ test2 |>
   facet_wrap("number_trees") +
   scale_color_manual(
     name = NULL, 
-    values = c("Target" = "red", "Prediction" = "black")
+    values = c("Variable-cible" = "red", "Prédiction" = "black")
   )
 
 
@@ -434,11 +434,11 @@ test2 |>
 
 # Gradient boosting model and RF model trained on the clean target
 test2 |> 
-  filter(label_target == "Clean data" & number_trees == 10 & single_tree == 0) |>
+  filter(label_target == "Données non-bruitées" & number_trees == 10 & single_tree == 0) |>
   ggplot() + 
-  geom_line(aes(x = x, y = target_clean, color = "Target"), size = 0.5, linetype = "dashed") +
+  geom_line(aes(x = x, y = target_clean, color = "Variable-cible"), size = 0.5, linetype = "dashed") +
   geom_line(aes(x = x, y = prediction, color = label_model), size = 0.5) +
-  labs(x = "x", y = "Prediction", color = "Type of target") +
+  labs(x = "x", y = "Prédiction", color = "Type de variable-cible") +
   scale_x_continuous(expand = c(0, 0), labels = NULL) + 
   scale_y_continuous(expand = c(0, 0), labels = NULL) + 
   scale_color_viridis_d(end = 0.7) + 
@@ -446,18 +446,18 @@ test2 |>
   theme(legend.position = "bottom") +
   scale_color_manual(
     name = NULL, 
-    values = c("Target" = "red", "Gradient boosting" = viridis::viridis(10)[1], "Random forest" = viridis::viridis(10)[7])
+    values = c("Variable-cible" = "red", "Gradient boosting" = viridis::viridis(10)[1], "Forêt aléatoire" = viridis::viridis(10)[7])
   )
 
 
 
 # Gradient boosting model and RF model trained on the noisy target
 test2 |> 
-  filter(label_target == "Noisy data" & number_trees == 10 & single_tree == 0) |>
+  filter(label_target == "Données bruitées" & number_trees == 10 & single_tree == 0) |>
   ggplot() + 
-  geom_line(aes(x = x, y = target_clean, color = "Target"), size = 0.5, linetype = "dashed") +
+  geom_line(aes(x = x, y = target_clean, color = "Variable-cible"), size = 0.5, linetype = "dashed") +
   geom_line(aes(x = x, y = prediction, color = label_model), size = 0.5) +
-  labs(x = "x", y = "Prediction", color = "Type of target") +
+  labs(x = "x", y = "Prédiction", color = "Type de variable-cible") +
   scale_x_continuous(expand = c(0, 0), labels = NULL) + 
   scale_y_continuous(expand = c(0, 0), labels = NULL) + 
   scale_color_viridis_d(end = 0.7) + 
@@ -465,17 +465,17 @@ test2 |>
   theme(legend.position = "bottom") +
   scale_color_manual(
     name = NULL, 
-    values = c("Target" = "red", "Gradient boosting" = viridis::viridis(10)[1], "Random forest" = viridis::viridis(10)[7])
+    values = c("Variable-cible" = "red", "Gradient boosting" = viridis::viridis(10)[1], "Forêt aléatoire" = viridis::viridis(10)[7])
   )
 
 
 # Gradient boosting model trained on the noisy target
 test2 |> 
-  filter(label_model == "Gradient boosting" & label_target == "Noisy data" & number_trees %in% selection) |>
+  filter(label_model == "Gradient boosting" & label_target == "Données bruitées" & number_trees %in% selection) |>
   ggplot() + 
-  geom_line(aes(x = x, y = prediction, color = "Prediction"), size = 0.5) +
-  geom_line(aes(x = x, y = target_clean, color = "Target"), size = 0.5, linetype = "dashed") +
-  labs(x = "x", y = "Prediction", color = "Type of target") +
+  geom_line(aes(x = x, y = prediction, color = "Prédiction"), size = 0.5) +
+  geom_line(aes(x = x, y = target_clean, color = "Variable-cible"), size = 0.5, linetype = "dashed") +
+  labs(x = "x", y = "Prédiction", color = "Type de variable-cible") +
   scale_x_continuous(expand = c(0, 0), labels = NULL) + 
   scale_y_continuous(expand = c(0, 0), labels = NULL) + 
   theme_minimal() +
@@ -483,6 +483,6 @@ test2 |>
   facet_wrap("number_trees") +
   scale_color_manual(
     name = NULL, 
-    values = c("Target" = "red", "Prediction" = "black")
+    values = c("Variable-cible" = "red", "Prédiction" = "black")
   )
 
