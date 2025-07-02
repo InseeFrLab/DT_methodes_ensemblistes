@@ -249,7 +249,7 @@ $$
 - \gamma
 $$ {#eq-fct-eval-split}
 
-Cette réduction de perte est simplement la différence entre la somme des pertes après partitionnement (noeud-enfant gauche + noeud-enfant droit) et la perte avant partitionnement. Le terme $\gamma$ est le terme de régularisation qui mesure le coût associé à la création d'un noeud supplémentaire. Si $\Delta \tilde{L}^{(t)}$ est **positive** et suffisamment grande, alors la scission fait **baisser** la perte globale et on la retient. Sinon, on renonce à scinder cette feuille. 
+Cette réduction de perte est simplement la différence entre la somme des pertes après partitionnement (noeud-enfant gauche + noeud-enfant droit) et la perte avant partitionnement. Le terme $\gamma$ est le terme de régularisation qui mesure le coût associé à la création d'un noeud supplémentaire. Si pour un noeud donné, la meilleure règle de décision candidate est associée à un $\Delta \tilde{L}^{(t)}$ strictement positif, alors cette règle de décision fait baisser la perte globale. On peut alors l'utiliser pour définir deux nouveaux noeuds-enfants. Sinon, on renonce à scinder ce noeud. 
 
 ::: { .callout-note}
 ## Optimisations des algorithmes
