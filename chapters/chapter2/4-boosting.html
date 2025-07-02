@@ -490,14 +490,17 @@ Optimisations des algorithmes
 </section>
 <section id="un-exemple-simple-la-régression-avec-perte-quadratique" class="level3" data-number="1.4">
 <h3 data-number="1.4" class="anchored" data-anchor-id="un-exemple-simple-la-régression-avec-perte-quadratique"><span class="header-section-number">1.4</span> Un exemple simple: la régression avec perte quadratique</h3>
-<p>La partie qui précède peut donner l’impression que la mécanique du <em>gradient boosting</em> est très complexe et difficile à comprendre. L’exemple qui suit permet de mieux saisir cette mécanique en se ramenant à une situation intuitive.</p>
-<p>On se place dans le cas d’un problème de régression, avec une perte quadratique: $ (y,;) = (y - )^2 $ et sans terme de régularisation. Dans ce cas particulier, le gradient de la fonction de perte est égal au résidu <span class="math inline">\(y-\hat{y}\)</span>, et la hessienne de la fonction de perte est égale à 1. L’équation <a href="#eq-fct-obj-final" class="quarto-xref">3</a> qui donne la fonction-objectif devient:</p>
-<p><span id="eq-fct-obj-final-exemple"><span class="math display">\[
-\tilde{\mathcal{L}}^{(t)} = \sum_{i=1}^{n} [\left(y-\hat{y}\right) f_t(\mathbf{x}_i)+ \frac{1}{2}]
+<p>La présentation qui précède peut donner l’impression que la mécanique du <em>gradient boosting</em> est complexe, abstraite et difficile à comprendre. Celle-ci devient beaucoup plus facile à saisir lorsqu’on l’illustre dans un cas simple et intuitif. Prenons ainsi un problème de régression, où l’on cherche à prédire une variable continue, avec une perte quadratique: $ (y,;) = (y - )^2 $ et sans terme de régularisation. Dans ce cas particulier, le gradient de la fonction de perte est égal à l’opposé du <strong>résidu</strong> du modèle <span class="math inline">\(\hat{y}-y\)</span>, et la hessienne de la fonction de perte est égale à 1. L’équation <a href="#eq-w-j-optimal" class="quarto-xref">4</a> qui donne le poids optimal de la feuille <span class="math inline">\(j\)</span> devient donc:</p>
+<p><span id="eq-w-j-optimal-exemple"><span class="math display">\[
+w_j^{\ast} = \frac{\sum_{i \in I_j} y-\hat{y}}{|I_j|}
 \tag{8}\]</span></span></p>
-<p>Dans ce cas, le gradient de la fonction de perte coïncide avec le résidu <span class="math inline">\(y-\hat{y}\)</span>.</p>
-<p>Expliciter la formule de <span class="math inline">\(w_i\)</span>, et donner l’intuition de lambda.</p>
-<p>METTRE LA FIGURE COMPLIQUEE avec les résidus.</p>
+<p>où <span class="math inline">\(I_j\)</span> désigne le nombre d’observations dans la feuille <span class="math inline">\(j\)</span>. Ce résultat est particulièrement intuitif : la prédiction de l’arbre pour chaque feuille terminale est égale à la moyenne des résidus (erreurs) des observations qui s’y trouvent. Ainsi, à chaque étape, le modèle se corrige de façon additive, en s’appuyant sur les erreurs précédentes, jusqu’à ce que ces erreurs deviennent aussi faibles que possible.</p>
+<p>Cet exemple simple illustre bien la démarche du <em>gradient boosting</em> : améliorer progressivement la qualité des prédictions en corrigeant les erreurs résiduelles, chaque nouvel arbre tâchant de capter ce que les arbres précédents n’ont pas bien appris. Par ailleurs, elle permet de comprendre pourquoi le gradient de la fonction de perte est fréquemment désigné par le terme de <em>pseudo-résidu</em>.</p>
+<!-- L'équation @eq-fct-obj-final qui donne la fonction-objectif devient: 
+
+$$ 
+\tilde{\mathcal{L}}^{(t)} = \sum_{i=1}^{n} [\left(\hat{y}-y\right) f_t(\mathbf{x}_i)+ \frac{1}{2}f_t(\mathbf{x}_i)^2]
+$$ {#eq-fct-obj-final-exemple} -->
 </section>
 <section id="sec-overfitting-gb" class="level3" data-number="1.5">
 <h3 data-number="1.5" class="anchored" data-anchor-id="sec-overfitting-gb"><span class="header-section-number">1.5</span> Le grand ennemi du <em>gradient boosting</em>: le surajustement</h3>
