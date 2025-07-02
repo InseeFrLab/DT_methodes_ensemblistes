@@ -90,7 +90,7 @@ Procédure de construction du modèle:
     (a) Calculer le gradient (les pseudo-résidus) à l'issue des $m-1$ étapes précédentes: $g_{im} = \frac{\partial l(y_i, F_{m-1}\left(\mathbf{x}\right))}{\partial F_{m-1}\left(\mathbf{x}\right)}$
 
     (b) Entraîner le $m$-ième _weak learner_: on cherche l'arbre $f_m$ qui prédit le mieux l'opposé du gradient de la fonction de perte:
-    $\mathbf{\hat{a}_m} = \underset{\mathbf{a}}{\arg \min} \sum_{i=1}^n \left(- g_{im} - f_m\left(\mathbf{x}_i, \mathbf{a}\right)\right)^2$
+    $\mathbf{\hat{f}_m} = \underset{f_m}{\arg \min} \sum_{i=1}^n \left(- g_{im} - f_m\left(\mathbf{x}_i, \mathbf{a}\right)^2$
 
     (c) Mettre à jour le modèle global: $F_m\left(\mathbf{x}\right) = F_{m-1}\left(\mathbf{x}\right) + \rho f_m\left(\mathbf{x}_i, \mathbf{\hat{a}_m}\right)$ avec $\rho$ le taux d'apprentissage (_learning rate_) dont la raison d'être est présentée dans la section @sec-overfitting-gb. 
 
@@ -134,13 +134,9 @@ Dans cette expression:
 
 ##### Principe
 
-A chaque étape de l'entraînement du modèle, l'algorithme de _gradient boosting_ va construire un arbre en faisant deux choses:
+A chaque étape de l'entraînement, l'algorithme de _gradient boosting_ ajoute un nouvel arbre au modèle en faisant deux choses: **déterminer la structure** de l'arbre en tenant compte de la régularisation (c'est-à-dire choisir les règles de décision qui définissent l'arbre) et **calculer la meilleure valeur $w_j$​** pour chaque feuille terminale (c'est-à-dire la valeur qui **minimise** la fonction de perte).
 
-1. **Déterminer la structure** de l'arbre en tenant compte de la régularisation (c'est-à-dire choisir les règles de décision qui définissent l'arbre);
-
-2. **Calculer la meilleure valeur $w_j$​** pour chaque feuille (c'est-à-dire la valeur qui **minimise** la fonction de perte).
-
-La construction de l'arbre se fait selon une approche **gloutonne**, _nœud après nœud_: on divise les données d'entraînement en feuilles de plus en plus petites, tant que cela génère une réduction "suffisante" de la fonction de perte. Cette approche peut être résumée ainsi:
+La construction de l'arbre se fait selon une approche **gloutonne**, _nœud après nœud_, de façon très similaire à la construction d'un arbre CART: on divise les données d'entraînement en sous-régions de plus en plus petites, tant que cela génère une réduction "suffisante" de la fonction de perte. Cette approche peut être résumée ainsi:
 
 1. On part du noeud-racine qui contient toutes les données d'entraînement.
 
@@ -150,7 +146,7 @@ La construction de l'arbre se fait selon une approche **gloutonne**, _nœud apr�
 
     - Pour chaque règle de décision candidate, on calcule le **gain** associé (c'est-à-dire la réduction de la perte globale si l'on retient cette règle de décision), et on retient la règle de décision avec le gain maximal.
 
-    - Si la meilleure règle de décision apporte un gain suffisamment élevé, on crée deux nouveaux noeuds.
+    - Si la meilleure règle de décision apporte un gain suffisamment élevé, on crée deux nouveaux noeuds-enfant.
 
 3. On répète le processus récursivement en partant des noeuds nouvellement créés, jusqu'à :
 
@@ -180,6 +176,7 @@ $$ {#eq-fct-obj-final}
 Deux remarques:
 
 - Cette expression montre que le problème initial où il fallait entraîner un grand nombre d'arbres simultanément (équation @eq-fct-obj-initial) à un problème beaucoup plus simple dans lequel il n'y a plus qu'un seul arbre à entraîner (équation @eq-fct-obj-final).
+
 - A COMPLETER: il ne reste que g et h, cadre général applicable à tout problème.
 
 
@@ -270,5 +267,4 @@ __La lutte contre le surajustement est donc un enjeu majeur de l'entraînement d
 
 - la dernière approche consiste à __entraîner les arbres sur un échantillon d'observations et/ou de variables__. L'échantillonnage des observations permet de réduire l'influence des éventuels points extrêmes contenus dans les données (car ils n'apparaissent pas dans les données d'entraînement de certains arbres); l'échantillonnage des variables permet de varier les variables utilisées dans les _splits_.
 
-#### Les fonctions de perte -->
 
