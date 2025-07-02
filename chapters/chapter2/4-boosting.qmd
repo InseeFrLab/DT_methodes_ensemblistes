@@ -134,7 +134,7 @@ Dans cette expression:
 
 A chaque étape de l'entraînement, l'algorithme de _gradient boosting_ ajoute un nouvel arbre au modèle en faisant deux choses: **déterminer la structure** de l'arbre en tenant compte de la régularisation (c'est-à-dire choisir les règles de décision qui définissent l'arbre) et **calculer la meilleure valeur $w_j$​** pour chaque feuille terminale (c'est-à-dire la valeur qui **minimise** la fonction de perte).
 
-La construction de l'arbre se fait selon une approche **gloutonne**, _nœud après nœud_, de façon très similaire à la construction d'un arbre CART (voir section @sec-CART): on divise les données d'entraînement en sous-régions de plus en plus petites, tant que cela génère une réduction "suffisante" de la fonction de perte. Une différence notable avec les arbres CART et les forêts aléatoires est que les arbres utilisés dans le _gradient boosting_ sont souvent relativement simples et peu profonds. Ainsi, le partitionnement récursif des données s'arrête généralement assez tôt, soit lorsqu'est atteinte une des limites de complexité définies _a priori_ (**profondeur maximale** de l'arbre, **nombre maximal de feuilles**, **nombre minimal d'observations par feuille**), soit lorsque l'algorithme ne parvient plus à trouver de partitionnement intéressant (c'est-à-dire qui permette de réduire suffisamment la perte).
+La construction de l'arbre se fait selon une **approche gloutonne**, de façon très similaire à la construction d'un arbre CART (voir section @sec-CART): on divise les données d'entraînement en sous-régions de plus en plus petites, tant que cela génère une réduction "suffisante" de la fonction de perte. Une différence notable avec les arbres CART et les forêts aléatoires est que les arbres utilisés dans le _gradient boosting_ sont souvent relativement simples et peu profonds. Ainsi, le partitionnement récursif des données s'arrête généralement assez tôt, soit lorsqu'est atteinte une des limites de complexité définies _a priori_ (**profondeur maximale** de l'arbre, **nombre maximal de feuilles**, **nombre minimal d'observations par feuille terminale**), soit lorsque l'algorithme ne parvient plus à trouver de partitionnement intéressant (c'est-à-dire qui permette de réduire suffisamment la perte).
 
 <!-- 
 : on divise les données d'entraînement en sous-régions de plus en plus petites, tant que cela génère une réduction "suffisante" de la fonction de perte. Cette approche peut être résumée ainsi:
@@ -163,7 +163,7 @@ Les paragraphes qui suivent détaillent le processus de construction du $t$-ièm
 
 On souhaite construire le $t$-ième arbre qui minimise la perte, conditionnellement aux données et aux $t-1$ arbres déjà construits. Formellement on cherche la fonction $f_t$ telle que
 
-$\hat{f}_t = \arg\min_{f} L^{(t)} = \arg\min_{f} \sum_{i=1}^n \ell\left(y_i,\;\hat{y}_i^{(t-1)} + f_t(x_i)\right) + \sum_k \Omega(f_{k})$
+$$ \hat{f}_t = \arg\min_{f} L^{(t)} = \arg\min_{f} \sum_{i=1}^n \ell\left(y_i,\;\hat{y}_i^{(t-1)} + f_t(x_i)\right) + \sum_k \Omega(f_{k}) $$
 
 Pour simplifier la construction de ce $t$-ième arbre, `XGBoost` utilise une **approximation de second ordre** de la fonction de perte $L^{(t)}$. Plus précisément, on fait un développement limité d'ordre 2 de $l(y_i, \hat{y}_{i}^{(t-1)} + f_{t}(\mathbf{x}_i))$ au voisinage de $\hat{y}_{i}^{(t-1)}$, en considérant que la prédiction du $t$-ième arbre $f_{t}(\mathbf{x}_i)$ est un incrément de petite taille:
 
