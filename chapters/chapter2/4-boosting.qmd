@@ -70,7 +70,7 @@ La *Gradient Boosting Machine* (GBM) propose une approche assez différente: ell
 
 -   La qualité du modèle final est évaluée sur un ensemble de test.
 
-L'approche de *gradient boosting* proposée par @friedman2001greedy présente deux grands avantages. D'une part, __toute la mécanique du _gradient boosting_ est indépendante de la fonction de perte choisie et de la nature du problème modélisé__. Autrement dit, cette approche peut être utilisée avec n'importe quelle fonction de perte différentiable, ce qui permet d'appliquer le _gradient boosting_ à de multiples problèmes (régression, classification binaire ou multiclasse, *learning-to-rank*...). D'autre part, __le *gradient boosting* offre souvent des performances comparables ou supérieures aux autres approches de *boosting*__. Le *gradient boosting* d'arbres de décision (*Gradient boosted Decision Trees* - GBDT) est donc devenue l'approche de référence en matière de *boosting*: toutes les implémentations modernes du *gradient boosting* comme `scikit-learn`, `XGBoost`, `LightGBM`, et `CatBoost` sont des extensions et améliorations de la *Gradient Boosting Machine*.
+L'approche de *gradient boosting* proposée par @friedman2001greedy présente deux grands avantages. D'une part, __toute la mécanique du _gradient boosting_ est indépendante de la fonction de perte choisie et de la nature du problème modélisé__. Cette approche peut donc être utilisée avec n'importe quelle fonction de perte différentiable, ce qui permet d'appliquer le _gradient boosting_ à de multiples problèmes (régression, classification binaire ou multiclasse, *learning-to-rank*...). D'autre part, __le *gradient boosting* offre souvent des performances comparables ou supérieures aux autres approches de *boosting*__. Le *gradient boosting* d'arbres de décision (*Gradient boosted Decision Trees* - GBDT) est donc devenue l'approche de référence en matière de *boosting*: toutes les implémentations modernes du *gradient boosting* comme `scikit-learn`, `XGBoost`, `LightGBM`, et `CatBoost` sont des extensions et améliorations de la *Gradient Boosting Machine*.
 
 
 ::: { .callout-note}
@@ -92,7 +92,7 @@ Procédure de construction du modèle:
     (b) Entraîner le $m$-ième _weak learner_: on cherche l'arbre $f_m$ qui prédit le mieux l'opposé du gradient de la fonction de perte:
     $\mathbf{\hat{f}_m} = \underset{f_m}{\arg \min} \sum_{i=1}^n \left(- g_{im} - f_m\left(\mathbf{x}_i\right)\right)^2$
 
-    (c) Mettre à jour le modèle global: $F_m\left(\mathbf{x_i}\right) = F_{m-1}\left(\mathbf{x_i}\right) + \rho f_m\left(\mathbf{x}_i\right)$ avec $\rho$ le taux d'apprentissage (_learning rate_) dont la raison d'être est présentée dans la section @sec-overfitting-gb. 
+    (c) Mettre à jour le modèle global: $F_m\left(\mathbf{x}_i\right) = F_{m-1}\left(\mathbf{x}_i\right) + \rho f_m\left(\mathbf{x}_i\right)$ avec $\rho$ le taux d'apprentissage (_learning rate_) dont la raison d'être est présentée dans la section @sec-overfitting-gb. 
 
 :::
 
