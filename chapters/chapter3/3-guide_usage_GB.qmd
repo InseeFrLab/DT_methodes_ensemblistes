@@ -1,10 +1,10 @@
 # Guide d'usage du _gradient boosting_ {#sec-guide-gb}
 
-Ce guide propose des recommandations sur l'usage des algorithmes de _gradient boosting_ disponibles dans la littérature, notamment @bentejac2021comparative et @probst2019tunability. Contrairement aux forêts aléatoires, la littérature méthodologique sur l'usages des algorithmes de _gradient boosting_ est assez limitée et relativement peu conclusive. Ce guide comporte un certain nombre de choix méthodologiques forts, comme les implémentations recommandées ou la procédure d'optimisation des hyperparamètres, et d'autres choix pertinents sont évidemment possibles. C'est pourquoi les recommandations de ce guide doivent être considérées comme un point de départ raisonnable, pas comme un ensemble de règles devant être respectées à tout prix.
+Ce guide propose des recommandations sur l'usage des algorithmes de _gradient boosting_ disponibles dans la littérature, notamment @bentejac2021comparative et @probst2019tunability. Contrairement aux forêts aléatoires, la littérature méthodologique sur l'usages des algorithmes de _gradient boosting_ est assez limitée et relativement peu conclusive. Ce guide comporte un certain nombre de choix méthodologiques forts, comme les implémentations recommandées ou la procédure d'optimisation des hyperparamètres, et d'autres choix pertinents sont évidemment possibles. C'est pourquoi __les recommandations de ce guide doivent être considérées comme un point de départ raisonnable, pas comme un ensemble de règles devant être respectées à tout prix__.
 
 ## Quelle implémentation utiliser? {#sec-implementation-gb}
 
-Il existe quatre implémentations du _gradient boosting_: `XGBoost`, `LightGBM`, `CatBoost` et `scikit-learn`. Elles sont toutes des variantes optimisées de l'algorithme de @friedman2001greedy et ne diffèrent que sur des points mineurs. De multiples publications les ont comparées, à la fois en matière de pouvoir prédictif et de rapidité d'entraînement (voir notamment @bentejac2021comparative, @alshari2021comparison et @florek2023benchmarking). Cette littérature a abouti à trois conclusions. Premièrement, les différentes implémentations présentent des performances très proches (le classement exact variant d'une publication à l'autre). Deuxièmement, bien optimiser les hyperparamètres est nettement plus important que le choix de l'implémentation. Troisièmement, le temps d'entraînement varie beaucoup d'une implémentation à l'autre, et `LightGBM` est sensiblement plus rapide que les autres. Dans la mesure où l'optimisation des hyperparamètres est une étape à la fois essentielle et intense en calcul, l'efficacité computationnelle apparaît comme un critère majeur de choix de l'implémentation. C'est pourquoi __le présent document décrit et recommande l'usage de `LightGBM`__. Ceci étant, les trois autres implémentations peuvent également être utilisées, notamment si les données sont de taille limitée.
+Il existe quatre implémentations principales du _gradient boosting_: `XGBoost`, `LightGBM`, `CatBoost` et `scikit-learn`. Elles sont toutes des variantes optimisées de l'algorithme de @friedman2001greedy et ne diffèrent que sur des points mineurs. De multiples publications les ont comparées, à la fois en matière de pouvoir prédictif et de rapidité d'entraînement (voir notamment @bentejac2021comparative, @alshari2021comparison et @florek2023benchmarking). Cette littérature a abouti à trois conclusions. Premièrement, les différentes implémentations présentent des performances très proches (le classement exact variant d'une publication à l'autre). Deuxièmement, bien optimiser les hyperparamètres est nettement plus important que le choix de l'implémentation. Troisièmement, le temps d'entraînement varie beaucoup d'une implémentation à l'autre, et `LightGBM` est sensiblement plus rapide que les autres. Dans la mesure où l'optimisation des hyperparamètres est une étape à la fois essentielle et intense en calcul, l'efficacité computationnelle apparaît comme un critère majeur de choix de l'implémentation. C'est pourquoi __le présent document décrit et recommande l'usage de `LightGBM`__. Ceci étant, les trois autres implémentations peuvent également être utilisées, notamment si les données sont de taille limitée.
 
 Par ailleurs, chacune de ces implémentations propose une interface de haut niveau compatible avec `scikit-learn`. __Il est vivement recommandé d'utiliser cette interface car elle minimise les risques d'erreur, facilite la construction de modèles reproductibles et permet d'utiliser l'ensemble des outils proposés par `scikit-learn`.__
 
@@ -42,6 +42,45 @@ Cette section décrit en détail les principaux hyperparamètres des algorithmes
 
 :::
 
+
+::: {.content-visible when-format="typst"}
+
+
+```{=typst}
+
+
+#figure(
+  table(
+    columns: (35fr, 50fr, 15fr),
+    align: (left + horizon, left + horizon, center + horizon),
+    table.header(
+      [Hyperparamètre], [Description], [Valeur par défaut]
+    ),
+    [`objective`],                            [Fonction de perte utilisée],                                                                                [Variable],
+    [`n_estimators` ou `num_trees`],          [Nombre d'arbres],                                                                                           [100],
+    [`learning_rate` ou `eta`],               [Taux d'apprentissage],                                                                                      [0.1],
+    [`max_depth`],                            [Profondeur maximale des arbres],                                                                            [Pas de limite],
+    [`num_leaves`],                           [Nombre de feuilles terminales des arbres],                                                                  [31],
+    [`min_child_samples`],                    [Nombre minimal d'observations qu'une feuille terminale doit contenir],                                      [20],
+    [`min_child_weight`],                     [Poids minimal qu'une feuille terminale doit contenir],                                                      [0.001],
+    [`lambda` ou `lambda_l2`],                [Pénalisation quadratique sur la valeur des feuilles terminales],                                            [0],
+    [`reg_alpha` ou `lambda_l1`],             [Pénalisation absolue (L1) sur la valeur des feuilles terminales],                                           [0],
+    [`min_split_gain`],                       [Gain minimal nécessaire pour diviser un noeud],                                                             [0],
+    [`bagging_fraction`],                     [Taux d'échantillonnage des données d'entraînement (utilisé uniquement si `bagging_freq` > 0)],             [1],
+    [`bagging_freq`],                         [Fréquence de rééchantillonnage des données d'entraînement (utilisé uniquement si `bagging_fraction` < 1)],  [1],
+    [`feature_fraction`],                     [Taux d'échantillonnage des colonnes par arbre],                                                             [1],
+    [`feature_fraction_bynode`],              [Taux d'échantillonnage des colonnes par noeud],                                                             [1],
+    [`max_bin`],                              [Nombre de _bins_ utilisés pour discrétiser les variables continues],                                        [255],
+    [`max_cat_to_onehot`],                    [Nombre de modalités en-deça duquel `LightGBM` utilise le _one-hot-encoding_],                              [4],
+    [`max_cat_threshold`],                    [Nombre maximal de _splits_ considérés dans le traitement des variables catégorielles],                      [32],
+    [`sample_weight`],                        [Pondération des observations dans les données d'entraînement],                                              [1],
+    [`scale_pos_weight`],                     [Poids des observations de la classe positive (classification binaire uniquement)],                          [Aucun],
+    [`class_weight`],                         [Poids des observations de chaque classe (classification multiclasse uniquement)],                           [Aucun],
+  ),
+  caption: [Les principaux hyperparamètres de `LightGBM`],
+) <tbl-hyp-lightgbm>
+```
+:::
 
 ::: {.callout-warning title="Attention aux alias!"}
 
@@ -94,7 +133,7 @@ Voici une présentation des principaux hyperparamètres et de leurs effets sur l
     - la pondération des observations sert à pondérer les données d'entraînement (voir PARTIE USAGE AVANCE).
 
     - le poids des observations de la classe positive sert à rééquilibrer les données d'entraînement lorsque la classe positive est sous-représentée. Cet hyperparamètre ne sert que pour la classification binaire. Par défaut les deux classes ont le même poids.
-    
+
     - le poids des observations de chaque classe sert à rééquilibrer les données d'entraînement lorsque la part des différentes classes est hétérogène. Cet hyperparamètre ne sert que pour la classification binaire multiclasse. Par défaut toutes les classes ont le même poids.
 
 
