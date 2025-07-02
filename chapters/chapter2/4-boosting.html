@@ -490,7 +490,11 @@ Optimisations des algorithmes
 </section>
 <section id="un-exemple-simple-la-régression-avec-perte-quadratique" class="level3" data-number="1.4">
 <h3 data-number="1.4" class="anchored" data-anchor-id="un-exemple-simple-la-régression-avec-perte-quadratique"><span class="header-section-number">1.4</span> Un exemple simple: la régression avec perte quadratique</h3>
-<p>La partie qui précède peut donner l’impression que la mécanique du <em>gradient boosting</em> est très complexe et difficile à comprendre. L’exemple qui suit permet de mieux saisir cette mécanique en se ramenant à une situation intuitive. On se place dans le cas d’un problème de régression, avec une perte quadratique: $ (y,;) = (y - )^2 $ et sans terme de régularisation.</p>
+<p>La partie qui précède peut donner l’impression que la mécanique du <em>gradient boosting</em> est très complexe et difficile à comprendre. L’exemple qui suit permet de mieux saisir cette mécanique en se ramenant à une situation intuitive.</p>
+<p>On se place dans le cas d’un problème de régression, avec une perte quadratique: $ (y,;) = (y - )^2 $ et sans terme de régularisation. Dans ce cas particulier, le gradient de la fonction de perte est égal au résidu <span class="math inline">\(y-\hat{y}\)</span>, et la hessienne de la fonction de perte est égale à 1. L’équation <a href="#eq-fct-obj-final" class="quarto-xref">3</a> qui donne la fonction-objectif devient:</p>
+<p><span id="eq-fct-obj-final-exemple"><span class="math display">\[
+\tilde{\mathcal{L}}^{(t)} = \sum_{i=1}^{n} [\left(y-\hat{y}\right) f_t(\mathbf{x}_i)+ \frac{1}{2}]
+\tag{8}\]</span></span></p>
 <p>Dans ce cas, le gradient de la fonction de perte coïncide avec le résidu <span class="math inline">\(y-\hat{y}\)</span>.</p>
 <p>Expliciter la formule de <span class="math inline">\(w_i\)</span>, et donner l’intuition de lambda.</p>
 <p>METTRE LA FIGURE COMPLIQUEE avec les résidus.</p>
