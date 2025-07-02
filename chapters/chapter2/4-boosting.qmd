@@ -241,11 +241,11 @@ La méthode de construction des arbres dans les algorithmes de _gradient boostin
 
 La grande différence avec les arbres CART et les forêts aléatoires est que ces algorithmes utilisent l'équation @eq-fct-obj-optimal (et non une mesure d'impureté) pour évaluer les règles de décision candidates. Plus précisément, à partir de l'équation @eq-fct-obj-optimal la réduction de perte associée au partitionnement de la feuille $I$ en deux noeuds-enfants gauche ($I_L$) et droit ($I_R$) à l'aide d'une certaine règle de décision s'écrit comme:
 $$
-\Delta \tilde{L}^{(t)} = \tfrac12 \bigl[
+\Delta \tilde{L}^{(t)} = \tfrac12 \biggl[
     \underbrace{\frac{\bigl(\sum_{i \in I_L} g_i\bigr)^2}{\sum_{i \in I_L} h_i + \lambda}}_{\text{Perte du noeud-enfant gauche}} + 
     \underbrace{\frac{\bigl(\sum_{i \in I_R} g_i\bigr)^2}{\sum_{i \in I_R} h_i + \lambda}}_{\text{Perte du noeud-enfant droit}} - 
     \underbrace{\frac{\bigl(\sum_{i \in I} g_i\bigr)^2}{\sum_{i \in I} h_i + \lambda}}_{\text{Perte du noeud d'origine}}
-\bigr]
+\biggr]
 - \gamma
 $$ {#eq-fct-eval-split}
 
