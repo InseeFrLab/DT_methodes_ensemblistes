@@ -342,8 +342,8 @@ Présentation formelle de la <em>Gradient Boosting Machine</em>
 <li><p>Pour <span class="math inline">\(m = 1, \dots, M:\)</span></p>
 <ol type="a">
 <li><p>Calculer le gradient (les pseudo-résidus) à l’issue des <span class="math inline">\(m-1\)</span> étapes précédentes: <span class="math inline">\(g_{im} = \frac{\partial l(y_i, F_{m-1}\left(\mathbf{x}\right))}{\partial F_{m-1}\left(\mathbf{x}\right)}\)</span></p></li>
-<li><p>Entraîner le <span class="math inline">\(m\)</span>-ième <em>weak learner</em>: on cherche l’arbre <span class="math inline">\(f_m\)</span> qui prédit le mieux l’opposé du gradient de la fonction de perte: <span class="math inline">\(\mathbf{\hat{f}_m} = \underset{f_m}{\arg \min} \sum_{i=1}^n \left(- g_{im} - f_m\left(\mathbf{x}_i, \mathbf{a}\right)^2\)</span></p></li>
-<li><p>Mettre à jour le modèle global: <span class="math inline">\(F_m\left(\mathbf{x}\right) = F_{m-1}\left(\mathbf{x}\right) + \rho f_m\left(\mathbf{x}_i, \mathbf{\hat{a}_m}\right)\)</span> avec <span class="math inline">\(\rho\)</span> le taux d’apprentissage (<em>learning rate</em>) dont la raison d’être est présentée dans la section <a href="#sec-overfitting-gb" class="quarto-xref">Section&nbsp;1.4</a>.</p></li>
+<li><p>Entraîner le <span class="math inline">\(m\)</span>-ième <em>weak learner</em>: on cherche l’arbre <span class="math inline">\(f_m\)</span> qui prédit le mieux l’opposé du gradient de la fonction de perte: <span class="math inline">\(\mathbf{\hat{f}_m} = \underset{f_m}{\arg \min} \sum_{i=1}^n \left(- g_{im} - f_m\left(\mathbf{x}_i\right)\right)^2\)</span></p></li>
+<li><p>Mettre à jour le modèle global: <span class="math inline">\(F_m\left(\mathbf{x_i}\right) = F_{m-1}\left(\mathbf{x_i}\right) + \rho f_m\left(\mathbf{x}_i\right)\)</span> avec <span class="math inline">\(\rho\)</span> le taux d’apprentissage (<em>learning rate</em>) dont la raison d’être est présentée dans la section <a href="#sec-overfitting-gb" class="quarto-xref">Section&nbsp;1.4</a>.</p></li>
 </ol></li>
 </ol>
 </div>
