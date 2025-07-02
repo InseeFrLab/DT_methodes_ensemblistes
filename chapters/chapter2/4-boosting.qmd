@@ -273,18 +273,25 @@ Il est alors possible de commencer l'entraînement de l'arbre suivant, selon la 
 
 ### Un exemple simple: la régression avec perte quadratique
 
-La partie qui précède peut donner l'impression que la mécanique du _gradient boosting_ est très complexe et difficile à comprendre. L'exemple qui suit permet de mieux saisir cette mécanique en se ramenant à une situation intuitive. 
-
-On se place dans le cas d'un problème de régression, avec une perte quadratique: $ \ell\left(y,\;\hat{y}\right) = \frac{1}{2} \left(y - \hat{y})^2 $ et sans terme de régularisation. Dans ce cas particulier, le gradient de la fonction de perte est égal au résidu $y-\hat{y}$, et la hessienne de la fonction de perte est égale à 1. L'équation @eq-fct-obj-final qui donne la fonction-objectif devient: 
+La présentation qui précède peut donner l'impression que la mécanique du _gradient boosting_ est complexe, abstraite et difficile à comprendre. Celle-ci devient beaucoup plus facile à saisir lorsqu'on l'illustre dans un cas simple et intuitif. Prenons ainsi un problème de régression, où l’on cherche à prédire une variable continue, avec une perte quadratique: $ \ell\left(y,\;\hat{y}\right) = \frac{1}{2} \left(y - \hat{y})^2 $ et sans terme de régularisation. Dans ce contexte, l'équation @eq-w-j-optimal qui donne le poids optimal de la feuille $j$ devient:
 
 $$ 
-\tilde{\mathcal{L}}^{(t)} = \sum_{i=1}^{n} [\left(y-\hat{y}\right) f_t(\mathbf{x}_i)+ \frac{1}{2}]
-$$ {#eq-fct-obj-final-exemple}
+w_j^{\ast} = \frac{\sum_{i \in I_j} y-\hat{y}}{|I_j|} 
+$$ {#eq-w-j-optimal-exemple}
+
+où $I_j$ désigne le nombre d'observations dans la feuille $j$. Ce résultat est particulièrement intuitif : la prédiction de l'arbre pour chaque feuille terminale est égale à la moyenne des résidus (erreurs) des observations qui s'y trouvent. Ainsi, à chaque étape, le modèle se corrige de façon additive, en s'appuyant sur les erreurs précédentes, jusqu'à ce que ces erreurs deviennent aussi faibles que possible. 
+
+Cet exemple simple illustre bien la démarche du _gradient boosting_ : améliorer progressivement la qualité des prédictions en corrigeant les erreurs résiduelles, chaque nouvel arbre tâchant de capter ce que les arbres précédents n'ont pas bien appris. Par ailleurs, elle permet de comprendre pourquoi le gradient de la fonction de perte est fréquemment désigné par le terme de _pseudo-résidu_.
 
 
-Dans ce cas, le gradient de la fonction de perte coïncide avec le résidu $y-\hat{y}$.
+<!-- L'équation @eq-fct-obj-final qui donne la fonction-objectif devient: 
 
-Expliciter la formule de $w_i$, et donner l'intuition de lambda.
+$$ 
+\tilde{\mathcal{L}}^{(t)} = \sum_{i=1}^{n} [\left(\hat{y}-y\right) f_t(\mathbf{x}_i)+ \frac{1}{2}f_t(\mathbf{x}_i)^2]
+$$ {#eq-fct-obj-final-exemple} -->
+
+
+
 
 METTRE LA FIGURE COMPLIQUEE avec les résidus.
 
