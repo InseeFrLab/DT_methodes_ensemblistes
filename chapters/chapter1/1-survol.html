@@ -371,21 +371,29 @@ Les familles de méthodes ensemblistes
 <li><p><strong>Entraînement parallèle</strong>: Un arbre est entraîné sur chaque sous-échantillon de manière indépendante. Ces arbres sont habituellement assez complexes et profonds.</p></li>
 <li><p><strong>Agrégation des prédictions</strong>: Les prédictions des modèles sont combinées pour produire le résultat final. En classification, la prédiction finale est souvent déterminée par un vote majoritaire, tandis qu’en régression, elle correspond généralement à la moyenne des prédictions.</p></li>
 </ul>
-<div id="fig-bagging" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-bagging-survol" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-bagging-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div aria-describedby="fig-bagging-survol-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="../../figures/bagging.svg" class="img-fluid figure-img">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bagging-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bagging-survol-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1: Représentation schématique d’un algorithme de <em>bagging</em>
 </figcaption>
 </figure>
 </div>
-<p>La <a href="#fig-bagging" class="quarto-xref">1</a> propose une représentation schématique du <em>bagging</em>: d’abord, des sous-échantillons sont générés aléatoires avec remise à partir du jeu de données d’entraînement. Ensuite, des arbres de décision sont entraînés indépendamment sur ces sous-échantillons. Enfin, leurs prédictions sont agrégées pour obtenir les prédictions finales. On procède généralement au vote majoritaire (la classe prédite majoritairement par les arbres) dans un problème de classification, et à la moyenne dans un problème de régression.</p>
+<p>La <a href="#fig-bagging-survol" class="quarto-xref">1</a> propose une représentation schématique du <em>bagging</em>: d’abord, des sous-échantillons sont générés aléatoires avec remise à partir du jeu de données d’entraînement. Ensuite, des arbres de décision sont entraînés indépendamment sur ces sous-échantillons. Enfin, leurs prédictions sont agrégées pour obtenir les prédictions finales. On procède généralement au vote majoritaire (la classe prédite majoritairement par les arbres) dans un problème de classification, et à la moyenne dans un problème de régression.</p>
 <p>L’efficacité du <em>bagging</em> provient de la réduction de la variance qui est permise par l’agrégation des prédictions. Chaque arbre est entraîné sur un sous-échantillon légèrement différent, sujet à des fluctuations aléatoires. L’agrégation des prédictions (par moyenne ou vote majoritaire) de tous les arbres réduit la sensibilité du modèle final aux fluctuations des données d’entraînement. Le modèle final est ainsi plus robuste et plus précis que chacun des arbres pris individuellement.</p>
-<ul>
-<li>Illustration avec un cas d’usage de classification en deux dimensions.</li>
-</ul>
+<div id="fig-bagging-1d-survol" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-bagging-1d-survol-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../../figures/single_trees_clean_rf.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bagging-1d-survol-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Illustration d’un algorithme de <em>bagging</em> en une dimension
+</figcaption>
+</figure>
+</div>
+<p>La figure <a href="#fig-bagging-1d-survol" class="quarto-xref">2</a> illustre le fonctionnement du <em>bagging</em> sur un exemple simple en une dimension. On peut lire sur le panneau du haut la prédiction de chacun des quatre premiers arbres du modèle. Sur le panneau du bas est représentée la prédiction du modèle complet, qui comprend un seul arbre pour la figure la plus à gauche, et quatre arbres pour la figure la plus à droite. Cette figure permet de constater trois caractéristiques du <em>bagging</em>: chaque arbre est un modèle à part entière, chaque arbre produit une prédiction proche mais différente de celles des autres arbres, et l’agrégation de ces différentes prédictions permet d’améliorer les performances prédictives du modèle d’ensemble.</p>
 <p>Malgré ses avantages, le <em>bagging</em> souffre d’une limite importante qui provient de la <strong>corrélation entre les arbres</strong>. En effet, malgré le tirage aléatoire des sous-échantillons, les arbres présentent souvent des structures similaires, car les règles de décision sous-jacentes restent généralement assez proches. Cette corrélation réduit l’efficacité de l’agrégation et limite les gains en performance.</p>
 <p>Pour réduire cette corrélation entre arbres, les forêts aléatoires introduisent une étape supplémentaire de randomisation. Leur supériorité prédictive explique pourquoi le <em>bagging</em> seul est rarement utilisé en pratique. Néanmoins, les forêts aléatoires tirent leur efficacité des principes fondamentaux du <em>bagging</em>.</p>
 </section>
@@ -399,11 +407,11 @@ Figure&nbsp;1: Représentation schématique d’un algorithme de <em>bagging</em
 <img src="../../figures/rf.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rf-survol-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: Représentation schématique d’un algorithme de forêt aléatoire
+Figure&nbsp;3: Représentation schématique d’un algorithme de forêt aléatoire
 </figcaption>
 </figure>
 </div>
-<p>La figure <a href="#fig-rf-survol" class="quarto-xref">2</a> propose une représentation schématique d’une forêt aléatoire. La logique d’ensemble reste la même que celle du <em>bagging</em>. L’échantillonnage <em>bootstrap</em> est inchangé, mais l’étape de construction de chaque arbre est modifiée pour n’utiliser, à chaque nouvelle division, qu’un sous-ensemble aléatoire de variables. L’agrégation des prédictions se fait ensuite de la même manière que pour le <em>bagging</em>.</p>
+<p>La figure <a href="#fig-rf-survol" class="quarto-xref">3</a> propose une représentation schématique d’une forêt aléatoire. La logique d’ensemble reste la même que celle du <em>bagging</em>. L’échantillonnage <em>bootstrap</em> est inchangé, mais l’étape de construction de chaque arbre est modifiée pour n’utiliser, à chaque nouvelle division, qu’un sous-ensemble aléatoire de variables. L’agrégation des prédictions se fait ensuite de la même manière que pour le <em>bagging</em>.</p>
 <!--Cette restriction de la liste des variables considérées permet de réduire l'utilisation des variables les plus prédictives et de mieux mobiliser l'information disponible dans les variables peu corrélées avec $y$.-->
 <p>Le principal enjeu de l’entraînement d’une forêt aléatoire est de trouver le bon arbitrage entre puissance prédictive des arbres individuels (que l’on souhaite maximiser) et corrélation entre les arbres (que l’on souhaite minimiser). L’optimisation des hyper-paramètres des forêts aléatoires (dont le plus important est le nombre de variables sélectionnées à chaque noeud) vise précisément à choisir le meilleur compromis possible entre pouvoir prédictif invividuel et diversité des arbres.</p>
 <p>Les forêts aléatoires sont très populaires car elles sont faciles à implémenter, peu sensibles aux hyperparamètres (elles fonctionnent bien avec les valeurs par défaut de la plupart des implémentations proposées en <code>R</code> ou en Python), et offrent de très bonnes performances dans de nombreux cas. Cependant, comme toute méthode d’apprentissage automatique, elles restent sujettes au surapprentissage (voir encadré), bien que dans une moindre mesure par rapport à d’autres techniques comme le <em>gradient boosting</em>.</p>
@@ -428,23 +436,34 @@ Qu’est-ce que le surapprentissage?
 <section id="sec-gb-intuition" class="level3" data-number="1.3.3">
 <h3 data-number="1.3.3" class="anchored" data-anchor-id="sec-gb-intuition"><span class="header-section-number">1.3.3</span> Le <em>gradient boosting</em></h3>
 <p>Contrairement aux forêts aléatoires qui combinent des arbres de décision complexes et indépendants, le <em>gradient boosting</em> construit un ensemble d’arbres plus simples et entraînés de manière séquentielle. Chaque arbre vise à corriger les erreurs commises par les arbres précédents, améliorant progressivement la précision du modèle global. Cette approche repose sur des fondements théoriques très différents de ceux du <em>bagging</em>.</p>
-<p>La logique du <em>gradient boosting</em> est illustrée par la figure <a href="#fig-gb-survol" class="quarto-xref">3</a>:</p>
 <div id="fig-gb-survol" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-gb-survol-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="../../figures/gb.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gb-survol-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3: Représentation schématique d’un algorithme de <em>gradient boosting</em>
+Figure&nbsp;4: Représentation schématique d’un algorithme de <em>gradient boosting</em>
 </figcaption>
 </figure>
 </div>
+<p>La logique du <em>gradient boosting</em> est illustrée par la figure <a href="#fig-gb-survol" class="quarto-xref">4</a>:</p>
 <ul>
-<li>Un premier modèle simple et peu performant est entraîné sur les données.</li>
-<li>Un deuxième modèle est entraîné de façon à corriger les erreurs du premier modèle (par exemple en pondérant davantage les observations mal prédites);</li>
-<li>Ce processus est répété en ajoutant des modèles simples, chaque modèle corrigeant les erreurs commises par l’ensemble des modèles précédents;</li>
-<li>Tous ces modèles sont finalement combinés (souvent par une somme pondérée) pour obtenir un modèle complexe et performant.</li>
+<li><p>Un premier modèle simple et peu performant est entraîné sur les données.</p></li>
+<li><p>Un deuxième modèle est entraîné de façon à corriger les erreurs du premier modèle (par exemple en pondérant davantage les observations mal prédites);</p></li>
+<li><p>Ce processus est répété en ajoutant des modèles simples, chaque modèle corrigeant les erreurs commises par l’ensemble des modèles précédents;</p></li>
+<li><p>Tous ces modèles sont finalement combinés (souvent par une somme pondérée) pour obtenir un modèle complexe et performant.</p></li>
 </ul>
+<div id="fig-boosting-1d-survol" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-boosting-1d-survol-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../../figures/single_trees_clean_gb.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-boosting-1d-survol-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Illustration d’un algorithme de <em>boosting</em> en une dimension
+</figcaption>
+</figure>
+</div>
+<p>La figure <a href="#fig-boosting-1d-survol" class="quarto-xref">5</a> illustre le fonctionnement du <em>boosting</em> sur un exemple simple en une dimension. On peut lire sur le panneau du haut la prédiction de chacun des quatre premiers arbres du modèle. Sur le panneau du bas est représentée la prédiction du modèle complet, qui comprend un seul arbre pour la figure la plus à gauche, et quatre arbres pour la figure la plus à droite. Cette figure permet de constater trois caractéristiques du <em>boosting</em>: chaque arbre n’est pas interprétable en lui-même car il dépend des arbres précédents, chaque arbre produit une prédiction qui tâche de corriger les erreurs de l’ensemble des arbres précédents, et l’agrégation de ces différentes prédictions permet d’obtenir un modèle très performant, qui reflète précisément les données sur lesquelles il est entraîné.</p>
 <p>Le <em>gradient boosting</em> offre des performances élevées mais exige une attention particulière portée sur la configuration des hyperparamètres et sur la prévention du surapprentissage. En particulier, les hyperparamètres sont nombreux et, contrairement aux forêts aléatoires, nécessitent un ajustement minutieux pour obtenir des résultats optimaux. Une mauvaise configuration peut conduire à des performances médiocres ou à un surapprentissage. L’utilisation du <em>gradient boosting</em> nécessite donc une bonne connaissance du fonctionnement des algorithmes. En outre, les algorithmes de <em>gradient boosting</em> peuvent être sensibles au bruit dans les données et aux erreurs dans la variable cible. Un prétraitement rigoureux des données est donc essentiel. Enfin, une validation rigoureuse sur un jeu de données de test indépendant (non utilisé pendant l’entraînement) est indispensable pour évaluer la qualité du modèle obtenu par <em>gradient boosting</em>.</p>
 </section>
 </section>
