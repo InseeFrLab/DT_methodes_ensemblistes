@@ -104,14 +104,17 @@ Le _bagging_ offre deux avantages majeurs par rapport aux arbres de décision CA
 
 - __Agrégation des prédictions__: Les prédictions des modèles sont combinées pour produire le résultat final. En classification, la prédiction finale est souvent déterminée par un vote majoritaire, tandis qu'en régression, elle correspond généralement à la moyenne des prédictions.
 
-![Représentation schématique d'un algorithme de _bagging_](/figures/bagging.svg){#fig-bagging}
+![Représentation schématique d'un algorithme de _bagging_](/figures/bagging.svg){#fig-bagging-survol}
 
-La @fig-bagging propose une représentation schématique du _bagging_: d'abord, des sous-échantillons sont générés aléatoires avec remise à partir du jeu de données d'entraînement. Ensuite, des arbres de décision sont entraînés indépendamment sur ces sous-échantillons. Enfin, leurs prédictions sont agrégées pour obtenir les prédictions finales. On procède généralement au vote majoritaire (la classe prédite majoritairement par les arbres) dans un problème de classification, et à la moyenne dans un problème de régression. 
+La @fig-bagging-survol propose une représentation schématique du _bagging_: d'abord, des sous-échantillons sont générés aléatoires avec remise à partir du jeu de données d'entraînement. Ensuite, des arbres de décision sont entraînés indépendamment sur ces sous-échantillons. Enfin, leurs prédictions sont agrégées pour obtenir les prédictions finales. On procède généralement au vote majoritaire (la classe prédite majoritairement par les arbres) dans un problème de classification, et à la moyenne dans un problème de régression. 
 
 L'efficacité du _bagging_ provient de la réduction de la variance qui est permise par l'agrégation des prédictions. Chaque arbre est entraîné sur un sous-échantillon légèrement différent, sujet à des fluctuations aléatoires. L'agrégation des prédictions (par moyenne ou vote majoritaire) de tous les arbres réduit la sensibilité du modèle final aux fluctuations des données d'entraînement. Le modèle final est ainsi plus robuste et plus précis que chacun des arbres pris individuellement.
 
+![Illustration d'un algorithme de _bagging_ en une dimension](/figures/single_trees_clean_rf.png){#fig-bagging-1d-survol}
 
-- Illustration avec un cas d'usage de classification en deux dimensions.
+La figure @fig-bagging-1d-survol illustre le fonctionnement du _bagging_ sur un exemple simple en une dimension. On peut lire sur le panneau du haut la prédiction de chacun des quatre premiers arbres du modèle. Sur le panneau du bas est représentée la prédiction du modèle complet, qui comprend un seul arbre pour la figure la plus à gauche, et quatre arbres pour la figure la plus à droite. Cette figure permet de constater trois caractéristiques du _bagging_: chaque arbre est un modèle à part entière, chaque arbre produit une prédiction proche mais différente de celles des autres arbres, et l'agrégation de ces différentes prédictions permet d'améliorer les performances prédictives du modèle d'ensemble.
+
+
 
 Malgré ses avantages, le _bagging_ souffre d'une limite importante qui provient de la **corrélation entre les arbres**. En effet, malgré le tirage aléatoire des sous-échantillons, les arbres présentent souvent des structures similaires, car les règles de décision sous-jacentes restent généralement assez proches. Cette corrélation réduit l'efficacité de l'agrégation et limite les gains en performance.
 
@@ -154,15 +157,21 @@ Le surapprentissage (_overfitting_) est un phénomène fréquent en _machine lea
 
 Contrairement aux forêts aléatoires qui combinent des arbres de décision complexes et indépendants, le _gradient boosting_ construit un ensemble d'arbres plus simples et entraînés de manière séquentielle. Chaque arbre vise à corriger les erreurs commises par les arbres précédents, améliorant progressivement la précision du modèle global. Cette approche repose sur des fondements théoriques très différents de ceux du _bagging_.
 
-La logique du *gradient boosting* est illustrée par la figure @fig-gb-survol:
-
 ![Représentation schématique d'un algorithme de _gradient boosting_](/figures/gb.svg){#fig-gb-survol}
 
+La logique du *gradient boosting* est illustrée par la figure @fig-gb-survol:
+
 -   Un premier modèle simple et peu performant est entraîné sur les données.
+
 -   Un deuxième modèle est entraîné de façon à corriger les erreurs du premier modèle (par exemple en pondérant davantage les observations mal prédites);
+
 -   Ce processus est répété en ajoutant des modèles simples, chaque modèle corrigeant les erreurs commises par l'ensemble des modèles précédents;
+
 -   Tous ces modèles sont finalement combinés (souvent par une somme pondérée) pour obtenir un modèle complexe et performant.
 
+![Illustration d'un algorithme de _boosting_ en une dimension](/figures/single_trees_clean_gb.png){#fig-boosting-1d-survol}
+
+La figure @fig-boosting-1d-survol illustre le fonctionnement du _boosting_ sur un exemple simple en une dimension. On peut lire sur le panneau du haut la prédiction de chacun des quatre premiers arbres du modèle. Sur le panneau du bas est représentée la prédiction du modèle complet, qui comprend un seul arbre pour la figure la plus à gauche, et quatre arbres pour la figure la plus à droite. Cette figure permet de constater trois caractéristiques du _boosting_: chaque arbre n'est pas interprétable en lui-même car il dépend des arbres précédents, chaque arbre produit une prédiction qui tâche de corriger les erreurs de l'ensemble des arbres précédents, et l'agrégation de ces différentes prédictions permet d'obtenir un modèle très performant, qui reflète précisément les données sur lesquelles il est entraîné.
 
 Le _gradient boosting_ offre des performances élevées mais exige une attention particulière portée sur la configuration des hyperparamètres et sur la prévention du surapprentissage. En particulier, les hyperparamètres sont nombreux et, contrairement aux forêts aléatoires, nécessitent un ajustement minutieux pour obtenir des résultats optimaux. Une mauvaise configuration peut conduire à des performances médiocres ou à un surapprentissage. L'utilisation du _gradient boosting_ nécessite donc une bonne connaissance du fonctionnement des algorithmes. En outre, les algorithmes de _gradient boosting_ peuvent être sensibles au bruit dans les données et aux erreurs dans la variable cible. Un prétraitement rigoureux des données est donc essentiel. Enfin, une validation rigoureuse sur un jeu de données de test indépendant (non utilisé pendant l'entraînement) est indispensable pour évaluer la qualité du modèle obtenu par _gradient boosting_. 
 
