@@ -1,5 +1,7 @@
 ## Sujets avancés: algorithmes {#sec-sujets-avances-algo}
 
+### Leaf-wise versus level-wise
+
 ### La classification multiclasse non-ordonnée
 
 Points d'attention:
