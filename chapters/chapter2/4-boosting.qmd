@@ -174,7 +174,7 @@ avec
 $$ g_i = \frac{\partial l(y_i, \hat{y}_i^{(t-1)})}{\partial\hat{y}_i^{(t-1)}} \;\;\text{et}\;\; h_i = \frac{\partial^2 l(y_i, \hat{y}_i^{(t-1)})}{{\partial \hat{y}_i^{(t-1)}}^2} $$
 
 
-Les termes $g_i$ et $h_i$ désignent respectivement la dérivée première (le gradient) et la dérivée seconde (la hessienne) de la fonction de perte par rapport à la variable prédite pour l'observation $i$ à l'issue de la $t-1$-ième étape de l'entraînement. Dans cette équation, les termes (A) et (B) sont constants car ils ne dépendent que des $t-1$ arbres précédents qui ont déjà été entraînés et qui ne sont pas modifiés par l'entraînement du $t$-ième arbre. <!-- Autrement dit, la seule façon d'améliorer le modèle sera de trouver un $t$-ième arbre $f_t$ qui minimise la fonction-objectif \mathcal{L}^{(t)} ainsi réécrite.  --> On peut donc retirer ces termes pour obtenir la fonction-objectif simplifiée $\tilde{L}^{(t)}$ qui sera utilisée pour l'entraînement du $t$-ième arbre:
+Les termes $g_i$ et $h_i$ désignent respectivement la dérivée première (le gradient) et la dérivée seconde (la hessienne) de la fonction de perte par rapport à la variable prédite pour l'observation $i$ à l'issue de la $t-1$-ième étape de l'entraînement. Dans cette équation, les termes (A) et (B) sont constants car ils ne dépendent que des $t-1$ arbres précédents qui ont déjà été entraînés et qui ne sont pas modifiés par l'entraînement du $t$-ième arbre. <!-- Autrement dit, la seule façon d'améliorer le modèle sera de trouver un $t$-ième arbre $f_t$ qui minimise la fonction-objectif \mathcal{L}^{(t)} ainsi réécrite.  --> On peut donc retirer ces termes pour obtenir la fonction-objectif simplifiée $\tilde{\mathcal{L}}^{(t)}$ qui sera utilisée pour l'entraînement du $t$-ième arbre:
 
 $$ \tilde{\mathcal{L}}^{(t)} = \sum_{i=1}^{n} [g_i f_t(\mathbf{x}_i)+ \frac{1}{2} h_i [f_t(\mathbf{x}_i)]^2] + \Omega(f_t) 
 $$ {#eq-fct-obj-final}
@@ -191,9 +191,9 @@ $$ \hat{f}_t = \arg\min_{f} \tilde{\mathcal{L}}^{(t)} = \arg\min_{f}  \sum_{i=1}
 - A COMPLETER: il ne reste que g et h, cadre général applicable à tout problème. -->
 
 
-#### Étape 2: calculer les poids optimaux conditionnellement à la structure de l'arbre
+##### Étape 2: calculer les poids optimaux conditionnellement à une structure d'arbre
 
-A partir de l'équation @eq-fct-obj-final, il est possible de faire apparaître les poids $w_j$ du $t$-ième arbre. Chaque arbre $f_t$ peut être vu comme une fonction constante par morceaux du type $f_t(x) = w_{\,q(x)}$ où $q(x)$ est une fonction qui assigne un indice de feuille (un entier entre 1 et $T$) à chaque observation $x$, et $w_j$ est le poids (valeur de sortie) de la $j$-ième feuille. En regroupant les observations $i$ tombant dans la feuille $j$ dans l'ensemble $I_j = \{i\mid q(x_i)=j\}$, la fonction de perte approchée peut être réécrite sous la forme:
+A partir de l'équation @eq-fct-obj-final, il est possible de faire apparaître, puis de calculer les poids $w_j$ du $t$-ième arbre. En effet, l'arbre $f_t$ peut être vu comme une fonction constante par morceaux du type $f_t(x) = w_{\,q(x)}$ où $q(x)$ est une fonction qui assigne un indice de feuille (un entier entre 1 et $T$) à chaque observation $x$, et $w_j$ est le poids (valeur de sortie) de la $j$-ième feuille. En regroupant les observations $i$ tombant dans la feuille $j$ dans l'ensemble $I_j = \{i\mid q(x_i)=j\}$, la fonction de perte approchée peut être réécrite sous la forme:
 
 $$
 \begin{align*}
@@ -260,7 +260,6 @@ $$ F_{t}(x)=F_{t-1}(x)+ \eta f_{t}(x) $$ {#eq-update-model}
 Puis les valeurs des gradients et hessiennes sont mises à jour pour chaque observation par les formules
 
 $$ g_i = \frac{\partial l(y_i, \hat{y}_i^{(t)})}{\partial\hat{y}_i^{(t)}} \;\;\text{et}\;\; h_i = \frac{\partial^2 l(y_i, \hat{y}_i^{(t)})}{{\partial \hat{y}_i^{(t)}}^2} $$
-
 
 Il est alors possible de commencer l'entraînement de l'arbre suivant, selon la même logique que précédemment. Le processus de construction des arbres se poursuit jusqu'à atteindre soit le nombre maximum d'arbres autorisé dans le modèle ($K$), soit un autre **critère d'arrêt** (par exemple, une réduction de perte minimale par arbre).
 
