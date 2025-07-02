@@ -90,9 +90,9 @@ Procédure de construction du modèle:
     (a) Calculer le gradient (les pseudo-résidus) à l'issue des $m-1$ étapes précédentes: $g_{im} = \frac{\partial l(y_i, F_{m-1}\left(\mathbf{x}\right))}{\partial F_{m-1}\left(\mathbf{x}\right)}$
 
     (b) Entraîner le $m$-ième _weak learner_: on cherche l'arbre $f_m$ qui prédit le mieux l'opposé du gradient de la fonction de perte:
-    $\mathbf{\hat{f}_m} = \underset{f_m}{\arg \min} \sum_{i=1}^n \left(- g_{im} - f_m\left(\mathbf{x}_i, \mathbf{a}\right)^2$
+    $\mathbf{\hat{f}_m} = \underset{f_m}{\arg \min} \sum_{i=1}^n \left(- g_{im} - f_m\left(\mathbf{x}_i\right)\right)^2$
 
-    (c) Mettre à jour le modèle global: $F_m\left(\mathbf{x}\right) = F_{m-1}\left(\mathbf{x}\right) + \rho f_m\left(\mathbf{x}_i, \mathbf{\hat{a}_m}\right)$ avec $\rho$ le taux d'apprentissage (_learning rate_) dont la raison d'être est présentée dans la section @sec-overfitting-gb. 
+    (c) Mettre à jour le modèle global: $F_m\left(\mathbf{x_i}\right) = F_{m-1}\left(\mathbf{x_i}\right) + \rho f_m\left(\mathbf{x}_i\right)$ avec $\rho$ le taux d'apprentissage (_learning rate_) dont la raison d'être est présentée dans la section @sec-overfitting-gb. 
 
 :::
 
