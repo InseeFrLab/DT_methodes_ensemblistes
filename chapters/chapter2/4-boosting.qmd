@@ -117,13 +117,13 @@ $$ {#eq-fct-obj-initial-full}
 
 Dans cette expression:
 
-- La fonction de perte $\ell$ mesure la distance entre la prédiction $\hat{y}$ et la vraie valeur $y$ (exemples: erreur quadratique moyenne, erreur absolue moyenne, perte d'entropie croisée binaire, etc.).
+- La fonction de perte $\ell$ mesure la distance entre la prédiction $\hat{y}$ et la vraie valeur $y$ (exemples: erreur quadratique moyenne, erreur absolue moyenne, perte d'entropie croisée binaire, etc.). Elle présente généralement les propriétés suivantes: elle est convexe et dérivable deux fois, et atteint son minimum lorsque $\hat{y} = y$.
 
 - Le terme de régularisation $\Omega(f)$ pénalise la complexité de chaque arbre $f$ via deux termes: le terme $\gamma\,T$ pénalise les arbres avec un grand nombre de feuilles ($T$ élevé) et le terme $\tfrac{1}{2} \lambda\sum_{j=1}^{T_t} w_j^2$ pénalise les arbres avec des poids élevés ($w_j$ élevés en valeur absolue). Cette pénalisation privilégie les arbres plus « simples » (moins de feuilles terminales, poids de feuilles plus petits) afin d'éviter le sur-ajustement (*overfitting*). $\gamma$ et $\lambda$ sont des hyperparamètres de régularisation qui contrôlent la complexité de l'arbre.
 
-On pourrait essayer d'entraîner directement ce modèle complet, en déterminant toutes les fonctions $f$ telles que:
+On pourrait essayer d'entraîner directement ce modèle complet, en déterminant en une seule étape toutes les fonctions $f$ telles que:
 
-$$ F =  \arg\min_{f_1, \dots, f_K} \mathcal{L} \biggl( \sum_{i=1}^n \ell\left(y_i,\;\sum_{k=1}^K f_k(x_i)\right) + \gamma T + \frac{1}{2} \lambda \sum_{k=1}^K \sum_{j=1}^{T_k} w_j^2 \biggr) $$
+$$ F =  \underset{f_1, \dots, f_K}{\arg\min} \mathcal{L} \biggl( \sum_{i=1}^n \ell\left(y_i,\;\sum_{k=1}^K f_k(x_i)\right) + \gamma T + \frac{1}{2} \lambda \sum_{k=1}^K \sum_{j=1}^{T_k} w_j^2 \biggr) $$
 
 
 En réalité, le modèle complet est impossible à entraîner en une seule fois, car pour cela il faudrait déteminer _simultanément_ $K$ fonctions relativement complexes. Le principe du _boosting_ consiste donc à construire le modèle complet de façon itérative, par **ajout successif d'arbres**. À l'itération $t$, on ajoute un nouvel arbre $f_t$ pour améliorer la prédiction actuelle $\hat{y}_i^{(t-1)}$. Ainsi, en écrivant la relation, $\hat{y}_i^{(t)} = \hat{y}_i^{(t-1)} + f_t(x_i)$, on peut réécrire la fonction-objectif @eq-fct-obj-initial-full comme ceci:
