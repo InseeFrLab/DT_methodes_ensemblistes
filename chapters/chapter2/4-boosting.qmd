@@ -22,9 +22,6 @@ $$ F\left(\mathbf{x}\right) = \sum_{m=1}^M \beta_m f\left(\mathbf{x}, \mathbf{\t
 
 $$ F_m(\mathbf{x}) = F_{m-1}(\mathbf{x}) + \hat{\beta}_m f(\mathbf{x}_i, \mathbf{\hat{\theta}_m}) $$
 
-
-METTRE ICI UNE FIGURE EN UNE DIMENSION, avec des points et des modèles en escalier qui s'affinent.
-
 ### Les premières approches du *boosting*
 
 #### Le *boosting* par repondération: Adaboost
