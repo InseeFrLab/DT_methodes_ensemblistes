@@ -127,6 +127,11 @@ supplement: none
 // Define paragraph settings: https://typst.app/blog/2024/typst-0.12/
 #set par(spacing: 0.5em)
 
+// No spacing in tables
+#show table: set par(spacing: 0em)
+#set table(
+  inset: 2pt
+  )
 // Define bibliography spacing
 #show bibliography: set par(leading: 0.25em, first-line-indent: 0em, justify: true)
 
