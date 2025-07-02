@@ -128,7 +128,7 @@ supplement: none
 #set par(spacing: 0.5em)
 
 // No spacing in tables
-#show table: set par(spacing: 0em)
+#show table: set par(leading: 0.2em)
 #set table(
   inset: 2pt
   )
