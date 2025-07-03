@@ -1,6 +1,6 @@
 # La forêt aléatoire {#sec-rf-detail}
 
-La forêt aléatoire (_random forests_) est une méthode ensembliste puissante et largement utilisée pour les tâches de classification et de régression. Elle combine la simplicité des arbres de décision et l'échantillonnage des observations et des variables avec la puissance de l'agrégation pour améliorer les performances prédictives et réduire le risque de surapprentissage (_overfitting_).
+La forêt aléatoire (_random forests_) est une méthode ensembliste puissante et largement utilisée pour les tâches de classification et de régression. Elle combine la simplicité des arbres de décision et l'échantillonnage des observations et des variables avec la puissance de l'agrégation pour améliorer les performances prédictives et réduire le risque de surajustement (_overfitting_).
 
 <!-- 
 Objectifs: 
@@ -14,7 +14,7 @@ Objectifs:
 
 ## Principe de la forêt aléatoire 
 
-La forêt aléatoire est une extension du _bagging_, présenté dans la section @sec-bagging-detail. Elle introduit un niveau supplémentaire d'aléa dans la construction des arbres, puisqu'à chaque nouvelle noeud, la règle de décision est choisie en considérant uniquement un sous-ensemble de variables **sélectionné aléatoirement**. Cette randomisation supplémentaire **réduit la corrélation** entre les arbres, ce qui permet de diminuer la variance des prédiction du modèle agrégé.
+La forêt aléatoire est une extension du _bagging_, présenté dans la section [@sec-bagging-detail]{.content-visible unless-format="html"}[précédente]{.content-visible when-format="html"}. Elle introduit un niveau supplémentaire d'aléa dans la construction des arbres, puisqu'à chaque nouvelle noeud, la règle de décision est choisie en considérant uniquement un sous-ensemble de variables **sélectionné aléatoirement**. Cette randomisation supplémentaire **réduit la corrélation** entre les arbres, ce qui permet de diminuer la variance des prédiction du modèle agrégé.
 
 Les forêts aléatoires reposent donc sur quatre éléments essentiels:
 
@@ -53,7 +53,7 @@ Pour construire la prédiction de la forêt aléatoire une fois celle-ci entraî
 
 - Classification: chaque arbre vote pour une classe, et la classe majoritaire est retenue.
 
-Les principaux hyper-paramètres des forêts aléatoires (détaillés dans la section @sec-guide-rf) sont les suivants: le nombre d'arbres, la méthode et le taux d'échantillonnage, le nombre (ou la proportion) de variables considérées à chaque nœud, le critère de division des nœuds (ou mesure d'hétérogénéité), et les critères d'arrêt (notamment la profondeur de l'arbre, le nombre minimal d'observations dans une feuille terminale, et le nombre minimal d'observations qu'un nœud doit comprendre pour être divisé en deux).
+Les principaux hyper-paramètres des forêts aléatoires (détaillés dans la section [la section @sec-guide-rf]{.content-visible unless-format="html"} [le guide d'usage des forêts aléatoire]{.content-visible when-format="html"}) sont les suivants: le nombre d'arbres, la méthode et le taux d'échantillonnage, le nombre (ou la proportion) de variables considérées à chaque nœud, le critère de division des nœuds (ou mesure d'hétérogénéité), et les critères d'arrêt (notamment la profondeur de l'arbre, le nombre minimal d'observations dans une feuille terminale, et le nombre minimal d'observations qu'un nœud doit comprendre pour être divisé en deux).
 
 ![Entraînement d'une forêt aléatoire](/figures/rf.svg){#fig-rf width=90%}
 
@@ -134,11 +134,11 @@ Les propriétés théoriques des forêts aléatoires permettent de comprendre po
 
 L'agrégation de plusieurs arbres permet de réduire la variance globale du modèle, ce qui améliore la stabilité des prédictions. Lorsque les estimateurs sont (faiblement) biaisés mais caractérisés par une variance élevée, l'agrégation permet d'obtenir un estimateur avec un biais similaire mais une variance réduite. La démonstration est identique à celle présentée dans la section @sec-bagging-detail.
 
-### Convergence et limite théorique au surapprentissage
+### Convergence et limite théorique au surajustement
 
 Bien qu'elles s'avèrent très performantes en pratique, __il n'est pas prouvé à ce stade que les forêts aléatoires convergent vers une solution optimale__ lorsque la taille de l'échantillon tend vers l'infini (@louppe2014understanding). Plusieurs travaux théoriques ont toutefois fourni des preuves de convergence pour des versions simplifiées de l'algorithme (par exemple, @biau2012analysis). 
 
-Par ailleurs, une propriété importante des forêts aléatoires démontrée par @breiman2001random est que leur erreur de généralisation, c'est-à-dire l'écart entre les prédictions du modèle et les résultats attendus sur des données jamais vues (donc hors de l'échantillon d'entraînement), diminue à mesure que le nombre d'arbres augmente et converge vers une valeur constante. Autrement dit, __la forêt aléatoire ne souffre pas d'un surapprentissage croissant avec le nombre d'arbres__ (contrairement aux algorithmes de _gradient boosting_). La conséquence pratique de ce résultat est qu'inclure un (trop) grand nombre d'arbres dans le modèle n'en dégrade pas la qualité, ce qui contribue à la rendre particulièrement robuste. En revanche, une forêt aléatoire peut souffrir de surapprentissage si ses autres hyperparamètres sont mal choisis (des arbres trop profonds par exemple).
+Par ailleurs, une propriété importante des forêts aléatoires démontrée par @breiman2001random est que leur erreur de généralisation, c'est-à-dire l'écart entre les prédictions du modèle et les résultats attendus sur des données jamais vues (donc hors de l'échantillon d'entraînement), diminue à mesure que le nombre d'arbres augmente et converge vers une valeur constante. Autrement dit, __la forêt aléatoire ne souffre pas d'un surajustement croissant avec le nombre d'arbres__ (contrairement aux algorithmes de _gradient boosting_). La conséquence pratique de ce résultat est qu'inclure un (trop) grand nombre d'arbres dans le modèle n'en dégrade pas la qualité, ce qui contribue à la rendre particulièrement robuste. En revanche, une forêt aléatoire peut souffrir de surajustement si ses autres hyperparamètres sont mal choisis (des arbres trop profonds par exemple).
 
 ### Facteurs influençant l'erreur de généralisation {#sec-facteur-perf-rf}
 
@@ -174,17 +174,17 @@ L'enjeu de l'entraînement des forêts aléatoires est donc de __minimiser la co
 - **Nombre de variables considérées à chaque noeud**: cet hyperparamètre détermine le nombre (ou la proportion) de _features_ sélectionnées aléatoirement à chaque nœud lors de la construction des arbres. Un nombre plus faible conduit à des arbres plus diversifiés et donc moins corrélés entre eux, mais peut entraîner une diminution de la qualité prédictive des arbres individuels, car ils sont parfois contraints de se diviser sur des variables moins pertinentes. Inversement, un nombre plus élevé améliore la performance des arbres individuels en leur permettant d'utiliser des variables plus informatives, mais accroît leur corrélation (les mêmes variables ayant tendance à être sélectionnées dans tous les arbres), limitant ainsi les bénéfices de l'agrégation en termes de réduction de variance. Ce phénomène est amplifié si seules quelques variables sont fortement prédictives, car elles dominent les divisions dans la majorité des arbres.
 
 
-- **Nombre minimal d'observations dans une feuille** : Un nombre d'observation minimal peut réduire le surapprentissage et surtout le temps de calcul.
+- **Nombre minimal d'observations dans une feuille** : Un nombre d'observation minimal peut réduire le surajustement et surtout le temps de calcul.
 
 - **Critère de division des noeuds** (_splitting rule_) : 
 
-- **Profondeur maximale des arbres** : en général, il est conseillé de laisser les arbres se développer pleinement (sans élagage) pour profiter de la réduction de variance par agrégation. Limiter la profondeur des arbres peut toutefois réduire le risque de surapprentissage et diminuer le temps de calcul.
+- **Profondeur maximale des arbres** : en général, il est conseillé de laisser les arbres se développer pleinement (sans élagage) pour profiter de la réduction de variance par agrégation. Limiter la profondeur des arbres peut toutefois réduire le risque de surajustement et diminuer le temps de calcul.
  -->
 
 
 ## Evaluation des performances par l'erreur _Out-of-Bag_ (OOB) {#sec-rf-oob}
 
-La forêt aléatoire présente une particularité intéressante et très utile en pratique: __il est possible d'évaluer les performances d'une forêt aléatoire directement à partir des données d'entraînement__, grâce à l'estimation de l'erreur _Out-of-Bag_ (OOB). Cette caractéristique repose sur le fait que chaque arbre est construit à partir d'un échantillon _bootstrap_, c'est-à-dire un échantillon tiré avec remise. Cela implique qu'une part des observations ne sont pas utilisées pour entraîner un arbre donné. Ces observations laissées de côté forment un **échantillon dit _out-of-bag_**, que l'on peut utiliser pour évaluer la performance de chaque arbre. On peut donc construire pour chaque observation du jeu d'entraînement une prédiction qui agrège uniquement les prédictions des arbres pour lesquels cette observation est _out-of-bag_; cette prédiction n'est pas affectée par le surapprentissage (puisque cette observation n'a jamais été utilisée pour entraîner ces arbres). De cette façon, il est possible d'évaluer correctement la performance de la forêt aléatoire en comparant ces prédictions avec la variable-cible à l'aide d'une métrique bien choisie.
+La forêt aléatoire présente une particularité intéressante et très utile en pratique: __il est possible d'évaluer les performances d'une forêt aléatoire directement à partir des données d'entraînement__, grâce à l'estimation de l'erreur _Out-of-Bag_ (OOB). Cette caractéristique repose sur le fait que chaque arbre est construit à partir d'un échantillon _bootstrap_, c'est-à-dire un échantillon tiré avec remise. Cela implique qu'une part des observations ne sont pas utilisées pour entraîner un arbre donné. Ces observations laissées de côté forment un **échantillon dit _out-of-bag_**, que l'on peut utiliser pour évaluer la performance de chaque arbre. On peut donc construire pour chaque observation du jeu d'entraînement une prédiction qui agrège uniquement les prédictions des arbres pour lesquels cette observation est _out-of-bag_; cette prédiction n'est pas affectée par le surajustement (puisque cette observation n'a jamais été utilisée pour entraîner ces arbres). De cette façon, il est possible d'évaluer correctement la performance de la forêt aléatoire en comparant ces prédictions avec la variable-cible à l'aide d'une métrique bien choisie.
 
 La procédure d'estimation de l'erreur OOB se déroule comme ceci:
 
