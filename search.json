@@ -208,7 +208,7 @@
     "href": "index.html",
     "title": "Introduction aux méthodes ensemblistes",
     "section": "",
-    "text": "1 Introduction\nUne bien belle introduction pour le site et le DT.\nLa version pdf de ce document est disponible ici.",
+    "text": "1 Introduction\nLa version pdf de ce document est disponible ici.\nDeux constats:\n\nPuissance prédictive, diversité des cas d’usage, pertinence pour les travaux de la statistique publique.\nPourtant, méthodes peu connues et peu utilisées dans la statistique publique, probablement en raison de l’éclatement des ressources consacrées aux méthodes ensemblistes: articles fondateurs parfois difficiles à lire, nombreux tutoriels souvent peu développés.\n\nCe document répond à plusieurs ambitions:\n\nproposer deux niveaux de lecture\n\nL’existence de ces deux niveaux de lecture implique nécessairement quelques répétitions, qu’on espère toutefois peu nombreuses.\n\nProposer une introduction raisonnée aux méthodes ensemblistes qui rassemble l’ensemble des connaissances pertinentes: fondements théoriques et propriétés des algorithmes, description des implémentations existantes et guide d’usage détaillé.\n\nBien insister sur la\nDétailler le plan\n\nLa première partie propose une vue d’ensemble des méthodes ensemblistes",
     "crumbs": [
       "Introduction aux méthodes ensemblistes"
     ]
