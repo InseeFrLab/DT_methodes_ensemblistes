@@ -132,7 +132,7 @@ Les propriétés théoriques des forêts aléatoires permettent de comprendre po
 
 ### Réduction de la variance par agrégation
 
-L'agrégation de plusieurs arbres permet de réduire la variance globale du modèle, ce qui améliore la stabilité des prédictions. Lorsque les estimateurs sont (faiblement) biaisés mais caractérisés par une variance élevée, l'agrégation permet d'obtenir un estimateur avec un biais similaire mais une variance réduite. La démonstration est identique à celle présentée dans la section @sec-bagging-detail.
+L'agrégation de plusieurs arbres permet de réduire la variance globale du modèle, ce qui améliore la stabilité des prédictions. Lorsque les estimateurs sont (faiblement) biaisés mais caractérisés par une variance élevée, l'agrégation permet d'obtenir un estimateur avec un biais similaire mais une variance réduite. La démonstration est identique à celle présentée dans la section [@sec-bagging-detail]{.content-visible unless-format="html"}[précédente]{.content-visible when-format="html"}.
 
 ### Convergence et limite théorique au surajustement
 

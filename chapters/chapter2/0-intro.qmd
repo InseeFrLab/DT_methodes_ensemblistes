@@ -10,7 +10,7 @@
 :::
 
 
-__Principe__: cette partie propose une présentation formalisée des méthodes ensemblistes, à destination des personnes souhaitant comprendre en détail le fonctionnement des algorithmes.
+__Principe__: cette partie propose une présentation formalisée des méthodes ensemblistes, à destination des personnes souhaitant comprendre en détail le fonctionnement et les propriétés des algorithmes.
 
 
 
