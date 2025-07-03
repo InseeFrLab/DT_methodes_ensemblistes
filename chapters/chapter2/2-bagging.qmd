@@ -104,28 +104,11 @@ $$
  
 #### Performance globale: convergence vers un classificateur presque optimal
 
-@breiman1996bagging montre que si chaque prédicteur individuel $φ(x, L)$ est order-correct pour une observation $x$, alors le prédicteur agrégé $φA(x)$, obtenu par **vote majoritaire**, atteint la performance optimale pour cette observation, c'est-à-dire qu'il converge vers la classe ayant la probabilité maximale $P(j∣x)$ pour l'observation $x$ lorsque le nombre de prédicteurs individuels augmente. Le vote majoritaire permet ainsi de **réduire les erreurs aléatoires** des classificateurs individuels.
+@breiman1996bagging montre que si chaque prédicteur individuel $φ(x, L)$ est order-correct pour une observation $x$, alors le prédicteur agrégé $φA(x)$, obtenu par **vote majoritaire**, atteint la performance optimale pour cette observation, c'est-à-dire que lorsque le nombre de prédicteurs individuels augmente le prédicteur agrégé converge vers la classe ayant la probabilité maximale $P(j∣x)$ pour l'observation $x$. Le vote majoritaire permet ainsi de **réduire les erreurs aléatoires** des classificateurs individuels. En généralisant sur toutes les valeurs de $x$, __si chaque prédicteur individuel $φ(x, L)$ est order-correct pour tout $x$, alors le classificateur agrégé $ϕA$ sera optimal pour tout $x$__. Ce résultat d'optimalité en tout point dépend d'une hypothèse cruciale: les classificateurs individuels doivent être order-corrects en tout point. Dans les régions de l'espace où ils ne sont pas order-corrects (c'est-à-dire que la classe qu'ils prédisent le plus fréquemment n'est pas la classe la plus probable dans la vraie distribution), l'agrégation par vote majoritaire n'améliore pas les performances du prédicteur; celles-ci peuvent même se détériorer par rapport aux modèles individuels si l'agrégation conduit à amplifier des erreurs systématiques (biais). 
 
-Le classificateur agrégé $ϕA$ est optimal s'il prédit systématiquement la classe la plus probable pour l'observation $x$ dans toutes les régions de l'espace. 
+Or, si l'on peut raisonnablement penser qu'un classificateur individuel présentant un biais faible (peu d'erreurs systématiques) sera order-correct pour la plupart des points $x$, il n'est pas certain qu'il le soit en tout point. En effet, chaque classificateur individuel est entraîné sur un échantillon fini de données, ce qui introduit du bruit dans son estimation de la vraie distribution conditionnelle $P(j|x)$. Il peut donc, pour certains $x$, prédire le plus souvent une classe différente de celle qui maximise la vraie probabilité $P(j|x)$. Par ailleurs, la variabilité due à l'échantillonnage peut induire une couverture incomplète de l'ensemble des $x$ possibles et aboutir à des erreurs systématiques sur certains points $x$.  C'est pour ces raisons que Breiman conclut que le prédicteur agrégé $φA(x)$ converge vers un classificateur presque optimal (optimal presque partout).
 
-Cependant, dans les régions de l'espace où les classificateurs individuels ne sont pas order-corrects (c'est-à-dire qu'ils se trompent majoritairement sur la classe d'appartenance), l'agrégation par vote majoritaire n'améliore pas les performances. Elles peuvent même se détériorer par rapport aux modèles individuels si l'agrégation conduit à amplifier des erreurs systématiques (biais).
-
-
-## L'échantillage par bootstrap peut détériorer les performances théoriques du modèle agrégé
-
-En pratique, au lieu d'utiliser tous les ensembles d'entraînement possibles $L$, le _bagging_ repose sur un nombre limité d'échantillons bootstrap tirés avec remise à partir d'un même jeu de données initial, ce qui peut introduire des biais par rapport au prédicteur agrégé théorique.
-
-Les échantillons bootstrap présentent les limites suivantes :
-
-- Une __taille effective réduite par rapport au jeu de données initial__: Bien que chaque échantillon bootstrap présente le même nombre d'observations que le jeu de données initial, environ 1/3 des observations (uniques) du jeu initial sont absentes de chaque échantillon bootstrap (du fait du tirage avec remise). Cela peut limiter la capacité des modèles à capturer des relations complexes au sein des données (et aboutir à des modèles individuels sous-ajustés par rapport à ce qui serait attendu théoriquement), en particulier lorsque l'échantillon initial est de taille modeste.
-
-- Une __dépendance entre échantillons__ : Les échantillons bootstrap sont tirés dans le même jeu de données, ce qui génère une dépendance entre eux, qui réduit la diversité des modèles. Cela peut limiter l'efficacité de la réduction de variance dans le cas de la régression, voire acroître le biais dans le cas de la classification.
-
-- Une __couverture incomplète de l'ensemble des échantillons possibles__: Les échantillons bootstrap ne couvrent pas l'ensemble des échantillons d'entraînement possibles, ce qui peut introduire un biais supplémentaire par rapport au prédicteur agrégé théorique.
-
-## Le _bagging_ en pratique
-
-### Quand utiliser le _bagging_ en pratique
+## Quand utiliser le _bagging_ en pratique
 
 Le _bagging_ est particulièrement utile lorsque les modèles individuels présentent une variance élevée et sont instables. Dans de tels cas, l'agrégation des prédictions peut réduire significativement la variance globale, améliorant ainsi la performance du modèle agrégé. Les situations où le _bagging_ est recommandé incluent typiquement:
 
@@ -137,24 +120,12 @@ Inversement, le _bagging_ peut être moins efficace ou même néfaste dans certa
 
 - Les modèles stables avec variance faible : Si les modèles individuels sont déjà stables et présentent une faible variance (par exemple, la régression linéaire), le _bagging_ n'apporte que peu d'amélioration, car la réduction de variance supplémentaire est minimale.
 
-- La présence de biais élevée : Si les modèles individuels sont biaisés, entraînant des erreurs systématiques, le _bagging_ peut amplifier ces erreurs plutôt que de les corriger. Dans de tels cas, il est préférable de s'attaquer d'abord au biais des modèles avant de considérer l'agrégation.
+- La présence de biais élevé : Si les modèles individuels sont biaisés, entraînant des erreurs systématiques, le _bagging_ peut amplifier ces erreurs plutôt que de les corriger. Dans de tels cas, il est préférable de s'attaquer d'abord au biais des modèles avant de considérer l'agrégation.
 
 - Les échantillons de petite taille : Avec des ensembles de données limités, les échantillons bootstrap peuvent ne pas être suffisamment diversifiés ou représentatifs, ce qui réduit l'efficacité du _bagging_ et peut augmenter le biais des modèles.
 
 
 **Ce qui qu'il faut retenir**: le _bagging_ peut améliorer substantiellement la performance des modèles d'apprentissage automatique lorsqu'il est appliqué dans des conditions appropriées. Il est essentiel d'évaluer la variance et le biais des modèles individuels, ainsi que la taille et la représentativité du jeu de données, pour déterminer si le _bagging_ est une stratégie adaptée. Lorsqu'il est utilisé judicieusement, le _bagging_ peut conduire à des modèles plus robustes et précis, exploitant efficacement la puissance de l'agrégation pour améliorer la performance des modèles individuels.
-
-
-### Comment utiliser le _bagging_ en pratique
-
-#### Combien de modèles agréger?
-"Optimal performance is often found by _bagging_ 50–500 trees. Data sets that have a few strong predictors typically require less trees; whereas data sets with lots of noise or multiple strong predictors may need more. Using too many trees will not lead to overfitting. However, it's important to realize that since multiple models are being run, the more iterations you perform the more computational and time requirements you will have. As these demands increase, performing k-fold CV can become computationally burdensome."
-
-#### Evaluation du modèle: cross validation et échantillon Out-of-bag (OOB)
-
-"A benefit to creating ensembles via _bagging_, which is based on resampling with replacement, is that it can provide its own internal estimate of predictive performance with the out-of-bag (OOB) sample (see Section 2.4.2). The OOB sample can be used to test predictive performance and the results usually compare well compared to k-fold CV assuming your data set is sufficiently large (say n≥1,000). Consequently, as your data sets become larger and your _bagging_ iterations increase, it is common to use the OOB error estimate as a proxy for predictive performance."
-
-
 
 
 
