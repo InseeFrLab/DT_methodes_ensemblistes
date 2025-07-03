@@ -14,10 +14,30 @@ author:
 
 # Introduction
 
-Une bien belle introduction pour le site et le DT.
-
 ::: {.content-visible when-format="html"}
 
 La version pdf de ce document est disponible [ici](https://inseefrlab.github.io/DT_methodes_ensemblistes/pdf/dt_methodes_ensemblistes.pdf).
 
 :::
+
+Deux constats:
+
+- Puissance prédictive, diversité des cas d'usage, pertinence pour les travaux de la statistique publique.
+
+- Pourtant, méthodes peu connues et peu utilisées dans la statistique publique, probablement en raison de l'éclatement des ressources consacrées aux méthodes ensemblistes: articles fondateurs parfois difficiles à lire, nombreux tutoriels souvent peu développés. 
+
+Ce document répond à plusieurs ambitions:
+
+- proposer deux niveaux de lecture
+
+L'existence de ces deux niveaux de lecture implique nécessairement quelques répétitions, qu'on espère toutefois peu nombreuses.
+
+
+- Proposer une introduction raisonnée aux méthodes ensemblistes qui rassemble l'ensemble des connaissances pertinentes: fondements théoriques et propriétés des algorithmes, description des implémentations existantes et guide d'usage détaillé.
+
+Bien insister sur la
+
+
+Détailler le plan
+
+- La première partie propose une vue d'ensemble des méthodes ensemblistes
