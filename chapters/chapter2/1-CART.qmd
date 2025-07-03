@@ -60,23 +60,23 @@ Les arbres de décision ont plusieurs propriétés qui contribuent à leur puiss
    ![Interactions dans un arbre de décision](/figures/decision_tree_interaction.svg){#fig-decision-tree-interaction width=90%}
 
 
-- __Dans un arbre de décision, les valeurs prises par les variables numériques (par exemple l'âge) n'ont pas d'importance par elles-mêmes, c'est l'_ordre_ de ces valeurs qui est essentiel__. Ainsi, dans la règle de décision "L'âge est-il supérieur à 30 ans?", ce n'est pas la valeur “30” qui importe par elle-même, c’est le fait qu'elle **sépare les observations** en deux groupes, selon que l'âge est inférieur ou supérieur à 30 ans. Cette propriété a pour conséquence que les arbres de décision sont insensibles aux modifications strictement monotones des variables continues. Par exemple, remplacer l'âge par l'âge au carré ne changera rien à l'arbre de décision, car les règles de décision "L'âge est-il supérieur à 30 ans?" et "L'âge au carré est-il supérieur à 900?" sont strictement équivalentes (car elles définissent les mêmes groupes).
+- __Dans un arbre de décision, les valeurs prises par les variables numériques (par exemple l'âge) n'ont pas d'importance par elles-mêmes, c'est l'_ordre_ de ces valeurs qui est essentiel__. Ainsi, dans la règle de décision "L'âge est-il inférieur à 30 ans?", ce n'est pas la valeur “30” qui importe par elle-même, c’est le fait qu'elle **sépare les observations** en deux groupes, selon que l'âge est inférieur ou supérieur à 30 ans. Cette propriété a pour conséquence que les arbres de décision sont insensibles aux modifications strictement monotones des variables continues. Par exemple, remplacer l'âge par l'âge au carré ne changera rien à l'arbre de décision, car les règles de décision "L'âge est-il inférieur à 30 ans?" et "L'âge au carré est-il inférieur à 900?" sont strictement équivalentes (car elles définissent les mêmes groupes).
 
-### Illustration
+<!-- ### Illustration
 
 Supposons que nous souhaitions prédire le prix d'une maison en fonction de sa superficie et de son nombre de pièces. Un arbre de décision pourrait procéder ainsi:
 
-1. **Première division**: "La superficie de la maison est-elle supérieure à 100 m² ?"
+1. **Première division**: "La superficie de la maison est-elle inférieure à 100 m² ?"
    - Oui: Aller à la branche de gauche.
    - Non: Aller à la branche de droite.
-2. **Deuxième division (branche de gauche)**: "Le nombre de pièces est-il supérieur à 4 ?"
+2. **Deuxième division (branche de gauche)**: "Le nombre de pièces est-il inférieur à 4 ?"
    - Oui: Prix élevé (par exemple, plus de 300 000 €).
    - Non: Prix moyen (par exemple, entre 200 000 € et 300 000 €).
-3. **Deuxième division (branche de droite)**: "Le nombre de pièces est-il supérieur à 2 ?"
+3. **Deuxième division (branche de droite)**: "Le nombre de pièces est-il inférieur à 2 ?"
    - Oui: Prix moyen (par exemple, entre 150 000 € et 200 000 €).
    - Non: Prix bas (par exemple, moins de 150 000 €).
 
-Cet arbre utilise des règles simples pour diviser l'espace des caractéristiques (superficie et nombre de pièces) en sous-groupes homogènes et fournir une prédiction (estimer le prix d'une maison).
+Cet arbre utilise des règles simples pour diviser l'espace des caractéristiques (superficie et nombre de pièces) en sous-groupes homogènes et fournir une prédiction (estimer le prix d'une maison). -->
 
 ## La construction d'un arbre de décision par l'algorithme CART {#sec-construire}
 
