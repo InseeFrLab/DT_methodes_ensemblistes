@@ -306,11 +306,11 @@ window.Quarto = {
 </section>
 <section id="la-décomposition-biais-variance" class="level4" data-number="1.2.1.2">
 <h4 data-number="1.2.1.2" class="anchored" data-anchor-id="la-décomposition-biais-variance"><span class="header-section-number">1.2.1.2</span> La décomposition biais-variance</h4>
-<p>Pour mieux comprendre comment l’agrégation améliore la performance globale d’un modèle individuel <span class="math inline">\(\phi(x, L)\)</span>, revenons à la <strong>décomposition biais-variance</strong> de l’erreur quadratique moyenne, qui est une mesure de performance très courante pour les problèmes de régression:</p>
+<p>Pour mieux comprendre comment l’agrégation améliore la performance globale d’un modèle individuel <span class="math inline">\(\phi(x, L)\)</span>, revenons à la <strong>décomposition biais-variance</strong> de l’erreur quadratique moyenne en <span class="math inline">\(x\)</span>, qui est une mesure de performance très courante pour les problèmes de régression:</p>
 <p><span id="eq-decompo-biais-variance"><span class="math display">\[
 E_L[\left(Y - \phi(x, L)\right)^2] = \underbrace{\left(E_L\left[\phi(x, L) - Y\right]\right)^2}_{\text{Biais}^2} + \underbrace{E_L[\left(\phi(x, L) - E_L[\phi(x, L)]\right)^2]}_{\text{Variance}}
 \tag{1}\]</span></span></p>
-<p>L’erreur quadratique moyenne se décompose en deux termes:</p>
+<p>L’erreur quadratique moyenne en <span class="math inline">\(x\)</span> se décompose en deux termes:</p>
 <ul>
 <li><p>Le <strong>biais</strong> est la différence entre la valeur observée <span class="math inline">\(Y\)</span> que l’on souhaite prédire et la prédiction moyenne <span class="math inline">\(E_L[\phi(x, L)]\)</span>. Si le modèle est peu prédictif, le biais sera élevé.</p></li>
 <li><p>La <strong>variance</strong> est la variabilité des prédictions <span class="math inline">\(\phi(x, L)\)</span> autour de leur moyenne <span class="math inline">\(E_L[\phi(x, L)]\)</span>. Un modèle avec une variance élevée est très sensible aux fluctuations au sein des données d’entraînement: ses prédictions varient beaucoup lorsque les données d’entraînement se modifient.</p></li>
@@ -325,11 +325,13 @@ E_L[\left(Y - \phi(x, L)\right)^2] = \underbrace{\left(E_L\left[\phi(x, L) - Y\r
 (Y - \phi_{A}(x))^2 \leq E_L[(Y - \phi(x, L))^2]
 \tag{2}\]</span></span></p>
 <ul>
-<li><p>Le terme <span class="math inline">\((Y - \phi_A(x))^2\)</span> représente l’erreur quadratique du <strong>prédicteur agrégé</strong> <span class="math inline">\(\phi_A(x)\)</span>;</p></li>
-<li><p>Le terme <span class="math inline">\(E_L[(Y - \phi(x, L))^2]\)</span> est l’erreur quadratique moyenne d’un <strong>prédicteur individuel</strong> <span class="math inline">\(\phi(x, L)\)</span> entraîné sur un échantillon aléatoire <span class="math inline">\(L\)</span>. Cette erreur varie en fonction des données d’entraînement.</p></li>
+<li><p>Le terme <span class="math inline">\((Y - \phi_A(x))^2\)</span> représente l’erreur quadratique en <span class="math inline">\(x\)</span> du <strong>prédicteur agrégé</strong> <span class="math inline">\(\phi_A(x)\)</span>;</p></li>
+<li><p>Le terme <span class="math inline">\(E_L[(Y - \phi(x, L))^2]\)</span> est l’erreur quadratique moyenne en <span class="math inline">\(x\)</span> d’un <strong>prédicteur individuel</strong> <span class="math inline">\(\phi(x, L)\)</span> entraîné sur un échantillon aléatoire <span class="math inline">\(L\)</span>. Cette erreur varie en fonction des données d’entraînement.</p></li>
 </ul>
-<p>Cette inégalité montre que <strong>l’erreur quadratique moyenne du prédicteur agrégé est toujours inférieure ou égale à la moyenne des erreurs des prédicteurs individuels</strong>. Puisque le biais du prédicteur agrégé est identique au biais du prédicteur individuel, alors l’inégalité précédente implique que la <strong>variance du modèle agrégé</strong> <span class="math inline">\(\phi_A(x)\)</span> est <strong>toujours inférieure ou égale</strong> à la variance moyenne d’un modèle individuel :</p>
-<p>$(_A(x)) = (E_L[(x, L)]) E_L[((x, L))] $</p>
+<p>Cette inégalité montre que <strong>l’erreur quadratique du prédicteur agrégé est toujours inférieure ou égale à l’erreur quadratique moyenne d’un prédicteur individuel</strong>. Étant donné que le biais du prédicteur agrégé est identique au biais du prédicteur individuel, l’inégalité précédente implique que la <strong>variance du modèle agrégé</strong> <span class="math inline">\(\phi_A(x)\)</span> est <strong>toujours inférieure ou égale</strong> à la variance moyenne d’un modèle individuel:</p>
+<p><span class="math display">\[
+\text{Var}(\phi_A(x)) = \text{Var}(E_L[\phi(x, L)]) \leq E_L[\text{Var}(\phi(x, L))]
+\]</span></p>
 <p>Autrement dit, le processus d’agrégation réduit l’erreur de prédiction globale en réduisant la <strong>variance</strong> des prédictions, tout en conservant un biais constant.</p>
 <p>Ce résultat ouvre la voie à des considérations pratiques immédiates. Lorsque le modèle individuel est instable et présente une variance élevée, l’inégalité <span class="math inline">\(Var(\phi_A(x)) \leq E_L[Var(\phi(x,L))]\)</span> est forte, ce qui signifie que l’agrégation peut améliorer significativement la performance globale du modèle. En revanche, si <span class="math inline">\(ϕ(x,L)\)</span> varie peu d’un ensemble d’entraînement à un autre (modèle stable avec variance faible), alors <span class="math inline">\(Var(\phi_A(x))\)</span> est proche de <span class="math inline">\(E_L[Var(\phi(x,L))]\)</span>, et la réduction de variance apportée par l’agrégation est faible. Ainsi, <strong>le <em>bagging</em> est particulièrement efficace pour les modèles instables</strong>, tels que les arbres de décision, mais moins efficace pour les modèles stables tels que les méthodes des k plus proches voisins.</p>
 </section>
