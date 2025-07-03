@@ -1,4 +1,4 @@
-## Sujets avancés: algorithmes {#sec-sujets-avances-algo}
+## Sujets avancés: fonctionnement des algorithmes {#sec-sujets-avances-algo}
 
 ### Leaf-wise versus level-wise
 
