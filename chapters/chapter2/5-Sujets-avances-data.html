@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>sujets-avances – Introduction aux méthodes ensemblistes</title>
+<title>sujets-avances-data – Introduction aux méthodes ensemblistes</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -49,7 +49,7 @@ div.csl-indent {
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
-<link href="../../chapters/chapter3/1-preparation_donnees.html" rel="next">
+<link href="../../chapters/chapter2/5-Sujets-avances-algo.html" rel="next">
 <link href="../../chapters/chapter2/4-boosting.html" rel="prev">
 <link href="../../images/favicon.ico" rel="icon">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
@@ -134,7 +134,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/chapter2/1-CART.html">Présentation formelle des algorithmes</a></li><li class="breadcrumb-item"><a href="../../chapters/chapter2/5-Sujets-avances.html">Sujets avancés: traitement des données pendant l’entraînement</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/chapter2/1-CART.html">Présentation formelle des algorithmes</a></li><li class="breadcrumb-item"><a href="../../chapters/chapter2/5-Sujets-avances-data.html">Sujets avancés: traitement des données pendant l’entraînement</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -209,8 +209,14 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../chapters/chapter2/5-Sujets-avances.html" class="sidebar-item-text sidebar-link active">
+  <a href="../../chapters/chapter2/5-Sujets-avances-data.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Sujets avancés: traitement des données pendant l’entraînement</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/chapter2/5-Sujets-avances-algo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sujets avancés: fonctionnement des algorithmes</span></a>
   </div>
 </li>
       </ul>
@@ -254,23 +260,23 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#sec-sujets-avances" id="toc-sec-sujets-avances" class="nav-link active" data-scroll-target="#sec-sujets-avances"><span class="header-section-number">1</span> Sujets avancés: traitement des données pendant l’entraînement</a>
+  <li><a href="#sec-sujets-avances-data" id="toc-sec-sujets-avances-data" class="nav-link active" data-scroll-target="#sec-sujets-avances-data"><span class="header-section-number">1</span> Sujets avancés: traitement des données pendant l’entraînement</a>
   <ul class="collapse">
   <li><a href="#sec-continuous-variables-hist" id="toc-sec-continuous-variables-hist" class="nav-link" data-scroll-target="#sec-continuous-variables-hist"><span class="header-section-number">1.1</span> Le traitement des variables continues: l’utilisation des histogrammes</a></li>
   <li><a href="#sec-categorical-variables-encoding" id="toc-sec-categorical-variables-encoding" class="nav-link" data-scroll-target="#sec-categorical-variables-encoding"><span class="header-section-number">1.2</span> Le traitement des variables catégorielles</a></li>
   <li><a href="#sec-missing-values" id="toc-sec-missing-values" class="nav-link" data-scroll-target="#sec-missing-values"><span class="header-section-number">1.3</span> Le traitement des valeurs manquantes</a></li>
   </ul></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/edit/main/chapters/chapter2/5-Sujets-avances.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/blob/main/chapters/chapter2/5-Sujets-avances.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/edit/main/chapters/chapter2/5-Sujets-avances-data.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/blob/main/chapters/chapter2/5-Sujets-avances-data.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/chapter2/1-CART.html">Présentation formelle des algorithmes</a></li><li class="breadcrumb-item"><a href="../../chapters/chapter2/5-Sujets-avances.html">Sujets avancés: traitement des données pendant l’entraînement</a></li></ol></nav></header>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/chapter2/1-CART.html">Présentation formelle des algorithmes</a></li><li class="breadcrumb-item"><a href="../../chapters/chapter2/5-Sujets-avances-data.html">Sujets avancés: traitement des données pendant l’entraînement</a></li></ol></nav></header>
 
 
 
 
-<section id="sec-sujets-avances" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="sec-sujets-avances"><span class="header-section-number">1</span> Sujets avancés: traitement des données pendant l’entraînement</h2>
+<section id="sec-sujets-avances-data" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="sec-sujets-avances-data"><span class="header-section-number">1</span> Sujets avancés: traitement des données pendant l’entraînement</h2>
 <section id="sec-continuous-variables-hist" class="level3" data-number="1.1">
 <h3 data-number="1.1" class="anchored" data-anchor-id="sec-continuous-variables-hist"><span class="header-section-number">1.1</span> Le traitement des variables continues: l’utilisation des histogrammes</h3>
 <p><strong>L’algorithme de détermination des critères de partition (<em>split-finding algorithm</em>) est un enjeu de performance essentiel dans les méthodes ensemblistes.</strong> En effet, l’algorithme le plus simple qui consiste à énumérer tous les critères de partition possibles (en balayant toutes les valeurs de toutes les variables) s’avère très coûteux à utiliser dès lors que les données contiennent soit un grand nombre de variables, soit des variables continues prenant un grand nombre de valeurs. C’est pourquoi cet algorithme a fait l’objet de multiples améliorations et optimisations visant à réduire leur coût computationnel sans dégrader la qualité des critères de partition.</p>
@@ -395,7 +401,7 @@ Table&nbsp;1: Prise en charge des variables catégorielles dans les implémentat
 </section>
 <section id="sec-missing-values" class="level3" data-number="1.3">
 <h3 data-number="1.3" class="anchored" data-anchor-id="sec-missing-values"><span class="header-section-number">1.3</span> Le traitement des valeurs manquantes</h3>
-<p>Le <strong>traitement des valeurs manquantes dans les variables explicatives est un problème qui peut être traité à deux moments: soit de façon classique lors de la préparation des données (<em>preprocessing</em>), soit directement lors de l’entraînement des modèles</strong>, car toutes les implémentations de référence des méthodes ensemblistes proposent une prise en charge des valeurs manquantes au moment de l’entraînement. La première approche est décrite dans la partie sur la préparation des données (<strong>?@sec-preprocessing</strong>). Le paragraphe qui suit se concentre sur la seconde approche et s’attache à décrire en détail la méthode utilisée par chaque implémentation, car les documentations sont souvent incomplètes sur ce point.</p>
+<p>Le <strong>traitement des valeurs manquantes dans les variables explicatives est un problème qui peut être traité à deux moments: soit de façon classique lors de la préparation des données (<em>preprocessing</em>), soit directement lors de l’entraînement des modèles</strong>, car toutes les implémentations de référence des méthodes ensemblistes proposent une prise en charge des valeurs manquantes au moment de l’entraînement. La première approche est décrite dans la section <span>sur la préparation des données</span>. Le paragraphe qui suit se concentre sur la seconde approche et s’attache à décrire en détail la méthode utilisée par chaque implémentation, car les documentations sont souvent incomplètes sur ce point.</p>
 <ul>
 <li><p><code>XGBoost</code>: le paramètre <code>missing</code> permet de préciser quelle valeur dans les données doit être considérée comme manquante (<code>np.nan</code> par défaut). Les valeurs manquantes sont traitées en modifiant légèrement l’algorithme de détermination des critères de partition, de façon à ce qu’il recherche à la fois le meilleur <em>split</em> et le meilleur noeud-enfant vers lequel envoyer les valeurs manquantes. Pour ce faire, le gain associé à chaque règle de décision candidate est calculé de deux façons différentes: en mettant les valeurs manquantes dans le noeud de droite, puis en les mettant dans le noeud de gauche. Le gain le plus élevé des deux indique dans quel noeud les valeurs manquantes doivent être envoyées, conditionnellement à la règle de décision candidate. Une fois que toutes les règles candidates ont été examinées, on obtient simultanément la meilleure règle de décision, et la meilleure façon de traiter les valeurs manquantes. Cette approche est systématiquement appliquée aux variables numériques, et aux variables catégorielles si le support natif des variables catégorielles est activé (<code>enable_categorical = True</code>, voir la section <a href="#sec-categorical-variables-encoding" class="quarto-xref">Section&nbsp;1.2</a>). Ceci dit, il arrive fréquemment que la règle de décision optimale pour un noeud repose sur une variable qui ne comprend aucune valeur manquante dans la population du noeud à partitionner; en ce cas les valeurs manquantes sont envoyées à droite par défaut<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>.</p></li>
 <li><p><code>LightGBM</code>: seules les valeurs <code>na</code> sont considérées comme manquantes; elles sont traitées selon une approche très similaire à celle d’XGBoost. Dans le cas des variables numériques, l’algorithme de détermination des critères de partition recherche à la fois le meilleur <em>split</em> et le meilleur noeud-enfant vers lequel envoyer les valeurs manquantes. Toutefois, lorsque la règle de décision optimale pour un noeud repose sur une variable qui ne comprend aucune valeur manquante dans la population du noeud à partitionner, toute valeur manquante rencontrée dans cette variable à l’étape de prédiction est convertie en 0, ce qui peut avoir des effets imprévisibles sur les prédictions<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a>. Dans le cas des variables catégorielles, les valeurs manquantes sont systématiquement envoyées vers le noeud-enfant de droite.</p></li>
@@ -837,8 +843,8 @@ Prokhorenkova, Liudmila, Gleb Gusev, Aleksandr Vorobev, Anna Veronika Dorogush, 
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../chapters/chapter3/1-preparation_donnees.html" class="pagination-link" aria-label="Comment bien utiliser les algorithmes?">
-        <span class="nav-page-text">Comment bien utiliser les algorithmes?</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../../chapters/chapter2/5-Sujets-avances-algo.html" class="pagination-link" aria-label="Sujets avancés: fonctionnement des algorithmes">
+        <span class="nav-page-text">Sujets avancés: fonctionnement des algorithmes</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -850,7 +856,7 @@ Prokhorenkova, Liudmila, Gleb Gusev, Aleksandr Vorobev, Anna Veronika Dorogush, 
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/edit/main/chapters/chapter2/5-Sujets-avances.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/blob/main/chapters/chapter2/5-Sujets-avances.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/edit/main/chapters/chapter2/5-Sujets-avances-data.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/blob/main/chapters/chapter2/5-Sujets-avances-data.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
 <p>This page is built with <a href="https://quarto.org/">Quarto</a>.</p>
 </div>

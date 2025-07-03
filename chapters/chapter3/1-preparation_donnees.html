@@ -50,7 +50,7 @@ div.csl-indent {
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
 <link href="../../chapters/chapter3/2-guide_usage_RF.html" rel="next">
-<link href="../../chapters/chapter2/5-Sujets-avances.html" rel="prev">
+<link href="../../chapters/chapter2/5-Sujets-avances-algo.html" rel="prev">
 <link href="../../images/favicon.ico" rel="icon">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -207,8 +207,14 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../chapters/chapter2/5-Sujets-avances.html" class="sidebar-item-text sidebar-link">
+  <a href="../../chapters/chapter2/5-Sujets-avances-data.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Sujets avancés: traitement des données pendant l’entraînement</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/chapter2/5-Sujets-avances-algo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sujets avancés: fonctionnement des algorithmes</span></a>
   </div>
 </li>
       </ul>
@@ -282,20 +288,20 @@ window.Quarto = {
 
 <section id="sec-preprocessing" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Préparation des données</h1>
-<p>Les méthodes ensemblistes à base d’arbres ne requièrent pas le même travail préparation des données que les méthodes économétriques traditionnelles. En particulier, certaines étapes indispensables à l’économétrie cessent d’être nécessaires. En revanche, d’autres, notamment le traitement des valeurs manquantes et des variables catégorielles. Cette section gagne à être lue après ou en parallèle de la section <strong>?@sec-sujets-avances</strong> qui détaille les approches possibles.</p>
+<p>Les méthodes ensemblistes à base d’arbres ne requièrent pas le même travail préparation des données que les méthodes économétriques traditionnelles. En particulier, certaines étapes indispensables à l’économétrie cessent d’être nécessaires. En revanche, d’autres, notamment le traitement des valeurs manquantes et des variables catégorielles. Cette section gagne à être lue après ou en parallèle de la section <span>sur les sujets avancés relatifs aux traitement des données</span>.</p>
 <section id="préparation-des-variables-explicatives" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="préparation-des-variables-explicatives"><span class="header-section-number">1.1</span> Préparation des variables explicatives</h2>
 <section id="quels-sont-les-traitements-inutiles" class="level3" data-number="1.1.1">
 <h3 data-number="1.1.1" class="anchored" data-anchor-id="quels-sont-les-traitements-inutiles"><span class="header-section-number">1.1.1</span> Quels sont les traitements inutiles?</h3>
 <p>Deux traitements usuels en économétrie ne sont pas nécessaires pour utiliser des méthodes ensemblistes:</p>
 <ul>
-<li><p>Il est inutile de normaliser ou de standardiser les variables numériques car c’est l’<em>ordre</em> défini par les valeurs qui est essentiel, pas les valeurs numériques elles-mêmes (voir la section <strong>?@sec-CART</strong>). Pour la même raison, il est inutile de modifier ou supprimer les valeurs extrêmes.</p></li>
+<li><p>Il est inutile de normaliser ou de standardiser les variables numériques car c’est l’<em>ordre</em> défini par les valeurs qui est essentiel, pas les valeurs numériques elles-mêmes (voir la section <span>sur les arbres de décision</span>). Pour la même raison, il est inutile de modifier ou supprimer les valeurs extrêmes.</p></li>
 <li><p>Il n’est pas indispensable de supprimer les variables corrélées car les méthodes ensemblistes sont robustes à la multicollinéarité. Ceci dit, réduire le nombre de variables peut accélérer légèrement l’entraînement des modèles.</p></li>
 </ul>
 </section>
 <section id="comment-traiter-les-variables-catégorielles" class="level3" data-number="1.1.2">
 <h3 data-number="1.1.2" class="anchored" data-anchor-id="comment-traiter-les-variables-catégorielles"><span class="header-section-number">1.1.2</span> Comment traiter les variables catégorielles?</h3>
-<p>Le <strong>traitement des variables catégorielles</strong> est un sujet plus complexe, car plusieurs approches sont possibles et certaines implémentations peuvent prendre en charge les variables catégorielles sans préparation particulière. Il est recommandé de lire la section <strong>?@sec-categorical-variables-encoding</strong> qui détaille les approches possibles. L’approche à privilégier <em>in fine</em> dépendra de trois facteurs: l’implémentation utilisée, l’existence d’un ordre des catégories, et le nombre total de catégories. Voici quelques recommandations générales:</p>
+<p>Le <strong>traitement des variables catégorielles</strong> est un sujet plus complexe, car plusieurs approches sont possibles et certaines implémentations peuvent prendre en charge les variables catégorielles sans préparation particulière. Il est recommandé de lire la section <span>sur le traitement des variables catégorielles</span> qui détaille les approches possibles. L’approche à privilégier <em>in fine</em> dépendra de trois facteurs: l’implémentation utilisée, l’existence d’un ordre des catégories, et le nombre total de catégories. Voici quelques recommandations générales:</p>
 <ul>
 <li><p><strong>il est nettement préférable de convertir les variables catégorielles en variables numériques lorsqu’elles comportent un ordre naturel</strong> (exemples: âge, niveau de revenu, niveau de diplôme, niveau de densité urbaine…). Cette approche a l’avantage de simplifier considérablement l’utilisation des variables catégorielles, en les traitant comme des variables numériques classiques. Par exemple, l’âge exprimé sous forme de tranche d’âge (<span class="math inline">\([0; 9]\)</span>, <span class="math inline">\([10; 19]\)</span>, <span class="math inline">\([20; 29]\)</span>, etc.) peut aisément être converti en variable numérique: la valeur 0 sera associée à la modalité <span class="math inline">\([0; 9]\)</span>, la valeur 1 à la modalité <span class="math inline">\([10; 19]\)</span>. L’encodeur <code>OrdinalEncoder</code> de <code>scikit-learn</code> permet d’automatiser cette tâche de façon efficace. De la même façon, il est possible de convertir une date en variable numérique exprimée en jours écoulés depuis une date de référence.</p></li>
 <li><p>dans le cas des variables catégorielles non ordonnées (exemple: secteur d’activité, PCS, département…), <strong>il est préférable de tester les approches intégrées aux implémentations des méthodes ensemblistes</strong> avant se lancer dans la construction d’une approche <em>ad hoc</em>.</p></li>
@@ -304,7 +310,7 @@ window.Quarto = {
 </section>
 <section id="comment-traiter-les-valeurs-manquantes" class="level3" data-number="1.1.3">
 <h3 data-number="1.1.3" class="anchored" data-anchor-id="comment-traiter-les-valeurs-manquantes"><span class="header-section-number">1.1.3</span> Comment traiter les valeurs manquantes?</h3>
-<p>Dans la mesure où toutes les implémentations de référence des méthodes ensemblistes proposent une prise en charge des valeurs manquantes (voir la partie <strong>?@sec-missing-values</strong>), il est à première vue inutile de traiter les valeurs manquantes avant d’entraîner un modèle. Il peut néanmoins être utile de le faire, par exemple par une imputation déterministe, pour se prémunir d’éventuels problèmes difficiles à débugguer. <em>A minima</em>, si on veut utiliser le support des valeurs manquantes fonctionne correctement, <strong>il faut impérativement vérifier que les valeurs manquantes sont bien codées avec la modalité considérée comme valeur manquante dans l’implémentation utilisée</strong> (voir la partie <strong>?@sec-missing-values</strong>). Il peut par exemple arriver que les valeurs manquantes soient codées avec 0, ou -999, ou une chaîne de caractères telle que <code>Z</code> au sein d’une variable numérique. En ce cas il faut recoder la modalité manquante.</p>
+<p>Dans la mesure où toutes les implémentations de référence des méthodes ensemblistes proposent une prise en charge des valeurs manquantes (voir la section <span>sur le traitement des valeurs manquantes</span>), il est à première vue inutile de traiter les valeurs manquantes avant d’entraîner un modèle. Il peut néanmoins être utile de le faire, par exemple par une imputation déterministe, pour se prémunir d’éventuels problèmes difficiles à débugguer. <em>A minima</em>, si on veut utiliser le support des valeurs manquantes fonctionne correctement, <strong>il faut impérativement vérifier que les valeurs manquantes sont bien codées avec la modalité considérée comme valeur manquante dans l’implémentation utilisée</strong>. Il peut par exemple arriver que les valeurs manquantes soient codées avec 0, ou -999, ou une chaîne de caractères telle que <code>Z</code> au sein d’une variable numérique. En ce cas il faut recoder la modalité manquante.</p>
 </section>
 <section id="est-il-utile-de-créer-des-variables-additionnelles" class="level3" data-number="1.1.4">
 <h3 data-number="1.1.4" class="anchored" data-anchor-id="est-il-utile-de-créer-des-variables-additionnelles"><span class="header-section-number">1.1.4</span> Est-il utile de créer des variables additionnelles?</h3>
@@ -355,7 +361,7 @@ window.Quarto = {
 <section id="choix-des-hyper-paramètres-du-modèle" class="level3" data-number="1.3.2">
 <h3 data-number="1.3.2" class="anchored" data-anchor-id="choix-des-hyper-paramètres-du-modèle"><span class="header-section-number">1.3.2</span> Choix des hyper-paramètres du modèle</h3>
 <p>L’estimation Out-of-Bag (OOB) et la validation croisée sont deux méthodes clés pour optimiser les hyper-paramètres d’une forêt aléatoire. Les deux approches permettent de comparer les performances obtenues pour différentes combinaisons d’hyper-paramètres et de sélectionner celles qui maximisent les performances prédictives, l’OOB étant souvent plus rapide et moins coûteuse, tandis que la validation croisée est plus fiable dans des situations où le surapprentissage est un risque important (<span class="citation" data-cites="probst2019hyperparameters">Probst, Wright, and Boulesteix (<a href="#ref-probst2019hyperparameters" role="doc-biblioref">2019</a>)</span>).</p>
-<p>Il convient de définir une stratégie d’optimisation des hyperparamètres pour ne pas perdre de temps à tester trop de jeux d’hyperparamètres. Plusieurs stratégies existent pour y parvenir, les principales sont exposées dans la section <strong>?@sec-guide-rf</strong>. Les implémentations des forêts aléatoires disponibles en <code>R</code> et en Python permettent d’optimiser aisément les principaux hyper-paramètres des forêts aléatoires.</p>
+<p>Il convient de définir une stratégie d’optimisation des hyperparamètres pour ne pas perdre de temps à tester trop de jeux d’hyperparamètres. Plusieurs stratégies existent pour y parvenir, les principales sont exposées dans <span>le guide d’usage des forêts aléatoires</span>. Les implémentations des forêts aléatoires disponibles en <code>R</code> et en Python permettent d’optimiser aisément les principaux hyper-paramètres des forêts aléatoires.</p>
 <section id="méthodes-de-recherche-exhaustives" class="level4" data-number="1.3.2.1">
 <h4 data-number="1.3.2.1" class="anchored" data-anchor-id="méthodes-de-recherche-exhaustives"><span class="header-section-number">1.3.2.1</span> Méthodes de recherche exhaustives</h4>
 <ul>
@@ -791,8 +797,8 @@ Probst, Philipp, Marvin N Wright, and Anne-Laure Boulesteix. 2019. <span>“Hype
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../../chapters/chapter2/5-Sujets-avances.html" class="pagination-link" aria-label="Sujets avancés: traitement des données pendant l'entraînement">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Sujets avancés: traitement des données pendant l’entraînement</span>
+      <a href="../../chapters/chapter2/5-Sujets-avances-algo.html" class="pagination-link" aria-label="Sujets avancés: fonctionnement des algorithmes">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Sujets avancés: fonctionnement des algorithmes</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

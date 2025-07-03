@@ -6,10 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Mélina Hillion">
-<meta name="author" content="Olivier Meslin">
 
-<title>Introduction aux méthodes ensemblistes</title>
+<title>sujets-avances-algo – Introduction aux méthodes ensemblistes</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -25,24 +23,25 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<link href="./chapters/chapter1/1-survol.html" rel="next">
-<link href="./images/favicon.ico" rel="icon">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-ea167b1c95185128cea848f008f0cb8f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../chapters/chapter3/1-preparation_donnees.html" rel="next">
+<link href="../../chapters/chapter2/5-Sujets-avances-data.html" rel="prev">
+<link href="../../images/favicon.ico" rel="icon">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-ea167b1c95185128cea848f008f0cb8f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -72,7 +71,7 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
-<link rel="stylesheet" href="custom.css">
+<link rel="stylesheet" href="../../custom.css">
 </head>
 
 <body class="nav-sidebar docked quarto-light">
@@ -84,7 +83,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Introduction aux méthodes ensemblistes</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/chapter2/1-CART.html">Présentation formelle des algorithmes</a></li><li class="breadcrumb-item"><a href="../../chapters/chapter2/5-Sujets-avances-algo.html">Sujets avancés: fonctionnement des algorithmes</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -99,9 +98,9 @@ ul.task-list li input[type="checkbox"] {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-center sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">Introduction aux méthodes ensemblistes</a> 
+      <a href="../../">Introduction aux méthodes ensemblistes</a> 
         <div class="sidebar-tools-main">
-    <a href="././pdf/dt_methodes_ensemblistes.pdf" title="NMFS Open Science" class="quarto-navigation-tool px-1" aria-label="NMFS Open Science"><i class="bi bi-file-pdf-fill"></i></a>
+    <a href="../.././pdf/dt_methodes_ensemblistes.pdf" title="NMFS Open Science" class="quarto-navigation-tool px-1" aria-label="NMFS Open Science"><i class="bi bi-file-pdf-fill"></i></a>
 </div>
     </div>
       </div>
@@ -114,19 +113,19 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Introduction aux méthodes ensemblistes</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/chapter1/1-survol.html" class="sidebar-item-text sidebar-link">
+  <a href="../../chapters/chapter1/1-survol.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Survol des méthodes ensemblistes</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./chapters/chapter2/1-CART.html" class="sidebar-item-text sidebar-link">
+            <a href="../../chapters/chapter2/1-CART.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Présentation formelle des algorithmes</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -135,37 +134,37 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/chapter2/1-CART.html" class="sidebar-item-text sidebar-link">
+  <a href="../../chapters/chapter2/1-CART.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Les arbres de décision</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/chapter2/2-bagging.html" class="sidebar-item-text sidebar-link">
+  <a href="../../chapters/chapter2/2-bagging.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Le <em>bagging</em></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/chapter2/3-random_forest.html" class="sidebar-item-text sidebar-link">
+  <a href="../../chapters/chapter2/3-random_forest.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">La forêt aléatoire</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/chapter2/4-boosting.html" class="sidebar-item-text sidebar-link">
+  <a href="../../chapters/chapter2/4-boosting.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Le <em>gradient boosting</em></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/chapter2/5-Sujets-avances-data.html" class="sidebar-item-text sidebar-link">
+  <a href="../../chapters/chapter2/5-Sujets-avances-data.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Sujets avancés: traitement des données pendant l’entraînement</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/chapter2/5-Sujets-avances-algo.html" class="sidebar-item-text sidebar-link">
+  <a href="../../chapters/chapter2/5-Sujets-avances-algo.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Sujets avancés: fonctionnement des algorithmes</span></a>
   </div>
 </li>
@@ -173,7 +172,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./chapters/chapter3/1-preparation_donnees.html" class="sidebar-item-text sidebar-link">
+            <a href="../../chapters/chapter3/1-preparation_donnees.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Comment bien utiliser les algorithmes?</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -182,19 +181,19 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/chapter3/1-preparation_donnees.html" class="sidebar-item-text sidebar-link">
+  <a href="../../chapters/chapter3/1-preparation_donnees.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Préparation des données</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/chapter3/2-guide_usage_RF.html" class="sidebar-item-text sidebar-link">
+  <a href="../../chapters/chapter3/2-guide_usage_RF.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Guide d’usage des forêts aléatoires</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/chapter3/3-guide_usage_GB.html" class="sidebar-item-text sidebar-link">
+  <a href="../../chapters/chapter3/3-guide_usage_GB.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Guide d’usage du <em>gradient boosting</em></span></a>
   </div>
 </li>
@@ -210,45 +209,97 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
+  <li><a href="#sec-sujets-avances-algo" id="toc-sec-sujets-avances-algo" class="nav-link active" data-scroll-target="#sec-sujets-avances-algo"><span class="header-section-number">1</span> Sujets avancés: fonctionnement des algorithmes</a>
+  <ul class="collapse">
+  <li><a href="#leaf-wise-versus-level-wise" id="toc-leaf-wise-versus-level-wise" class="nav-link" data-scroll-target="#leaf-wise-versus-level-wise"><span class="header-section-number">1.1</span> Leaf-wise versus level-wise</a></li>
+  <li><a href="#la-classification-multiclasse-non-ordonnée" id="toc-la-classification-multiclasse-non-ordonnée" class="nav-link" data-scroll-target="#la-classification-multiclasse-non-ordonnée"><span class="header-section-number">1.2</span> La classification multiclasse non-ordonnée</a></li>
+  <li><a href="#la-classification-multiclasse-ordonnée" id="toc-la-classification-multiclasse-ordonnée" class="nav-link" data-scroll-target="#la-classification-multiclasse-ordonnée"><span class="header-section-number">1.3</span> La classification multiclasse ordonnée</a></li>
+  <li><a href="#les-fonctions-de-perte-custom" id="toc-les-fonctions-de-perte-custom" class="nav-link" data-scroll-target="#les-fonctions-de-perte-custom"><span class="header-section-number">1.4</span> Les fonctions de perte custom</a></li>
+  </ul></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/edit/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/blob/main/index.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/edit/main/chapters/chapter2/5-Sujets-avances-algo.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/blob/main/chapters/chapter2/5-Sujets-avances-algo.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Introduction aux méthodes ensemblistes</h1>
-</div>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/chapter2/1-CART.html">Présentation formelle des algorithmes</a></li><li class="breadcrumb-item"><a href="../../chapters/chapter2/5-Sujets-avances-algo.html">Sujets avancés: fonctionnement des algorithmes</a></li></ol></nav></header>
 
 
 
-<div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Authors</div>
-    <div class="quarto-title-meta-contents">
-             <p><a href="https://github.com/melinahillion">Mélina Hillion</a> <a href="mailto:melina.hillion@insee.fr" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
-             <p><a href="https://github.com/oliviermeslin">Olivier Meslin</a> <a href="mailto:olivier.meslin@insee.fr" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
-          </div>
-  </div>
-    
-  
-    
-  </div>
-  
+<section id="sec-sujets-avances-algo" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="sec-sujets-avances-algo"><span class="header-section-number">1</span> Sujets avancés: fonctionnement des algorithmes</h2>
+<section id="leaf-wise-versus-level-wise" class="level3" data-number="1.1">
+<h3 data-number="1.1" class="anchored" data-anchor-id="leaf-wise-versus-level-wise"><span class="header-section-number">1.1</span> Leaf-wise versus level-wise</h3>
+</section>
+<section id="la-classification-multiclasse-non-ordonnée" class="level3" data-number="1.2">
+<h3 data-number="1.2" class="anchored" data-anchor-id="la-classification-multiclasse-non-ordonnée"><span class="header-section-number">1.2</span> La classification multiclasse non-ordonnée</h3>
+<p>Points d’attention:</p>
+<ul>
+<li><p>Comment sont construits les modèles <em>exactement</em>? En faisant k modèles en 1-versus-all?</p></li>
+<li><p>Quelle est la fonction de perte exacte?</p></li>
+<li><p>Comment les prédictions sont-elles agrégées <em>exactement</em>?</p></li>
+<li><p>A quoi doit ressembler la target? Doit-elle être encodée ou pas?</p></li>
+<li><p>Comment gérer les déséquilibres entre classes? Il me semble qu’il y a un peu partout des class weights.</p></li>
+<li><p>Comment peut-on récupérer les probas de chaque classe?</p></li>
+</ul>
+<section id="xgboost" class="level4" data-number="1.2.1">
+<h4 data-number="1.2.1" class="anchored" data-anchor-id="xgboost"><span class="header-section-number">1.2.1</span> XGBoost</h4>
+<p>La classification multi-classe avec XGBoost permet de prédire une classe parmi plusieurs possibles pour chaque exemple.</p>
+<ul>
+<li><strong>Fonction objectif</strong> : Pour la classification multi-classe, le paramètre <code>objective</code> doit généralement être défini sur <code>'multi:softmax'</code> (pour obtenir directement les étiquettes de classe) ou <code>'multi:softprob'</code> (pour obtenir les probabilités de chaque classe). Par défaut, le classifieur XGBoost utilise automatiquement <code>'multi:softprob'</code> s’il détecte plus de deux classes dans la variable cible.</li>
+<li><strong>Nombre de classes</strong> : Il faut spécifier le nombre de classes avec le paramètre <code>num_class</code>, qui doit correspondre au nombre de valeurs uniques dans la variable cible.</li>
+<li><strong>Entraînement</strong> : Pendant l’entraînement, XGBoost construit un modèle qui utilise une stratégie de type “un contre tous” (ou similaire) pour chaque classe, optimisant simultanément les probabilités ou les affectations de classe à l’aide de la fonction objectif.</li>
+<li><strong>Prédiction</strong> : Lors de la prédiction, le modèle retourne soit la classe prédite (<code>multi:softmax</code>), soit une probabilité pour chaque classe (<code>multi:softprob</code>), selon l’objectif choisi.</li>
+<li><strong>Encodage de la cible</strong> : La variable cible doit être encodée sous forme d’entiers (0, 1, 2, …) pour chaque classe, et non sous forme de variables binaires (one-hot encoding).</li>
+</ul>
+<p>Cette méthode permet à XGBoost de gérer efficacement les problèmes multi-classes en optimisant la séparation des classes via le boosting de gradient.</p>
+</section>
+<section id="lightgbm" class="level4" data-number="1.2.2">
+<h4 data-number="1.2.2" class="anchored" data-anchor-id="lightgbm"><span class="header-section-number">1.2.2</span> LightGBM</h4>
+<p>LightGBM propose <a href="https://github.com/microsoft/LightGBM/issues/1518">deux approches</a> de la classification multiclasse: <code>multiclass</code> et <code>multiclassova</code>:</p>
+<ul>
+<li><p><code>multiclassova</code> construit un modèle en mode one-vs-all pour chaque modalité, puis applique la fonction sigmoïde aux scores pour obtenir le résultat (pas clair); un point important est que les différents classifiers binaires sont entraînés indépendamment les uns des autres.</p></li>
+<li><p><code>multiclass</code></p></li>
+</ul>
+<p>La classification multiclasse avec LightGBM repose sur l’algorithme d’arbre de décision avec renforcement de gradient (GBDT) et des optimisations spécifiques comme GOSS et EFB pour améliorer l’efficacité et la vitesse[1][5].</p>
+<ul>
+<li><strong>Paramétrage</strong> : Pour une tâche multiclasse, il faut spécifier <code>objective='multiclass'</code> et indiquer le nombre de classes avec <code>num_class</code> (par exemple, <code>num_class=3</code> pour 3 classes)[4][7].</li>
+<li><strong>Encodage de la cible</strong> : La variable cible doit être encodée sous forme d’entiers (0, 1, 2, …) correspondant à chaque classe[2][4].</li>
+<li><strong>Apprentissage</strong> : LightGBM entraîne un modèle qui, pour chaque itération, construit <code>num_class</code> arbres (un par classe), soit un total de <code>num_class * num_iterations</code> arbres au total[7].</li>
+<li><strong>Prédiction</strong> : Lors de la prédiction, le modèle retourne un vecteur de scores (probabilités) pour chaque classe, et la classe prédite est celle avec le score le plus élevé[2][3].</li>
+<li><strong>Pas de normalisation requise</strong> : Aucune normalisation ou prétraitement particulier n’est nécessaire pour la variable cible, sauf l’encodage correct[2].</li>
+</ul>
+<p>En résumé, LightGBM gère la classification multiclasse en optimisant simultanément la séparation de toutes les classes via le boosting de gradient, tout en restant très efficace sur de grands volumes de données[1][5].</p>
+<p>Lorsque vous utilisez le modèle pour la classification multiclasse, vous pouvez obtenir :</p>
+<ul>
+<li><p>La <strong>classe prédite</strong> avec la méthode <code>predict()</code> : cela retourne la classe avec la probabilité la plus élevée pour chaque échantillon.</p></li>
+<li><p>La <strong>probabilité de chaque classe</strong> avec la méthode <code>predict_proba()</code> : cela retourne un tableau de probabilités pour chaque classe, de dimension (n_échantillons, n_classes), où chaque ligne correspond à un échantillon et chaque colonne à la probabilité d’appartenir à une classe donnée.</p></li>
+</ul>
+</section>
+<section id="ranger" class="level4" data-number="1.2.3">
+<h4 data-number="1.2.3" class="anchored" data-anchor-id="ranger"><span class="header-section-number">1.2.3</span> ranger</h4>
+<p>Extraits de la documentation:</p>
+<blockquote class="blockquote">
+<p>The tree type is determined by the type of the dependent variable. For factors classification trees are grown, for numeric values regression trees and for survival objects survival trees.</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>With the probability option and factor dependent variable a probability forest is grown. Here, the node impurity is used for splitting, as in classification forests. Predictions are class probabilities for each sample. In contrast to other implementations, each tree returns a probability estimate and these estimates are averaged for the forest probability estimate.</p>
+</blockquote>
+<p>Je comprends que par défaut ranger construit une RF qui prédit une classe; il faut l’option <code>probability = TRUE</code> pour avoir une probabilité.</p>
+<ul>
+<li>la variable-cible doit être de type <code>factor</code>.</li>
+<li></li>
+</ul>
+</section>
+</section>
+<section id="la-classification-multiclasse-ordonnée" class="level3" data-number="1.3">
+<h3 data-number="1.3" class="anchored" data-anchor-id="la-classification-multiclasse-ordonnée"><span class="header-section-number">1.3</span> La classification multiclasse ordonnée</h3>
+<p>Attention, là on est franchement <em>advanced</em>.</p>
+</section>
+<section id="les-fonctions-de-perte-custom" class="level3" data-number="1.4">
+<h3 data-number="1.4" class="anchored" data-anchor-id="les-fonctions-de-perte-custom"><span class="header-section-number">1.4</span> Les fonctions de perte custom</h3>
 
 
-</header>
-
-
-<section id="introduction" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
-<p>Une bien belle introduction pour le site et le DT.</p>
-<p>La version pdf de ce document est disponible <a href="https://inseefrlab.github.io/DT_methodes_ensemblistes/pdf/dt_methodes_ensemblistes.pdf">ici</a>.</p>
-
-
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -653,10 +704,13 @@ ul.task-list li input[type="checkbox"] {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="../../chapters/chapter2/5-Sujets-avances-data.html" class="pagination-link" aria-label="Sujets avancés: traitement des données pendant l'entraînement">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Sujets avancés: traitement des données pendant l’entraînement</span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./chapters/chapter1/1-survol.html" class="pagination-link" aria-label="Survol des méthodes ensemblistes">
-        <span class="nav-page-text">Survol des méthodes ensemblistes</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../../chapters/chapter3/1-preparation_donnees.html" class="pagination-link" aria-label="Comment bien utiliser les algorithmes?">
+        <span class="nav-page-text">Comment bien utiliser les algorithmes?</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -668,7 +722,7 @@ ul.task-list li input[type="checkbox"] {
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/edit/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/blob/main/index.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/edit/main/chapters/chapter2/5-Sujets-avances-algo.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/blob/main/chapters/chapter2/5-Sujets-avances-algo.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
 <p>This page is built with <a href="https://quarto.org/">Quarto</a>.</p>
 </div>
