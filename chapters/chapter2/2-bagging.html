@@ -266,8 +266,6 @@ window.Quarto = {
   <li><a href="#quand-utiliser-le-bagging-en-pratique" id="toc-quand-utiliser-le-bagging-en-pratique" class="nav-link" data-scroll-target="#quand-utiliser-le-bagging-en-pratique"><span class="header-section-number">1.4.1</span> Quand utiliser le <em>bagging</em> en pratique</a></li>
   <li><a href="#comment-utiliser-le-bagging-en-pratique" id="toc-comment-utiliser-le-bagging-en-pratique" class="nav-link" data-scroll-target="#comment-utiliser-le-bagging-en-pratique"><span class="header-section-number">1.4.2</span> Comment utiliser le <em>bagging</em> en pratique</a></li>
   </ul></li>
-  <li><a href="#mise-en-pratique-exemple-avec-code" id="toc-mise-en-pratique-exemple-avec-code" class="nav-link" data-scroll-target="#mise-en-pratique-exemple-avec-code"><span class="header-section-number">1.5</span> Mise en pratique (exemple avec code)</a></li>
-  <li><a href="#interprétation" id="toc-interprétation" class="nav-link" data-scroll-target="#interprétation"><span class="header-section-number">1.6</span> Interprétation</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/edit/main/chapters/chapter2/2-bagging.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/blob/main/chapters/chapter2/2-bagging.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/inseefrlab/DT_methodes_ensemblistes/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -281,37 +279,41 @@ window.Quarto = {
 <section id="sec-bagging-detail" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Le <em>bagging</em></h1>
 <p>Le <em>bagging</em>, ou “bootstrap aggregating”, est une méthode ensembliste qui vise à améliorer la stabilité et la précision des algorithmes d’apprentissage automatique en agrégeant plusieurs modèles (<span class="citation" data-cites="breiman1996bagging">Breiman (<a href="#ref-breiman1996bagging" role="doc-biblioref">1996</a>)</span>). Chaque modèle est entraîné sur un échantillon distinct généré par une technique de rééchantillonnage (<em>bootstrap</em>). Ces modèles sont ensuite combinés pour produire une prédiction agrégée, souvent plus robuste et généralisable que celle obtenue par un modèle unique.</p>
+<p>Le <em>bagging</em> est peu utilisé en pratique car il a été supplanté par les forêts aléatoires (présentées dans le chapitre suivant) dont il constitue l’un des fondements méthodologiques.</p>
 <!-- , qui consiste à créer des échantillons par tirage aléatoires avec remise à partir du jeu de données initial -->
 <section id="principe-du-bagging" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="principe-du-bagging"><span class="header-section-number">1.1</span> Principe du <em>bagging</em></h2>
 <p>Le <em>bagging</em> comporte trois étapes principales:</p>
 <ul>
 <li><p><strong>L’échantillonnage bootstrap</strong> : L’échantillonnage bootstrap consiste à créer des échantillons distincts en tirant aléatoirement avec remise des observations du jeu de données initial. Chaque échantillon <em>bootstrap</em> contient le même nombre d’observations que le jeu de données initial, mais certaines observations sont répétées (car sélectionnées plusieurs fois), tandis que d’autres sont omises.</p></li>
-<li><p><strong>L’entraînement de plusieurs modèles</strong> : Un modèle (aussi appelé <em>apprenant de base</em> ou <em>weak learner</em>) est entraîné sur chaque échantillon bootstrap. Les modèles peuvent être des arbres de décision, des régressions ou tout autre algorithme d’apprentissage. Le <em>bagging</em> est particulièrement efficace avec des modèles instables, tels que les arbres de décision non élagués.</p></li>
-<li><p><strong>L’agrégation des prédictions</strong> : Les prédictions de tous les modèles sont ensuite agrégées, en procédant généralement à la moyenne (ou à la médiane) des prédictions dans le cas de la régression, et au vote majoritaire (ou à la moyenne des probabilités prédites pour chaque classe) dans le cas de la classification, afin d’obtenir des prédictions plus précises et généralisables.</p></li>
+<li><p><strong>L’entraînement de plusieurs modèles</strong> : Un modèle est entraîné sur chaque échantillon bootstrap. Les modèles peuvent être des arbres de décision, des régressions ou tout autre algorithme d’apprentissage. Le <em>bagging</em> est particulièrement efficace avec des modèles instables, tels que les arbres de décision non élagués.</p></li>
+<li><p><strong>L’agrégation des prédictions</strong> : Les prédictions de tous les modèles sont ensuite agrégées, généralement en prenant la moyenne des prédictions dans le cas de la régression, et la classe majoritaire (ou la moyenne des probabilités prédites pour chaque classe) dans le cas de la classification.</p></li>
 </ul>
 </section>
 <section id="pourquoi-et-dans-quelles-situations-le-bagging-fonctionne" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="pourquoi-et-dans-quelles-situations-le-bagging-fonctionne"><span class="header-section-number">1.2</span> Pourquoi (et dans quelles situations) le <em>bagging</em> fonctionne</h2>
-<p>L’objectif du <em>bagging</em> est de construire un prédicteur plus précis en agrégeant les prédictions de plusieurs modèles entraînés sur des échantillons (légèrement) différents les uns des autres. <span class="citation" data-cites="breiman1996bagging">Breiman (<a href="#ref-breiman1996bagging" role="doc-biblioref">1996</a>)</span> a démontré que cette méthode est particulièrement efficace lorsqu’elle est appliquée à des modèles très instables, dont les performances sont particulièrement sensibles aux variations du jeu de données d’entraînement, et peu biaisés. Cette section vise à expliquer pourquoi (et sous quelles conditions) l’agrégation par <em>bagging</em> permet de construire un prédicteur plus performant. Dans la suite, nous notons <span class="math inline">\(φ(x, L)\)</span> un prédicteur (d’une valeur numérique dans le cas de la <em>régression</em> ou d’un label dans le cas de la <em>classification</em>), entraîné sur un ensemble d’apprentissage <span class="math inline">\(L\)</span>, et prenant en entrée un vecteur de caractéristiques <span class="math inline">\(x\)</span>.</p>
+<p>L’objectif du <em>bagging</em> est de construire un prédicteur plus précis en agrégeant les prédictions de plusieurs modèles entraînés sur des échantillons (légèrement) différents les uns des autres. <span class="citation" data-cites="breiman1996bagging">Breiman (<a href="#ref-breiman1996bagging" role="doc-biblioref">1996</a>)</span> a démontré que cette méthode est particulièrement efficace lorsqu’elle est appliquée à des modèles très instables, dont les performances sont particulièrement sensibles aux variations du jeu de données d’entraînement, et peu biaisés. Cette section vise à expliquer pourquoi (et sous quelles conditions) l’agrégation par <em>bagging</em> permet de construire un <strong>prédicteur agrégé</strong> plus performant. Dans la suite, nous notons <span class="math inline">\(φ(x, L)\)</span> un prédicteur (d’une valeur numérique dans le cas de la <em>régression</em> ou d’une classe dans le cas de la <em>classification</em>), entraîné sur un ensemble d’apprentissage <span class="math inline">\(L\)</span>, et prenant en entrée un vecteur de caractéristiques <span class="math inline">\(x\)</span>.</p>
 <section id="la-régression-réduction-de-lerreur-quadratique-moyenne-par-agrégation" class="level3" data-number="1.2.1">
 <h3 data-number="1.2.1" class="anchored" data-anchor-id="la-régression-réduction-de-lerreur-quadratique-moyenne-par-agrégation"><span class="header-section-number">1.2.1</span> La régression: réduction de l’erreur quadratique moyenne par agrégation</h3>
 <p>Dans le contexte de la <strong>régression</strong>, l’objectif est de prédire une valeur numérique <span class="math inline">\(Y\)</span> à partir d’un vecteur de caractéristiques <span class="math inline">\(x\)</span>. Un modèle de régression <span class="math inline">\(\phi(x, L)\)</span> est construit à partir d’un ensemble d’apprentissage <span class="math inline">\(L\)</span>, et produit une estimation de <span class="math inline">\(Y\)</span> pour chaque observation <span class="math inline">\(x\)</span>.</p>
 <section id="définition-du-prédicteur-agrégé" class="level4" data-number="1.2.1.1">
 <h4 data-number="1.2.1.1" class="anchored" data-anchor-id="définition-du-prédicteur-agrégé"><span class="header-section-number">1.2.1.1</span> Définition du prédicteur agrégé</h4>
 <p>Dans le cas de la régression, le <strong>prédicteur agrégé</strong> est défini comme suit :</p>
-<p><span class="math inline">\(\phi_{A}(x) = E_L[\phi(x, L)]\)</span></p>
+<p><span class="math display">\[
+\phi_{A}(x) = E_L[\phi(x, L)]
+\]</span></p>
 <p>où <span class="math inline">\(\phi_A(x)\)</span> représente la prédiction agrégée, <span class="math inline">\(E_L[.]\)</span> correspond à l’espérance prise sur tous les échantillons d’apprentissage possibles <span class="math inline">\(L\)</span>, chacun étant tiré selon la même distribution que le jeu de données initial, et <span class="math inline">\(\phi(x, L)\)</span> correspond à la prédiction du modèle construit sur l’échantillon d’apprentissage <span class="math inline">\(L\)</span>.</p>
 </section>
 <section id="la-décomposition-biais-variance" class="level4" data-number="1.2.1.2">
 <h4 data-number="1.2.1.2" class="anchored" data-anchor-id="la-décomposition-biais-variance"><span class="header-section-number">1.2.1.2</span> La décomposition biais-variance</h4>
-<p>Pour mieux comprendre comment l’agrégation améliore la performance globale d’un modèle individuel <span class="math inline">\(\phi(x, L)\)</span>, revenons à la <strong>décomposition biais-variance</strong> de l’erreur quadratique moyenne (il s’agit de la mesure de performance classiquement considérée dans un problème de régression):</p>
+<p>Pour mieux comprendre comment l’agrégation améliore la performance globale d’un modèle individuel <span class="math inline">\(\phi(x, L)\)</span>, revenons à la <strong>décomposition biais-variance</strong> de l’erreur quadratique moyenne, qui est une mesure de performance très courante pour les problèmes de régression:</p>
 <p><span id="eq-decompo-biais-variance"><span class="math display">\[
 E_L[\left(Y - \phi(x, L)\right)^2] = \underbrace{\left(E_L\left[\phi(x, L) - Y\right]\right)^2}_{\text{Biais}^2} + \underbrace{E_L[\left(\phi(x, L) - E_L[\phi(x, L)]\right)^2]}_{\text{Variance}}
 \tag{1}\]</span></span></p>
+<p>L’erreur quadratique moyenne se décompose en deux termes:</p>
 <ul>
-<li><p>Le <strong>biais</strong> est la différence entre la valeur observée <span class="math inline">\(Y\)</span> que l’on souhaite prédire et la prédiction moyenne <span class="math inline">\(E_L[\phi(x, L)]\)</span>. Si le modèle est sous-ajusté, le biais sera élevé.</p></li>
-<li><p>La <strong>variance</strong> est la variabilité des prédictions (<span class="math inline">\(\phi(x, L)\)</span>) autour de leur moyenne (<span class="math inline">\(E_L[\phi(x, L)]\)</span>). Un modèle avec une variance élevée est très sensible aux fluctuations au sein des données d’entraînement: ses prédictions varient beaucoup lorsque les données d’entraînement se modifient.</p></li>
+<li><p>Le <strong>biais</strong> est la différence entre la valeur observée <span class="math inline">\(Y\)</span> que l’on souhaite prédire et la prédiction moyenne <span class="math inline">\(E_L[\phi(x, L)]\)</span>. Si le modèle est peu prédictif, le biais sera élevé.</p></li>
+<li><p>La <strong>variance</strong> est la variabilité des prédictions <span class="math inline">\(\phi(x, L)\)</span> autour de leur moyenne <span class="math inline">\(E_L[\phi(x, L)]\)</span>. Un modèle avec une variance élevée est très sensible aux fluctuations au sein des données d’entraînement: ses prédictions varient beaucoup lorsque les données d’entraînement se modifient.</p></li>
 </ul>
 <p>L’équation <a href="#eq-decompo-biais-variance" class="quarto-xref">1</a> illustre l’<strong>arbitrage biais-variance</strong> qui est omniprésent en <em>machine learning</em>: plus la complexité d’un modèle s’accroît (exemple: la profondeur d’un arbre), plus son biais sera plus faible (car ses prédictions seront de plus en plus proches des données d’entraînement), et plus sa variance sera élevée (car ses prédictions, étant très proches des données d’entraînement, auront tendance à varier fortement d’un jeu d’entraînement à l’autre).</p>
 </section>
@@ -335,7 +337,7 @@ E_L[\left(Y - \phi(x, L)\right)^2] = \underbrace{\left(E_L\left[\phi(x, L) - Y\r
 <section id="la-classification-vers-un-classificateur-presque-optimal-par-agrégation" class="level3" data-number="1.2.2">
 <h3 data-number="1.2.2" class="anchored" data-anchor-id="la-classification-vers-un-classificateur-presque-optimal-par-agrégation"><span class="header-section-number">1.2.2</span> La classification: vers un classificateur presque optimal par agrégation</h3>
 <p>Dans le cas de la classification, le mécanisme de réduction de la variance par le <em>bagging</em> permet, sous une certaine condition, d’atteindre un <strong>classificateur presque optimal</strong> (<em>nearly optimal classifier</em>). Ce concept a été introduit par <span class="citation" data-cites="breiman1996bagging">Breiman (<a href="#ref-breiman1996bagging" role="doc-biblioref">1996</a>)</span> pour décrire un modèle qui tend à classer une observation dans la classe la plus probable, avec une performance approchant celle du classificateur Bayésien optimal (la meilleure performance théorique qu’un modèle de classification puisse atteindre).</p>
-<p>Pour comprendre ce résutlat, introduisons <span class="math inline">\(Q(j|x) = E_L(1_{φ(x, L) = j}) = P(φ(x, L) = j)\)</span>, la probabilité qu’un modèle <span class="math inline">\(φ(x, L)\)</span> prédise la classe <span class="math inline">\(j\)</span> pour l’observation <span class="math inline">\(x\)</span>, et <span class="math inline">\(P(j|x)\)</span>, la probabilité réelle (conditionnelle) que <span class="math inline">\(x\)</span> appartienne à la classe <span class="math inline">\(j\)</span>.</p>
+<p>Pour comprendre ce résultat, introduisons <span class="math inline">\(Q(j|x) = E_L(1_{φ(x, L) = j}) = P(φ(x, L) = j)\)</span>, la probabilité qu’un modèle <span class="math inline">\(φ(x, L)\)</span> prédise la classe <span class="math inline">\(j\)</span> pour l’observation <span class="math inline">\(x\)</span>, et <span class="math inline">\(P(j|x)\)</span>, la probabilité réelle (conditionnelle) que <span class="math inline">\(x\)</span> appartienne à la classe <span class="math inline">\(j\)</span>.</p>
 <section id="définition-classificateur-order-correct" class="level4" data-number="1.2.2.1">
 <h4 data-number="1.2.2.1" class="anchored" data-anchor-id="définition-classificateur-order-correct"><span class="header-section-number">1.2.2.1</span> Définition : classificateur order-correct</h4>
 <p>Un classificateur <span class="math inline">\(φ(x, L)\)</span> est dit <strong>order-correct</strong> pour une observation <span class="math inline">\(x\)</span> si, en espérance, il identifie <strong>correctement la classe la plus probable</strong>, même s’il ne prédit pas toujours avec exactitude les probabilités associées à chaque classe <span class="math inline">\(Q(j∣x)\)</span>.</p>
@@ -395,22 +397,15 @@ E_L[\left(Y - \phi(x, L)\right)^2] = \underbrace{\left(E_L\left[\phi(x, L) - Y\r
 <section id="evaluation-du-modèle-cross-validation-et-échantillon-out-of-bag-oob" class="level4" data-number="1.4.2.2">
 <h4 data-number="1.4.2.2" class="anchored" data-anchor-id="evaluation-du-modèle-cross-validation-et-échantillon-out-of-bag-oob"><span class="header-section-number">1.4.2.2</span> Evaluation du modèle: cross validation et échantillon Out-of-bag (OOB)</h4>
 <p>“A benefit to creating ensembles via <em>bagging</em>, which is based on resampling with replacement, is that it can provide its own internal estimate of predictive performance with the out-of-bag (OOB) sample (see Section 2.4.2). The OOB sample can be used to test predictive performance and the results usually compare well compared to k-fold CV assuming your data set is sufficiently large (say n≥1,000). Consequently, as your data sets become larger and your <em>bagging</em> iterations increase, it is common to use the OOB error estimate as a proxy for predictive performance.”</p>
-</section>
-</section>
-</section>
-<section id="mise-en-pratique-exemple-avec-code" class="level2" data-number="1.5">
-<h2 data-number="1.5" class="anchored" data-anchor-id="mise-en-pratique-exemple-avec-code"><span class="header-section-number">1.5</span> Mise en pratique (exemple avec code)</h2>
-<p>Ou bien ne commencer les mises en pratique qu’avec les random forest ?</p>
-</section>
-<section id="interprétation" class="level2" data-number="1.6">
-
 
 
 
 </section>
 </section>
+</section>
+</section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">1.6 Interprétation</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-breiman1996bagging" class="csl-entry" role="listitem">
 Breiman, Leo. 1996. <span>“Bagging Predictors.”</span> <em>Machine Learning</em> 24: 123–40.
 </div>
