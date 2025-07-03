@@ -256,7 +256,7 @@ Cette réduction de perte est simplement la différence entre la somme des perte
 ::: { .callout-note}
 ## Optimisations des algorithmes
 
-__L'algorithme de détermination des règles de décision est le composant le plus intense en calcul des algorithmes de _gradient boosting_.__ Les différentes implémentations du _gradient boosting_ proposent donc de multiples améliorations et optimisations visant à le rendre le plus efficace possible. Certaines de ces optimisations sont présentées dans la partie [@sec-sujets-avances.]{.content-visible unless-format="html"} [sur les sujets avancés relatifs aux traitement des données pendant l'entraînement.]{.content-visible when-format="html"}
+__L'algorithme de détermination des règles de décision est le composant le plus intense en calcul des algorithmes de _gradient boosting_.__ Les différentes implémentations du _gradient boosting_ proposent donc de multiples améliorations et optimisations visant à le rendre le plus efficace possible. Certaines de ces optimisations sont présentées dans la partie [@sec-sujets-avances-data.]{.content-visible unless-format="html"} [sur les sujets avancés relatifs aux traitement des données pendant l'entraînement.]{.content-visible when-format="html"}
 :::
 
 ##### Étape 4: Ajouter des arbres jusqu'à atteindre un critère d'arrêt

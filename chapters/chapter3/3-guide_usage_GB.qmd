@@ -130,7 +130,7 @@ Voici une présentation des principaux hyperparamètres et de leurs effets sur l
 
 - Les __pondérations__:
 
-    - la pondération des observations sert à pondérer les données d'entraînement (voir PARTIE USAGE AVANCE).
+    - la pondération des observations sert à pondérer les données d'entraînement (voir la section [@sec-sujets-avances-algo]{.content-visible unless-format="html"}[sur les sujets avancés relatifs au fonctionnement des algorithmes]{.content-visible when-format="html"}).
 
     - le poids des observations de la classe positive sert à rééquilibrer les données d'entraînement lorsque la classe positive est sous-représentée. Cet hyperparamètre ne sert que pour la classification binaire. Par défaut les deux classes ont le même poids.
 
@@ -156,7 +156,7 @@ Proposer une procédure pour l'optimisation des hyperparamètres s'avère plus d
 
 ::: {.callout-tip title="Parfois, une forêt aléatoire suffit..."}
 
-Avant de se lancer dans le _gradient boosting_, il est utile d'entraîner une forêt aléatoire selon la procédure décrite dans la section @sec-procedure-training-rf. Ce modèle servira de point de comparaison pour la suite, et permettra notamment de voir si le _gradient boosting_ offre des gains de performances qui justifient le temps passé à l'optimisation des hyperparamètres.
+Avant de se lancer dans le _gradient boosting_, il est utile d'entraîner une forêt aléatoire selon la procédure décrite dans [la section @sec-guide-rf]{.content-visible unless-format="html"}[le guide d'usage des forêts aléatoires]{.content-visible when-format="html"}. Ce modèle servira de point de comparaison pour la suite, et permettra notamment de voir si le _gradient boosting_ offre des gains de performances qui justifient le temps passé à l'optimisation des hyperparamètres.
 :::
 
 ### Préparer l'optimisation des hyperparamètres
