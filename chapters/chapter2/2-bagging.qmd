@@ -2,6 +2,7 @@
 
 Le _bagging_, ou "bootstrap aggregating", est une méthode ensembliste qui vise à améliorer la stabilité et la précision des algorithmes d'apprentissage automatique en agrégeant plusieurs modèles (@breiman1996bagging). Chaque modèle est entraîné sur un échantillon distinct généré par une technique de rééchantillonnage (_bootstrap_). Ces modèles sont ensuite combinés pour produire une prédiction agrégée, souvent plus robuste et généralisable que celle obtenue par un modèle unique.
 
+Le _bagging_ est peu utilisé en pratique car il a été supplanté par les forêts aléatoires (présentées dans le chapitre suivant) dont il constitue l'un des fondements méthodologiques.
 
 <!-- , qui consiste à créer des échantillons par tirage aléatoires avec remise à partir du jeu de données initial -->
 
@@ -11,41 +12,43 @@ Le _bagging_ comporte trois étapes principales:
 
 -   **L'échantillonnage bootstrap** : L'échantillonnage bootstrap consiste à créer des échantillons distincts en tirant aléatoirement avec remise des observations du jeu de données initial. Chaque échantillon *bootstrap* contient le même nombre d'observations que le jeu de données initial, mais certaines observations sont répétées (car sélectionnées plusieurs fois), tandis que d'autres sont omises.
 
--   **L'entraînement de plusieurs modèles** : Un modèle (aussi appelé *apprenant de base* ou *weak learner*) est entraîné sur chaque échantillon bootstrap. Les modèles peuvent être des arbres de décision, des régressions ou tout autre algorithme d'apprentissage. Le _bagging_ est particulièrement efficace avec des modèles instables, tels que les arbres de décision non élagués.
+-   **L'entraînement de plusieurs modèles** : Un modèle est entraîné sur chaque échantillon bootstrap. Les modèles peuvent être des arbres de décision, des régressions ou tout autre algorithme d'apprentissage. Le _bagging_ est particulièrement efficace avec des modèles instables, tels que les arbres de décision non élagués.
 
--   **L'agrégation des prédictions** : Les prédictions de tous les modèles sont ensuite agrégées, en procédant généralement à la moyenne (ou à la médiane) des prédictions dans le cas de la régression, et au vote majoritaire (ou à la moyenne des probabilités prédites pour chaque classe) dans le cas de la classification, afin d'obtenir des prédictions plus précises et généralisables.
+-   **L'agrégation des prédictions** : Les prédictions de tous les modèles sont ensuite agrégées, généralement en prenant la moyenne des prédictions dans le cas de la régression, et la classe majoritaire (ou la moyenne des probabilités prédites pour chaque classe) dans le cas de la classification.
 
 
 ## Pourquoi (et dans quelles situations) le _bagging_ fonctionne
 
-L'objectif du _bagging_ est de construire un prédicteur plus précis en agrégeant les prédictions de plusieurs modèles entraînés sur des échantillons (légèrement) différents les uns des autres. @breiman1996bagging a démontré que cette méthode est particulièrement efficace lorsqu'elle est appliquée à des modèles très instables, dont les performances sont particulièrement sensibles aux variations du jeu de données d'entraînement, et peu biaisés. Cette section vise à expliquer pourquoi (et sous quelles conditions) l'agrégation par _bagging_ permet de construire un prédicteur plus performant. Dans la suite, nous notons $φ(x, L)$ un prédicteur (d'une valeur numérique dans le cas de la *régression* ou d'un label dans le cas de la *classification*), entraîné sur un ensemble d'apprentissage $L$, et prenant en entrée un vecteur de caractéristiques $x$. 
+L'objectif du _bagging_ est de construire un prédicteur plus précis en agrégeant les prédictions de plusieurs modèles entraînés sur des échantillons (légèrement) différents les uns des autres. @breiman1996bagging a démontré que cette méthode est particulièrement efficace lorsqu'elle est appliquée à des modèles très instables, dont les performances sont particulièrement sensibles aux variations du jeu de données d'entraînement, et peu biaisés. Cette section vise à expliquer pourquoi (et sous quelles conditions) l'agrégation par _bagging_ permet de construire un **prédicteur agrégé** plus performant. Dans la suite, nous notons $φ(x, L)$ un prédicteur (d'une valeur numérique dans le cas de la *régression* ou d'une classe dans le cas de la *classification*), entraîné sur un ensemble d'apprentissage $L$, et prenant en entrée un vecteur de caractéristiques $x$.
 
 ### La régression: réduction de l'erreur quadratique moyenne par agrégation
 
 Dans le contexte de la **régression**, l'objectif est de prédire une valeur numérique $Y$ à partir d'un vecteur de caractéristiques $x$. Un modèle de régression $\phi(x, L)$ est construit à partir d'un ensemble d'apprentissage $L$, et produit une estimation de $Y$ pour chaque observation $x$. 
 
-
 #### Définition du prédicteur agrégé
 
 Dans le cas de la régression, le **prédicteur agrégé** est défini comme suit :
 
-$\phi_{A}(x) = E_L[\phi(x, L)]$
+$$
+\phi_{A}(x) = E_L[\phi(x, L)]
+$$
 
 où $\phi_A(x)$ représente la prédiction agrégée, $E_L[.]$ correspond à l'espérance prise sur tous les échantillons d'apprentissage possibles $L$, chacun étant tiré selon la même distribution que le jeu de données initial, et $\phi(x, L)$ correspond à la prédiction du modèle construit sur l'échantillon d'apprentissage $L$.
 
 
 #### La décomposition biais-variance
 
-Pour mieux comprendre comment l'agrégation améliore la performance globale d'un modèle individuel $\phi(x, L)$, revenons à la **décomposition biais-variance** de l'erreur quadratique moyenne (il s'agit de la mesure de performance classiquement considérée dans un problème de régression): 
+Pour mieux comprendre comment l'agrégation améliore la performance globale d'un modèle individuel $\phi(x, L)$, revenons à la **décomposition biais-variance** de l'erreur quadratique moyenne, qui est une mesure de performance très courante pour les problèmes de régression:
 
 $$
 E_L[\left(Y - \phi(x, L)\right)^2] = \underbrace{\left(E_L\left[\phi(x, L) - Y\right]\right)^2}_{\text{Biais}^2} + \underbrace{E_L[\left(\phi(x, L) - E_L[\phi(x, L)]\right)^2]}_{\text{Variance}}
 $$ {#eq-decompo-biais-variance}
 
+L'erreur quadratique moyenne se décompose en deux termes:
 
-  - Le **biais** est la différence entre la valeur observée $Y$ que l'on souhaite prédire et la prédiction moyenne $E_L[\phi(x, L)]$. Si le modèle est sous-ajusté, le biais sera élevé.
+  - Le **biais** est la différence entre la valeur observée $Y$ que l'on souhaite prédire et la prédiction moyenne $E_L[\phi(x, L)]$. Si le modèle est peu prédictif, le biais sera élevé.
 
-  - La **variance** est la variabilité des prédictions ($\phi(x, L)$) autour de leur moyenne ($E_L[\phi(x, L)]$). Un modèle avec une variance élevée est très sensible aux fluctuations au sein des données d'entraînement: ses prédictions varient beaucoup lorsque les données d'entraînement se modifient.
+  - La **variance** est la variabilité des prédictions $\phi(x, L)$ autour de leur moyenne $E_L[\phi(x, L)]$. Un modèle avec une variance élevée est très sensible aux fluctuations au sein des données d'entraînement: ses prédictions varient beaucoup lorsque les données d'entraînement se modifient.
 
 
 L'équation @eq-decompo-biais-variance illustre l'__arbitrage biais-variance__ qui est omniprésent en _machine learning_: plus la complexité d'un modèle s'accroît (exemple: la profondeur d'un arbre), plus son biais sera plus faible (car ses prédictions seront de plus en plus proches des données d'entraînement), et plus sa variance sera élevée (car ses prédictions, étant très proches des données d'entraînement, auront tendance à varier fortement d'un jeu d'entraînement à l'autre).
@@ -79,7 +82,7 @@ Ce résultat ouvre la voie à des considérations pratiques immédiates. Lorsque
 
 Dans le cas de la classification, le mécanisme de réduction de la variance par le _bagging_ permet, sous une certaine condition, d'atteindre un **classificateur presque optimal** (*nearly optimal classifier*). Ce concept a été introduit par @breiman1996bagging pour décrire un modèle qui tend à classer une observation dans la classe la plus probable, avec une performance approchant celle du classificateur Bayésien optimal (la meilleure performance théorique qu'un modèle de classification puisse atteindre).
 
-Pour comprendre ce résutlat, introduisons $Q(j|x) = E_L(1_{φ(x, L) = j}) = P(φ(x, L) = j)$, la probabilité qu'un modèle $φ(x, L)$ prédise la classe $j$ pour l'observation $x$, et $P(j|x)$, la probabilité réelle (conditionnelle) que $x$ appartienne à la classe $j$.
+Pour comprendre ce résultat, introduisons $Q(j|x) = E_L(1_{φ(x, L) = j}) = P(φ(x, L) = j)$, la probabilité qu'un modèle $φ(x, L)$ prédise la classe $j$ pour l'observation $x$, et $P(j|x)$, la probabilité réelle (conditionnelle) que $x$ appartienne à la classe $j$.
 
 
 #### Définition : classificateur order-correct
@@ -156,14 +159,6 @@ Inversement, le _bagging_ peut être moins efficace ou même néfaste dans certa
 #### Evaluation du modèle: cross validation et échantillon Out-of-bag (OOB)
 
 "A benefit to creating ensembles via _bagging_, which is based on resampling with replacement, is that it can provide its own internal estimate of predictive performance with the out-of-bag (OOB) sample (see Section 2.4.2). The OOB sample can be used to test predictive performance and the results usually compare well compared to k-fold CV assuming your data set is sufficiently large (say n≥1,000). Consequently, as your data sets become larger and your _bagging_ iterations increase, it is common to use the OOB error estimate as a proxy for predictive performance."
-
-
-## Mise en pratique (exemple avec code)
-
-Ou bien ne commencer les mises en pratique qu'avec les random forest ?
-
-
-## Interprétation 
 
 
 
