@@ -1,7 +1,7 @@
 
 # Préparation des données {#sec-preprocessing}
 
-Les méthodes ensemblistes à base d'arbres ne requièrent pas le même travail préparation des données que les méthodes économétriques traditionnelles. En particulier, certaines étapes indispensables à l'économétrie cessent d'être nécessaires. En revanche, d'autres, notamment le traitement des valeurs manquantes et des variables catégorielles. Cette section gagne à être lue après ou en parallèle de la section @sec-sujets-avances qui détaille les approches possibles.
+Les méthodes ensemblistes à base d'arbres ne requièrent pas le même travail préparation des données que les méthodes économétriques traditionnelles. En particulier, certaines étapes indispensables à l'économétrie cessent d'être nécessaires. En revanche, d'autres, notamment le traitement des valeurs manquantes et des variables catégorielles. Cette section gagne à être lue après ou en parallèle de la section [@sec-sujets-avances]{.content-visible unless-format="html"}[sur les sujets avancés relatifs aux traitement des données]{.content-visible when-format="html"}.
 
 ## Préparation des variables explicatives
 
@@ -9,13 +9,13 @@ Les méthodes ensemblistes à base d'arbres ne requièrent pas le même travail 
 
 Deux traitements usuels en économétrie ne sont pas nécessaires pour utiliser des méthodes ensemblistes: 
 
-- Il est inutile de normaliser ou de standardiser les variables numériques car c'est l'_ordre_ défini par les valeurs qui est essentiel, pas les valeurs numériques elles-mêmes (voir la section @sec-CART). Pour la même raison, il est inutile de modifier ou supprimer les valeurs extrêmes.
+- Il est inutile de normaliser ou de standardiser les variables numériques car c'est l'_ordre_ défini par les valeurs qui est essentiel, pas les valeurs numériques elles-mêmes (voir la section [@sec-CART]{.content-visible unless-format="html"}[sur les arbres de décision]{.content-visible when-format="html"}). Pour la même raison, il est inutile de modifier ou supprimer les valeurs extrêmes.
 
 - Il n'est pas indispensable de supprimer les variables corrélées car les méthodes ensemblistes sont robustes à la multicollinéarité. Ceci dit, réduire le nombre de variables peut accélérer légèrement l'entraînement des modèles.
 
 ### Comment traiter les variables catégorielles?
 
-Le __traitement des variables catégorielles__ est un sujet plus complexe, car plusieurs approches sont possibles et certaines implémentations peuvent prendre en charge les variables catégorielles sans préparation particulière. Il est recommandé de lire la section @sec-categorical-variables-encoding qui détaille les approches possibles. L'approche à privilégier _in fine_ dépendra de trois facteurs: l'implémentation utilisée, l'existence d'un ordre des catégories, et le nombre total de catégories. Voici quelques recommandations générales:
+Le __traitement des variables catégorielles__ est un sujet plus complexe, car plusieurs approches sont possibles et certaines implémentations peuvent prendre en charge les variables catégorielles sans préparation particulière. Il est recommandé de lire la section [@sec-categorical-variables-encoding]{.content-visible unless-format="html"}[sur le traitement des variables catégorielles]{.content-visible when-format="html"} qui détaille les approches possibles. L'approche à privilégier _in fine_ dépendra de trois facteurs: l'implémentation utilisée, l'existence d'un ordre des catégories, et le nombre total de catégories. Voici quelques recommandations générales:
 
   - __il est nettement préférable de convertir les variables catégorielles en variables numériques lorsqu'elles comportent un ordre naturel__ (exemples: âge, niveau de revenu, niveau de diplôme, niveau de densité urbaine...). Cette approche a l'avantage de simplifier considérablement l'utilisation des variables catégorielles, en les traitant comme des variables numériques classiques. Par exemple, l'âge exprimé sous forme de tranche d'âge ($[0; 9]$, $[10; 19]$, $[20; 29]$, etc.) peut aisément être converti en variable numérique: la valeur 0 sera associée à la modalité $[0; 9]$, la valeur 1 à la modalité $[10; 19]$. L'encodeur `OrdinalEncoder` de `scikit-learn` permet d'automatiser cette tâche de façon efficace. De la même façon, il est possible de convertir une date en variable numérique exprimée en jours écoulés depuis une date de référence.
 
@@ -25,7 +25,7 @@ Le __traitement des variables catégorielles__ est un sujet plus complexe, car p
 
 ### Comment traiter les valeurs manquantes?
 
-Dans la mesure où toutes les implémentations de référence des méthodes ensemblistes proposent une prise en charge des valeurs manquantes (voir la partie @sec-missing-values), il est à première vue inutile de traiter les valeurs manquantes avant d'entraîner un modèle. Il peut néanmoins être utile de le faire, par exemple par une imputation déterministe, pour se prémunir d'éventuels problèmes difficiles à débugguer. _A minima_, si on veut utiliser le support des valeurs manquantes fonctionne correctement, __il faut impérativement vérifier que les valeurs manquantes sont bien codées avec la modalité considérée comme valeur manquante dans l'implémentation utilisée__ (voir la partie @sec-missing-values). Il peut par exemple arriver que les valeurs manquantes soient codées avec 0, ou -999, ou une chaîne de caractères telle que `Z` au sein d'une variable numérique. En ce cas il faut recoder la modalité manquante.
+Dans la mesure où toutes les implémentations de référence des méthodes ensemblistes proposent une prise en charge des valeurs manquantes (voir la section [@sec-missing-values]{.content-visible unless-format="html"}[sur le traitement des valeurs manquantes]{.content-visible when-format="html"}), il est à première vue inutile de traiter les valeurs manquantes avant d'entraîner un modèle. Il peut néanmoins être utile de le faire, par exemple par une imputation déterministe, pour se prémunir d'éventuels problèmes difficiles à débugguer. _A minima_, si on veut utiliser le support des valeurs manquantes fonctionne correctement, __il faut impérativement vérifier que les valeurs manquantes sont bien codées avec la modalité considérée comme valeur manquante dans l'implémentation utilisée__. Il peut par exemple arriver que les valeurs manquantes soient codées avec 0, ou -999, ou une chaîne de caractères telle que `Z` au sein d'une variable numérique. En ce cas il faut recoder la modalité manquante.
 
 ### Est-il utile de créer des variables additionnelles?
 
@@ -94,7 +94,7 @@ Il s'agit d'un cas particulier où le nombre de sous-échantillons est égal à 
 
 L'estimation Out-of-Bag (OOB) et la validation croisée sont deux méthodes clés pour optimiser les hyper-paramètres d'une forêt aléatoire. Les deux approches permettent de comparer les performances obtenues pour différentes combinaisons d'hyper-paramètres et de sélectionner celles qui maximisent les performances prédictives, l'OOB étant souvent plus rapide et moins coûteuse, tandis que la validation croisée est plus fiable dans des situations où le surapprentissage est un risque important (@probst2019hyperparameters). 
 
-Il convient de définir une stratégie d'optimisation des hyperparamètres pour ne pas perdre de temps à tester trop de jeux d'hyperparamètres. Plusieurs stratégies existent pour y parvenir, les principales sont exposées dans la section @sec-guide-rf. Les implémentations des forêts aléatoires disponibles en `R` et en Python permettent d'optimiser aisément les principaux hyper-paramètres des forêts aléatoires.
+Il convient de définir une stratégie d'optimisation des hyperparamètres pour ne pas perdre de temps à tester trop de jeux d'hyperparamètres. Plusieurs stratégies existent pour y parvenir, les principales sont exposées dans [la section @sec-guide-rf]{.content-visible unless-format="html"}[le guide d'usage des forêts aléatoires]{.content-visible when-format="html"}. Les implémentations des forêts aléatoires disponibles en `R` et en Python permettent d'optimiser aisément les principaux hyper-paramètres des forêts aléatoires.
 
 #### Méthodes de recherche exhaustives
 
