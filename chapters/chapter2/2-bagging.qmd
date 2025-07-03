@@ -68,7 +68,7 @@ $$ {#eq-inegalite-breiman1996}
   
   - Le terme $E_L[(Y - \phi(x, L))^2]$ est l'erreur quadratique moyenne en $x$ d'un **prédicteur individuel** $\phi(x, L)$ entraîné sur un échantillon aléatoire $L$. Cette erreur varie en fonction des données d'entraînement.
     
-Cette inégalité montre que **l'erreur quadratique du prédicteur agrégé est toujours inférieure ou égale à l'erreur quadratique moyenne d'un prédicteur individuel**. Étant donné que le biais du prédicteur agrégé est identique au biais du prédicteur individuel, l'inégalité précédente implique que la **variance du modèle agrégé** $\phi_A(x)$ est **toujours inférieure ou égale** à la variance moyenne d'un modèle individuel:
+Cette inégalité montre que **l'erreur quadratique du prédicteur agrégé est toujours inférieure ou égale à l'erreur quadratique moyenne d'un prédicteur individuel**. Étant donné que le biais du prédicteur agrégé est égal au biais du prédicteur individuel, l'inégalité précédente implique que la **variance du modèle agrégé** $\phi_A(x)$ est **toujours inférieure ou égale** à la variance moyenne d'un modèle individuel:
 
 $$
 \text{Var}(\phi_A(x)) = \text{Var}(E_L[\phi(x, L)]) \leq E_L[\text{Var}(\phi(x, L))] 
@@ -76,7 +76,7 @@ $$
 
 Autrement dit, le processus d'agrégation réduit l'erreur de prédiction globale en réduisant la **variance** des prédictions, tout en conservant un biais constant.
 
-Ce résultat ouvre la voie à des considérations pratiques immédiates. Lorsque le modèle individuel est instable et présente une variance élevée, l'inégalité $Var(\phi_A(x)) \leq E_L[Var(\phi(x,L))]$ est forte, ce qui signifie que l'agrégation peut améliorer significativement la performance globale du modèle. En revanche, si $ϕ(x,L)$ varie peu d'un ensemble d'entraînement à un autre (modèle stable avec variance faible), alors $Var(\phi_A(x))$ est proche de $E_L[Var(\phi(x,L))]$, et la réduction de variance apportée par l'agrégation est faible. Ainsi, __le _bagging_ est particulièrement efficace pour les modèles instables__, tels que les arbres de décision, mais moins efficace pour les modèles stables tels que les méthodes des k plus proches voisins.
+Ce résultat ouvre la voie à des considérations pratiques immédiates. Lorsque le modèle individuel est instable et présente une variance élevée, l'inégalité $Var(\phi_A(x)) \leq E_L[Var(\phi(x,L))]$ est forte, ce qui signifie que l'agrégation peut améliorer significativement la performance globale du modèle. En revanche, si $\phi(x,L)$ varie peu d'un ensemble d'entraînement à un autre (modèle stable avec variance faible), alors $Var(\phi_A(x))$ est proche de $E_L[Var(\phi(x,L))]$, et la réduction de variance apportée par l'agrégation est faible. Ainsi, __le _bagging_ est particulièrement efficace pour les modèles instables__, tels que les arbres de décision, mais moins efficace pour les modèles stables tels que les méthodes des k plus proches voisins.
 
 
 
@@ -84,31 +84,23 @@ Ce résultat ouvre la voie à des considérations pratiques immédiates. Lorsque
 
 Dans le cas de la classification, le mécanisme de réduction de la variance par le _bagging_ permet, sous une certaine condition, d'atteindre un **classificateur presque optimal** (*nearly optimal classifier*). Ce concept a été introduit par @breiman1996bagging pour décrire un modèle qui tend à classer une observation dans la classe la plus probable, avec une performance approchant celle du classificateur Bayésien optimal (la meilleure performance théorique qu'un modèle de classification puisse atteindre).
 
-Pour comprendre ce résultat, introduisons $Q(j|x) = E_L(1_{φ(x, L) = j}) = P(φ(x, L) = j)$, la probabilité qu'un modèle $φ(x, L)$ prédise la classe $j$ pour l'observation $x$, et $P(j|x)$, la probabilité réelle (conditionnelle) que $x$ appartienne à la classe $j$.
+Pour comprendre ce résultat, introduisons $Q(j|x) = E_L(1_{φ(x, L) = j}) = P(φ(x, L) = j)$, la probabilité qu'un modèle $φ(x, L)$ prédise la classe $j$ pour l'observation $x$, et $P(j|x)$, la vraie probabilité qu'une observation de caractéristiques $x$ appartienne à la classe $j$.
 
 
 #### Définition : classificateur order-correct
 
-Un classificateur $φ(x, L)$ est dit **order-correct** pour une observation $x$ si, en espérance, il identifie **correctement la classe la plus probable**, même s’il ne prédit pas toujours avec exactitude les probabilités associées à chaque classe $Q(j∣x)$.
+Un classificateur $φ(x, L)$ est dit **order-correct** pour une observation $x$ si, en espérance, il identifie **correctement la classe la plus probable**, même s'il ne prédit pas toujours avec exactitude les probabilités associées à chaque classe $Q(j∣x)$. Formellement, un prédicteur est dit "order-correct" pour un vecteur de caractéristiques $x$ si $\underset{j}{argmax} Q(j|x) = \underset{j}{argmax} P(j|x)$ où $P(j|x)$ est la vraie probabilité que l'observation de caractéristiques $x$ appartienne à la classe $j$, et $Q(j|x)$ est la probabilité que l'observation de caractéristiques $x$ appartienne à la classe $j$ prédite par le modèle $φ(x, L)$. En termes moins techniques, la classe prédite le plus souvent par le modèle pour une observation $x$ correspond à la classe la plus probable pour cette observation dans la vraie distribution. 
 
-Cela signifie que si l'on considérait tous les ensemble de données possibles, et que l'on évaluait les prédictions du modèle en $x$, la majorité des prédictions correspondraient à la classe à laquelle il a la plus grande probabilité vraie d'appartenir $P(j∣x)$.
-
-Formellement, un prédicteur est dit "order-correct" pour une entrée $x$ si :
-
-$argmax_j Q(j|x) = argmax_j P(j|x) $
-
-où $P(j|x)$ est la vraie probabilité que l’observation $x$ appartienne à la classe $j$, et $Q(j|x)$ est la probabilité que $x$ appartienne à la classe $j$ prédite par le modèle $φ(x, L)$.
-
-Un classificateur est **order-correct** si, pour **chaque** observation $x$, la classe qu'il prédit correspond à celle qui a la probabilité maximale $P(j|x)$ dans la distribution vraie. 
+En généralisant sur toutes les valeurs de $x$, un classificateur est **order-correct** si, pour **tout** $x$, la classe qu'il prédit le plus souvent correspond à celle qui a la probabilité maximale $P(j|x)$ dans la vraie distribution. 
 
 
 #### Prédicteur agrégé en classification: le vote majoritaire
 
-Dans le cas de la classification, le prédicteur agrégé est défini par le **vote majoritaire**. Cela signifie que si $K$ classificateurs sont entraînés sur $K$ échantillons distincts, la classe prédite pour $x$ est celle qui reçoit **le plus de votes** de la part des modèles individuels.
+Dans le cas de la classification, le prédicteur agrégé est défini par le **vote majoritaire**. Cela signifie que si $K$ classificateurs sont entraînés sur $K$ échantillons distincts, la classe prédite pour $x$ est celle qui reçoit **le plus de votes** de la part des modèles individuels. Formellement, le classificateur agrégé $φA(x)$ est défini par :
 
-Formellement, le classificateur agrégé $φA(x)$ est défini par :
-
-$φA(x) =  \text{argmax}_j \sum_{L} I(\phi(x, L) = j) = argmax_j Q(j|x)$
+$$
+φA(x) =  \text{argmax}_j \sum_{L} I(\phi(x, L) = j) = argmax_j Q(j|x)
+$$
  
 #### Performance globale: convergence vers un classificateur presque optimal
 
@@ -116,7 +108,7 @@ $φA(x) =  \text{argmax}_j \sum_{L} I(\phi(x, L) = j) = argmax_j Q(j|x)$
 
 Le classificateur agrégé $ϕA$ est optimal s'il prédit systématiquement la classe la plus probable pour l'observation $x$ dans toutes les régions de l'espace. 
 
-Cependant, dans les régions de l’espace où les classificateurs individuels ne sont pas order-corrects (c’est-à-dire qu'ils se trompent majoritairement sur la classe d'appartenance), l'agrégation par vote majoritaire n'améliore pas les performances. Elles peuvent même se détériorer par rapport aux modèles individuels si l'agrégation conduit à amplifier des erreurs systématiques (biais).
+Cependant, dans les régions de l'espace où les classificateurs individuels ne sont pas order-corrects (c'est-à-dire qu'ils se trompent majoritairement sur la classe d'appartenance), l'agrégation par vote majoritaire n'améliore pas les performances. Elles peuvent même se détériorer par rapport aux modèles individuels si l'agrégation conduit à amplifier des erreurs systématiques (biais).
 
 
 ## L'échantillage par bootstrap peut détériorer les performances théoriques du modèle agrégé
@@ -156,7 +148,7 @@ Inversement, le _bagging_ peut être moins efficace ou même néfaste dans certa
 ### Comment utiliser le _bagging_ en pratique
 
 #### Combien de modèles agréger?
-"Optimal performance is often found by _bagging_ 50–500 trees. Data sets that have a few strong predictors typically require less trees; whereas data sets with lots of noise or multiple strong predictors may need more. Using too many trees will not lead to overfitting. However, it’s important to realize that since multiple models are being run, the more iterations you perform the more computational and time requirements you will have. As these demands increase, performing k-fold CV can become computationally burdensome."
+"Optimal performance is often found by _bagging_ 50–500 trees. Data sets that have a few strong predictors typically require less trees; whereas data sets with lots of noise or multiple strong predictors may need more. Using too many trees will not lead to overfitting. However, it's important to realize that since multiple models are being run, the more iterations you perform the more computational and time requirements you will have. As these demands increase, performing k-fold CV can become computationally burdensome."
 
 #### Evaluation du modèle: cross validation et échantillon Out-of-bag (OOB)
 
