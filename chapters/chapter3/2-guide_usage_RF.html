@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.8.24">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -54,14 +54,15 @@ div.csl-indent {
 <link href="../../images/favicon.ico" rel="icon">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-ea167b1c95185128cea848f008f0cb8f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-b0ce400981af6002bfdd55bfc8303ed1.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -104,7 +105,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -146,12 +147,11 @@ window.Quarto = {
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-center sidebar-header">
-    <div class="sidebar-title mb-0 py-0">
-      <a href="../../">Introduction aux méthodes ensemblistes</a> 
-        <div class="sidebar-tools-main">
+      <a href="../../index.html" class="sidebar-logo-link">
+      </a>
+      <div class="sidebar-tools-main">
     <a href="../.././pdf/dt_methodes_ensemblistes.pdf" title="NMFS Open Science" class="quarto-navigation-tool px-1" aria-label="NMFS Open Science"><i class="bi bi-file-pdf-fill"></i></a>
 </div>
-    </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
@@ -365,17 +365,17 @@ Table&nbsp;1: Les principaux hyperparamètres des forêts aléatoires
 <h3 data-number="1.3.1" class="anchored" data-anchor-id="approche-simple"><span class="header-section-number">1.3.1</span> Approche simple</h3>
 <p>Voici une procédure simple pour entraîner une forêt aléatoire. Elle ne garantit pas l’obtention d’un modèle optimal, mais elle est lisible et permet d’obtenir rapidement un modèle raisonnablement performant.</p>
 <ul>
-<li><strong>Entraîner une forêt aléatoire avec les valeurs des hyperparamètres par défaut</strong>. Ce premier modèle servira de point de comparaison pour la suite.</li>
-<li><strong>Ajuster le nombre d’arbres</strong>: entraîner une forêt aléatoire avec les hyperparamètres par défaut en augmentant progressivement le nombre d’arbres, puis déterminer à partir de quel nombre d’arbres la performance se stabilise (en mesurant la performance avec l’erreur OOB avec pour métrique le <a href="https://scikit-learn.org/dev/modules/model_evaluation.html#brier-score-loss">score de Brier</a>). Fixer le nombre d’arbres à cette valeur par la suite.</li>
-<li><strong>Ajuster le nombre de variables candidates et le taux d’échantillonnage</strong>: optimiser ces deux hyperparamètres grâce à une méthode de <em>grid search</em> évaluée par une approche de validation-croisée, ou par une approche reposant sur l’erreur OOB.</li>
-<li><strong>Ajuster le nombre minimal d’observations dans les noeuds terminaux</strong>: optimiser cet hyperparamètre grâce à une méthode de <em>grid search</em> évaluée par une approche de validation-croisée, ou par une approche reposant sur l’erreur OOB. Ce n’est pas l’hyperparamètre le plus important, mais s’il est possible de le fixer à une valeur plus élevée que la valeur par défaut sans perte de performance, cela permet d’accélérer le reste de la procédure.</li>
-<li><strong>Entraîner le modèle final</strong>: entraîner une forêt aléatoire avec les hyperparamètres optimisés déduits des étapes précédentes.</li>
-<li><strong>Évaluer le modèle final</strong>: mesurer la performance du modèle final soit avec l’approche <em>out-of-bag</em> (OOB), soit avec un ensemble de test. Il est souvent instructif de comparer les performances du modèle final et du modèle entraîné avec les valeurs des hyperparamètres par défaut (parfois pour se rendre compte que ce dernier était déjà suffisamment performant…).</li>
+<li><p><strong>Entraîner une forêt aléatoire avec les valeurs des hyperparamètres par défaut</strong>. Ce premier modèle servira de point de comparaison pour la suite.</p></li>
+<li><p><strong>Ajuster le nombre d’arbres</strong>: entraîner une forêt aléatoire avec les hyperparamètres par défaut en augmentant progressivement le nombre d’arbres, puis déterminer à partir de quel nombre d’arbres la performance se stabilise (en mesurant la performance avec l’erreur OOB avec pour métrique le <a href="https://scikit-learn.org/dev/modules/model_evaluation.html#brier-score-loss">score de Brier</a>). Fixer le nombre d’arbres à cette valeur par la suite.</p></li>
+<li><p><strong>Ajuster le nombre de variables candidates et le taux d’échantillonnage</strong>: optimiser ces deux hyperparamètres grâce à une méthode de <em>grid search</em> évaluée par une approche de validation-croisée, ou par une approche reposant sur l’erreur OOB.</p></li>
+<li><p><strong>Ajuster le nombre minimal d’observations dans les noeuds terminaux</strong>: optimiser cet hyperparamètre grâce à une méthode de <em>grid search</em> évaluée par une approche de validation-croisée, ou par une approche reposant sur l’erreur OOB. Ce n’est pas l’hyperparamètre le plus important, mais s’il est possible de le fixer à une valeur plus élevée que la valeur par défaut sans perte de performance, cela permet d’accélérer le reste de la procédure.</p></li>
+<li><p><strong>Entraîner le modèle final</strong>: entraîner une forêt aléatoire avec les hyperparamètres optimisés déduits des étapes précédentes.</p></li>
+<li><p><strong>Évaluer le modèle final</strong>: mesurer la performance du modèle final soit avec l’approche <em>out-of-bag</em> (OOB), soit avec un ensemble de test. Il est souvent instructif de comparer les performances du modèle final et du modèle entraîné avec les valeurs des hyperparamètres par défaut (parfois pour se rendre compte que ce dernier était déjà suffisamment performant…).</p></li>
 </ul>
 </section>
 <section id="approches-plus-avancées" class="level3" data-number="1.3.2">
 <h3 data-number="1.3.2" class="anchored" data-anchor-id="approches-plus-avancées"><span class="header-section-number">1.3.2</span> Approches plus avancées</h3>
-<p>Lorsque l’espace des hyperparamètres est large ou que les performances initiales sont insuffisantes, adopter des méthodes avancées comme l’ptimisation basée sur un modèle séquentiel (SMBO). En <code>R</code>, il existe plusieurs implémentations d’appuyant sur cette méthode: <code>tuneRF</code> (limité à l’optimisation de <code>mtry</code>), tuneRanger (optimise simultanément <code>mtry</code>, node size, et sample size). La méthode SMBO est généralement la plus performante, mais demande un temps de calcul plus important.</p>
+<p>Lorsque l’espace des hyperparamètres est large ou que les performances initiales sont insuffisantes, adopter des méthodes avancées comme l’ptimisation basée sur un modèle séquentiel (SMBO). En <code>R</code>, il existe plusieurs implémentations d’appuyant sur cette méthode: <code>tuneRF</code> (limité à l’optimisation de <code>mtry</code>), <code>tuneRanger</code> (optimise simultanément <code>mtry</code>, node size, et sample size). La méthode SMBO est généralement la plus performante, mais demande un temps de calcul plus important.</p>
 <p>Il est également possible de remplacer les critères classiques (le taux d’erreur pour une classification par exemple) par d’autres critères de performance, comme le score de Brier ou la fonction de perte logarithmique (<span class="citation" data-cites="probst2018tune">Probst and Boulesteix (<a href="#ref-probst2018tune" role="doc-biblioref">2018</a>)</span>).</p>
 <p>Pour gérer la contrainte computationnelle, il est possible de commencer par utiliser des échantillons réduits pour les étapes exploratoires, puis d’augmenter la taille de l’échantillon pour les tests finaux.</p>
 <!-- #### Classification ordonnée versus non ordonnée
@@ -476,13 +476,14 @@ Strobl, Carolin, Anne-Laure Boulesteix, Achim Zeileis, and Torsten Hothorn. 2007
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
