@@ -28,15 +28,9 @@ Deux constats:
 
 Ce document répond à plusieurs ambitions:
 
-- proposer deux niveaux de lecture
+- __Proposer deux niveaux de lecture__: un premier niveau qui s'adresse à ceux qui souhaitent comprendre la logique des méthodes ensembliste sans se plonger dans les détails techniques, et un second niveau qui entre davantage dans les détails des algorithmes et de leurs implémentations. L'existence de ces deux niveaux de lecture implique nécessairement quelques répétitions, qu'on espère toutefois peu nombreuses.
 
-L'existence de ces deux niveaux de lecture implique nécessairement quelques répétitions, qu'on espère toutefois peu nombreuses.
-
-
-- Proposer une introduction raisonnée aux méthodes ensemblistes qui rassemble l'ensemble des connaissances pertinentes: fondements théoriques et propriétés des algorithmes, description des implémentations existantes et guide d'usage détaillé.
-
-Bien insister sur la
-
+- __Proposer une introduction raisonnée aux méthodes ensemblistes qui rassemble l'ensemble des connaissances pertinentes__: fondements théoriques et propriétés des algorithmes, description des implémentations existantes et guide d'usage détaillé.
 
 Détailler le plan
 
