@@ -31,7 +31,7 @@ Pour surmonter ces difficultés, les algorithmes d'arbres de décision, et notam
 
 ### Terminologie et structure d'un arbre de décision
 
-Cet algorithme est appelé __arbre de décision__ (_decision tree_) en raison provient de la structure arborescente en forme d'arbre inversé qui apparaît lorsqu'on en fait une représentation graphique (voir figure @fig-decision-tree-description). Plus généralement, les principaux éléments qui composent les arbres de décision sont désignés par des termes issus du champ lexical des arbres:
+Cet algorithme est appelé __arbre de décision__ (_decision tree_) en raison de la structure arborescente en forme d'arbre inversé qui apparaît lorsqu'on en fait une représentation graphique (voir figure @fig-decision-tree-description). Plus généralement, les principaux éléments qui composent les arbres de décision sont désignés par des termes issus du champ lexical des arbres:
 
 - **Nœud Racine (_Root Node_)**: Le nœud-racine est le point de départ de l'arbre de décision, il est situé au sommet de l'arbre. Il contient l'ensemble des données d'entraînement avant tout partitionnement. À ce niveau, l'algorithme cherche la caractéristique la plus discriminante, c'est-à-dire celle qui permet de diviser les données en deux régions de manière à minimiser un certain critère d'hétérogénéité (comme l'indice de Gini pour la classification ou la variance pour la régression).
 
