@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.24">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -59,7 +59,7 @@ div.csl-indent {
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../site_libs/bootstrap/bootstrap-b0ce400981af6002bfdd55bfc8303ed1.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -316,7 +316,7 @@ window.Quarto = {
 </section>
 <section id="terminologie-et-structure-dun-arbre-de-décision" class="level3" data-number="1.1.3">
 <h3 data-number="1.1.3" class="anchored" data-anchor-id="terminologie-et-structure-dun-arbre-de-décision"><span class="header-section-number">1.1.3</span> Terminologie et structure d’un arbre de décision</h3>
-<p>Cet algorithme est appelé <strong>arbre de décision</strong> (<em>decision tree</em>) en raison provient de la structure arborescente en forme d’arbre inversé qui apparaît lorsqu’on en fait une représentation graphique (voir figure <a href="#fig-decision-tree-description" class="quarto-xref">1</a>). Plus généralement, les principaux éléments qui composent les arbres de décision sont désignés par des termes issus du champ lexical des arbres:</p>
+<p>Cet algorithme est appelé <strong>arbre de décision</strong> (<em>decision tree</em>) en raison de la structure arborescente en forme d’arbre inversé qui apparaît lorsqu’on en fait une représentation graphique (voir figure <a href="#fig-decision-tree-description" class="quarto-xref">1</a>). Plus généralement, les principaux éléments qui composent les arbres de décision sont désignés par des termes issus du champ lexical des arbres:</p>
 <ul>
 <li><p><strong>Nœud Racine (<em>Root Node</em>)</strong>: Le nœud-racine est le point de départ de l’arbre de décision, il est situé au sommet de l’arbre. Il contient l’ensemble des données d’entraînement avant tout partitionnement. À ce niveau, l’algorithme cherche la caractéristique la plus discriminante, c’est-à-dire celle qui permet de diviser les données en deux régions de manière à minimiser un certain critère d’hétérogénéité (comme l’indice de Gini pour la classification ou la variance pour la régression).</p></li>
 <li><p><strong>Nœuds Internes (<em>Internal Nodes</em>)</strong>: Les nœuds internes sont les points intermédiaires où l’algorithme CART applique des règles de décision pour diviser les données en sous-régions plus petites. Chaque nœud interne se définit par une <strong>règle de décision</strong> basée sur une variable et un seuil, qui sert à opérer un partitionnement des données. Le plus souvent, la règle de décision est exprimée sous la forme d’une inégalité telle que <code>x_3 &lt;= 7</code>. Chaque nœud interne a la fois un <strong>nœud-parent</strong> (<em>parent node</em>) dont il constitue une sous-région et deux <strong>nœuds-enfants</strong> (<em>child nodes</em>) qui le partitionnent. Le noeud de gauche regroupe les observations pour lesquelles la règle de décision est vérifiée (valeurs basses); le noeud de droite regroupe les observations pour lesquelles la règle de décision n’est pas vérifiée (valeurs élevées).</p></li>
