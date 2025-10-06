@@ -203,8 +203,9 @@ A partir de l'équation @eq-fct-obj-final, il est possible de faire apparaître,
 
 $$
 \begin{align*}
-\tilde{L}^{(t)} =&   \sum_{j=1}^{T} \sum_{i\in I_{j}} \bigg[g_i f_t(\mathbf{x}_i)\phantom{\frac{1}{2}} &+ \frac{1}{2} h_i [f_t(\mathbf{x}_i)]^2\bigg]&+ \gamma T + \frac{1}{2} \lambda \sum_{j=1}^T w_i^2 \\
-     &= \sum_{j=1}^{T} \sum_{i\in I_{j}} \bigg[g_i w_j &+ \frac{1}{2} h_i w_j^2\bigg] &+ \gamma T + \frac{1}{2} \lambda \sum_{j=1}^T w_i^2 \\
+\tilde{L}^{(t)} 
+     &=   \sum_{j=1}^{T} \sum_{i\in I_{j}} \bigg[g_i f_t(\mathbf{x}_i) &+ \frac{1}{2} h_i [f_t(\mathbf{x}_i)]^2\bigg]&+ \gamma T + \frac{1}{2} \lambda \sum_{j=1}^T w_j^2 \\
+     &= \sum_{j=1}^{T} \sum_{i\in I_{j}} \bigg[g_i w_j &+ \frac{1}{2} h_i w_j^2\bigg] &+ \gamma T + \frac{1}{2} \lambda \sum_{j=1}^T w_j^2 \\
      &= \sum^T_{j=1} \bigg[w_j\sum_{i\in I_{j}} g_i &+ \frac{1}{2} w_j^2 \left( \sum_{i \in I_{j}} h_i + \lambda \right) \bigg] &+ \gamma T
 \end{align*}
 $$
