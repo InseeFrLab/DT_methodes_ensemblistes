@@ -82,7 +82,7 @@ Les arbres CART présentent plusieurs avantages: leur principe est simple, ils s
 
 Ils souffrent néanmoins de deux limites. D'une part, les arbres CART ont souvent un __pouvoir prédictif faible__ qui en limite l'usage. D'autre part, ils sont __peu robustes et instables__: on dit qu'ils présentent une __variance élevée__. Ainsi, un léger changement dans les données (par exemple l'ajout ou la suppression de quelques observations) peut entraîner des modifications significatives dans la structure de l'arbre et dans la définition des régions utilisées pour la prédiction (feuilles). Les arbres CART sont notamment sensibles aux valeurs extrêmes, aux points aberrants et au bruit statistique. De plus, les prédictions des arbres CART sont sensibles à de petites fluctuations des données d'échantillonnage: celles-ci peuvent aboutir à ce qu'une partie des observations change brutalement de feuille et donc de valeur prédite.
 
-Ces limites motivent l'utilisation des deux familles de méthodes ensemblistes présentées dans la suite (le _bagging_, dont la _random forests_, et le _gradient boosting_), qui s'appuient sur un grand nombre d'arbres pour accroître à la fois la précision et la stabilité des prédictions. La différence essentielle entre ces deux familles portent sur la façon dont les arbres sont entraînés.
+Ces limites motivent l'utilisation des deux familles de méthodes ensemblistes présentées dans la suite (le _bagging_, dont la _random forests_, et le _gradient boosting_), qui s'appuient sur un grand nombre d'arbres pour accroître à la fois la précision et la stabilité des prédictions. La différence essentielle entre ces deux familles porte sur la façon dont les arbres sont entraînés.
 
 
 ::: {.callout-note title="Les familles de méthodes ensemblistes"}
