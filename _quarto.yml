@@ -36,6 +36,14 @@ website:
   repo-actions: [edit, source, issue]
   favicon: images/favicon.ico
   
+  navbar:
+    left:
+      - href: index.qmd
+        text: Accueil
+    right:
+      - text: "English version"
+        href: "https://inseefrlab-github-io.translate.goog/DT_methodes_ensemblistes/?_x_tr_sl=fr&_x_tr_tl=en&_x_tr_hl=en&_x_tr_pto=wapp"
+
   page-footer:
     right: "This page is built with [Quarto](https://quarto.org/)."
     left: "&copy; CC-1.0"
