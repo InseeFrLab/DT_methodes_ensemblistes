@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.9.37">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>guide_usage_rf – Introduction aux méthodes ensemblistes</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -24,7 +27,6 @@ ul.task-list li input[type="checkbox"] {
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
-  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -54,21 +56,20 @@ div.csl-indent {
 <link href="../../images/favicon.ico" rel="icon">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-b0ce400981af6002bfdd55bfc8303ed1.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-eb0bbfcb936562f326230a82a52e3863.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
-  "location": "sidebar",
+  "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
-  "panel-placement": "start",
-  "type": "textbox",
+  "panel-placement": "end",
+  "type": "overlay",
   "limit": 50,
   "keyboard-shortcut": [
     "f",
@@ -92,7 +93,7 @@ div.csl-indent {
 }</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -124,10 +125,39 @@ window.Quarto = {
 <link rel="stylesheet" href="../../custom.css">
 </head>
 
-<body class="nav-sidebar docked quarto-light">
+<body class="nav-sidebar docked nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Introduction aux méthodes ensemblistes</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="../../index.html" aria-current="page"> 
+<span class="menu-text">Accueil</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://inseefrlab-github-io.translate.goog/DT_methodes_ensemblistes/?_x_tr_sl=fr&amp;_x_tr_tl=en&amp;_x_tr_hl=en&amp;_x_tr_pto=wapp"> 
+<span class="menu-text">English version</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
@@ -143,21 +173,17 @@ window.Quarto = {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
-    <div class="pt-lg-2 mt-2 text-center sidebar-header">
-      <a href="../../index.html" class="sidebar-logo-link">
-      </a>
-      <div class="sidebar-tools-main">
-    <a href="../.././pdf/dt_methodes_ensemblistes.pdf" title="NMFS Open Science" class="quarto-navigation-tool px-1" aria-label="NMFS Open Science"><i class="bi bi-file-pdf-fill"></i></a>
-</div>
-      </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
         <div id="quarto-search" class="" title="Search"></div>
         </div>
         </div>
+        <div class="sidebar-tools-collapse">
+    <a href="../.././pdf/dt_methodes_ensemblistes.pdf" title="NMFS Open Science" class="quarto-navigation-tool px-1" aria-label="NMFS Open Science"><i class="bi bi-file-pdf-fill"></i></a>
+</div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
@@ -280,7 +306,7 @@ window.Quarto = {
 
 <section id="sec-guide-rf" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Guide d’usage des forêts aléatoires</h1>
-<p>Ce guide d’entraînement des forêts aléatoires rassemble et synthétise des recommandations sur l’entraînement des forêts aléatoires disponibles dans la littérature, en particulier dans <span class="citation" data-cites="probst2019hyperparameters">Probst, Wright, and Boulesteix (<a href="#ref-probst2019hyperparameters" role="doc-biblioref">2019</a>)</span> et <span class="citation" data-cites="biau2016random">Biau and Scornet (<a href="#ref-biau2016random" role="doc-biblioref">2016</a>)</span>. Ce guide comporte un certain nombre de choix méthodologiques forts, comme les implémentations recommandées ou la procédure proposée pour l’optimisation des hyperparamètres, et d’autres choix pertinents sont évidemment possibles. C’est pourquoi les recommandations de ce guide doivent être considérées comme un point de départ raisonnable, pas comme un ensemble de règles devant être respectées à tout prix.</p>
+<p>Ce guide d’entraînement des forêts aléatoires rassemble et synthétise des recommandations sur l’entraînement des forêts aléatoires disponibles dans la littérature, en particulier dans <span class="citation" data-cites="probst2019hyperparameters">Probst, Wright, et al. (<a href="#ref-probst2019hyperparameters" role="doc-biblioref">2019</a>)</span> et <span class="citation" data-cites="biau2016random">Biau and Scornet (<a href="#ref-biau2016random" role="doc-biblioref">2016</a>)</span>. Ce guide comporte un certain nombre de choix méthodologiques forts, comme les implémentations recommandées ou la procédure proposée pour l’optimisation des hyperparamètres, et d’autres choix pertinents sont évidemment possibles. C’est pourquoi les recommandations de ce guide doivent être considérées comme un point de départ raisonnable, pas comme un ensemble de règles devant être respectées à tout prix.</p>
 <section id="sec-implementation-rf" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="sec-implementation-rf"><span class="header-section-number">1.1</span> Quelles implémentations utiliser?</h2>
 <p>Il existe de multiples implémentations des forêts aléatoires. Le présent document présente et recommande l’usage de deux implémentations de référence: le <em>package</em> <code>R</code> <code>ranger</code> et le <em>package</em> <code>Python</code> <code>scikit-learn</code> pour leur rigueur, leur efficacité et leur simplicité d’utilisation. Il est à noter qu’il est possible d’entraîner des forêts aléatoires avec les algorithmes <code>XGBoost</code> et <code>LightGBM</code>, mais il s’agit d’un usage avancé qui n’est pas recommandé en première approche. Cette approche est présentée dans la partie <strong>REFERENCE A LA PARTIE USAGE AVANCE</strong>.</p>
@@ -351,14 +377,14 @@ Table&nbsp;1: Les principaux hyperparamètres des forêts aléatoires
 <ul>
 <li><p>Le <strong>nombre d’arbres</strong> par défaut varie selon les implémentations (500 dans <code>ranger</code>, 100 dans <code>scikit-learn</code>). Il s’agit d’un hyperparamètre particulier car il n’est associé à aucun arbitrage en matière de performance: la performance de la forêt aléatoire croît avec le nombre d’arbres, puis se stabilise. Le nombre optimal d’arbres est celui à partir duquel la performance de la forêt ne croît plus (ce point est détaillé plus bas) où à partir duquel l’ajout d’arbres supplémentaires génère des gains marginaux. Il est important de noter que ce nombre optimal dépend des autres hyperparamètres. Par exemple, un taux d’échantillonnage faible et un nombre faible de variables candidates à chaque noeud aboutissent à des arbres peu corrélés, mais peu performants, ce qui requiert probablement un plus grand nombre d’arbres. Dans le cas d’une classification, l’utilisation de mesures comme le score de Brier ou la fonction de perte logarithmique est recommandée pour évaluer la convergence plutôt que la précision (métrique par défaut de <code>ranger</code> et <code>scikit-learn</code>).</p></li>
 <li><p>Le <strong>nombre (ou la part) de variables candidates à chaque noeud</strong> (souvent appelé <code>mtry</code>) est un hyperparamètre essentiel qui détermine le nombre de variables prédictives sélectionnées aléatoirement à chaque nœud lors de la construction des arbres. Ce paramètre exerce la plus forte influence sur les performances du modèle, et un compromis doit être trouvé entre puissance prédictive des arbres et corrélation entre arbres. Une faible valeur de <code>mtry</code> conduit à des arbres moins performants mais plus diversifiés et donc moins corrélés entre eux. Inversement, une valeur plus élevée améliore la précision des arbres individuels mais accroît leur corrélation (les mêmes variables ayant tendance à être sélectionnées dans tous les arbres). La valeur optimale de <code>mtry</code> dépend du nombre de variables réellement pertinentes dans les données: elle est plus faible lorsque la plupart des variables sont pertinentes, et plus élevée lorsqu’il y a peu de variables pertinentes. Par ailleurs, une valeur élevée de <code>mtry</code> est préférable si les données comprennent un grand nombre de variables binaires issues du <em>one-hot-encoding</em> des variables catégorielles (LIEN AVEC LA PARTIE PREPROCESSING). Par défaut, cette valeur est fréquemment fixée à <span class="math inline">\(\sqrt{p}\)</span> pour les problèmes de classification et à <span class="math inline">\(p/3\)</span> pour les problèmes de régression, où <span class="math inline">\(p\)</span> représente le nombre total de variables prédictives disponibles.</p></li>
-<li><p>Le <strong>taux d’échantillonnage</strong> et le <strong>mode de tirage</strong> contrôlent le plan d’échantillonnage des données d’entraînement. Les valeurs par défaut varient d’une implémentation à l’autre; dans le cas de <code>ranger</code>, le taux d’échantillonnage est de 63,2% sans remise, et de 100% avec remise. L’implémentation <code>scikit-learn</code> ne propose pas le tirage sans remise. Ces hyperparamètres ont des effets sur la performance similaires à ceux du nombre de variables candidates, mais d’une moindre ampleur. Un taux d’échantillonnage plus faible aboutit à des arbres plus diversifiés et donc moins corrélés (car ils sont entraînés sur des échantillons très différents), mais ces arbres peuvent être peu performants car ils sont entraînés sur des échantillons de petite taille. Inversement, un taux d’échantillonnage élevé aboutit à des arbres plus performants mais plus corrélés. Les effets de l’échantillonnage avec ou sans remise sur la performance de la forêt aléatoire sont moins clairs et ne font pas consensus. Les travaux les plus récents semblent toutefois suggérer qu’il est préférable d’échantillonner sans remise (<span class="citation" data-cites="probst2019hyperparameters">Probst, Wright, and Boulesteix (<a href="#ref-probst2019hyperparameters" role="doc-biblioref">2019</a>)</span>).</p></li>
+<li><p>Le <strong>taux d’échantillonnage</strong> et le <strong>mode de tirage</strong> contrôlent le plan d’échantillonnage des données d’entraînement. Les valeurs par défaut varient d’une implémentation à l’autre; dans le cas de <code>ranger</code>, le taux d’échantillonnage est de 63,2% sans remise, et de 100% avec remise. L’implémentation <code>scikit-learn</code> ne propose pas le tirage sans remise. Ces hyperparamètres ont des effets sur la performance similaires à ceux du nombre de variables candidates, mais d’une moindre ampleur. Un taux d’échantillonnage plus faible aboutit à des arbres plus diversifiés et donc moins corrélés (car ils sont entraînés sur des échantillons très différents), mais ces arbres peuvent être peu performants car ils sont entraînés sur des échantillons de petite taille. Inversement, un taux d’échantillonnage élevé aboutit à des arbres plus performants mais plus corrélés. Les effets de l’échantillonnage avec ou sans remise sur la performance de la forêt aléatoire sont moins clairs et ne font pas consensus. Les travaux les plus récents semblent toutefois suggérer qu’il est préférable d’échantillonner sans remise (<span class="citation" data-cites="probst2019hyperparameters">Probst, Wright, et al. (<a href="#ref-probst2019hyperparameters" role="doc-biblioref">2019</a>)</span>).</p></li>
 <li><p>Le <strong>nombre minimal d’observations dans les noeuds terminaux</strong> contrôle la taille des noeuds terminaux. La valeur par défaut est faible dans la plupart des implémentations (entre 1 et 5). Il n’y a pas vraiment de consensus sur l’effet de cet hyperparamètre sur les performances, bien qu’une valeur plus faible augmente le risque de sur-apprentissage. En revanche, il est certain que le temps d’entraînement décroît fortement avec cet hyperparamètre: une valeur faible implique des arbres très profonds, avec un grand nombre de noeuds. Il peut donc être utile de fixer ce nombre à une valeur plus élevée pour accélérer l’entraînement, en particulier si les données sont volumineuses et si on utilise une méthode de validation croisée pour le choix des autres hyperparamètres. Cela se fait généralement sans perte significative de performance.</p></li>
-<li><p>Le <strong>critère de choix de la règle de division des noeuds intermédiaires</strong>: la plupart des implémentations des forêts aléatoires retiennent par défaut l’impureté de Gini pour la classification et la variance pour la régression, même si d’autres critères de choix ont été proposés dans la littérature (p-value dans les forêts d’inférence conditionnelle, arbres extrêmement randomisés, etc.). Chaque règle présente des avantages et des inconvénients, notamment en termes de biais de sélection des variables et de vitesse de calcul. A ce stade, aucun critère de choix ne paraît systématiquement supérieur aux autres en matière de performance. Modifier cet hyperparamètre relève d’un usage avancé des forêts aléatoires. Le lecteur intéressé pourra se référer à la discussion détaillée dans <span class="citation" data-cites="probst2019hyperparameters">Probst, Wright, and Boulesteix (<a href="#ref-probst2019hyperparameters" role="doc-biblioref">2019</a>)</span>.</p></li>
+<li><p>Le <strong>critère de choix de la règle de division des noeuds intermédiaires</strong>: la plupart des implémentations des forêts aléatoires retiennent par défaut l’impureté de Gini pour la classification et la variance pour la régression, même si d’autres critères de choix ont été proposés dans la littérature (p-value dans les forêts d’inférence conditionnelle, arbres extrêmement randomisés, etc.). Chaque règle présente des avantages et des inconvénients, notamment en termes de biais de sélection des variables et de vitesse de calcul. A ce stade, aucun critère de choix ne paraît systématiquement supérieur aux autres en matière de performance. Modifier cet hyperparamètre relève d’un usage avancé des forêts aléatoires. Le lecteur intéressé pourra se référer à la discussion détaillée dans <span class="citation" data-cites="probst2019hyperparameters">Probst, Wright, et al. (<a href="#ref-probst2019hyperparameters" role="doc-biblioref">2019</a>)</span>.</p></li>
 </ul>
 </section>
 <section id="sec-procedure-training-rf" class="level2" data-number="1.3">
 <h2 data-number="1.3" class="anchored" data-anchor-id="sec-procedure-training-rf"><span class="header-section-number">1.3</span> Comment entraîner une forêt aléatoire?</h2>
-<p>Les forêts aléatoires nécessitent généralement moins d’optimisation que d’autres modèles de <em>machine learning</em>, car leurs performances varient relativement peu en fonction des hyperparamètres. Les valeurs par défaut fournissent souvent des résultats satisfaisants, ce qui réduit le besoin d’optimisation intensive (<span class="citation" data-cites="probst2018tune">Probst and Boulesteix (<a href="#ref-probst2018tune" role="doc-biblioref">2018</a>)</span>, <span class="citation" data-cites="probst2019tunability">Probst, Boulesteix, and Bischl (<a href="#ref-probst2019tunability" role="doc-biblioref">2019</a>)</span>). Cependant, un ajustement précis des hyperparamètres peut apporter des gains de performance, notamment sur des jeux de données complexes.</p>
+<p>Les forêts aléatoires nécessitent généralement moins d’optimisation que d’autres modèles de <em>machine learning</em>, car leurs performances varient relativement peu en fonction des hyperparamètres. Les valeurs par défaut fournissent souvent des résultats satisfaisants, ce qui réduit le besoin d’optimisation intensive (<span class="citation" data-cites="probst2018tune">Probst and Boulesteix (<a href="#ref-probst2018tune" role="doc-biblioref">2018</a>)</span>, <span class="citation" data-cites="probst2019tunability">Probst, Boulesteix, et al. (<a href="#ref-probst2019tunability" role="doc-biblioref">2019</a>)</span>). Cependant, un ajustement précis des hyperparamètres peut apporter des gains de performance, notamment sur des jeux de données complexes.</p>
 <p>Comme indiqué dans la partie <strong>?@sec-facteur-perf-rf</strong>, la performance prédictive d’une forêt aléatoire varie en fonction de deux critères essentiels: elle croît avec le pouvoir prédictif des arbres, et décroît avec la corrélation des arbres entre eux. L’optimisation des hyperparamètres d’une forêt aléatoire vise donc à trouver un équilibre optimal où les arbres sont suffisamment puissants pour être prédictifs, tout en étant suffisamment diversifiés pour que leurs erreurs ne soient pas trop corrélées.</p>
 <p>La littérature propose de multiples approches pour optimiser simultanément plusieurs hyperparamètres: la recherche par grille (<em>grid search</em>), la recherche aléatoire (<em>random search</em>) et l’optimisation basée sur modèle séquentiel (SMBO), et il peut être difficile de savoir quelle approche adopter. Ce guide propose donc une première approche délibérément simple, avant de présenter les approches plus avancées.</p>
 <section id="approche-simple" class="level3" data-number="1.3.1">
@@ -387,13 +413,13 @@ Table&nbsp;1: Les principaux hyperparamètres des forêts aléatoires
 <section id="mesurer-limportance-des-variables" class="level2" data-number="1.4">
 <h2 data-number="1.4" class="anchored" data-anchor-id="mesurer-limportance-des-variables"><span class="header-section-number">1.4</span> Mesurer l’importance des variables</h2>
 <p>Il s’avère souvent utile de savoir quelles sont les variables qui jouent le plus grand rôle dans un modèle, à la fois pour en interpréter les résultats mais aussi pour conserver uniquement les variables pertinentes de façon à construire un modèle performant et parcimonieux.</p>
-<p>Il existe plusieurs méthodes classiques d’évaluation de l’importance des variables, telles que l’indice de Gini (<em>Mean Decrease in Impurity</em> - MDI) et l’importance par permutation (<em>Mean Decrease Accuracy</em> - MDA). Bien qu’elles soient fréquemment utilisées, il est important de garder en tête que ces mesures d’importance n’ont pas de fondement statistique précis. Par ailleurs, ces méthodes peuvent produire des résultats biaisés dans certaines situations (<span class="citation" data-cites="strobl2007bias">Strobl et al. (<a href="#ref-strobl2007bias" role="doc-biblioref">2007</a>)</span>, <span class="citation" data-cites="benard2022mda">Bénard, Da Veiga, and Scornet (<a href="#ref-benard2022mda" role="doc-biblioref">2022</a>)</span>, <span class="citation" data-cites="benard2022shaff">Bénard et al. (<a href="#ref-benard2022shaff" role="doc-biblioref">2022</a>)</span>). En particulier, elles peuvent surestimer l’importance de certaines variables lorsque les variables prédictives sont fortement corrélées, présentent des échelles de mesure différentes ou possèdent un nombre variable de catégories. Par exemple, les variables avec un grand nombre de catégories ou des échelles continues étendues peuvent être artificiellement privilégiées, même si leur contribution réelle à la prédiction est limitée.</p>
+<p>Il existe plusieurs méthodes classiques d’évaluation de l’importance des variables, telles que l’indice de Gini (<em>Mean Decrease in Impurity</em> - MDI) et l’importance par permutation (<em>Mean Decrease Accuracy</em> - MDA). Bien qu’elles soient fréquemment utilisées, il est important de garder en tête que ces mesures d’importance n’ont pas de fondement statistique précis. Par ailleurs, ces méthodes peuvent produire des résultats biaisés dans certaines situations (<span class="citation" data-cites="strobl2007bias">Strobl et al. (<a href="#ref-strobl2007bias" role="doc-biblioref">2007</a>)</span>, <span class="citation" data-cites="benard2022mda">Bénard, Da Veiga, et al. (<a href="#ref-benard2022mda" role="doc-biblioref">2022</a>)</span>, <span class="citation" data-cites="benard2022shaff">Bénard, Biau, et al. (<a href="#ref-benard2022shaff" role="doc-biblioref">2022</a>)</span>). En particulier, elles peuvent surestimer l’importance de certaines variables lorsque les variables prédictives sont fortement corrélées, présentent des échelles de mesure différentes ou possèdent un nombre variable de catégories. Par exemple, les variables avec un grand nombre de catégories ou des échelles continues étendues peuvent être artificiellement privilégiées, même si leur contribution réelle à la prédiction est limitée.</p>
 <p>En pratique, il est recommandé d’utiliser des méthodes d’importance des variables moins sensibles aux biais, comme les CIF ou la Sobol-MDA. Les valeurs de Shapley, issues de la théorie des jeux, sont également une alternative intéressante. Elles attribuent à chaque variable une contribution proportionnelle à son impact sur la prédiction. Cependant, leur calcul est souvent complexe et coûteux en ressources computationnelles, surtout en présence de nombreuses variables. Des méthodes comme SHAFF (SHApley eFfects via random Forests) ont été développées pour estimer efficacement ces valeurs, même en présence de dépendances entre variables.</p>
 <p>On conseille l’utilisation de trois implémentations pour comparer l’importances des variables d’une forêt aléatoire:</p>
 <ul>
 <li><p>Pour la MDI: l’algorithme CIF proposé par <span class="citation" data-cites="strobl2007bias">Strobl et al. (<a href="#ref-strobl2007bias" role="doc-biblioref">2007</a>)</span> et implémenté en <code>R</code></p></li>
-<li><p>Pour la MDA: l’algorithme Sobol-MDA proposé par <span class="citation" data-cites="benard2022mda">Bénard, Da Veiga, and Scornet (<a href="#ref-benard2022mda" role="doc-biblioref">2022</a>)</span> et implémenté en <code>R</code></p></li>
-<li><p>Pour les valeurs de Shapley : l’alogrithme SHAFF proposé par <span class="citation" data-cites="benard2022shaff">Bénard et al. (<a href="#ref-benard2022shaff" role="doc-biblioref">2022</a>)</span> et implémenté en <code>R</code></p></li>
+<li><p>Pour la MDA: l’algorithme Sobol-MDA proposé par <span class="citation" data-cites="benard2022mda">Bénard, Da Veiga, et al. (<a href="#ref-benard2022mda" role="doc-biblioref">2022</a>)</span> et implémenté en <code>R</code></p></li>
+<li><p>Pour les valeurs de Shapley : l’alogrithme SHAFF proposé par <span class="citation" data-cites="benard2022shaff">Bénard, Biau, et al. (<a href="#ref-benard2022shaff" role="doc-biblioref">2022</a>)</span> et implémenté en <code>R</code></p></li>
 </ul>
 <p>Enfin, nous recommandons de combiner plusieurs méthodes pour une analyse plus robuste et de tenir compte des prétraitements des données afin de minimiser les biais potentiels.</p>
 
@@ -402,9 +428,9 @@ Table&nbsp;1: Les principaux hyperparamètres des forêts aléatoires
 </section>
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-benard2022shaff" class="csl-entry" role="listitem">
-Bénard, Clément, Gérard Biau, Sébastien Da Veiga, and Erwan Scornet. 2022. <span>“SHAFF: Fast and Consistent SHApley eFfect Estimates via Random Forests.”</span> In <em>International Conference on Artificial Intelligence and Statistics</em>, 5563–82. PMLR.
+Bénard, Clément, Gérard Biau, Sébastien Da Veiga, and Erwan Scornet. 2022. <span>“SHAFF: Fast and Consistent SHApley eFfect Estimates via Random Forests.”</span> <em>International Conference on Artificial Intelligence and Statistics</em>, 5563–82.
 </div>
 <div id="ref-benard2022mda" class="csl-entry" role="listitem">
 Bénard, Clément, Sébastien Da Veiga, and Erwan Scornet. 2022. <span>“Mean Decrease Accuracy for Random Forests: Inconsistency, and a Practical Solution via the Sobol-MDA.”</span> <em>Biometrika</em> 109 (4): 881–900. <a href="https://doi.org/10.1093/biomet/asac017">https://doi.org/10.1093/biomet/asac017</a>.

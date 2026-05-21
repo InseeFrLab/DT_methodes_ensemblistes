@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.9.37">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>guide_usage_gb – Introduction aux méthodes ensemblistes</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -24,7 +27,6 @@ ul.task-list li input[type="checkbox"] {
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
-  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -53,21 +55,20 @@ div.csl-indent {
 <link href="../../images/favicon.ico" rel="icon">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-b0ce400981af6002bfdd55bfc8303ed1.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-eb0bbfcb936562f326230a82a52e3863.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
-  "location": "sidebar",
+  "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
-  "panel-placement": "start",
-  "type": "textbox",
+  "panel-placement": "end",
+  "type": "overlay",
   "limit": 50,
   "keyboard-shortcut": [
     "f",
@@ -91,7 +92,7 @@ div.csl-indent {
 }</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -123,10 +124,39 @@ window.Quarto = {
 <link rel="stylesheet" href="../../custom.css">
 </head>
 
-<body class="nav-sidebar docked quarto-light">
+<body class="nav-sidebar docked nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Introduction aux méthodes ensemblistes</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="../../index.html" aria-current="page"> 
+<span class="menu-text">Accueil</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://inseefrlab-github-io.translate.goog/DT_methodes_ensemblistes/?_x_tr_sl=fr&amp;_x_tr_tl=en&amp;_x_tr_hl=en&amp;_x_tr_pto=wapp"> 
+<span class="menu-text">English version</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
@@ -142,21 +172,17 @@ window.Quarto = {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
-    <div class="pt-lg-2 mt-2 text-center sidebar-header">
-      <a href="../../index.html" class="sidebar-logo-link">
-      </a>
-      <div class="sidebar-tools-main">
-    <a href="../.././pdf/dt_methodes_ensemblistes.pdf" title="NMFS Open Science" class="quarto-navigation-tool px-1" aria-label="NMFS Open Science"><i class="bi bi-file-pdf-fill"></i></a>
-</div>
-      </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
         <div id="quarto-search" class="" title="Search"></div>
         </div>
         </div>
+        <div class="sidebar-tools-collapse">
+    <a href="../.././pdf/dt_methodes_ensemblistes.pdf" title="NMFS Open Science" class="quarto-navigation-tool px-1" aria-label="NMFS Open Science"><i class="bi bi-file-pdf-fill"></i></a>
+</div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
@@ -279,10 +305,10 @@ window.Quarto = {
 
 <section id="sec-guide-gb" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Guide d’usage du <em>gradient boosting</em></h1>
-<p>Ce guide propose des recommandations sur l’usage des algorithmes de <em>gradient boosting</em> disponibles dans la littérature, notamment <span class="citation" data-cites="bentejac2021comparative">Bentéjac, Csörgő, and Martínez-Muñoz (<a href="#ref-bentejac2021comparative" role="doc-biblioref">2021</a>)</span> et <span class="citation" data-cites="probst2019tunability">Probst, Boulesteix, and Bischl (<a href="#ref-probst2019tunability" role="doc-biblioref">2019</a>)</span>. Contrairement aux forêts aléatoires, la littérature méthodologique sur l’usages des algorithmes de <em>gradient boosting</em> est assez limitée et relativement peu conclusive. Ce guide comporte un certain nombre de choix méthodologiques forts, comme les implémentations recommandées ou la procédure d’optimisation des hyperparamètres, et d’autres choix pertinents sont évidemment possibles. C’est pourquoi <strong>les recommandations de ce guide doivent être considérées comme un point de départ raisonnable, pas comme un ensemble de règles devant être respectées à tout prix</strong>.</p>
+<p>Ce guide propose des recommandations sur l’usage des algorithmes de <em>gradient boosting</em> disponibles dans la littérature, notamment <span class="citation" data-cites="bentejac2021comparative">Bentéjac et al. (<a href="#ref-bentejac2021comparative" role="doc-biblioref">2021</a>)</span> et <span class="citation" data-cites="probst2019tunability">Probst et al. (<a href="#ref-probst2019tunability" role="doc-biblioref">2019</a>)</span>. Contrairement aux forêts aléatoires, la littérature méthodologique sur l’usages des algorithmes de <em>gradient boosting</em> est assez limitée et relativement peu conclusive. Ce guide comporte un certain nombre de choix méthodologiques forts, comme les implémentations recommandées ou la procédure d’optimisation des hyperparamètres, et d’autres choix pertinents sont évidemment possibles. C’est pourquoi <strong>les recommandations de ce guide doivent être considérées comme un point de départ raisonnable, pas comme un ensemble de règles devant être respectées à tout prix</strong>.</p>
 <section id="sec-implementation-gb" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="sec-implementation-gb"><span class="header-section-number">1.1</span> Quelle implémentation utiliser?</h2>
-<p>Il existe quatre implémentations principales du <em>gradient boosting</em>: <code>XGBoost</code>, <code>LightGBM</code>, <code>CatBoost</code> et <code>scikit-learn</code>. Elles sont toutes des variantes optimisées de l’algorithme de <span class="citation" data-cites="friedman2001greedy">Friedman (<a href="#ref-friedman2001greedy" role="doc-biblioref">2001</a>)</span> et ne diffèrent que sur des points mineurs. De multiples publications les ont comparées, à la fois en matière de pouvoir prédictif et de rapidité d’entraînement (voir notamment <span class="citation" data-cites="bentejac2021comparative">Bentéjac, Csörgő, and Martínez-Muñoz (<a href="#ref-bentejac2021comparative" role="doc-biblioref">2021</a>)</span>, <span class="citation" data-cites="alshari2021comparison">Alshari, Saleh, and Odabaş (<a href="#ref-alshari2021comparison" role="doc-biblioref">2021</a>)</span> et <span class="citation" data-cites="florek2023benchmarking">Florek and Zagdański (<a href="#ref-florek2023benchmarking" role="doc-biblioref">2023</a>)</span>). Cette littérature a abouti à trois conclusions. Premièrement, les différentes implémentations présentent des performances très proches (le classement exact variant d’une publication à l’autre). Deuxièmement, bien optimiser les hyperparamètres est nettement plus important que le choix de l’implémentation. Troisièmement, le temps d’entraînement varie beaucoup d’une implémentation à l’autre, et <code>LightGBM</code> est sensiblement plus rapide que les autres. Dans la mesure où l’optimisation des hyperparamètres est une étape à la fois essentielle et intense en calcul, l’efficacité computationnelle apparaît comme un critère majeur de choix de l’implémentation. C’est pourquoi <strong>le présent document décrit et recommande l’usage de <code>LightGBM</code></strong>. Ceci étant, les trois autres implémentations peuvent également être utilisées, notamment si les données sont de taille limitée.</p>
+<p>Il existe quatre implémentations principales du <em>gradient boosting</em>: <code>XGBoost</code>, <code>LightGBM</code>, <code>CatBoost</code> et <code>scikit-learn</code>. Elles sont toutes des variantes optimisées de l’algorithme de <span class="citation" data-cites="friedman2001greedy">Friedman (<a href="#ref-friedman2001greedy" role="doc-biblioref">2001</a>)</span> et ne diffèrent que sur des points mineurs. De multiples publications les ont comparées, à la fois en matière de pouvoir prédictif et de rapidité d’entraînement (voir notamment <span class="citation" data-cites="bentejac2021comparative">Bentéjac et al. (<a href="#ref-bentejac2021comparative" role="doc-biblioref">2021</a>)</span>, <span class="citation" data-cites="alshari2021comparison">Alshari et al. (<a href="#ref-alshari2021comparison" role="doc-biblioref">2021</a>)</span> et <span class="citation" data-cites="florek2023benchmarking">Florek and Zagdański (<a href="#ref-florek2023benchmarking" role="doc-biblioref">2023</a>)</span>). Cette littérature a abouti à trois conclusions. Premièrement, les différentes implémentations présentent des performances très proches (le classement exact variant d’une publication à l’autre). Deuxièmement, bien optimiser les hyperparamètres est nettement plus important que le choix de l’implémentation. Troisièmement, le temps d’entraînement varie beaucoup d’une implémentation à l’autre, et <code>LightGBM</code> est sensiblement plus rapide que les autres. Dans la mesure où l’optimisation des hyperparamètres est une étape à la fois essentielle et intense en calcul, l’efficacité computationnelle apparaît comme un critère majeur de choix de l’implémentation. C’est pourquoi <strong>le présent document décrit et recommande l’usage de <code>LightGBM</code></strong>. Ceci étant, les trois autres implémentations peuvent également être utilisées, notamment si les données sont de taille limitée.</p>
 <p>Par ailleurs, chacune de ces implémentations propose une interface de haut niveau compatible avec <code>scikit-learn</code>. <strong>Il est vivement recommandé d’utiliser cette interface car elle minimise les risques d’erreur, facilite la construction de modèles reproductibles et permet d’utiliser l’ensemble des outils proposés par <code>scikit-learn</code>.</strong></p>
 </section>
 <section id="sec-hyperparam-gb" class="level2" data-number="1.2">
@@ -437,8 +463,8 @@ Table&nbsp;1: Les principaux hyperparamètres de <code>LightGBM</code>
 <li><p>La <strong>mécanique du <em>gradient boosting</em></strong> est contrôlée par seulement trois hyperparamètres (tous les autres hyperparamètres portant sur la construction des arbres pris isolément):</p>
 <ul>
 <li><p>L’hyperparamètre <code>objective</code> définit à la fois la <strong>nature du problème</strong> modélisé (régression, classification…) et la <strong>fonction de perte</strong> utilisée lors de l’entraînement du modèle. La valeur par défaut varie selon le modèle utilisé: <code>regression_l2</code> (minimisation de l’erreur quadratique moyenne) pour la régression, <code>binary_log_loss</code> (maximisation de la log-vraisemblance d’un modèle logistique) pour la classification binaire et <code>softmax</code> (maximisation de la log-vraisemblance d’un logit multinomial) pour la classification multiclasse. Il existe de nombreuses autres possibilités, comme <code>regression_l1</code> pour la régression (minimisation de l’erreur absolue moyenne)</p></li>
-<li><p>le <strong>nombre d’arbres</strong> contrôle la complexité générale de l’algorithme. Le point essentiel est que, contrairement aux forêts aléatoires, la performance du <em>gradient boosting</em> sur les données d’entraînement croît continûment avec le nombre d’arbres sans jamais se stabiliser. Le choix du nombre d’arbres est essentiel, et doit viser un équilibre entre amélioration du pouvoir prédictif du modèle (si les arbres supplémentaires permettent au modèle de corriger les erreurs résiduelles), et lutte contre le surajustement (si les arbres supplémentaires captent uniquement les bruits statistiques et les fluctuations spécifiques des données d’entraînement). Par ailleurs, le choix du nombre d’arbres est très lié à celui du taux d’apprentissage, et il est nécessaire de les optimiser conjointement (<span class="citation" data-cites="probst2019tunability">Probst, Boulesteix, and Bischl (<a href="#ref-probst2019tunability" role="doc-biblioref">2019</a>)</span>).</p></li>
-<li><p>le <strong>taux d’apprentissage</strong> (<em>learning rate</em>) contrôle l’influence de chaque arbre sur le modèle global; il s’agit de <span class="math inline">\(\eta\)</span> dans l’équation REFERENCE PARTIE OVERFITTING. Cet hyperparamètre a un effet important sur la performance du modèle global (<span class="citation" data-cites="probst2019tunability">Probst, Boulesteix, and Bischl (<a href="#ref-probst2019tunability" role="doc-biblioref">2019</a>)</span>). Un taux d’apprentissage faible réduit la contribution de chaque arbre, rendant l’apprentissage plus progressif; cela évite qu’un arbre donné ait une influence trop importante sur le modèle global et contribue donc à réduire le surajustement, mais nécessite un plus grand nombre d’arbres pour converger vers une solution optimale. Inversement, un taux d’apprentissage élevé accélère l’entraînement mais peut rendre le modèle instable (car trop sensible à un arbre donné), entraîner un surajustement et/ou aboutir à un modèle sous-optimal. La règle générale est de privilégier un taux d’apprentissage faible (entre 0.01 ou 0.3). Le choix du taux d’apprentissage est très lié à celui du nombre d’arbres: plus le taux d’apprentissage sera faible, plus le nombre d’arbres nécessaires pour converger vers une solution optimale sera élevé. Ces deux hyperparamètres doivent donc être optimisés conjointement.</p></li>
+<li><p>le <strong>nombre d’arbres</strong> contrôle la complexité générale de l’algorithme. Le point essentiel est que, contrairement aux forêts aléatoires, la performance du <em>gradient boosting</em> sur les données d’entraînement croît continûment avec le nombre d’arbres sans jamais se stabiliser. Le choix du nombre d’arbres est essentiel, et doit viser un équilibre entre amélioration du pouvoir prédictif du modèle (si les arbres supplémentaires permettent au modèle de corriger les erreurs résiduelles), et lutte contre le surajustement (si les arbres supplémentaires captent uniquement les bruits statistiques et les fluctuations spécifiques des données d’entraînement). Par ailleurs, le choix du nombre d’arbres est très lié à celui du taux d’apprentissage, et il est nécessaire de les optimiser conjointement (<span class="citation" data-cites="probst2019tunability">Probst et al. (<a href="#ref-probst2019tunability" role="doc-biblioref">2019</a>)</span>).</p></li>
+<li><p>le <strong>taux d’apprentissage</strong> (<em>learning rate</em>) contrôle l’influence de chaque arbre sur le modèle global; il s’agit de <span class="math inline">\(\eta\)</span> dans l’équation REFERENCE PARTIE OVERFITTING. Cet hyperparamètre a un effet important sur la performance du modèle global (<span class="citation" data-cites="probst2019tunability">Probst et al. (<a href="#ref-probst2019tunability" role="doc-biblioref">2019</a>)</span>). Un taux d’apprentissage faible réduit la contribution de chaque arbre, rendant l’apprentissage plus progressif; cela évite qu’un arbre donné ait une influence trop importante sur le modèle global et contribue donc à réduire le surajustement, mais nécessite un plus grand nombre d’arbres pour converger vers une solution optimale. Inversement, un taux d’apprentissage élevé accélère l’entraînement mais peut rendre le modèle instable (car trop sensible à un arbre donné), entraîner un surajustement et/ou aboutir à un modèle sous-optimal. La règle générale est de privilégier un taux d’apprentissage faible (entre 0.01 ou 0.3). Le choix du taux d’apprentissage est très lié à celui du nombre d’arbres: plus le taux d’apprentissage sera faible, plus le nombre d’arbres nécessaires pour converger vers une solution optimale sera élevé. Ces deux hyperparamètres doivent donc être optimisés conjointement.</p></li>
 </ul></li>
 <li><p>La <strong>complexité des arbres</strong>: la profondeur maximale des arbres et le nombre de feuilles terminales contrôlent la complexité des <em>weak learners</em>: une profondeur élevée et un grand nombre de feuilles aboutissent à des arbres complexes au pouvoir prédictif plus élevé, mais induisent un risque de surajustement. Par ailleurs, de tels arbres sont plus longs à entraîner que des arbres peu profonds avec un nombre limité de feuilles. Le nombre optimal d’arbres est très corrélé au nombre de feuilles terminales: il est logiquement plus faible quand les arbres sont complexes. Il est à noter que le nombre de feuilles terminales a un effet linéaire sur la complexité des arbres, tandis que la profondeur maximale a un effet exponentiel: un arbre pleinement développé de profondeur <span class="math inline">\(k\)</span> comprend <span class="math inline">\(2^k\)</span> feuilles terminales et <span class="math inline">\(2^k - 1\)</span> <em>splits</em>. Augmenter la profondeur d’une unité a donc pour effet de doubler le temps d’entraînement de chaque arbre. Ces deux hyperparamètres peuvent interagir entre eux de manière complexe (voir encadré).</p></li>
 <li><p>La <strong>lutte contre le surajustement</strong>: ces hyperparamètres de régularisation jouent un rôle important dans le contrôle de la complexité des <em>weak learners</em> et contribuent à éviter le surajustement:</p>
@@ -495,7 +521,7 @@ Figure&nbsp;1
 </section>
 <section id="sec-procedure-training-gb" class="level2" data-number="1.3">
 <h2 data-number="1.3" class="anchored" data-anchor-id="sec-procedure-training-gb"><span class="header-section-number">1.3</span> Comment entraîner un algorithme de <em>gradient boosting</em>?</h2>
-<p>Proposer une procédure pour l’optimisation des hyperparamètres s’avère plus délicat pour les algorithmes de <em>gradient boosting</em> que pour les forêts aléatoires, car ces algorithmes comprennent un nombre beaucoup plus élevé d’hyperparamètres, et la littérature méthodologique sur leur usage pratique reste assez limitée et peu conclusive (en-dehors des nombreux tutoriels introductifs disponibles sur internet). Trois constats sont néanmoins bien établis. Premièrement, <strong>optimiser les hyperparamètres est essentiel pour la performance du modèle final</strong>. Deuxièmement, <strong>contrairement aux forêts aléatoires, les valeurs par défaut des hyperparamètres dans les différentes implémentations ne constituent le plus souvent pas un point de départ raisonnable</strong> (<span class="citation" data-cites="bentejac2021comparative">Bentéjac, Csörgő, and Martínez-Muñoz (<a href="#ref-bentejac2021comparative" role="doc-biblioref">2021</a>)</span> et <span class="citation" data-cites="probst2019tunability">Probst, Boulesteix, and Bischl (<a href="#ref-probst2019tunability" role="doc-biblioref">2019</a>)</span>), en particulier pour les hyperparamètres de régularisation dont la valeur par défaut est souvent nulle. Troisièmement, <strong>cette optimisation peut s’avérer complexe et longue</strong>, il faut donc la mener de façon rigoureuse et organisée pour ne pas perdre de temps.</p>
+<p>Proposer une procédure pour l’optimisation des hyperparamètres s’avère plus délicat pour les algorithmes de <em>gradient boosting</em> que pour les forêts aléatoires, car ces algorithmes comprennent un nombre beaucoup plus élevé d’hyperparamètres, et la littérature méthodologique sur leur usage pratique reste assez limitée et peu conclusive (en-dehors des nombreux tutoriels introductifs disponibles sur internet). Trois constats sont néanmoins bien établis. Premièrement, <strong>optimiser les hyperparamètres est essentiel pour la performance du modèle final</strong>. Deuxièmement, <strong>contrairement aux forêts aléatoires, les valeurs par défaut des hyperparamètres dans les différentes implémentations ne constituent le plus souvent pas un point de départ raisonnable</strong> (<span class="citation" data-cites="bentejac2021comparative">Bentéjac et al. (<a href="#ref-bentejac2021comparative" role="doc-biblioref">2021</a>)</span> et <span class="citation" data-cites="probst2019tunability">Probst et al. (<a href="#ref-probst2019tunability" role="doc-biblioref">2019</a>)</span>), en particulier pour les hyperparamètres de régularisation dont la valeur par défaut est souvent nulle. Troisièmement, <strong>cette optimisation peut s’avérer complexe et longue</strong>, il faut donc la mener de façon rigoureuse et organisée pour ne pas perdre de temps.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Parfois, une forêt aléatoire suffit...">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -512,8 +538,8 @@ Figure&nbsp;1
 <section id="préparer-loptimisation-des-hyperparamètres" class="level3" data-number="1.3.1">
 <h3 data-number="1.3.1" class="anchored" data-anchor-id="préparer-loptimisation-des-hyperparamètres"><span class="header-section-number">1.3.1</span> Préparer l’optimisation des hyperparamètres</h3>
 <ul>
-<li><p><strong>Choisir les hyperparamètres à optimiser</strong>. Le nombre élevé d’hyperparamètres fait qu’il est en pratique impossible (et inutile) des les optimiser tous, il est donc important de restreindre l’optimisation aux hyperparamètres qui ont le plus d’influence sur la performance du modèle, et d’utiliser simplement des valeurs par défaut raisonnables pour les autres hyperparamètres (voir point suivant). Sur ce point, la littérature méthodologique suggère de concentrer l’effort d’optimisation sur le nombre d’arbres, le taux d’apprentissage, la complexité des arbres (nombre de feuilles et/ou profondeur maximale) et les paramètres de régularisation. Inversement, les hyperparamètres d’échantillonnage n’ont pas réellement besoin d’être optimisés une fois qu’on a choisi une valeur par défaut raisonnable (voir <span class="citation" data-cites="probst2019tunability">Probst, Boulesteix, and Bischl (<a href="#ref-probst2019tunability" role="doc-biblioref">2019</a>)</span> et <span class="citation" data-cites="bentejac2021comparative">Bentéjac, Csörgő, and Martínez-Muñoz (<a href="#ref-bentejac2021comparative" role="doc-biblioref">2021</a>)</span>). La liste des hyperparamètres à optimiser peut évidemment varier en fonction du problème modélisé; en tout état de cause, prendre le temps d’établir cette liste est essentiel pour ne pas se perdre dans les étapes d’optimisation.</p></li>
-<li><p><strong>Définir des valeurs par défaut raisonnables</strong>. Définir les valeurs par défaut des hyperparamètres est une étape importante car elle permet de gagner du temps lors de l’optimisation des hyperparamètres. <strong>Ce choix prend du temps</strong> et doit reposer sur une bonne compréhension du fonctionnement de l’algorithme et sur une connaissance approfondie des données utilisées. Voici quelques suggestions de valeurs de départ issues de la littérature (voir notamment <span class="citation" data-cites="bentejac2021comparative">Bentéjac, Csörgő, and Martínez-Muñoz (<a href="#ref-bentejac2021comparative" role="doc-biblioref">2021</a>)</span> et <span class="citation" data-cites="probst2019tunability">Probst, Boulesteix, and Bischl (<a href="#ref-probst2019tunability" role="doc-biblioref">2019</a>)</span>); il est tout à fait possible de s’en écarter lorsqu’on pense que le problème modélisé le justifie:</p>
+<li><p><strong>Choisir les hyperparamètres à optimiser</strong>. Le nombre élevé d’hyperparamètres fait qu’il est en pratique impossible (et inutile) des les optimiser tous, il est donc important de restreindre l’optimisation aux hyperparamètres qui ont le plus d’influence sur la performance du modèle, et d’utiliser simplement des valeurs par défaut raisonnables pour les autres hyperparamètres (voir point suivant). Sur ce point, la littérature méthodologique suggère de concentrer l’effort d’optimisation sur le nombre d’arbres, le taux d’apprentissage, la complexité des arbres (nombre de feuilles et/ou profondeur maximale) et les paramètres de régularisation. Inversement, les hyperparamètres d’échantillonnage n’ont pas réellement besoin d’être optimisés une fois qu’on a choisi une valeur par défaut raisonnable (voir <span class="citation" data-cites="probst2019tunability">Probst et al. (<a href="#ref-probst2019tunability" role="doc-biblioref">2019</a>)</span> et <span class="citation" data-cites="bentejac2021comparative">Bentéjac et al. (<a href="#ref-bentejac2021comparative" role="doc-biblioref">2021</a>)</span>). La liste des hyperparamètres à optimiser peut évidemment varier en fonction du problème modélisé; en tout état de cause, prendre le temps d’établir cette liste est essentiel pour ne pas se perdre dans les étapes d’optimisation.</p></li>
+<li><p><strong>Définir des valeurs par défaut raisonnables</strong>. Définir les valeurs par défaut des hyperparamètres est une étape importante car elle permet de gagner du temps lors de l’optimisation des hyperparamètres. <strong>Ce choix prend du temps</strong> et doit reposer sur une bonne compréhension du fonctionnement de l’algorithme et sur une connaissance approfondie des données utilisées. Voici quelques suggestions de valeurs de départ issues de la littérature (voir notamment <span class="citation" data-cites="bentejac2021comparative">Bentéjac et al. (<a href="#ref-bentejac2021comparative" role="doc-biblioref">2021</a>)</span> et <span class="citation" data-cites="probst2019tunability">Probst et al. (<a href="#ref-probst2019tunability" role="doc-biblioref">2019</a>)</span>); il est tout à fait possible de s’en écarter lorsqu’on pense que le problème modélisé le justifie:</p>
 <ul>
 <li><code>num_leaves</code>: entre 31 et 255;</li>
 <li><code>max_depth</code>: entre 8 et 12;</li>
@@ -578,7 +604,7 @@ Figure&nbsp;1
 </section>
 
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-alshari2021comparison" class="csl-entry" role="listitem">
 Alshari, Haithm, Abdulrazak Yahya Saleh, and Alper Odabaş. 2021. <span>“Comparison of Gradient Boosting Decision Tree Algorithms for CPU Performance.”</span> <em>Journal of Institue Of Science and Technology</em> 37 (1): 157–68.
 </div>
@@ -589,7 +615,7 @@ Bentéjac, Candice, Anna Csörgő, and Gonzalo Martínez-Muñoz. 2021. <span>“
 Florek, Piotr, and Adam Zagdański. 2023. <span>“Benchmarking State-of-the-Art Gradient Boosting Algorithms for Classification.”</span> <em>arXiv Preprint arXiv:2305.17094</em>.
 </div>
 <div id="ref-friedman2001greedy" class="csl-entry" role="listitem">
-Friedman, Jerome H. 2001. <span>“Greedy Function Approximation: A Gradient Boosting Machine.”</span> <em>Annals of Statistics</em>, 1189–1232.
+Friedman, Jerome H. 2001. <span>“Greedy Function Approximation: A Gradient Boosting Machine.”</span> <em>Annals of Statistics</em>, 1189–232.
 </div>
 <div id="ref-probst2019tunability" class="csl-entry" role="listitem">
 Probst, Philipp, Anne-Laure Boulesteix, and Bernd Bischl. 2019. <span>“Tunability: Importance of Hyperparameters of Machine Learning Algorithms.”</span> <em>Journal of Machine Learning Research</em> 20 (53): 1–32.
